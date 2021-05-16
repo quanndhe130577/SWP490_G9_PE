@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SWP_G9_PE.Controllers
+namespace SWP490_G9_PE.Controllers
 {
     [ApiController]
     [Route("[controller]")]

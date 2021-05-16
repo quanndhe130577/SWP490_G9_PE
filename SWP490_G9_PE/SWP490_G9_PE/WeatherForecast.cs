@@ -1,6 +1,6 @@
 using System;
 
-namespace SWP_G9_PE
+namespace SWP490_G9_PE
 {
     public class WeatherForecast
     {

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SWP_G9_PE
+namespace SWP490_G9_PE
 {
     public class Program
     {
