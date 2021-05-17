@@ -17,7 +17,7 @@ namespace SWP490_G9_PE.Models
         {
         }
 
-        public virtual DbSet<Products> Products { get; set; }
+        public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<UserInfo> UserInfos { get; set; }
 
         /*protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -32,7 +32,12 @@ namespace SWP490_G9_PE.Models
         {
             modelBuilder.HasAnnotation("Relational:Collation", "Latin1_General_CI_AS");
 
-            modelBuilder.Entity<Products>(entity =>
+            var productList = new Product[] {
+                new Product("Product 1", "Category 1", "Red", 1000, 50),
+                new Product("Product 2", "Category 2", "Green", 2000, 100),
+                new Product("Product 3", "Category 3", "Blue", 3000, 150),
+            };
+            modelBuilder.Entity<Product>(entity =>
             {
                 entity.Property(e => e.Category)
                     .HasMaxLength(100)
@@ -49,7 +54,12 @@ namespace SWP490_G9_PE.Models
 
                 entity.Property(e => e.UnitPrice).HasColumnType("decimal(18, 0)");
             });
+            modelBuilder.Entity<Product>().HasData(productList);
 
+            var userList = new UserInfo[] {
+                new UserInfo("default", "admin", "admin@admin.com", "admin" , DateTime.Now),
+            };
+            modelBuilder.Entity<UserInfo>().HasData(userList);
             modelBuilder.Entity<UserInfo>(entity =>
             {
                 entity.HasKey(e => e.UserId)

@@ -16,5 +16,24 @@ namespace SWP490_G9_PE.Models
         public string Email { get; set; }
         public string Password { get; set; }
         public DateTime CreatedDate { get; set; }
+
+        public UserInfo() { }
+        public UserInfo(int id, string fName, string lName, string email, string pass, DateTime crD)
+        {
+            this.UserId = id;
+            this.FirstName = fName;
+            this.LastName = lName;
+            this.Email = email;
+            this.Password = pass;
+            this.CreatedDate = crD;
+        }
+        public UserInfo(string fName, string lName, string email, string pass, DateTime crD)
+        {
+            this.FirstName = fName;
+            this.LastName = lName;
+            this.Email = email;
+            this.Password = pass;
+            this.CreatedDate = crD;
+        }
     }
 }
