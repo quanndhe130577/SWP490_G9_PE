@@ -10,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using SWP490_G9_PE.Common.Token;
 using SWP490_G9_PE.Models;
 using System;
 using System.Collections.Generic;
@@ -24,9 +25,11 @@ namespace SWP490_G9_PE
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            StaticConfig = configuration;
         }
 
         public IConfiguration Configuration { get; }
+        public static IConfiguration StaticConfig { get; private set; } // to use Config from other class
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -49,6 +52,8 @@ namespace SWP490_G9_PE
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
                 };
             });
+
+            //services.Configure<TokenGeneration>(Configuration.GetSection("Jwt"));
             /*services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "SWP490_G9_PE", Version = "v1" });
