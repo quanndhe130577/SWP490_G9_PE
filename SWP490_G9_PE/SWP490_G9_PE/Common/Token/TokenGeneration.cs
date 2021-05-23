@@ -1,31 +1,22 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using SWP490_G9_PE.Models;
+﻿using Microsoft.IdentityModel.Tokens;
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace SWP490_G9_PE.Common.Token
+namespace TnR_SS.API.Common.Token
 {
     public static class TokenGeneration
     {
 
-        public static string GetToken(UserInfo _userData)
+        public static string GetTokenUser(string id)
         {
             //create claims details based on the user information
             var claims = new[] {
                     new Claim(JwtRegisteredClaimNames.Sub, Startup.StaticConfig["Jwt:Subject"]),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                     new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-                    new Claim("Id", _userData.UserId.ToString()),
-                    new Claim("FirstName", _userData.FirstName),
-                    new Claim("LastName", _userData.LastName),
-                    new Claim("UserName", _userData.UserName),
-                    new Claim("Email", _userData.Email)
+                    new Claim("ID", id),
                    };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Startup.StaticConfig["Jwt:Key"]));

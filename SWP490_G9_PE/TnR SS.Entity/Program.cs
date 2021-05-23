@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TnR_SS
+namespace TnR_SS.Entity
 {
     public class Program
     {

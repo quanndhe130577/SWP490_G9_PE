@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace SWP490_G9_PE.Common.Response
+namespace TnR_SS.API.Common.Response
 {
     public class ResponseModel
     {
@@ -15,11 +15,6 @@ namespace SWP490_G9_PE.Common.Response
         public string Message { get; set; }
 
         public string Type { get; set; }
-
-        public override string ToString()
-        {
-            return $"[{Success.ToString().ToUpper()} : {StatusCode}] {Message}";
-        }
 
         public ResponseModel() { }
         public ResponseModel(HttpStatusCode code, bool sc, string ms, string type)

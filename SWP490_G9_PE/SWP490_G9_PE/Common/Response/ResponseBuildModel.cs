@@ -4,11 +4,11 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace SWP490_G9_PE.Common.Response
+namespace TnR_SS.API.Common.Response
 {
     public class ResponseBuilder
     {
-        protected ResponseModel ResponseModel { get; set; }
+        public ResponseModel ResponseModel { get; set; }
         public ResponseBuilder()
         {
             this.ResponseModel = new ResponseModel();
@@ -20,6 +20,7 @@ namespace SWP490_G9_PE.Common.Response
         {
             this.ResponseModel.Success = true;
             this.ResponseModel.Message = message;
+            this.ResponseModel.Type = "Success";
             this.ResponseModel.StatusCode = HttpStatusCode.OK;
 
             return this;
@@ -95,6 +96,7 @@ namespace SWP490_G9_PE.Common.Response
 
         public ResponseBuilder<T> WithData(T data)
         {
+            base.Success("Success");
             ((ResponseModel<T>)this.ResponseModel).Data = data;
             return this;
         }

@@ -1,24 +1,15 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
-using SWP490_G9_PE.Common.Token;
-using SWP490_G9_PE.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using TnR_SS.Entity.Models;
 
-namespace SWP490_G9_PE
+namespace TnR_SS
 {
     public class Startup
     {
@@ -37,7 +28,7 @@ namespace SWP490_G9_PE
 
             services.AddControllers();
 
-            services.AddDbContext<InventoryContext>(options => options.UseSqlServer(Configuration.GetConnectionString("InventoryDatabase")));
+            services.AddDbContext<TnR_SSContext>(options => options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("TnR_SS")));
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {
@@ -82,6 +73,7 @@ namespace SWP490_G9_PE
             {
                 endpoints.MapControllers();
             });
+
         }
     }
 }

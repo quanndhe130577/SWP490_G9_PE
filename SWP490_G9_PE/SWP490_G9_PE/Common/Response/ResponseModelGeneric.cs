@@ -1,12 +1,14 @@
-﻿namespace SWP490_G9_PE.Common.Response
+﻿using System.Net;
+
+namespace TnR_SS.API.Common.Response
 {
     public class ResponseModel<T> : ResponseModel
     {
         public T Data { get; set; }
-        public ResponseModel(T data)
+        public ResponseModel(HttpStatusCode code, bool sc, string ms, string type, T data) : base(code, sc, ms, type)
         {
             this.Data = data;
         }
-        public ResponseModel(){}
+        public ResponseModel() { }
     }
 }
