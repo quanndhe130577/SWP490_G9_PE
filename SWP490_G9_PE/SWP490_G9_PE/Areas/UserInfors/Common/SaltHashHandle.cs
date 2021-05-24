@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace TnR_SS.API.UserInfors.Common
 {
-    public static class Common
+    public static class SaltHashHandle
     {
-        private static string RandomSaltHash()
+        public static string RandomSaltHash()
         {
             string rs = "";
             Random rd = new Random();

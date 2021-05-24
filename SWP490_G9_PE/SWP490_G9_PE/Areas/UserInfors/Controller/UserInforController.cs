@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TnR_SS.API.Common.HandleSHA256;
 using TnR_SS.API.Common.Response;
+using TnR_SS.API.UserInfors.Common;
 using TnR_SS.API.UserInfors.Model;
 using TnR_SS.Entity.Models;
 
@@ -56,13 +58,14 @@ namespace TnR_SS.API.UserInfors.Controller
         // PUT: api/UserInfor/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<ResponseModel> PutUserInfor(int id, UserInfor userInfor)
+        public async Task<ResponseModel> PutUserInfor(int id, InsertUserModel userData)
         {
-            if (id != userInfor.Id)
+            var userInfor = await _context.UserInfors.FindAsync(id);
+            if (userInfor == null)
             {
-                return new ResponseBuilder().WithCode(HttpStatusCode.BadRequest).ResponseModel;
+                return new ResponseBuilder().WithCode(HttpStatusCode.NotFound).ResponseModel;
             }
-
+            userData.updateUserInfor(userInfor);
             _context.Entry(userInfor).State = EntityState.Modified;
 
             try
@@ -93,6 +96,9 @@ namespace TnR_SS.API.UserInfors.Controller
             if (!UserPhoneNumberExists(userData.PhoneNumber))
             {
                 var userInfor = userData.changeToUserInfor();
+                userInfor.SaltPassword = SaltHashHandle.RandomSaltHash();
+                userInfor.Password = HandleSHA256.EncryptString(userData.Password + userInfor.SaltPassword);
+                userInfor.CreatedDate = DateTime.Now;
                 _context.UserInfors.Add(userInfor);
                 await _context.SaveChangesAsync();
 
