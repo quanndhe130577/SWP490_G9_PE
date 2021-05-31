@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TnR_SS.API.UserInfors.Common
+namespace TnR_SS.API.Areas.AccountManagement.Common
 {
     public static class SaltHashHandle
     {

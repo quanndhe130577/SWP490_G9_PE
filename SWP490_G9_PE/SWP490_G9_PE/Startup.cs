@@ -1,12 +1,15 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Text;
+using TnR_SS.API.Common.AutoMapper;
 using TnR_SS.Entity.Models;
 
 namespace TnR_SS
@@ -30,6 +33,19 @@ namespace TnR_SS
 
             services.AddDbContext<TnR_SSContext>(options => options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("TnR_SS")));
 
+            services.AddIdentity<UserInfor, RoleUser>(cfg =>
+            {
+                cfg.Password.RequireDigit = false;
+                cfg.Password.RequiredLength = 64;
+                cfg.Password.RequireNonAlphanumeric = false;
+                cfg.Password.RequireUppercase = false;
+                cfg.Password.RequireLowercase = false;
+                cfg.User.RequireUniqueEmail = false;
+                cfg.SignIn.RequireConfirmedAccount = false;
+            })
+            .AddEntityFrameworkStores<TnR_SSContext>()
+            .AddDefaultTokenProviders();
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {
                 options.RequireHttpsMetadata = false;
@@ -44,6 +60,13 @@ namespace TnR_SS
                 };
             });
 
+            services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
+
+            /*services.Configure<SecurityStampValidatorOptions>(options =>
+            {
+                // enables immediate logout, after updating the user's stat.
+                options.ValidationInterval = TimeSpan.Zero;
+            });*/
             //services.Configure<TokenGeneration>(Configuration.GetSection("Jwt"));
             /*services.AddSwaggerGen(c =>
             {

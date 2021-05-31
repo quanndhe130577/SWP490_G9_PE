@@ -1,12 +1,13 @@
 ﻿using System;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 
 #nullable disable
 
 namespace TnR_SS.Entity.Models
 {
-    public partial class TnR_SSContext : DbContext
+    public partial class TnR_SSContext : IdentityDbContext<UserInfor, RoleUser, int>
     {
         public TnR_SSContext()
         {
@@ -22,6 +23,8 @@ namespace TnR_SS.Entity.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.HasAnnotation("Relational:Collation", "Latin1_General_CI_AS");
 
             var listRole = new RoleUser[]
@@ -51,9 +54,9 @@ namespace TnR_SS.Entity.Models
 
             var listUser = new UserInfor[]
             {
-                new UserInfor(){ Id = 1, Avatar = null, FirstName = "Nguyen", Lastname = "Quan", RoleId = 2, PhoneNumber = "0966848112" , CreatedDate = new DateTime(2021,5,1), Dob = new DateTime(1999,10,21), IdentifyCode = "123456789", SaltPassword = "qwertyuiopasdfghjklz", Password = "1a56be4be3e34472001aa7e5f5fc5cbe84428edfe902bdf1508fcf33ff517198"},
-                new UserInfor(){ Id = 2, Avatar = null, FirstName = "Anh", Lastname = "Duc", RoleId = 3, PhoneNumber = "0969360445" , CreatedDate = new DateTime(2021,5,1), Dob = new DateTime(1999,1,1), IdentifyCode = "123456789", SaltPassword = "qwertyuiopasdfghjklz", Password = "1a56be4be3e34472001aa7e5f5fc5cbe84428edfe902bdf1508fcf33ff517198"},
-                new UserInfor(){ Id = 3, Avatar = null, FirstName = "Admin", Lastname = "Admin", RoleId = 1, PhoneNumber = "admin" , CreatedDate = new DateTime(2021,5,1), Dob = new DateTime(1999,10,21), IdentifyCode = "123456789", SaltPassword = "qwertyuiopasdfghjklz", Password = "f781bfeada73d5d4d703dca8c3b1b0eba6aa49151ac0fcfaa5d10510eaecdfd3"},
+                new UserInfor(){ Id = 1, Avatar = null, FirstName = "Nguyen", Lastname = "Quan", RoleId = 2, PhoneNumber = "0966848112" , CreatedDate = new DateTime(2021,5,1), Dob = new DateTime(1999,10,21), IdentifyCode = "123456789", SaltPassword = "qwertyuiopasdfghjklz", Password = "1a56be4be3e34472001aa7e5f5fc5cbe84428edfe902bdf1508fcf33ff517198", SecurityStamp = Guid.NewGuid().ToString()},
+                new UserInfor(){ Id = 2, Avatar = null, FirstName = "Anh", Lastname = "Duc", RoleId = 3, PhoneNumber = "0969360445" , CreatedDate = new DateTime(2021,5,1), Dob = new DateTime(1999,1,1), IdentifyCode = "123456789", SaltPassword = "qwertyuiopasdfghjklz", Password = "1a56be4be3e34472001aa7e5f5fc5cbe84428edfe902bdf1508fcf33ff517198", SecurityStamp = Guid.NewGuid().ToString()},
+                new UserInfor(){ Id = 3, Avatar = null, FirstName = "Admin", Lastname = "Admin", RoleId = 1, PhoneNumber = "admin" , CreatedDate = new DateTime(2021,5,1), Dob = new DateTime(1999,10,21), IdentifyCode = "123456789", SaltPassword = "qwertyuiopasdfghjklz", Password = "f781bfeada73d5d4d703dca8c3b1b0eba6aa49151ac0fcfaa5d10510eaecdfd3", SecurityStamp = Guid.NewGuid().ToString()},
             };
 
             modelBuilder.Entity<UserInfor>(entity =>

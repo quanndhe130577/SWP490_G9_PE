@@ -15,7 +15,6 @@ namespace TnR_SS.API.Common.Response
         }
 
 
-
         public ResponseBuilder Success(string message = null)
         {
             this.ResponseModel.Success = true;
@@ -44,6 +43,11 @@ namespace TnR_SS.API.Common.Response
         public ResponseBuilder WithType(string type)
         {
             this.ResponseModel.Type = type;
+            return this;
+        }
+        public ResponseBuilder WithMessage(string ms)
+        {
+            this.ResponseModel.Message = ms;
             return this;
         }
 

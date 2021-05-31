@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -7,14 +8,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TnR_SS.Entity.Models
 {
-    public partial class UserInfor
+    public partial class UserInfor : IdentityUser<int>
     {
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public override int Id { get; set; }
         public string FirstName { get; set; }
         public string Lastname { get; set; }
-        public string PhoneNumber { get; set; }
+        public override string PhoneNumber { get; set; }
         public string Password { get; set; }
         public string SaltPassword { get; set; }
         public DateTime Dob { get; set; }

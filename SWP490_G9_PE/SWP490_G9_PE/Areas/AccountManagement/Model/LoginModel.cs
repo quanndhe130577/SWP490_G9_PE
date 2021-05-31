@@ -1,4 +1,4 @@
-﻿namespace TnR_SS.API.Authentication.Model
+﻿namespace TnR_SS.API.Areas.AccountManagement.Model
 {
     public class LoginModel
     {
