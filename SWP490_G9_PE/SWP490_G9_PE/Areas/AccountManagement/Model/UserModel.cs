@@ -14,8 +14,6 @@ namespace TnR_SS.Areas.API.AccountManagement.Model
         [MaxLength(12)]
         [MinLength(10)]
         public string PhoneNumber { get; set; }
-        [MaxLength(30)]
-        public string Password { get; set; }
         public DateTime Dob { get; set; }
         public string IdentifyCode { get; set; }
         public string Avatar { get; set; }

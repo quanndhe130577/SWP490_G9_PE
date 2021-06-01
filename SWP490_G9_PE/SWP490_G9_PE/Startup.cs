@@ -7,9 +7,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using System;
 using System.Text;
-using TnR_SS.API.Common.AutoMapper;
+using TnR_SS.API.Common.ErrorHandlerMiddleware;
 using TnR_SS.Entity.Models;
 
 namespace TnR_SS
@@ -30,6 +29,8 @@ namespace TnR_SS
         {
 
             services.AddControllers();
+
+            //services.AddControllers(options => options.Filters.Add(new HttpResponseExceptionFilter()));
 
             services.AddDbContext<TnR_SSContext>(options => options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("TnR_SS")));
 
@@ -60,7 +61,7 @@ namespace TnR_SS
                 };
             });
 
-            services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
+            services.AddAutoMapper(typeof(Startup));
 
             /*services.Configure<SecurityStampValidatorOptions>(options =>
             {
@@ -79,14 +80,21 @@ namespace TnR_SS
         {
             if (env.IsDevelopment())
             {
+                //app.UseExceptionHandler("/api/error-local-development");
                 app.UseDeveloperExceptionPage();
                 /*app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SWP490_G9_PE v1"));*/
+            }
+            else
+            {
+                //app.UseExceptionHandler("/api/error");
             }
 
             app.UseAuthentication();
 
             app.UseHttpsRedirection();
+
+            app.UseMiddleware<ErrorHandlerMiddleware>();
 
             app.UseRouting();
 

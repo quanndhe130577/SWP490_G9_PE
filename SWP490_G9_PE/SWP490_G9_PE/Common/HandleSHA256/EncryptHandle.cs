@@ -4,7 +4,7 @@ using System.Text;
 
 namespace TnR_SS.API.Common.HandleSHA256
 {
-    public static class HandleSHA256
+    public static class EncryptHandle
     {
         public static string EncryptString(String word)
         {

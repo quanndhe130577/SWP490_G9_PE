@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using TnR_SS.API.Areas.AccountManagement.Common;
 using TnR_SS.API.Areas.AccountManagement.Model;
 using TnR_SS.API.Common.HandleSHA256;
 using TnR_SS.API.Common.Response;
@@ -49,13 +48,7 @@ namespace TnR_SS.API.Areas.AccountManagement.Controller
                     return new ResponseBuilder().Error("Phone Number existed").ResponseModel;
                 }
 
-                var userInfor = _mapper.Map<UserInfor>(userData);
-                //var userInfor = userData.mapToUserInfor();
-                userInfor.SaltPassword = SaltHashHandle.RandomSaltHash();
-                userInfor.Password = HandleSHA256.EncryptString(userData.Password + userInfor.SaltPassword);
-                userInfor.CreatedDate = DateTime.Now;
-                userInfor.SecurityStamp = Guid.NewGuid().ToString();
-
+                var userInfor = _mapper.Map<UserModel, UserInfor>(userData);
                 var result = await _userManager.CreateAsync(userInfor, userInfor.Password);
 
                 if (result.Succeeded)
@@ -100,7 +93,7 @@ namespace TnR_SS.API.Areas.AccountManagement.Controller
                     return new ResponseBuilder().Error("User not found").ResponseModel;
                 }
 
-                var userSigninResult = await _signInManager.PasswordSignInAsync(user, HandleSHA256.EncryptString(userData.Password + user.SaltPassword), true, false);
+                var userSigninResult = await _signInManager.PasswordSignInAsync(user, EncryptHandle.EncryptString(userData.Password + user.SaltPassword), true, false);
                 //var userSigninResult = await _userManager.CheckPasswordAsync(user, HandleSHA256.EncryptString(userData.Password + user.SaltPassword));
 
                 if (userSigninResult.Succeeded)
@@ -119,26 +112,25 @@ namespace TnR_SS.API.Areas.AccountManagement.Controller
                 List<String> listError = new List<String>();
 
                 return new ResponseBuilder().Error("Invalid Phone number or password").ResponseModel;
-
             }
 
             return new ResponseBuilder().Error("Login failed").ResponseModel;
         }
         #endregion
 
-        [HttpPut("{id}")]
-        [Route("update")]
+        [HttpPut("update/{id}")]
+        //[Route("update")]
         public async Task<ResponseModel> UpdateUserInfor(int id, UserModel userData)
         {
             //var userInfor = await _context.UserInfors.FindAsync(id);
             var userInfor = _userManager.Users.FirstOrDefault(x => x.Id == id);
             if (userInfor == null)
             {
-                return new ResponseBuilder().WithCode(HttpStatusCode.NotFound).ResponseModel;
+                return new ResponseBuilder().WithCode(HttpStatusCode.NotFound).WithMessage("User have not existed").ResponseModel;
             }
-            userInfor = _mapper.Map<UserInfor>(userData);
+
+            userInfor = _mapper.Map<UserModel, UserInfor>(userData, userInfor);
             await _userManager.UpdateAsync(userInfor);
-            //userData.updateUserInfor(userInfor);
             //_context.Entry(userInfor).State = EntityState.Modified;
 
             try
@@ -157,11 +149,11 @@ namespace TnR_SS.API.Areas.AccountManagement.Controller
 
         }
 
-        [HttpPut("{id}")]
-        [Route("change-password")]
-        public async Task<ResponseModel> ChangePassword(int id, string password, string confirmPassword)
+        [HttpPut("change-password/{id}")]
+        //[Route("change-password")]
+        public async Task<ResponseModel> ChangePassword(int id, [FromBody] ChangePasswordModel changePasswordModel)
         {
-            if (password != confirmPassword)
+            if (changePasswordModel.Password != changePasswordModel.ConfirmPassword)
             {
                 return new ResponseBuilder().Error("Invalid confirm password").ResponseModel;
             }
@@ -172,23 +164,16 @@ namespace TnR_SS.API.Areas.AccountManagement.Controller
                 return new ResponseBuilder().Error("Invalid information").ResponseModel;
             }
 
-            userInfor.Password = password;
-            try
-            {
+            userInfor = _mapper.Map<ChangePasswordModel, UserInfor>(changePasswordModel, userInfor);
+ 
                 await _userManager.UpdateAsync(userInfor);
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-
-                return new ResponseBuilder().WithCode(HttpStatusCode.Conflict).WithMessage("").ResponseModel;
-
-            }
+  
 
             return new ResponseBuilder().Success("Update Success").ResponseModel;
 
         }
 
-        [HttpGet]
+        [HttpGet("logout")]
         public async Task<ResponseModel> Logout()
         {
             await _signInManager.SignOutAsync();
