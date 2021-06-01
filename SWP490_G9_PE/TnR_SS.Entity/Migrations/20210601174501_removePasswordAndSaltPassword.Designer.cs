@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TnR_SS.Entity.Models;
 
 namespace TnR_SS.Entity.Migrations
 {
     [DbContext(typeof(TnR_SSContext))]
-    partial class TnR_SSContextModelSnapshot : ModelSnapshot
+    [Migration("20210601174501_removePasswordAndSaltPassword")]
+    partial class removePasswordAndSaltPassword
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -160,29 +162,6 @@ namespace TnR_SS.Entity.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("RoleUser");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ConcurrencyStamp = "048b36a8-c473-4716-a9f6-9c6835b4484d",
-                            DisplayName = "Admin",
-                            RoleName = "Admin"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ConcurrencyStamp = "833c39fb-371b-472d-88a1-f873807dd300",
-                            DisplayName = "Trader",
-                            RoleName = "Trader"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            ConcurrencyStamp = "bae2bbe4-b6d4-4926-bede-a806457ea819",
-                            DisplayName = "Weight Recorder",
-                            RoleName = "Weight Recorder"
-                        });
                 });
 
             modelBuilder.Entity("TnR_SS.Entity.Models.UserInfor", b =>

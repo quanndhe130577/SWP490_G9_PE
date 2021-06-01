@@ -1,11 +1,7 @@
-﻿using AutoMapper;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
-using TnR_SS.API.Areas.AccountManagement.Common;
-using TnR_SS.API.Common.HandleSHA256;
-using TnR_SS.Entity.Models;
 
-namespace TnR_SS.Areas.API.AccountManagement.Model
+namespace TnR_SS.API.Areas.AccountManagement.Model
 {
     public class UserModel
     {

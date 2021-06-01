@@ -100,7 +100,7 @@ namespace TnR_SS.API.Common.Response
 
         public ResponseBuilder<T> WithData(T data)
         {
-            base.Success("Success");
+            //base.Success("Success");
             ((ResponseModel<T>)this.ResponseModel).Data = data;
             return this;
         }

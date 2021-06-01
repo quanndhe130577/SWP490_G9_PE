@@ -37,20 +37,20 @@ namespace TnR_SS
             services.AddIdentity<UserInfor, RoleUser>(cfg =>
             {
                 cfg.Password.RequireDigit = false;
-                cfg.Password.RequiredLength = 64;
+                cfg.Password.RequiredLength = 8;
                 cfg.Password.RequireNonAlphanumeric = false;
                 cfg.Password.RequireUppercase = false;
                 cfg.Password.RequireLowercase = false;
                 cfg.User.RequireUniqueEmail = false;
                 cfg.SignIn.RequireConfirmedAccount = false;
             })
-            .AddEntityFrameworkStores<TnR_SSContext>()
-            .AddDefaultTokenProviders();
+            .AddEntityFrameworkStores<TnR_SSContext>();
+            //.AddDefaultTokenProviders();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {
                 options.RequireHttpsMetadata = false;
-                options.SaveToken = true;
+                options.SaveToken = false;
                 options.TokenValidationParameters = new TokenValidationParameters()
                 {
                     ValidateIssuer = true,

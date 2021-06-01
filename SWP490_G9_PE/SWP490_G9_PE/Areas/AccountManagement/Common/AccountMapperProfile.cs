@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
 using System;
-using TnR_SS.Areas.API.AccountManagement.Model;
-using TnR_SS.Entity.Models;
-using TnR_SS.API.Common.HandleSHA256;
 using TnR_SS.API.Areas.AccountManagement.Model;
+using TnR_SS.API.Common.HandleSHA256;
+using TnR_SS.Entity.Models;
 
 namespace TnR_SS.API.Areas.AccountManagement.Common
 {
@@ -12,7 +11,7 @@ namespace TnR_SS.API.Areas.AccountManagement.Common
 
         public AccountMapperProfile()
         {
-            CreateMap<UserModel, UserInfor>().ForMember(destination => destination.UserName, options => options.MapFrom(source => source.PhoneNumber))
+            CreateMap<RegisterModel, UserInfor>().ForMember(destination => destination.UserName, options => options.MapFrom(source => source.PhoneNumber))
             //.ForMember(destination => destination.SaltPassword, options => SaltHashHandle.RandomSaltHash())
                 .AfterMap((source, destination) =>
                 {
@@ -27,12 +26,13 @@ namespace TnR_SS.API.Areas.AccountManagement.Common
                 });
             //.ForAllOtherMembers(options => options.UseDestinationValue());
             //.ForMember(destination => destination.SecurityStamp, options => options.UseDestinationValue());
-            CreateMap<ChangePasswordModel, UserInfor>().AfterMap((source, destination) =>
+            /*CreateMap<ChangePasswordModel, UserInfor>().AfterMap((source, destination) =>
             {
                 var saltPass = RandomSaltHash();
                 destination.SaltPassword = saltPass;
                 destination.Password = EncryptHandle.EncryptString(source.Password + saltPass);
-            });
+            });*/
+            CreateMap<UserModel, UserInfor>().ForMember(destination => destination.UserName, options => options.MapFrom(source => source.PhoneNumber));
         }
 
         private static string RandomSaltHash()

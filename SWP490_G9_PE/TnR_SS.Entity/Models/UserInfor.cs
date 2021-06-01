@@ -16,8 +16,8 @@ namespace TnR_SS.Entity.Models
         public string FirstName { get; set; }
         public string Lastname { get; set; }
         public override string PhoneNumber { get; set; }
-        public string Password { get; set; }
-        public string SaltPassword { get; set; }
+        /*public string Password { get; set; }
+        public string SaltPassword { get; set; }*/
         public DateTime Dob { get; set; }
         public string IdentifyCode { get; set; }
         public string Avatar { get; set; }
