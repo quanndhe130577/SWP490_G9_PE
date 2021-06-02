@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
+using TnR_SS.API.Common.Response;
 
-namespace TnR_SS.API.Common.ErrorHandlerMiddleware
+namespace TnR_SS.API.Common.ErrorHandle
 {
     public class ErrorHandlerMiddleware
     {
@@ -27,23 +28,21 @@ namespace TnR_SS.API.Common.ErrorHandlerMiddleware
                 var response = context.Response;
                 response.ContentType = "application/json";
 
-                switch (error)
+                /*switch (error)
                 {
-                    case AppException e:
+                    case Exception e:
                         // custom application error
                         response.StatusCode = (int)HttpStatusCode.BadRequest;
-                        break;
-                    case KeyNotFoundException e:
-                        // not found error
-                        response.StatusCode = (int)HttpStatusCode.NotFound;
                         break;
                     default:
                         // unhandled error
                         response.StatusCode = (int)HttpStatusCode.InternalServerError;
                         break;
-                }
+                }*/
 
-                var result = JsonSerializer.Serialize(new { message = error?.Message });
+                ResponseBuilder<object> rpb = new ResponseBuilder<object>().Error("Error").WithData(new ErrorResponse(new List<string>(new string[] { error?.Message })));
+                //var result = JsonSerializer.Serialize(rpb.ResponseModel);
+                var result = JsonConvert.SerializeObject(rpb.ResponseModel);
                 await response.WriteAsync(result);
             }
         }

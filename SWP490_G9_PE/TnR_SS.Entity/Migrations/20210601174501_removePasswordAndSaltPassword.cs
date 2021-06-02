@@ -7,7 +7,9 @@ namespace TnR_SS.Entity.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DeleteData(
+            /*migrationBuilder.Sql("DELETE FROM [UserInfor]", true);
+            migrationBuilder.Sql("DELETE FROM [RoleUser]", true);*/
+            /*migrationBuilder.DeleteData(
                 table: "UserInfor",
                 keyColumn: "ID",
                 keyValue: 1);
@@ -20,22 +22,7 @@ namespace TnR_SS.Entity.Migrations
             migrationBuilder.DeleteData(
                 table: "UserInfor",
                 keyColumn: "ID",
-                keyValue: 3);
-
-            migrationBuilder.DeleteData(
-                table: "RoleUser",
-                keyColumn: "ID",
-                keyValue: 1);
-
-            migrationBuilder.DeleteData(
-                table: "RoleUser",
-                keyColumn: "ID",
-                keyValue: 2);
-
-            migrationBuilder.DeleteData(
-                table: "RoleUser",
-                keyColumn: "ID",
-                keyValue: 3);
+                keyValue: 3);*/
 
             migrationBuilder.DropColumn(
                 name: "Password",
@@ -44,6 +31,21 @@ namespace TnR_SS.Entity.Migrations
             migrationBuilder.DropColumn(
                 name: "SaltPassword",
                 table: "UserInfor");
+
+            /*migrationBuilder.DeleteData(
+                 table: "RoleUser",
+                 keyColumn: "ID",
+                 keyValue: 1);
+
+            migrationBuilder.DeleteData(
+                table: "RoleUser",
+                keyColumn: "ID",
+                keyValue: 2);
+
+            migrationBuilder.DeleteData(
+                table: "RoleUser",
+                keyColumn: "ID",
+                keyValue: 3);*/
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -66,7 +68,7 @@ namespace TnR_SS.Entity.Migrations
                 nullable: false,
                 defaultValue: "");
 
-            migrationBuilder.InsertData(
+            /*migrationBuilder.InsertData(
                 table: "RoleUser",
                 columns: new[] { "ID", "ConcurrencyStamp", "DisplayName", "Name", "NormalizedName", "RoleName" },
                 values: new object[] { 1, "e8baefa1-b256-49f8-9095-d1b12f8e10d9", "Admin", null, null, "Admin" });
@@ -94,7 +96,7 @@ namespace TnR_SS.Entity.Migrations
             migrationBuilder.InsertData(
                 table: "UserInfor",
                 columns: new[] { "ID", "AccessFailedCount", "Avatar", "ConcurrencyStamp", "CreatedDate", "DOB", "Email", "EmailConfirmed", "FirstName", "IdentifyCode", "Lastname", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "Password", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "RoleID", "SaltPassword", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { 2, 0, null, "0c55d4ce-bf57-43eb-aa7a-bf0268399e9e", new DateTime(2021, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1999, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, false, "Anh", "123456789", "Duc", false, null, null, null, "1a56be4be3e34472001aa7e5f5fc5cbe84428edfe902bdf1508fcf33ff517198", null, "0969360445", false, 3, "qwertyuiopasdfghjklz", "88208305-7eb2-4d8f-a90d-0ca4b6d5299e", false, null });
+                values: new object[] { 2, 0, null, "0c55d4ce-bf57-43eb-aa7a-bf0268399e9e", new DateTime(2021, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1999, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, false, "Anh", "123456789", "Duc", false, null, null, null, "1a56be4be3e34472001aa7e5f5fc5cbe84428edfe902bdf1508fcf33ff517198", null, "0969360445", false, 3, "qwertyuiopasdfghjklz", "88208305-7eb2-4d8f-a90d-0ca4b6d5299e", false, null });*/
         }
     }
 }

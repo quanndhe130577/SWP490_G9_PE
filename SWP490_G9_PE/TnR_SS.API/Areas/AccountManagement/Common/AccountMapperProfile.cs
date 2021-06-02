@@ -1,18 +1,15 @@
 ﻿using AutoMapper;
 using System;
 using TnR_SS.API.Areas.AccountManagement.Model;
-using TnR_SS.API.Common.HandleSHA256;
 using TnR_SS.Entity.Models;
 
 namespace TnR_SS.API.Areas.AccountManagement.Common
 {
     public class AccountMapperProfile : Profile
     {
-
         public AccountMapperProfile()
         {
             CreateMap<RegisterModel, UserInfor>().ForMember(destination => destination.UserName, options => options.MapFrom(source => source.PhoneNumber))
-            //.ForMember(destination => destination.SaltPassword, options => SaltHashHandle.RandomSaltHash())
                 .AfterMap((source, destination) =>
                 {
                     if (string.IsNullOrEmpty(destination.SecurityStamp))

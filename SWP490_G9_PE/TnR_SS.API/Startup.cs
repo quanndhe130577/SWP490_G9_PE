@@ -2,13 +2,16 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using System.Linq;
 using System.Text;
-using TnR_SS.API.Common.ErrorHandlerMiddleware;
+using TnR_SS.API.Common.ErrorHandle;
+using TnR_SS.API.Common.Response;
 using TnR_SS.Entity.Models;
 
 namespace TnR_SS
@@ -44,8 +47,8 @@ namespace TnR_SS
                 cfg.User.RequireUniqueEmail = false;
                 cfg.SignIn.RequireConfirmedAccount = false;
             })
-            .AddEntityFrameworkStores<TnR_SSContext>();
-            //.AddDefaultTokenProviders();
+            .AddEntityFrameworkStores<TnR_SSContext>()
+            .AddDefaultTokenProviders();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {
@@ -63,6 +66,22 @@ namespace TnR_SS
 
             services.AddAutoMapper(typeof(Startup));
 
+            // handle ModelBiding Exception
+            services.AddMvc().ConfigureApiBehaviorOptions(options =>
+                {
+                    //options.SuppressModelStateInvalidFilter = true;
+
+                    options.InvalidModelStateResponseFactory = actionContext =>
+                    {
+
+                        var errors = actionContext.ModelState
+                            .Where(e => e.Value.Errors.Count > 0)
+                            .Select(e => e.Value.Errors.First().ErrorMessage).ToList();
+                        ResponseBuilder<object> rpb = new ResponseBuilder<object>().Error("Error").WithData(new ErrorResponse(errors));
+
+                        return new BadRequestObjectResult(rpb.ResponseModel);
+                    };
+                });
             /*services.Configure<SecurityStampValidatorOptions>(options =>
             {
                 // enables immediate logout, after updating the user's stat.
@@ -80,14 +99,14 @@ namespace TnR_SS
         {
             if (env.IsDevelopment())
             {
-                //app.UseExceptionHandler("/api/error-local-development");
-                app.UseDeveloperExceptionPage();
+                app.UseExceptionHandler("/api/error-local-development");
+                //app.UseDeveloperExceptionPage();
                 /*app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SWP490_G9_PE v1"));*/
             }
             else
             {
-                //app.UseExceptionHandler("/api/error");
+                app.UseExceptionHandler("/api/error");
             }
 
             app.UseAuthentication();

@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
-using System;
+﻿using System;
 using System.Globalization;
 
-namespace TnR_SS.API.Common.ErrorHandlerMiddleware
+namespace TnR_SS.API.Common.ErrorHandle
+
 {
     public class AppException : Exception
     {

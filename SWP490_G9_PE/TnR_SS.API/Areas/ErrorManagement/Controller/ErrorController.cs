@@ -1,11 +1,7 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace TnR_SS.API.Areas.ErrorManagement.Controller
 {
@@ -13,7 +9,7 @@ namespace TnR_SS.API.Areas.ErrorManagement.Controller
     [ApiController]
     public class ErrorController : ControllerBase
     {
-        /*[Route("error")]
+        [Route("error")]
         public IActionResult Error() => Problem();
 
         [Route("error-local-development")]
@@ -30,6 +26,6 @@ namespace TnR_SS.API.Areas.ErrorManagement.Controller
             return Problem(
                 detail: context.Error.StackTrace,
                 title: context.Error.Message);
-        }*/
+        }
     }
 }

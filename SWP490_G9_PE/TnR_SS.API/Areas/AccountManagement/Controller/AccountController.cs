@@ -104,7 +104,7 @@ namespace TnR_SS.API.Areas.AccountManagement.Controller
                         Token = token,
                         UserID = user.Id.ToString("######")
                     };
-                    ResponseBuilder<ResponseLoginModel> rpB = new ResponseBuilder<ResponseLoginModel>().WithData(rlm);
+                    ResponseBuilder<ResponseLoginModel> rpB = new ResponseBuilder<ResponseLoginModel>().Success("Login success").WithData(rlm);
                     return rpB.ResponseModel;
                 }
 
@@ -152,9 +152,7 @@ namespace TnR_SS.API.Areas.AccountManagement.Controller
             }
             catch (DbUpdateConcurrencyException)
             {
-
                 return new ResponseBuilder().WithCode(HttpStatusCode.Conflict).WithMessage("").ResponseModel;
-
             }
 
             return new ResponseBuilder().Success("Update Success").ResponseModel;
