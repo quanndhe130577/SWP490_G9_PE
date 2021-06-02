@@ -40,7 +40,7 @@ namespace TnR_SS.API.Common.ErrorHandle
                         break;
                 }*/
 
-                ResponseBuilder<object> rpb = new ResponseBuilder<object>().Error("Error").WithData(new ErrorResponse(new List<string>(new string[] { error?.Message })));
+                ResponseBuilder<object> rpb = new ResponseBuilder<object>().Error("Error").WithData(new ErrorResponse(new List<string>(new string[] { error?.Message, "Error Handler Middleware" })));
                 //var result = JsonSerializer.Serialize(rpb.ResponseModel);
                 var result = JsonConvert.SerializeObject(rpb.ResponseModel);
                 await response.WriteAsync(result);

@@ -73,7 +73,6 @@ namespace TnR_SS
 
                     options.InvalidModelStateResponseFactory = actionContext =>
                     {
-
                         var errors = actionContext.ModelState
                             .Where(e => e.Value.Errors.Count > 0)
                             .Select(e => e.Value.Errors.First().ErrorMessage).ToList();

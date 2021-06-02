@@ -82,7 +82,7 @@ namespace TnR_SS.API.Areas.AccountManagement.Controller
         [HttpPost]
         [Route("login")]
         [AllowAnonymous]
-        public async Task<ResponseModel> Login(LoginModel userData)
+        public async Task<ResponseModel> Login([FromBody] LoginModel userData)
         {
             if (ModelState.IsValid)
             {
