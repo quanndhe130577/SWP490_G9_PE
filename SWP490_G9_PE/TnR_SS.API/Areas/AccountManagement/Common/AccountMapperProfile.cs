@@ -30,6 +30,9 @@ namespace TnR_SS.API.Areas.AccountManagement.Common
                 destination.Password = EncryptHandle.EncryptString(source.Password + saltPass);
             });*/
             CreateMap<UserReqModel, UserInfor>().ForMember(destination => destination.UserName, options => options.MapFrom(source => source.PhoneNumber));
+
+            CreateMap<UserInfor, UserResModel>().ForMember(destination => destination.UserID, options => options.MapFrom(source => source.Id))
+                .ForMember(destination => destination.RoleName, options => options.MapFrom(source => source.Role.DisplayName));
         }
 
         private static string RandomSaltHash()

@@ -35,10 +35,11 @@ namespace TnR_SS.API.Common.Response
 
         public ResponseBuilder Errors(List<string> rs)
         {
+            this.ResponseModel = new ResponseModel<object>();
             this.ResponseModel.Success = false;
             this.ResponseModel.StatusCode = HttpStatusCode.BadRequest;
             this.ResponseModel.Message = "Errors";
-            ((ResponseModel<List<string>>)this.ResponseModel).Data = rs;
+            ((ResponseModel<object>)this.ResponseModel).Data = new { errors = rs };
             return this;
         }
 

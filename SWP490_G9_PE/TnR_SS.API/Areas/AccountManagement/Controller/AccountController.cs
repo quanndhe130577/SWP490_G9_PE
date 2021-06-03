@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -16,7 +15,7 @@ using TnR_SS.Entity.Models;
 namespace TnR_SS.API.Areas.AccountManagement.Controller
 {
     [Authorize]
-    [Route("api/test")]
+    [Route("api")]
     [ApiController]
     public class AccountController : ControllerBase
     {
@@ -84,7 +83,7 @@ namespace TnR_SS.API.Areas.AccountManagement.Controller
                     LoginResModel rlm = new LoginResModel()
                     {
                         Token = token,
-                        UserID = user.Id
+                        UserInfor = _mapper.Map<UserInfor, UserResModel>(user)
                     };
                     ResponseBuilder<LoginResModel> rpB = new ResponseBuilder<LoginResModel>().Success("Login success").WithData(rlm);
                     return rpB.ResponseModel;
@@ -156,7 +155,7 @@ namespace TnR_SS.API.Areas.AccountManagement.Controller
                     LoginResModel rlm = new LoginResModel()
                     {
                         Token = token,
-                        UserID = userInfor.Id
+                        UserInfor = _mapper.Map<UserInfor, UserResModel>(userInfor)
                     };
                     return new ResponseBuilder<LoginResModel>().Success("Update Success").WithData(rlm).ResponseModel;
                 }
@@ -186,10 +185,11 @@ namespace TnR_SS.API.Areas.AccountManagement.Controller
             //generate reset token
             var token = _userManager.GeneratePasswordResetTokenAsync(userInfor).Result;
 
-            return new ResponseBuilder<Object>().Success("Update Success").WithData(new { resetToken = token }).ResponseModel;
+            return new ResponseBuilder<Object>().Success("Success").WithData(new { resetToken = token }).ResponseModel;
         }
 
         [HttpPost("reset-password")]
+        [AllowAnonymous]
         public async Task<ResponseModel> ResetPassword(ResetPasswordReqModel resetData)
         {
             var userInfor = _userManager.Users.FirstOrDefault(x => x.PhoneNumber.Equals(resetData.PhoneNumber));
