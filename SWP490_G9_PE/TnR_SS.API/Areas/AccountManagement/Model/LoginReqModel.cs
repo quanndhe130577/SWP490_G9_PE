@@ -2,7 +2,7 @@
 
 namespace TnR_SS.API.Areas.AccountManagement.Model
 {
-    public class LoginModel
+    public class LoginReqModel
     {
         [MinLength(10)]
         [MaxLength(12)]
@@ -11,9 +11,9 @@ namespace TnR_SS.API.Areas.AccountManagement.Model
         public string Password { get; set; }
     }
 
-    public class ResponseLoginModel
+    public class LoginResModel
     {
         public string Token { get; set; }
-        public string UserID { get; set; }
+        public int UserID { get; set; }
     }
 }

@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Text.Json;
 using System.Threading.Tasks;
 using TnR_SS.API.Common.Response;
 
-namespace TnR_SS.API.Common.ErrorHandle
+namespace TnR_SS.API.Middleware.ErrorHandle
 {
     public class ErrorHandlerMiddleware
     {
@@ -40,7 +38,7 @@ namespace TnR_SS.API.Common.ErrorHandle
                         break;
                 }*/
 
-                ResponseBuilder<object> rpb = new ResponseBuilder<object>().Error("Error").WithData(new ErrorResponse(new List<string>(new string[] { error?.Message, "Error Handler Middleware" })));
+                ResponseBuilder rpb = new ResponseBuilder().Error(error?.Message);
                 //var result = JsonSerializer.Serialize(rpb.ResponseModel);
                 var result = JsonConvert.SerializeObject(rpb.ResponseModel);
                 await response.WriteAsync(result);

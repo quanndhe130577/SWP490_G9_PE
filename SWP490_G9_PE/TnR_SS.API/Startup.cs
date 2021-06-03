@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -8,10 +8,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Net.Http.Headers;
 using System.Linq;
 using System.Text;
-using TnR_SS.API.Common.ErrorHandle;
 using TnR_SS.API.Common.Response;
+using TnR_SS.API.Middleware.ErrorHandle;
 using TnR_SS.Entity.Models;
 
 namespace TnR_SS
@@ -50,19 +51,40 @@ namespace TnR_SS
             .AddEntityFrameworkStores<TnR_SSContext>()
             .AddDefaultTokenProviders();
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+            // add cors configure
+            services.AddCors(options =>
             {
-                options.RequireHttpsMetadata = false;
-                options.SaveToken = false;
-                options.TokenValidationParameters = new TokenValidationParameters()
-                {
-                    ValidateIssuer = true,
-                    ValidIssuer = Configuration["Jwt:Issuer"],
-                    ValidateAudience = true,
-                    ValidAudience = Configuration["Jwt:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
-                };
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.WithOrigins("http://localhost:3010")
+                            .AllowCredentials()
+                            .AllowAnyMethod()
+                            //.AllowAnyHeader()
+                            .WithHeaders(HeaderNames.ContentType);
+                    });
             });
+
+            services.AddAuthentication(
+                //JwtBearerDefaults.AuthenticationScheme
+                x =>
+                {
+                    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                }
+                ).AddJwtBearer(options =>
+                {
+                    options.RequireHttpsMetadata = false;
+                    options.SaveToken = false; // truy cập mã thông báo trong controller khi cần thiết
+                    options.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        ValidateIssuer = true,
+                        ValidIssuer = Configuration["Jwt:Issuer"],
+                        ValidateAudience = true,
+                        ValidAudience = Configuration["Jwt:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+                    };
+                });
 
             services.AddAutoMapper(typeof(Startup));
 
@@ -76,7 +98,7 @@ namespace TnR_SS
                         var errors = actionContext.ModelState
                             .Where(e => e.Value.Errors.Count > 0)
                             .Select(e => e.Value.Errors.First().ErrorMessage).ToList();
-                        ResponseBuilder<object> rpb = new ResponseBuilder<object>().Error("Error").WithData(new ErrorResponse(errors));
+                        ResponseBuilder rpb = new ResponseBuilder().Errors(errors);
 
                         return new BadRequestObjectResult(rpb.ResponseModel);
                     };
@@ -108,16 +130,34 @@ namespace TnR_SS
                 app.UseExceptionHandler("/api/error");
             }
 
-            app.UseAuthentication();
-
-            app.UseHttpsRedirection();
-
+            // exception handler
             app.UseMiddleware<ErrorHandlerMiddleware>();
 
+            //HSTS
+
+            //HttpsRedirection
+            app.UseHttpsRedirection();
+
+            //static file
+
+            //routing
             app.UseRouting();
 
+            //use cors
+            app.UseCors();
+
+            //response caching
+            //app.UseResponseCaching();
+
+            //authentication
+            app.UseAuthentication();
+
+            //authorization
             app.UseAuthorization();
 
+            //custom
+
+            //end point
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

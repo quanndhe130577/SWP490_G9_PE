@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using TnR_SS.API.Common.ErrorHandle;
 using TnR_SS.API.Common.Response;
 
 namespace TnR_SS.API.Areas.ErrorManagement.Controller
@@ -22,7 +20,7 @@ namespace TnR_SS.API.Areas.ErrorManagement.Controller
             }
 
             var context = HttpContext.Features.Get<IExceptionHandlerFeature>();
-            ResponseBuilder<object> rpb = new ResponseBuilder<object>().Error("Error").WithData(new ErrorResponse(new List<string>(new string[] { context.Error.Message, "Product Enviroment" })));
+            ResponseBuilder rpb = new ResponseBuilder().Error(context.Error.Message);
             return rpb.ResponseModel;
             /*return Problem(
                 detail: context.Error.StackTrace,
@@ -39,7 +37,7 @@ namespace TnR_SS.API.Areas.ErrorManagement.Controller
             }
 
             var context = HttpContext.Features.Get<IExceptionHandlerFeature>();
-            ResponseBuilder<object> rpb = new ResponseBuilder<object>().Error("Error").WithData(new ErrorResponse(new List<string>(new string[] { context.Error.Message, "Development Enviroment" })));
+            ResponseBuilder rpb = new ResponseBuilder().Error(context.Error.Message);
             return rpb.ResponseModel;
             /*return Problem(
                 detail: context.Error.StackTrace,

@@ -9,7 +9,6 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using TnR_SS.API.Areas.AccountManagement.Model;
-using TnR_SS.API.Common.HandleSHA256;
 using TnR_SS.API.Common.Response;
 using TnR_SS.API.Common.Token;
 using TnR_SS.Entity.Models;
@@ -38,7 +37,7 @@ namespace TnR_SS.API.Areas.AccountManagement.Controller
         [HttpPost]
         [Route("register")]
         [AllowAnonymous]
-        public async Task<ResponseModel> Register(RegisterModel userData)
+        public async Task<ResponseModel> Register(RegisterReqModel userData)
         {
             if (ModelState.IsValid)
             {
@@ -47,31 +46,15 @@ namespace TnR_SS.API.Areas.AccountManagement.Controller
                     return new ResponseBuilder().Error("Phone Number existed").ResponseModel;
                 }
 
-                var userInfor = _mapper.Map<RegisterModel, UserInfor>(userData);
+                var userInfor = _mapper.Map<RegisterReqModel, UserInfor>(userData);
                 var result = await _userManager.CreateAsync(userInfor, userData.Password);
-
                 if (result.Succeeded)
                 {
-                    /*var token = TokenGeneration.GetTokenUser(userInfor.Id.ToString("######"));
-                    ResponseLoginModel rlm = new ResponseLoginModel()
-                    {
-                        Token = token,
-                        UserID = userInfor.Id.ToString("######")
-                    };
-                    ResponseBuilder<ResponseLoginModel> rpB = new ResponseBuilder<ResponseLoginModel>().WithData(rlm);
-                    return rpB.ResponseModel;*/
                     return new ResponseBuilder().Success("Create Success").ResponseModel;
                 }
 
-                List<string> listError = new List<string>();
-
-                foreach (var error in result.Errors)
-                {
-                    listError.Add(error.Description);
-                }
-                //ResponseModel<Object> rpB1 = new ResponseModel<Object>(HttpStatusCode.BadRequest, false, "Invalid information", "Login", new { error = listError });
-                ResponseBuilder<Object> rpB1 = new ResponseBuilder<Object>().WithCode(HttpStatusCode.BadRequest).WithData(listError);
-                return rpB1.ResponseModel;
+                var errors = result.Errors.Select(x => x.ToString()).ToList();
+                return new ResponseBuilder().Errors(errors).ResponseModel;
 
             }
 
@@ -82,7 +65,7 @@ namespace TnR_SS.API.Areas.AccountManagement.Controller
         [HttpPost]
         [Route("login")]
         [AllowAnonymous]
-        public async Task<ResponseModel> Login([FromBody] LoginModel userData)
+        public async Task<ResponseModel> Login([FromBody] LoginReqModel userData)
         {
             if (ModelState.IsValid)
             {
@@ -94,17 +77,16 @@ namespace TnR_SS.API.Areas.AccountManagement.Controller
 
                 var userSigninResult = await _signInManager.PasswordSignInAsync(user, userData.Password, true, false);
                 //var userSigninResult = await _userManager.CheckPasswordAsync(user, HandleSHA256.EncryptString(userData.Password + user.SaltPassword));
-
                 if (userSigninResult.Succeeded)
                 {
                     //await _signInManager.SignInAsync(user, false);
-                    var token = TokenGeneration.GetTokenUser(user.Id.ToString("######"));
-                    ResponseLoginModel rlm = new ResponseLoginModel()
+                    var token = TokenManagement.GetTokenUser(user.Id);
+                    LoginResModel rlm = new LoginResModel()
                     {
                         Token = token,
-                        UserID = user.Id.ToString("######")
+                        UserID = user.Id
                     };
-                    ResponseBuilder<ResponseLoginModel> rpB = new ResponseBuilder<ResponseLoginModel>().Success("Login success").WithData(rlm);
+                    ResponseBuilder<LoginResModel> rpB = new ResponseBuilder<LoginResModel>().Success("Login success").WithData(rlm);
                     return rpB.ResponseModel;
                 }
 
@@ -117,31 +99,20 @@ namespace TnR_SS.API.Areas.AccountManagement.Controller
 
         [HttpPut("update/{id}")]
         //[Route("update")]
-        public async Task<ResponseModel> UpdateUserInfor(int id, UserModel userData)
+        public async Task<ResponseModel> UpdateUserInfor(int id, UserReqModel userData)
         {
-            // check token
-            var currentUser = HttpContext.User;
-
-            if (currentUser.HasClaim(c => c.Type == "Id"))
+            if (!TokenManagement.CheckUserIdFromToken(HttpContext, id))
             {
-                int claimdId = int.Parse(currentUser.Claims.FirstOrDefault(c => c.Type == "Id").Value);
-                if (claimdId != id)
-                {
-                    return new ResponseBuilder().WithCode(HttpStatusCode.Unauthorized).WithMessage("Access Denied").ResponseModel;
-                }
-            }
-            else
-            {
-                return new ResponseBuilder().WithCode(HttpStatusCode.Unauthorized).WithMessage("Access Denied").ResponseModel;
+                return new ResponseBuilder().Error("Access denied").ResponseModel;
             }
 
             var userInfor = _userManager.Users.FirstOrDefault(x => x.Id == id);
-            if (userInfor == null)
+            if (userInfor is null)
             {
-                return new ResponseBuilder().WithCode(HttpStatusCode.NotFound).WithMessage("User have not existed").ResponseModel;
+                return new ResponseBuilder().WithCode(HttpStatusCode.NotFound).WithMessage("User have not registered").ResponseModel;
             }
 
-            userInfor = _mapper.Map<UserModel, UserInfor>(userData, userInfor);
+            userInfor = _mapper.Map<UserReqModel, UserInfor>(userData, userInfor);
             await _userManager.UpdateAsync(userInfor);
             //_context.Entry(userInfor).State = EntityState.Modified;
 
@@ -152,7 +123,7 @@ namespace TnR_SS.API.Areas.AccountManagement.Controller
             }
             catch (DbUpdateConcurrencyException)
             {
-                return new ResponseBuilder().WithCode(HttpStatusCode.Conflict).WithMessage("").ResponseModel;
+                return new ResponseBuilder().WithCode(HttpStatusCode.Conflict).WithMessage("Conflict information").ResponseModel;
             }
 
             return new ResponseBuilder().Success("Update Success").ResponseModel;
@@ -161,11 +132,14 @@ namespace TnR_SS.API.Areas.AccountManagement.Controller
 
         [HttpPut("change-password/{id}")]
         //[Route("change-password")]
-        public async Task<ResponseModel> ChangePassword(int id, [FromBody] ChangePasswordModel changePasswordModel)
+        public async Task<ResponseModel> ChangePassword(int id, [FromBody] ChangePasswordReqModel changePasswordModel)
         {
             if (ModelState.IsValid)
             {
-                // check token
+                if (!TokenManagement.CheckUserIdFromToken(HttpContext, id))
+                {
+                    return new ResponseBuilder().Error("Access denied").ResponseModel;
+                }
 
                 var userInfor = _userManager.Users.FirstOrDefault(x => x.Id == id);
                 if (userInfor is null)
@@ -178,54 +152,71 @@ namespace TnR_SS.API.Areas.AccountManagement.Controller
                 if (result.Succeeded)
                 {
                     //await _signInManager.RefreshSignInAsync(userInfor);
-                    var token = TokenGeneration.GetTokenUser(userInfor.Id.ToString("######"));
-                    ResponseLoginModel rlm = new ResponseLoginModel()
+                    var token = TokenManagement.GetTokenUser(userInfor.Id);
+                    LoginResModel rlm = new LoginResModel()
                     {
                         Token = token,
-                        UserID = userInfor.Id.ToString("######")
+                        UserID = userInfor.Id
                     };
-                    return new ResponseBuilder<ResponseLoginModel>().Success("Update Success").WithData(rlm).ResponseModel;
+                    return new ResponseBuilder<LoginResModel>().Success("Update Success").WithData(rlm).ResponseModel;
                 }
                 else
                 {
-                    List<string> listError = new List<string>();
-                    foreach (var er in result.Errors)
-                    {
-                        listError.Add(er.Description);
-                    }
-                    return new ResponseBuilder<List<string>>().Error("Change password failed").WithData(listError).ResponseModel;
+                    var errors = result.Errors.Select(x => x.ToString()).ToList();
+                    return new ResponseBuilder().Errors(errors).ResponseModel;
                 }
             }
 
             return new ResponseBuilder().Error("Invalid password").ResponseModel;
         }
 
-        [HttpPost("reset-token/{id}")]
+        #region Reset Password
+        [HttpGet("reset-password-token/{phoneNumber}")]
         [AllowAnonymous]
-        public ResponseModel GeneratePasswordResetToken(int id, string OTP)
+        public ResponseModel GeneratePasswordResetToken(string phoneNumber)
         {
-            //check OTP
+            var userInfor = _userManager.Users.FirstOrDefault(x => x.PhoneNumber.Equals(phoneNumber));
+            if (userInfor is null)
+            {
+                return new ResponseBuilder().WithCode(HttpStatusCode.NotFound).WithMessage("Phone Number haven't registered yet").ResponseModel;
+            }
 
-            var userInfor = _userManager.Users.FirstOrDefault(x => x.Id == id);
+            //generate OTP
+
+            //generate reset token
             var token = _userManager.GeneratePasswordResetTokenAsync(userInfor).Result;
+
             return new ResponseBuilder<Object>().Success("Update Success").WithData(new { resetToken = token }).ResponseModel;
         }
 
-        [HttpPost("reset-password/{id}")]
-        public async Task<ResponseModel> ResetPassword(int id, ResetPasswordModel passwordData)
+        [HttpPost("reset-password")]
+        public async Task<ResponseModel> ResetPassword(ResetPasswordReqModel resetData)
         {
-            var userInfor = _userManager.Users.FirstOrDefault(x => x.Id == id);
+            var userInfor = _userManager.Users.FirstOrDefault(x => x.PhoneNumber.Equals(resetData.PhoneNumber));
 
-            var result = await _userManager.ResetPasswordAsync(userInfor, passwordData.Token, passwordData.Password);
+            if (userInfor is null)
+            {
+                return new ResponseBuilder().WithCode(HttpStatusCode.NotFound).WithMessage("Invalid Information").ResponseModel;
+            }
+
+            // check OTP for User
+            if (!resetData.OTP.Equals("123456"))
+            {
+                return new ResponseBuilder().Error("Invalid OTP").ResponseModel;
+            }
+
+            var result = await _userManager.ResetPasswordAsync(userInfor, resetData.Token, resetData.NewPassword);
             if (result.Succeeded)
             {
                 return new ResponseBuilder().Success("Reset Password Success").ResponseModel;
             }
             else
             {
-                return new ResponseBuilder().Error("Reset password failed").ResponseModel;
+                var errors = result.Errors.Select(x => x.ToString()).ToList();
+                return new ResponseBuilder().Errors(errors).ResponseModel;
             }
         }
+        #endregion
 
         [HttpGet("logout")]
         public async Task<ResponseModel> Logout()

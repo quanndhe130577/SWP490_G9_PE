@@ -28,8 +28,4 @@
     <ProjectReference Include="..\TnR_SS.Entity\TnR_SS.Entity.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Areas\ErrorManagement\Model\" />
-  </ItemGroup>
-
 </Project>

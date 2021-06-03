@@ -9,7 +9,7 @@ namespace TnR_SS.API.Areas.AccountManagement.Common
     {
         public AccountMapperProfile()
         {
-            CreateMap<RegisterModel, UserInfor>().ForMember(destination => destination.UserName, options => options.MapFrom(source => source.PhoneNumber))
+            CreateMap<RegisterReqModel, UserInfor>().ForMember(destination => destination.UserName, options => options.MapFrom(source => source.PhoneNumber))
                 .AfterMap((source, destination) =>
                 {
                     if (string.IsNullOrEmpty(destination.SecurityStamp))
@@ -29,7 +29,7 @@ namespace TnR_SS.API.Areas.AccountManagement.Common
                 destination.SaltPassword = saltPass;
                 destination.Password = EncryptHandle.EncryptString(source.Password + saltPass);
             });*/
-            CreateMap<UserModel, UserInfor>().ForMember(destination => destination.UserName, options => options.MapFrom(source => source.PhoneNumber));
+            CreateMap<UserReqModel, UserInfor>().ForMember(destination => destination.UserName, options => options.MapFrom(source => source.PhoneNumber));
         }
 
         private static string RandomSaltHash()

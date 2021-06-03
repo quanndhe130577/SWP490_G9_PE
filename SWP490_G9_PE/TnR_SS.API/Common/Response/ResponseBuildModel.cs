@@ -19,7 +19,6 @@ namespace TnR_SS.API.Common.Response
         {
             this.ResponseModel.Success = true;
             this.ResponseModel.Message = message;
-            this.ResponseModel.Type = "Success";
             this.ResponseModel.StatusCode = HttpStatusCode.OK;
 
             return this;
@@ -34,17 +33,21 @@ namespace TnR_SS.API.Common.Response
             return this;
         }
 
+        public ResponseBuilder Errors(List<string> rs)
+        {
+            this.ResponseModel.Success = false;
+            this.ResponseModel.StatusCode = HttpStatusCode.BadRequest;
+            this.ResponseModel.Message = "Errors";
+            ((ResponseModel<List<string>>)this.ResponseModel).Data = rs;
+            return this;
+        }
+
         public ResponseBuilder WithCode(HttpStatusCode statusCode)
         {
             this.ResponseModel.StatusCode = statusCode;
             return this;
         }
 
-        public ResponseBuilder WithType(string type)
-        {
-            this.ResponseModel.Type = type;
-            return this;
-        }
         public ResponseBuilder WithMessage(string ms)
         {
             this.ResponseModel.Message = ms;
@@ -92,12 +95,6 @@ namespace TnR_SS.API.Common.Response
             return this;
         }
 
-        public new ResponseBuilder<T> WithType(string type)
-        {
-            base.WithType(type);
-            return this;
-        }
-
         public ResponseBuilder<T> WithData(T data)
         {
             //base.Success("Success");
@@ -110,4 +107,5 @@ namespace TnR_SS.API.Common.Response
             return (ResponseModel<T>)this.ResponseModel;
         }
     }
+
 }

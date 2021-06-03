@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TnR_SS.API.Areas.AccountManagement.Model
 {
-    public class UserModel
+    public class UserReqModel
     {
         public string FirstName { get; set; }
         public string Lastname { get; set; }

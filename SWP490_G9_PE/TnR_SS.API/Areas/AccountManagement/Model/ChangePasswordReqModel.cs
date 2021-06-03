@@ -2,7 +2,7 @@
 
 namespace TnR_SS.API.Areas.AccountManagement.Model
 {
-    public class ChangePasswordModel
+    public class ChangePasswordReqModel
     {
         [MinLength(8)]
         public string CurrentPassword { get; set; }
