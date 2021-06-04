@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using TnR_SS.API.Areas.AccountManagement.Model;
+using TnR_SS.API.Common.OTP;
 using TnR_SS.API.Common.Response;
 using TnR_SS.API.Common.Token;
 using TnR_SS.Entity.Models;
@@ -181,6 +182,7 @@ namespace TnR_SS.API.Areas.AccountManagement.Controller
             }
 
             //generate OTP
+            var rs = TestOTP_Stringee.SendRequestAsync();
 
             //generate reset token
             var token = _userManager.GeneratePasswordResetTokenAsync(userInfor).Result;
