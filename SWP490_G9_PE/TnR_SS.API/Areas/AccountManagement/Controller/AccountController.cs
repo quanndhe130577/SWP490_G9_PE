@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -53,7 +54,7 @@ namespace TnR_SS.API.Areas.AccountManagement.Controller
                     return new ResponseBuilder().Success("Create Success").ResponseModel;
                 }
 
-                var errors = result.Errors.Select(x => x.ToString()).ToList();
+                var errors = result.Errors.Select(x => x.Description).ToList();
                 return new ResponseBuilder().Errors(errors).ResponseModel;
 
             }
@@ -162,7 +163,7 @@ namespace TnR_SS.API.Areas.AccountManagement.Controller
                 }
                 else
                 {
-                    var errors = result.Errors.Select(x => x.ToString()).ToList();
+                    var errors = result.Errors.Select(x => x.Description).ToList();
                     return new ResponseBuilder().Errors(errors).ResponseModel;
                 }
             }
@@ -214,7 +215,7 @@ namespace TnR_SS.API.Areas.AccountManagement.Controller
             }
             else
             {
-                var errors = result.Errors.Select(x => x.ToString()).ToList();
+                var errors = result.Errors.Select(x => x.Description).ToList();
                 return new ResponseBuilder().Errors(errors).ResponseModel;
             }
         }
