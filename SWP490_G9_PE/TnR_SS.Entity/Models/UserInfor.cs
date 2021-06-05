@@ -22,9 +22,9 @@ namespace TnR_SS.Entity.Models
         public string IdentifyCode { get; set; }
         public string Avatar { get; set; }
         public DateTime CreatedDate { get; set; }
-        [ForeignKey(nameof(RoleUser))]
+        /*[ForeignKey(nameof(RoleUser))]
         public int RoleId { get; set; }
 
-        public virtual RoleUser Role { get; set; }
+        public virtual RoleUser Role { get; set; }*/
     }
 }

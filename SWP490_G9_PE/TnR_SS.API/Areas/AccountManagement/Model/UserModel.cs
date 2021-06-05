@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TnR_SS.API.Areas.AccountManagement.Model
 {
-    public class UserReqModel
+    public class UserModel
     {
         [Required]
         [MaxLength(50)]
@@ -24,9 +24,6 @@ namespace TnR_SS.API.Areas.AccountManagement.Model
         public string IdentifyCode { get; set; }
 
         public string Avatar { get; set; }
-
-        [Required]
-        public int RoleId { get; set; }
 
     }
 }

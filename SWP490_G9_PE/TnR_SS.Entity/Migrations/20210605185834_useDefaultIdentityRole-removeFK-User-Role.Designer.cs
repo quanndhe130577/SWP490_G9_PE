@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TnR_SS.Entity.Models;
 
 namespace TnR_SS.Entity.Migrations
 {
     [DbContext(typeof(TnR_SSContext))]
-    partial class TnR_SSContextModelSnapshot : ModelSnapshot
+    [Migration("20210605185834_useDefaultIdentityRole-removeFK-User-Role")]
+    partial class useDefaultIdentityRoleremoveFKUserRole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -132,9 +134,6 @@ namespace TnR_SS.Entity.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("DisplayName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Name")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -156,26 +155,23 @@ namespace TnR_SS.Entity.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "b036c01b-5972-4166-9449-6d39be3f1072",
-                            DisplayName = "Admin",
+                            ConcurrencyStamp = "2bf2693d-64f7-4015-945b-11b1dcca3024",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "f498a0fd-3c57-4675-8ffe-38fcd724faa3",
-                            DisplayName = "Thương lái",
+                            ConcurrencyStamp = "811ed2cd-f71e-4366-b558-b392ddb805ae",
                             Name = "Trader",
-                            NormalizedName = "Trader"
+                            NormalizedName = "Thương lái"
                         },
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "1a92e729-a8be-405e-8c52-0cfb25b255aa",
-                            DisplayName = "Chủ bến",
+                            ConcurrencyStamp = "091fbf22-b231-4a76-8c10-576f537e809e",
                             Name = "Weight Recorder",
-                            NormalizedName = "Weight Recorder"
+                            NormalizedName = "Chủ bến"
                         });
                 });
 

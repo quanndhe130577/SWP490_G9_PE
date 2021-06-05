@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace TnR_SS.API.Areas.RoleManagement.Model.ResponseModel
 {
-    public class RoleResModel
+    public class AllRoleResModel
     {
-        public int Id { get; set; }
+        public string NormalizedName { get; set; }
         public string DisplayName { get; set; }
     }
 }

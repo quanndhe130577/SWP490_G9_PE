@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TnR_SS.API.Areas.AccountManagement.Model
+namespace TnR_SS.API.Areas.AccountManagement.Model.RequestModel
 {
     public class ResetPasswordReqModel
     {

@@ -8,7 +8,7 @@ namespace TnR_SS.API.Areas.RoleManagement.Common
     {
         public RoleMapperProfile()
         {
-            CreateMap<RoleUser, RoleResModel>();
+            CreateMap<RoleUser, AllRoleResModel>();
         }
     }
 }

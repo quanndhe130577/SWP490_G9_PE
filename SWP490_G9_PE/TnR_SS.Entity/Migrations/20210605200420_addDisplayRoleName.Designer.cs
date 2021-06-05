@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TnR_SS.Entity.Models;
 
 namespace TnR_SS.Entity.Migrations
 {
     [DbContext(typeof(TnR_SSContext))]
-    partial class TnR_SSContextModelSnapshot : ModelSnapshot
+    [Migration("20210605200420_addDisplayRoleName")]
+    partial class addDisplayRoleName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -156,26 +158,23 @@ namespace TnR_SS.Entity.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "b036c01b-5972-4166-9449-6d39be3f1072",
+                            ConcurrencyStamp = "d43d871f-b57a-484a-96ad-fe15cf8f982d",
                             DisplayName = "Admin",
-                            Name = "Admin",
-                            NormalizedName = "Admin"
+                            Name = "Admin"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "f498a0fd-3c57-4675-8ffe-38fcd724faa3",
+                            ConcurrencyStamp = "18eafe2a-935d-43f2-9541-3c7372ce2313",
                             DisplayName = "Thương lái",
-                            Name = "Trader",
-                            NormalizedName = "Trader"
+                            Name = "Trader"
                         },
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "1a92e729-a8be-405e-8c52-0cfb25b255aa",
+                            ConcurrencyStamp = "b17c8c65-5b4b-41e0-b646-997fdc70ebf0",
                             DisplayName = "Chủ bến",
-                            Name = "Weight Recorder",
-                            NormalizedName = "Weight Recorder"
+                            Name = "Weight Recorder"
                         });
                 });
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace TnR_SS.API.Areas.AccountManagement.Model
+namespace TnR_SS.API.Areas.AccountManagement.Model.ResponseModel
 {
     public class LoginResModel
     {
@@ -21,6 +21,6 @@ namespace TnR_SS.API.Areas.AccountManagement.Model
         public DateTime Dob { get; set; }
         public string IdentifyCode { get; set; } // chung minh thu nhan dan
         public string Avatar { get; set; }
-        public string RoleName { get; set; }
+        public string RoleDisplayName { get; set; }
     }
 }

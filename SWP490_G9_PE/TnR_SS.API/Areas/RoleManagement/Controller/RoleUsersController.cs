@@ -34,13 +34,13 @@ namespace TnR_SS.API.Areas.RoleManagement.Controller
         public ResponseModel GetRoleUsers()
         {
             //var roles = await _roleManager.Roles.ToListAsync();
-            List<RoleResModel> roleRes = new List<RoleResModel>();
+            List<AllRoleResModel> roleRes = new List<AllRoleResModel>();
             foreach (var role in _roleManager.Roles)
             {
-                roleRes.Add(_mapper.Map<RoleUser, RoleResModel>(role));
+                roleRes.Add(_mapper.Map<RoleUser, AllRoleResModel>(role));
             }
 
-            return new ResponseBuilder<List<RoleResModel>>().Success("Get list role success").WithData(roleRes).ResponseModel;
+            return new ResponseBuilder<List<AllRoleResModel>>().Success("Get list role success").WithData(roleRes).ResponseModel;
         }
 
     }

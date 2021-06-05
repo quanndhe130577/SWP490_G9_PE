@@ -29,6 +29,17 @@ namespace TnR_SS.Entity.Models
 
             var listRole = new RoleUser[]
             {
+                new RoleUser(){ Id = 1, Name = "Admin", DisplayName = "Admin", NormalizedName = "Admin"},
+                new RoleUser(){ Id = 2, Name = "Trader", DisplayName = "Thương lái", NormalizedName = "Trader"},
+                new RoleUser(){ Id = 3, Name = "Weight Recorder", DisplayName = "Chủ bến", NormalizedName = "Weight Recorder"},
+            };
+
+            modelBuilder.Entity<RoleUser>(entity =>
+            {
+                entity.HasData(listRole);
+            });
+            /*var listRole = new RoleUser[]
+            {
                 new RoleUser(){ Id = 1, DisplayName = "Admin", RoleName = "Admin"},
                 new RoleUser(){ Id = 2, DisplayName = "Trader", RoleName = "Trader"},
                 new RoleUser(){ Id = 3, DisplayName = "Weight Recorder", RoleName = "Weight Recorder"},
@@ -50,7 +61,7 @@ namespace TnR_SS.Entity.Models
                     .IsUnicode(false);
 
                 entity.HasData(listRole);
-            });
+            });*/
 
             /*var listUser = new UserInfor[]
             {
@@ -91,28 +102,19 @@ namespace TnR_SS.Entity.Models
                     .IsRequired()
                     .HasMaxLength(50);
 
-                /*entity.Property(e => e.Password)
-                    .IsRequired()
-                    .HasMaxLength(64)
-                    .IsUnicode(false);*/
-
                 entity.Property(e => e.PhoneNumber)
                     .IsRequired()
                     .HasMaxLength(12)
                     .IsUnicode(false);
 
-                entity.Property(e => e.RoleId).HasColumnName("RoleID");
+                /*entity.Property(e => e.RoleId).HasColumnName("RoleID");
 
-                /*entity.Property(e => e.SaltPassword)
-                    .IsRequired()
-                    .HasMaxLength(20)
-                    .IsUnicode(false);*/
 
                 entity.HasOne(d => d.Role)
                     .WithMany(p => p.UserInfors)
                     .HasForeignKey(d => d.RoleId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__UserInfor__RoleUser");
+                    .HasConstraintName("FK__UserInfor__RoleUser");*/
 
                 //entity.HasData(listUser);
             });

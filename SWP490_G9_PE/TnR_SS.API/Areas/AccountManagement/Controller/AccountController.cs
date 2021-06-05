@@ -2,13 +2,13 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using TnR_SS.API.Areas.AccountManagement.Model;
+using TnR_SS.API.Areas.AccountManagement.Model.RequestModel;
+using TnR_SS.API.Areas.AccountManagement.Model.ResponseModel;
 using TnR_SS.API.Common.OTP;
 using TnR_SS.API.Common.Response;
 using TnR_SS.API.Common.Token;
@@ -24,13 +24,15 @@ namespace TnR_SS.API.Areas.AccountManagement.Controller
         private readonly TnR_SSContext _context;
         private readonly UserManager<UserInfor> _userManager;
         private readonly SignInManager<UserInfor> _signInManager;
+        private readonly RoleManager<RoleUser> _roleManager;
         private readonly IMapper _mapper;
 
-        public AccountController(TnR_SSContext context, UserManager<UserInfor> userManager, SignInManager<UserInfor> signInManager, IMapper mapper)
+        public AccountController(TnR_SSContext context, UserManager<UserInfor> userManager, SignInManager<UserInfor> signInManager, RoleManager<RoleUser> roleManager, IMapper mapper)
         {
             _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
             _mapper = mapper;
         }
 
@@ -38,7 +40,7 @@ namespace TnR_SS.API.Areas.AccountManagement.Controller
         [HttpPost]
         [Route("register")]
         [AllowAnonymous]
-        public async Task<ResponseModel> Register(RegisterReqModel userData)
+        public async Task<ResponseModel> Register(RegisterUserReqModel userData)
         {
             if (ModelState.IsValid)
             {
@@ -47,11 +49,29 @@ namespace TnR_SS.API.Areas.AccountManagement.Controller
                     return new ResponseBuilder().Error("Phone Number existed").ResponseModel;
                 }
 
-                var userInfor = _mapper.Map<RegisterReqModel, UserInfor>(userData);
+                bool checkRoleExists = await _roleManager.RoleExistsAsync(userData.RoleNormalizedName);
+                if (!checkRoleExists)
+                {
+                    return new ResponseBuilder().Error("Role user does not existed").ResponseModel;
+                }
+
+                var userInfor = _mapper.Map<RegisterUserReqModel, UserInfor>(userData);
                 var result = await _userManager.CreateAsync(userInfor, userData.Password);
+
                 if (result.Succeeded)
                 {
-                    return new ResponseBuilder().Success("Create Success").ResponseModel;
+                    //add role to user
+                    var result_addUserToRole = await _userManager.AddToRoleAsync(userInfor, userData.RoleNormalizedName);
+                    if (result_addUserToRole.Succeeded)
+                    {
+                        return new ResponseBuilder().Success("Create Success").ResponseModel;
+                    }
+
+                    //add role to user failed
+                    await _userManager.DeleteAsync(userInfor);
+                    var errors1 = result_addUserToRole.Errors.Select(x => x.Description).ToList();
+                    return new ResponseBuilder().Errors(errors1).ResponseModel;
+
                 }
 
                 var errors = result.Errors.Select(x => x.Description).ToList();
@@ -88,6 +108,10 @@ namespace TnR_SS.API.Areas.AccountManagement.Controller
                         Token = token,
                         UserInfor = _mapper.Map<UserInfor, UserResModel>(user)
                     };
+
+                    //set role 
+                    rlm.UserInfor.RoleDisplayName = GetRoleDisplayName(user);
+
                     ResponseBuilder<LoginResModel> rpB = new ResponseBuilder<LoginResModel>().Success("Login success").WithData(rlm);
                     return rpB.ResponseModel;
                 }
@@ -101,7 +125,7 @@ namespace TnR_SS.API.Areas.AccountManagement.Controller
 
         [HttpPut("update/{id}")]
         //[Route("update")]
-        public async Task<ResponseModel> UpdateUserInfor(int id, UserReqModel userData)
+        public async Task<ResponseModel> UpdateUserInfor(int id, UpdateUserReqModel userData)
         {
             if (!TokenManagement.CheckUserIdFromToken(HttpContext, id))
             {
@@ -114,19 +138,8 @@ namespace TnR_SS.API.Areas.AccountManagement.Controller
                 return new ResponseBuilder().WithCode(HttpStatusCode.NotFound).WithMessage("User have not registered").ResponseModel;
             }
 
-            userInfor = _mapper.Map<UserReqModel, UserInfor>(userData, userInfor);
+            userInfor = _mapper.Map<UpdateUserReqModel, UserInfor>(userData, userInfor);
             var result = await _userManager.UpdateAsync(userInfor);
-            //_context.Entry(userInfor).State = EntityState.Modified;
-
-            /*try
-            {
-                await _userManager.UpdateAsync(userInfor);
-                //await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                return new ResponseBuilder().WithCode(HttpStatusCode.Conflict).WithMessage("Conflict information").ResponseModel;
-            }*/
 
             if (result.Succeeded)
             {
@@ -241,5 +254,10 @@ namespace TnR_SS.API.Areas.AccountManagement.Controller
             return rs is not null;
         }
 
+        private string GetRoleDisplayName(UserInfor user)
+        {
+            var userRoles = _userManager.GetRolesAsync(user);
+            return _roleManager.FindByNameAsync(userRoles.Result[0]).Result.DisplayName;
+        }
     }
 }

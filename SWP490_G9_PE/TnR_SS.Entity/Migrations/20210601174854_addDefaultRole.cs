@@ -6,7 +6,7 @@ namespace TnR_SS.Entity.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.InsertData(
+            /*migrationBuilder.InsertData(
                 table: "RoleUser",
                 columns: new[] { "ID", "ConcurrencyStamp", "DisplayName", "Name", "NormalizedName", "RoleName" },
                 values: new object[] { 1, "048b36a8-c473-4716-a9f6-9c6835b4484d", "Admin", null, null, "Admin" });
@@ -19,12 +19,12 @@ namespace TnR_SS.Entity.Migrations
             migrationBuilder.InsertData(
                 table: "RoleUser",
                 columns: new[] { "ID", "ConcurrencyStamp", "DisplayName", "Name", "NormalizedName", "RoleName" },
-                values: new object[] { 3, "bae2bbe4-b6d4-4926-bede-a806457ea819", "Weight Recorder", null, null, "Weight Recorder" });
+                values: new object[] { 3, "bae2bbe4-b6d4-4926-bede-a806457ea819", "Weight Recorder", null, null, "Weight Recorder" });*/
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DeleteData(
+            /*migrationBuilder.DeleteData(
                 table: "RoleUser",
                 keyColumn: "ID",
                 keyValue: 1);
@@ -37,7 +37,7 @@ namespace TnR_SS.Entity.Migrations
             migrationBuilder.DeleteData(
                 table: "RoleUser",
                 keyColumn: "ID",
-                keyValue: 3);
+                keyValue: 3);*/
         }
     }
 }
