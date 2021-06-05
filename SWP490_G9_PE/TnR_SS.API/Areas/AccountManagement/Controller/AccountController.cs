@@ -76,11 +76,13 @@ namespace TnR_SS.API.Areas.AccountManagement.Controller
                     return new ResponseBuilder().Error("User not found").ResponseModel;
                 }
 
+                await _signInManager.SignOutAsync();
                 var userSigninResult = await _signInManager.PasswordSignInAsync(user, userData.Password, true, false);
                 //var userSigninResult = await _userManager.CheckPasswordAsync(user, HandleSHA256.EncryptString(userData.Password + user.SaltPassword));
                 if (userSigninResult.Succeeded)
                 {
-                    //await _signInManager.SignInAsync(user, false);
+
+                    await _signInManager.SignInAsync(user, false);
                     var token = TokenManagement.GetTokenUser(user.Id);
                     LoginResModel rlm = new LoginResModel()
                     {
@@ -114,10 +116,10 @@ namespace TnR_SS.API.Areas.AccountManagement.Controller
             }
 
             userInfor = _mapper.Map<UserReqModel, UserInfor>(userData, userInfor);
-            await _userManager.UpdateAsync(userInfor);
+            var result = await _userManager.UpdateAsync(userInfor);
             //_context.Entry(userInfor).State = EntityState.Modified;
 
-            try
+            /*try
             {
                 await _userManager.UpdateAsync(userInfor);
                 //await _context.SaveChangesAsync();
@@ -125,9 +127,15 @@ namespace TnR_SS.API.Areas.AccountManagement.Controller
             catch (DbUpdateConcurrencyException)
             {
                 return new ResponseBuilder().WithCode(HttpStatusCode.Conflict).WithMessage("Conflict information").ResponseModel;
+            }*/
+
+            if (result.Succeeded)
+            {
+                return new ResponseBuilder().Success("Update Success").ResponseModel;
             }
 
-            return new ResponseBuilder().Success("Update Success").ResponseModel;
+            var errors = result.Errors.Select(x => x.Description).ToList();
+            return new ResponseBuilder().Errors(errors).ResponseModel;
 
         }
 
