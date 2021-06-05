@@ -34,17 +34,17 @@ namespace TnR_SS.API.Common.OTP
                 {"cty", "stringee-api;v=1" }
             };*/
             var claims = new[] {
-                    new Claim(JwtRegisteredClaimNames.Jti, Startup.StaticConfig["JwtStringee:apiKeySecret"] + "-" + DateTime.Now),
+                    new Claim(JwtRegisteredClaimNames.Jti, Startup.StaticConfig["JwtStringee:iss"] + "_" + DateTime.Now),
                     new Claim(JwtRegisteredClaimNames.Iss, Startup.StaticConfig["JwtStringee:iss"]),
-                    new Claim(JwtRegisteredClaimNames.Exp, DateTime.Now.AddMinutes(2).ToString()),
-                    new Claim("rest_api", true.ToString()),
+                    new Claim(JwtRegisteredClaimNames.Exp, "120"),
+                    new Claim("rest_api", "1"),
                    };
             var identityClaim = new ClaimsIdentity(claims);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 SigningCredentials = credentials,
-                AdditionalHeaderClaims = new Dictionary<string, object> { { "cty", "JWT" }, { "typ", "JWT" }, { "alg", "HS256" }, },
+                AdditionalHeaderClaims = new Dictionary<string, object> { { "cty", "stringee-api;v=1" }, { "typ", "JWT" }, { "alg", "HS256" }, },
                 Subject = identityClaim
             };
 

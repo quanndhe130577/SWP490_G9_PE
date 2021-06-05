@@ -38,7 +38,7 @@ namespace TnR_SS.API.Middleware.ErrorHandle
                         break;
                 }*/
 
-                ResponseBuilder rpb = new ResponseBuilder().Error(error?.InnerException?.Message);
+                ResponseBuilder rpb = new ResponseBuilder().Error(error?.InnerException == null ? error?.Message : error?.InnerException.Message);
                 //var result = JsonSerializer.Serialize(rpb.ResponseModel);
                 var result = JsonConvert.SerializeObject(rpb.ResponseModel);
                 await response.WriteAsync(result);
