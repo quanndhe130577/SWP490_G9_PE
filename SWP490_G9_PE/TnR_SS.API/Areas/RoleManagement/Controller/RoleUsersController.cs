@@ -31,11 +31,11 @@ namespace TnR_SS.API.Areas.RoleManagement.Controller
         // GET: api/RoleUsers
         [HttpGet]
         [Route("get-all")]
-        public async Task<ResponseModel> GetRoleUsers()
+        public ResponseModel GetRoleUsers()
         {
-            var roles = await _roleManager.Roles.ToListAsync();
+            //var roles = await _roleManager.Roles.ToListAsync();
             List<RoleResModel> roleRes = new List<RoleResModel>();
-            foreach (var role in roles)
+            foreach (var role in _roleManager.Roles)
             {
                 roleRes.Add(_mapper.Map<RoleUser, RoleResModel>(role));
             }

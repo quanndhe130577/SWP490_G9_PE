@@ -124,14 +124,18 @@ namespace TnR_SS
                 //app.UseDeveloperExceptionPage();
                 /*app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SWP490_G9_PE v1"));*/
+
+                // exception handler
+                app.UseMiddleware<ErrorHandlerMiddleware>();
             }
             else
             {
                 app.UseExceptionHandler("/api/error");
+                // exception handler
+                app.UseMiddleware<ErrorHandlerMiddleware>();
             }
 
-            // exception handler
-            app.UseMiddleware<ErrorHandlerMiddleware>();
+
 
             //HSTS
 

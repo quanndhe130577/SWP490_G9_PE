@@ -78,7 +78,6 @@ namespace TnR_SS.API.Areas.AccountManagement.Controller
 
                 await _signInManager.SignOutAsync();
                 var userSigninResult = await _signInManager.PasswordSignInAsync(user, userData.Password, true, false);
-                //var userSigninResult = await _userManager.CheckPasswordAsync(user, HandleSHA256.EncryptString(userData.Password + user.SaltPassword));
                 if (userSigninResult.Succeeded)
                 {
 
