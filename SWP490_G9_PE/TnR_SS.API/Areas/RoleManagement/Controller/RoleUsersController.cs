@@ -1,13 +1,11 @@
-﻿using System;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using TnR_SS.API.Areas.RoleManagement.Model.ResponseModel;
+using TnR_SS.API.Areas.RoleManagement.Model.ResquestModel;
 using TnR_SS.API.Common.Response;
 using TnR_SS.Entity.Models;
 
@@ -43,5 +41,20 @@ namespace TnR_SS.API.Areas.RoleManagement.Controller
             return new ResponseBuilder<List<AllRoleResModel>>().Success("Get list role success").WithData(roleRes).ResponseModel;
         }
 
+        [HttpPost]
+        [Route("create")]
+        public async Task<ResponseModel> CreateRoleUsers(CreateRoleReqModel roleData)
+        {
+            RoleUser roleUser = new RoleUser(roleData.Name, roleData.DisplayName);
+
+            IdentityResult result = await _roleManager.CreateAsync(roleUser);
+            if (result.Succeeded)
+            {
+                return new ResponseBuilder<RoleUser>().Success("Get list role success").WithData(roleUser).ResponseModel;
+            }
+
+            var errors = result.Errors.Select(x => x.Description).ToList();
+            return new ResponseBuilder().Errors(errors).ResponseModel;
+        }
     }
 }

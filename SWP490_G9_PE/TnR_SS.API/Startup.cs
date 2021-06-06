@@ -82,7 +82,7 @@ namespace TnR_SS
                         ValidIssuer = Configuration["Jwt:Issuer"],
                         ValidateAudience = true,
                         ValidAudience = Configuration["Jwt:Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"])),
                     };
                 });
 

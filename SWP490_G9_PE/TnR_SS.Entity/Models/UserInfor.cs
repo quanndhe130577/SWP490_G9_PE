@@ -10,11 +10,14 @@ namespace TnR_SS.Entity.Models
 {
     public partial class UserInfor : IdentityUser<int>
     {
-        [Key]
+        /*[Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
-        public override int Id { get; set; }
+        public override int Id { get; set; }*/
+        [Required]
         public string FirstName { get; set; }
+        [Required]
         public string Lastname { get; set; }
+        [Required]
         public override string PhoneNumber { get; set; }
         /*public string Password { get; set; }
         public string SaltPassword { get; set; }*/
