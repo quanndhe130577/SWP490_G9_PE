@@ -24,7 +24,7 @@ namespace TnR_SS.API.Areas.AccountManagement.Common
                     }
                 });
 
-            CreateMap<UpdateUserReqModel, UserInfor>().ForMember(destination => destination.UserName, options => options.MapFrom(source => source.PhoneNumber));
+            CreateMap<UpdateUserReqModel, UserInfor>();
 
             CreateMap<UserInfor, UserResModel>().ForMember(destination => destination.UserID, options => options.MapFrom(source => source.Id));
 

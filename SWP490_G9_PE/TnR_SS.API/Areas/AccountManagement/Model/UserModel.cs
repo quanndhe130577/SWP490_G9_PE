@@ -13,9 +13,6 @@ namespace TnR_SS.API.Areas.AccountManagement.Model
         [MaxLength(50)]
         public string Lastname { get; set; }
 
-        [MaxLength(12)]
-        [MinLength(10)]
-        public string PhoneNumber { get; set; }
 
         [Required]
         public DateTime Dob { get; set; }

@@ -53,7 +53,7 @@ namespace TnR_SS.API.Common.OTP
             return new JwtSecurityTokenHandler().CreateEncodedJwt(tokenDescriptor);
         }
 
-        public static async Task<string> SendRequestAsync()
+        public static async Task<int> SendRequestAsync()
         {
 
             string token = GetStringeeToken();
@@ -61,12 +61,16 @@ namespace TnR_SS.API.Common.OTP
             var client = new HttpClient();
             client.DefaultRequestHeaders.Add("X-STRINGEE-AUTH", token);
 
+            // generate OTP
+            string OTP = "123456";
+
+
             var r = new object[1];
             r[0] = new
             {
                 from = "TnR",
                 to = "84966848112",
-                text = "Your OTP is 123456"
+                text = "Your OTP is " + OTP
             };
 
             var obj = new
@@ -77,7 +81,10 @@ namespace TnR_SS.API.Common.OTP
             var response = await client.PostAsync("https://api.stringee.com/v1/sms", new StringContent(obj.ToString(), Encoding.UTF8, "application/json"));
             var rs = await response.Content.ReadAsStringAsync();
 
-            return rs;
+            // if rs == true => luu OTP vao DB
+
+            // return OTPID
+            return 1;
         }
     }
 }
