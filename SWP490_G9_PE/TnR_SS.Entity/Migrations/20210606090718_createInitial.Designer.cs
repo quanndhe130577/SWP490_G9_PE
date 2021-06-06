@@ -10,8 +10,8 @@ using TnR_SS.Entity.Models;
 namespace TnR_SS.Entity.Migrations
 {
     [DbContext(typeof(TnR_SSContext))]
-    [Migration("20210605200420_addDisplayRoleName")]
-    partial class addDisplayRoleName
+    [Migration("20210606090718_createInitial")]
+    partial class createInitial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -135,6 +135,7 @@ namespace TnR_SS.Entity.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DisplayName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -158,23 +159,26 @@ namespace TnR_SS.Entity.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "d43d871f-b57a-484a-96ad-fe15cf8f982d",
+                            ConcurrencyStamp = "6d48bf32-a305-42a5-8b43-3bb891efa164",
                             DisplayName = "Admin",
-                            Name = "Admin"
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "18eafe2a-935d-43f2-9541-3c7372ce2313",
+                            ConcurrencyStamp = "19f7f92f-14bc-4b8b-9105-1e3639d61d8f",
                             DisplayName = "Thương lái",
-                            Name = "Trader"
+                            Name = "Trader",
+                            NormalizedName = "TRADER"
                         },
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "b17c8c65-5b4b-41e0-b646-997fdc70ebf0",
+                            ConcurrencyStamp = "d7d218d6-3490-4b1e-96d0-3bbcb14cd90e",
                             DisplayName = "Chủ bến",
-                            Name = "Weight Recorder"
+                            Name = "Weight Recorder",
+                            NormalizedName = "WEIGHT RECORDER"
                         });
                 });
 

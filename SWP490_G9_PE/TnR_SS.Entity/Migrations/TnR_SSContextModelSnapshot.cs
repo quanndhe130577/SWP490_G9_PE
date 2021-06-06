@@ -133,6 +133,7 @@ namespace TnR_SS.Entity.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DisplayName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -156,26 +157,26 @@ namespace TnR_SS.Entity.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "b036c01b-5972-4166-9449-6d39be3f1072",
+                            ConcurrencyStamp = "6d48bf32-a305-42a5-8b43-3bb891efa164",
                             DisplayName = "Admin",
                             Name = "Admin",
-                            NormalizedName = "Admin"
+                            NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "f498a0fd-3c57-4675-8ffe-38fcd724faa3",
+                            ConcurrencyStamp = "19f7f92f-14bc-4b8b-9105-1e3639d61d8f",
                             DisplayName = "Thương lái",
                             Name = "Trader",
-                            NormalizedName = "Trader"
+                            NormalizedName = "TRADER"
                         },
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "1a92e729-a8be-405e-8c52-0cfb25b255aa",
+                            ConcurrencyStamp = "d7d218d6-3490-4b1e-96d0-3bbcb14cd90e",
                             DisplayName = "Chủ bến",
                             Name = "Weight Recorder",
-                            NormalizedName = "Weight Recorder"
+                            NormalizedName = "WEIGHT RECORDER"
                         });
                 });
 
