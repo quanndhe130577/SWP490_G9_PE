@@ -98,7 +98,7 @@ namespace TnR_SS.API.Areas.AccountManagement.Controller
                     var result_addUserToRole = await _userManager.AddToRoleAsync(userInfor, userData.RoleNormalizedName);
                     if (result_addUserToRole.Succeeded)
                     {
-                        return new ResponseBuilder().Success("Create Success").ResponseModel;
+                        return new ResponseBuilder().Success("Register Success").ResponseModel;
                     }
 
                     //add role to user failed
@@ -141,11 +141,11 @@ namespace TnR_SS.API.Areas.AccountManagement.Controller
                     LoginResModel rlm = new LoginResModel()
                     {
                         Token = token,
-                        UserInfor = _mapper.Map<UserInfor, UserResModel>(user)
+                        User = _mapper.Map<UserInfor, UserResModel>(user)
                     };
 
                     //set role 
-                    rlm.UserInfor.RoleDisplayName = GetRoleDisplayName(user);
+                    rlm.User.RoleDisplayName = GetRoleDisplayName(user);
 
                     ResponseBuilder<LoginResModel> rpB = new ResponseBuilder<LoginResModel>().Success("Login success").WithData(rlm);
                     return rpB.ResponseModel;
@@ -215,7 +215,7 @@ namespace TnR_SS.API.Areas.AccountManagement.Controller
                     LoginResModel rlm = new LoginResModel()
                     {
                         Token = token,
-                        UserInfor = _mapper.Map<UserInfor, UserResModel>(userInfor)
+                        User = _mapper.Map<UserInfor, UserResModel>(userInfor)
                     };
                     return new ResponseBuilder<LoginResModel>().Success("Update Success").WithData(rlm).ResponseModel;
                 }

@@ -6,7 +6,7 @@ namespace TnR_SS.API.Areas.AccountManagement.Model.ResponseModel
     public class LoginResModel
     {
         public string Token { get; set; }
-        public UserResModel UserInfor { get; set; }
+        public UserResModel User { get; set; }
     }
 
     public class UserResModel
