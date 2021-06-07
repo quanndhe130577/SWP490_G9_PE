@@ -33,8 +33,9 @@ namespace TnR_SS.Domain.Supervisor
                 return false;
             }
 
-            if (otpInfor.PhoneNumber == phoneNumber && otpInfor.Code == otp)
+            if (otpInfor.PhoneNumber == phoneNumber && otpInfor.Code == otp && otpInfor.Status.Equals(OTPStatus.Waiting.ToString()))
             {
+                await _otpRepository.UpdateStatusAsync(otpId);
                 return true;
             }
 

@@ -125,7 +125,7 @@ namespace TnR_SS.API.Controller
                     };
 
                     //set role 
-                    rlm.User.RoleDisplayName = await _tnrssSupervisor.GetRoleDisplayName(user);
+                    rlm.User.RoleDisplayName = await _tnrssSupervisor.GetRoleDisplayNameAsync(user);
 
                     ResponseBuilder<LoginResModel> rpB = new ResponseBuilder<LoginResModel>().Success("Login success").WithData(rlm);
                     return rpB.ResponseModel;
@@ -197,6 +197,7 @@ namespace TnR_SS.API.Controller
                         Token = token,
                         User = _mapper.Map<UserInfor, UserResModel>(userInfor)
                     };
+                    rlm.User.RoleDisplayName = await _tnrssSupervisor.GetRoleDisplayNameAsync(userInfor);
                     return new ResponseBuilder<LoginResModel>().Success("Update Success").WithData(rlm).ResponseModel;
                 }
                 else
@@ -223,12 +224,12 @@ namespace TnR_SS.API.Controller
             }
 
             // check OTP for User
-            if (!await _tnrssSupervisor.CheckOTPRightAsync(resetData.OTPID, resetData.OTP, resetData.PhoneNumber))
+            if (!await _tnrssSupervisor.CheckOTPRightAsync(resetData.OTPID, resetData.Code, resetData.PhoneNumber))
             {
                 return new ResponseBuilder().Error("Invalid OTP").ResponseModel;
             }
 
-            var result = await _tnrssSupervisor.ResetUserPasswordAsync(userInfor, resetData.Token, resetData.NewPassword);
+            var result = await _tnrssSupervisor.ResetUserPasswordAsync(userInfor, resetData.ResetToken, resetData.NewPassword);
             if (result.Succeeded)
             {
                 return new ResponseBuilder().Success("Reset Password Success").ResponseModel;
@@ -256,7 +257,7 @@ namespace TnR_SS.API.Controller
                 return new ResponseBuilder().Error("Phone Number existed").ResponseModel;
             }
             //check OTP for phoneNumber
-            if (await _tnrssSupervisor.CheckOTPRightAsync(modelData.OTPID, modelData.OTP, modelData.PhoneNumber))
+            if (await _tnrssSupervisor.CheckOTPRightAsync(modelData.OTPID, modelData.Code, modelData.NewPhoneNumber))
             {
                 var user = _tnrssSupervisor.GetUserById(id);
                 user.PhoneNumber = modelData.NewPhoneNumber;

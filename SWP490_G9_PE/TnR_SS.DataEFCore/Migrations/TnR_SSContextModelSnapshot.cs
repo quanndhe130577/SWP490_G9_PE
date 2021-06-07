@@ -189,7 +189,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "d805b7e8-8756-4395-8caf-4c04be21c7a4",
+                            ConcurrencyStamp = "26244b77-a930-4660-9483-a804db931628",
                             DisplayName = "Admin",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
@@ -197,7 +197,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "5d55e046-2990-4da0-ad8a-8f6f20991d65",
+                            ConcurrencyStamp = "39dba883-892d-4917-aa50-8539027c134a",
                             DisplayName = "Thương lái",
                             Name = "Trader",
                             NormalizedName = "TRADER"
@@ -205,7 +205,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "79fdbbdf-9cd3-499a-9423-060140eff614",
+                            ConcurrencyStamp = "a6b3354b-301d-4562-9b8e-d09df949cc2b",
                             DisplayName = "Chủ bến",
                             Name = "Weight Recorder",
                             NormalizedName = "WEIGHT RECORDER"

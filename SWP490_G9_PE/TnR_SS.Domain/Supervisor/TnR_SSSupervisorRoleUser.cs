@@ -14,7 +14,7 @@ namespace TnR_SS.Domain.Supervisor
         {
             return await _roleUserRepository.RoleExistsAsync(roleName);
         }
-        public async Task<string> GetRoleDisplayName(UserInfor user)
+        public async Task<string> GetRoleDisplayNameAsync(UserInfor user)
         {
             var userRoles = await _userInforRepository.GetRolesAsync(user);
             return _roleUserRepository.FindByNameAsync(userRoles[0]).Result.DisplayName;

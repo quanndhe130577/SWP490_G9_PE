@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TnR_SS.DataEFCore.Migrations
 {
-    public partial class initialDatabase : Migration
+    public partial class initialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -180,17 +180,17 @@ namespace TnR_SS.DataEFCore.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "DisplayName", "Name", "NormalizedName" },
-                values: new object[] { 1, "d805b7e8-8756-4395-8caf-4c04be21c7a4", "Admin", "Admin", "ADMIN" });
+                values: new object[] { 1, "26244b77-a930-4660-9483-a804db931628", "Admin", "Admin", "ADMIN" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "DisplayName", "Name", "NormalizedName" },
-                values: new object[] { 2, "5d55e046-2990-4da0-ad8a-8f6f20991d65", "Thương lái", "Trader", "TRADER" });
+                values: new object[] { 2, "39dba883-892d-4917-aa50-8539027c134a", "Thương lái", "Trader", "TRADER" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "DisplayName", "Name", "NormalizedName" },
-                values: new object[] { 3, "79fdbbdf-9cd3-499a-9423-060140eff614", "Chủ bến", "Weight Recorder", "WEIGHT RECORDER" });
+                values: new object[] { 3, "a6b3354b-301d-4562-9b8e-d09df949cc2b", "Chủ bến", "Weight Recorder", "WEIGHT RECORDER" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

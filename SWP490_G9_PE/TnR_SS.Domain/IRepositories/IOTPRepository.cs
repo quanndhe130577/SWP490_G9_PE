@@ -12,5 +12,6 @@ namespace TnR_SS.Domain.IRepositories
         Task<OTP> FindByIdAsync(int otpId);
         List<OTP> GetByPhoneNumber(string phoneNumber);
         Task AddAsync(OTP otp);
+        Task UpdateStatusAsync(int otpid);
     }
 }
