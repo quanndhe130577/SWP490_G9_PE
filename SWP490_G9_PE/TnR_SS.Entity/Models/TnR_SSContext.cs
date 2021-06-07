@@ -22,6 +22,9 @@ namespace TnR_SS.Entity.Models
         public virtual DbSet<UserInfor> UserInfors { get; set; }
         public virtual DbSet<OTP> OTPs { get; set; }
 
+        /*protected override void OnConfiguring(DbContextOptionsBuilder options)
+    => options.UseSqlServer("DataSource=app.db");*/
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

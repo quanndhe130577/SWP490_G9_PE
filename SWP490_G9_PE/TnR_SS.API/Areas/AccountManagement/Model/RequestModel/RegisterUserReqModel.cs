@@ -5,6 +5,7 @@ namespace TnR_SS.API.Areas.AccountManagement.Model.RequestModel
     public class RegisterUserReqModel : UserModel
     {
         [Required]
+        [MinLength(8)]
         public string Password { get; set; }
 
         [Required]

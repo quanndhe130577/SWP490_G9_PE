@@ -60,8 +60,8 @@ namespace TnR_SS
                         builder.WithOrigins("http://localhost:3010")
                             .AllowCredentials()
                             .AllowAnyMethod()
-                            //.AllowAnyHeader()
-                            .WithHeaders(HeaderNames.ContentType);
+                            .AllowAnyHeader();
+                        //.WithHeaders(HeaderNames.ContentType);
                     });
             });
 
