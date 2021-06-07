@@ -6,10 +6,9 @@ using System;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using TnR_SS.API.Areas.AccountManagement.Model;
 using TnR_SS.API.Areas.AccountManagement.Model.RequestModel;
 using TnR_SS.API.Areas.AccountManagement.Model.ResponseModel;
-using TnR_SS.API.Common.OTP;
+using TnR_SS.API.Common.OTPManagement;
 using TnR_SS.API.Common.Response;
 using TnR_SS.API.Common.Token;
 using TnR_SS.Entity.Models;
@@ -47,7 +46,11 @@ namespace TnR_SS.API.Areas.AccountManagement.Controller
             }
 
             //send OTP
-            var otpId = await TestOTP_Stringee.SendRequestAsync();
+            var otpId = await TestOTP_Stringee.SendRequestAsync(phoneNumber);
+            if (otpId == 0)
+            {
+                return new ResponseBuilder<Object>().Error("Send OTP error").ResponseModel;
+            }
 
             return new ResponseBuilder<Object>().Success("Success").WithData(new { OTPID = otpId }).ResponseModel;
         }
@@ -233,7 +236,7 @@ namespace TnR_SS.API.Areas.AccountManagement.Controller
         #region Reset Password
         [HttpGet("reset-password-token/{phoneNumber}")]
         [AllowAnonymous]
-        public ResponseModel GeneratePasswordResetToken(string phoneNumber)
+        public async Task<ResponseModel> GeneratePasswordResetToken(string phoneNumber)
         {
             var userInfor = _userManager.Users.FirstOrDefault(x => x.PhoneNumber.Equals(phoneNumber));
             if (userInfor is null)
@@ -242,12 +245,16 @@ namespace TnR_SS.API.Areas.AccountManagement.Controller
             }
 
             //generate OTP
-            var rs = TestOTP_Stringee.SendRequestAsync();
+            var otpId = await TestOTP_Stringee.SendRequestAsync(phoneNumber);
+            if (otpId == 0)
+            {
+                return new ResponseBuilder<Object>().Error("Send OTP error").ResponseModel;
+            }
 
             //generate reset token
             var token = _userManager.GeneratePasswordResetTokenAsync(userInfor).Result;
 
-            return new ResponseBuilder<Object>().Success("Success").WithData(new { resetToken = token }).ResponseModel;
+            return new ResponseBuilder<Object>().Success("Success").WithData(new { resetToken = token, otpid = otpId }).ResponseModel;
         }
 
         [HttpPost("reset-password")]
@@ -262,7 +269,7 @@ namespace TnR_SS.API.Areas.AccountManagement.Controller
             }
 
             // check OTP for User
-            if (!resetData.OTP.Equals("123456"))
+            if (!VerifyRegisterUserOTP(_mapper.Map<ResetPasswordReqModel, OTPReqModel>(resetData)))
             {
                 return new ResponseBuilder().Error("Invalid OTP").ResponseModel;
             }
@@ -302,7 +309,11 @@ namespace TnR_SS.API.Areas.AccountManagement.Controller
             }
 
             //send OTP
-            var otpId = await TestOTP_Stringee.SendRequestAsync();
+            var otpId = await TestOTP_Stringee.SendRequestAsync(dataModel.NewPhoneNumber);
+            if(otpId == 0)
+            {
+                return new ResponseBuilder<Object>().Error("Send OTP error").ResponseModel;
+            }
 
             return new ResponseBuilder<Object>().Success("Success").WithData(new { OTPID = otpId }).ResponseModel;
         }

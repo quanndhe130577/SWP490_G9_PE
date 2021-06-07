@@ -6,14 +6,17 @@ using System.Threading.Tasks;
 
 namespace TnR_SS.API.Areas.AccountManagement.Model.RequestModel
 {
-    public class ResetPasswordReqModel
+    public class ResetPasswordReqModel : OTPReqModel
     {
-        [Required]
+        /*[Required]
         public string PhoneNumber { get; set; }
 
         [Required]
         [StringLength(6)]
         public string OTP { get; set; }
+
+        [Required]
+        public int OTPID { get; set; }*/
 
         [Required]
         [MinLength(8)]
