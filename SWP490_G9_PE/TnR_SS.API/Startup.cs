@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using System.Linq;
 using System.Text;
+using TnR_SS.API.Common.HandleOTP;
 using TnR_SS.API.Common.Response;
 using TnR_SS.API.Middleware.ErrorHandle;
 using TnR_SS.Entity.Models;
@@ -36,7 +38,8 @@ namespace TnR_SS
 
             //services.AddControllers(options => options.Filters.Add(new HttpResponseExceptionFilter()));
 
-            services.AddDbContext<TnR_SSContext>(options => options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("TnR_SS")));
+            services.AddDbContext<TnR_SSContext>(options => options.UseSqlServer(Configuration.GetConnectionString("TnR_SS")));
+            /*services.AddDbContext<TnR_SSContext>(options => options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("TnR_SS")));*/
 
             services.AddIdentity<UserInfor, RoleUser>(cfg =>
             {
@@ -88,6 +91,8 @@ namespace TnR_SS
 
             services.AddAutoMapper(typeof(Startup));
 
+            //services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             // handle ModelBiding Exception
             services.AddMvc().ConfigureApiBehaviorOptions(options =>
                 {
@@ -103,6 +108,8 @@ namespace TnR_SS
                         return new BadRequestObjectResult(rpb.ResponseModel);
                     };
                 });
+
+            services.AddTransient<HandleOTP>();
             /*services.Configure<SecurityStampValidatorOptions>(options =>
             {
                 // enables immediate logout, after updating the user's stat.

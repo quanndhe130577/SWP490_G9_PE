@@ -31,10 +31,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Areas\OTPManagement\Model\RequestModel\StringeeReqModel.cs">
+    <Compile Update="Common\HandleOTP\Model\StringeeReqModel.cs">
       <ExcludeFromSourceAnalysis>True</ExcludeFromSourceAnalysis>
       <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\OTPManagement\Model\ResponseModel\" />
+    <Folder Include="Configurations--\" />
+    <Folder Include="Controllers--\" />
   </ItemGroup>
 
 </Project>

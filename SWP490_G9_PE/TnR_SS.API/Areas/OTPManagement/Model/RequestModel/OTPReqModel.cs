@@ -13,6 +13,6 @@ namespace TnR_SS.API.Areas.OTPManagement.Model.RequestModel
         [Required]
         public string PhoneNumber { get; set; }
         [Required]
-        public string OTP { get; set; }
+        public string Code { get; set; }
     }
 }

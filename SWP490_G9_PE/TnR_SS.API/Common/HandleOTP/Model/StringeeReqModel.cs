@@ -1,8 +1,8 @@
-﻿namespace TnR_SS.API.Areas.OTPManagement.Model.RequestModel
+﻿namespace TnR_SS.API.Common.HandleOTP.Model
 {
     public class StringeeReqModel
     {
-        SMSContentReqModel SMS { get; set; }
+        public SMSContentReqModel SMS { get; set; }
     }
 
     public class SMSContentReqModel

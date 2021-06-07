@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using TnR_SS.API.Areas.AccountManagement.Model.RequestModel;
 using TnR_SS.API.Areas.AccountManagement.Model.ResponseModel;
 using TnR_SS.API.Areas.OTPManagement;
+using TnR_SS.API.Common.HandleOTP;
 using TnR_SS.API.Common.Response;
 using TnR_SS.API.Common.Token;
 using TnR_SS.Entity.Models;
@@ -25,14 +26,17 @@ namespace TnR_SS.API.Areas.AccountManagement.Controller
         private readonly SignInManager<UserInfor> _signInManager;
         private readonly RoleManager<RoleUser> _roleManager;
         private readonly IMapper _mapper;
+        private readonly HandleOTP _handleOTP;
 
-        public AccountController(TnR_SSContext context, UserManager<UserInfor> userManager, SignInManager<UserInfor> signInManager, RoleManager<RoleUser> roleManager, IMapper mapper)
+        public AccountController(TnR_SSContext context, UserManager<UserInfor> userManager, SignInManager<UserInfor> signInManager,
+            RoleManager<RoleUser> roleManager, IMapper mapper, HandleOTP handleOTP)
         {
             _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _mapper = mapper;
+            _handleOTP = handleOTP;
         }
 
         #region Register      
@@ -44,7 +48,7 @@ namespace TnR_SS.API.Areas.AccountManagement.Controller
             if (ModelState.IsValid)
             {
                 //check OTP for phoneNumber
-                if (!CheckOTPDone(userData.OTPID, userData.PhoneNumber))
+                if (!await _handleOTP.CheckOTPDoneAsync(userData.OTPID, userData.PhoneNumber))
                 {
                     return new ResponseBuilder().Error("Access denied").ResponseModel;
                 }
@@ -214,7 +218,7 @@ namespace TnR_SS.API.Areas.AccountManagement.Controller
             }
 
             // check OTP for User
-            if (!CheckOTPRight(resetData.OTPID, resetData.OTP, resetData.PhoneNumber))
+            if (!await _handleOTP.CheckOTPRightAsync(resetData.OTPID, resetData.OTP, resetData.PhoneNumber))
             {
                 return new ResponseBuilder().Error("Invalid OTP").ResponseModel;
             }
@@ -234,35 +238,6 @@ namespace TnR_SS.API.Areas.AccountManagement.Controller
 
         #region change PhoneNumber 
 
-        [HttpPost("change-phone-number/{id}")]
-        public async Task<ResponseModel> SendChangePhoneNumberOTP(int id, ChangePhoneNumberReqModel dataModel)
-        {
-            if (!TokenManagement.CheckUserIdFromToken(HttpContext, id))
-            {
-                return new ResponseBuilder().Error("Access denied").ResponseModel;
-            }
-
-            var user = await _userManager.FindByIdAsync(id.ToString());
-            if (!_userManager.CheckPasswordAsync(user, dataModel.CurrentPassword).Result)
-            {
-                return new ResponseBuilder().Error("Invalid password").ResponseModel;
-            }
-
-            if (UserPhoneNumberExists(dataModel.NewPhoneNumber))
-            {
-                return new ResponseBuilder().Error("Phone Number existed").ResponseModel;
-            }
-
-            //send OTP
-            var otpId = await TestOTP_Stringee.SendRequestAsync(dataModel.NewPhoneNumber);
-            if(otpId == 0)
-            {
-                return new ResponseBuilder<Object>().Error("Send OTP error").ResponseModel;
-            }
-
-            return new ResponseBuilder<Object>().Success("Success").WithData(new { OTPID = otpId }).ResponseModel;
-        }
-
         [HttpPost("check-change-phone-otp/{id}")]
         public async Task<ResponseModel> CheckChangePhoneNumberOTP(int id, CheckChangePhoneNumberOTPReqModel modelData)
         {
@@ -276,7 +251,7 @@ namespace TnR_SS.API.Areas.AccountManagement.Controller
                 return new ResponseBuilder().Error("Phone Number existed").ResponseModel;
             }
             //check OTP for phoneNumber
-            if (CheckOTPRight(modelData.OTPID, modelData.OTP, modelData.PhoneNumber))
+            if (await _handleOTP.CheckOTPRightAsync(modelData.OTPID, modelData.OTP, modelData.PhoneNumber))
             {
                 var user = await _userManager.FindByIdAsync(id.ToString());
                 user.PhoneNumber = modelData.NewPhoneNumber;
@@ -317,32 +292,7 @@ namespace TnR_SS.API.Areas.AccountManagement.Controller
             return rs is not null;
         }
 
-        private bool CheckOTPDone(int OTPID, string PhoneNumber)
-        {
-            string rs = "WAITING";
-            // get OTP Entity status
-            if (OTPID == 1) rs = "DONE";
 
-            if (rs == "DONE" /*&& checkPhone*/)
-            {
-                return true;
-            }
-            return false;
-        }
-
-        private bool CheckOTPRight(int otpid, string otp, string phoneNumber)
-        {
-            // get OTP Entity
-            if (otpid != 1) return false;
-
-            //check
-            if (otp == "123456" /*&& status*/)
-            {
-                // update status OTP in db
-                return true;
-            }
-            return false;
-        }
         #endregion
     }
 }

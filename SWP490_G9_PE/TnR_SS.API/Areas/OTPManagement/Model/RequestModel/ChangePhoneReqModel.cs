@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace TnR_SS.API.Areas.AccountManagement.Model.RequestModel
+namespace TnR_SS.API.Areas.OTPManagement.Model.RequestModel
 {
-    public class ChangePhoneNumberReqModel
+    public class ChangePhoneReqModel
     {
         [Required]
         [MinLength(10)]

@@ -7,6 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TnR_SS.API", "TnR_SS.API\Tn
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TnR_SS.Entity", "TnR_SS.Entity\TnR_SS.Entity.csproj", "{244A3B95-D89E-49BF-BF9B-DDF7869BCC33}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TnR_SS.DataEFCore", "TnR_SS.DataEFCore\TnR_SS.DataEFCore.csproj", "{6DF3A44B-D70E-4120-A289-F64275F8883D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TnR_SS.Domain", "TnR_SS.Domain\TnR_SS.Domain.csproj", "{41E7E73A-6962-4065-B29C-E8D364EC1978}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{244A3B95-D89E-49BF-BF9B-DDF7869BCC33}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{244A3B95-D89E-49BF-BF9B-DDF7869BCC33}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{244A3B95-D89E-49BF-BF9B-DDF7869BCC33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6DF3A44B-D70E-4120-A289-F64275F8883D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6DF3A44B-D70E-4120-A289-F64275F8883D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6DF3A44B-D70E-4120-A289-F64275F8883D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6DF3A44B-D70E-4120-A289-F64275F8883D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41E7E73A-6962-4065-B29C-E8D364EC1978}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41E7E73A-6962-4065-B29C-E8D364EC1978}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41E7E73A-6962-4065-B29C-E8D364EC1978}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41E7E73A-6962-4065-B29C-E8D364EC1978}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

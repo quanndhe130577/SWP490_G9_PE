@@ -1,36 +1,38 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using TnR_SS.API.Areas.AccountManagement.Model.RequestModel;
 using TnR_SS.API.Areas.OTPManagement.Model.RequestModel;
+using TnR_SS.API.Common.HandleOTP;
 using TnR_SS.API.Common.Response;
+using TnR_SS.API.Common.Token;
 using TnR_SS.Entity.Models;
 
 namespace TnR_SS.API.Areas.OTPManagement.Controller
 {
-    [Route("api/[controller]")]
+    [Route("api/OTP")]
     [ApiController]
     public class OTPController : ControllerBase
     {
         private readonly TnR_SSContext _context;
         private readonly UserManager<UserInfor> _userManager;
         private readonly IMapper _mapper;
+        private readonly HandleOTP _handleOTP;
 
-        public OTPController(TnR_SSContext context, UserManager<UserInfor> userManager, SignInManager<UserInfor> signInManager, RoleManager<RoleUser> roleManager, IMapper mapper)
+        public OTPController(TnR_SSContext context, UserManager<UserInfor> userManager, SignInManager<UserInfor> signInManager, RoleManager<RoleUser> roleManager, IMapper mapper, HandleOTP handleOTP)
         {
             _context = context;
             _userManager = userManager;
             _mapper = mapper;
+            _handleOTP = handleOTP;
         }
 
-        [HttpGet("register-otp/{phoneNumber}")]
+        #region Register OTP
+        [HttpGet("register/{phoneNumber}")]
         [AllowAnonymous]
         public async Task<ResponseModel> SendRegisterUserOTP(string phoneNumber)
         {
@@ -40,7 +42,7 @@ namespace TnR_SS.API.Areas.OTPManagement.Controller
             }
 
             //send OTP
-            var otpId = await TestOTP_Stringee.SendRequestAsync(phoneNumber);
+            var otpId = await _handleOTP.SendOTPByStringeeAsync(phoneNumber);
             if (otpId == 0)
             {
                 return new ResponseBuilder<Object>().Error("Send OTP error").ResponseModel;
@@ -49,20 +51,21 @@ namespace TnR_SS.API.Areas.OTPManagement.Controller
             return new ResponseBuilder<Object>().Success("Success").WithData(new { OTPID = otpId }).ResponseModel;
         }
 
-        [HttpPost("check-register-otp")]
+        [HttpPost("check-register")]
         [AllowAnonymous]
-        public ResponseModel CheckRegisterUserOTP(OTPReqModel modelData)
+        public async Task<ResponseModel> CheckRegisterUserOTP(OTPReqModel modelData)
         {
-            //check OTP for phoneNumber
-            if (CheckOTPRight(modelData))
+            if (await _handleOTP.CheckOTPRightAsync(modelData.OTPID, modelData.Code, modelData.PhoneNumber))
             {
                 return new ResponseBuilder().Success("OTP Success").ResponseModel;
             }
 
             return new ResponseBuilder().Error("Invalid OTP").ResponseModel;
         }
+        #endregion
 
-        [HttpGet("reset-password-token/{phoneNumber}")]
+        #region Reset Password OTP
+        [HttpGet("reset-password/{phoneNumber}")]
         [AllowAnonymous]
         public async Task<ResponseModel> GeneratePasswordResetToken(string phoneNumber)
         {
@@ -73,7 +76,7 @@ namespace TnR_SS.API.Areas.OTPManagement.Controller
             }
 
             //generate OTP
-            var otpId = await TestOTP_Stringee.SendRequestAsync(phoneNumber);
+            var otpId = await _handleOTP.SendOTPByStringeeAsync(phoneNumber);
             if (otpId == 0)
             {
                 return new ResponseBuilder().Error("Send OTP error").ResponseModel;
@@ -84,37 +87,45 @@ namespace TnR_SS.API.Areas.OTPManagement.Controller
 
             return new ResponseBuilder<Object>().Success("Success").WithData(new { resetToken = token, otpid = otpId }).ResponseModel;
         }
+        #endregion
 
-        private bool CheckOTPRight(OTPReqModel modelData)
+        #region Change Phone Number
+        [HttpPost("change-phone/{id}")]
+        public async Task<ResponseModel> SendChangePhoneNumberOTP(int id, ChangePhoneReqModel dataModel)
         {
-            // get OTP Entity
-            if (modelData.OTPID != 1) return false;
-
-            //check
-            if (modelData.OTP == "123456" /*&& status*/)
+            if (!TokenManagement.CheckUserIdFromToken(HttpContext, id))
             {
-                // update status OTP in db
-                return true;
+                return new ResponseBuilder().Error("Access denied").ResponseModel;
             }
-            return false;
-        }
 
-        private bool CheckOTPDone(int OTPID, string PhoneNumber)
-        {
-            string rs = "WAITING";
-            // get OTP Entity status
-            if (OTPID == 1) rs = "DONE";
-
-            if (rs == "DONE" /*&& checkPhone*/)
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            if (!_userManager.CheckPasswordAsync(user, dataModel.CurrentPassword).Result)
             {
-                return true;
+                return new ResponseBuilder().Error("Invalid password").ResponseModel;
             }
-            return false;
+
+            if (UserPhoneNumberExists(dataModel.NewPhoneNumber))
+            {
+                return new ResponseBuilder().Error("Phone Number existed").ResponseModel;
+            }
+
+            //send OTP
+            var otpId = await _handleOTP.SendOTPByStringeeAsync(dataModel.NewPhoneNumber);
+            if (otpId == 0)
+            {
+                return new ResponseBuilder<Object>().Error("Send OTP error").ResponseModel;
+            }
+
+            return new ResponseBuilder<Object>().Success("Success").WithData(new { OTPID = otpId }).ResponseModel;
         }
+        #endregion
+
+        #region Common
         private bool UserPhoneNumberExists(string phoneNumber)
         {
             var rs = _userManager.Users.SingleOrDefault(u => u.PhoneNumber == phoneNumber);
             return rs is not null;
         }
+        #endregion
     }
 }
