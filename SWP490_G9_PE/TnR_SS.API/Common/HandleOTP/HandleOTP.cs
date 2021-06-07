@@ -9,7 +9,8 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using TnR_SS.API.Common.HandleOTP.Model;
-using TnR_SS.Entity.Models;
+using TnR_SS.DataEFCore;
+using TnR_SS.Domain.Entities;
 
 namespace TnR_SS.API.Common.HandleOTP
 {
@@ -86,7 +87,7 @@ namespace TnR_SS.API.Common.HandleOTP
             return await SaveOTPAsync(phoneNumber, OTP);
         }
 
-        private string GenerateOTP(string phoneNumber)
+        public string GenerateOTP(string phoneNumber)
         {
             Random rd = new Random();
             string n = rd.Next(1, 999999).ToString("D6");
@@ -98,7 +99,7 @@ namespace TnR_SS.API.Common.HandleOTP
             return "0";
         }
 
-        private static string GetStringeeToken()
+        public static string GetStringeeToken()
         {
             //var iss = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Startup.StaticConfig["JwtStringee:iss"]));
 
@@ -143,7 +144,7 @@ namespace TnR_SS.API.Common.HandleOTP
             return otp.ID;
         }
 
-        private static string ModifyPhoneNumber(string phoneNumber)
+        public static string ModifyPhoneNumber(string phoneNumber)
         {
             return phoneNumber;
         }

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,13 +8,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.Net.Http.Headers;
 using System.Linq;
 using System.Text;
 using TnR_SS.API.Common.HandleOTP;
 using TnR_SS.API.Common.Response;
+using TnR_SS.API.Configurations;
 using TnR_SS.API.Middleware.ErrorHandle;
-using TnR_SS.Entity.Models;
+using TnR_SS.DataEFCore;
+using TnR_SS.Domain.Entities;
 
 namespace TnR_SS
 {
@@ -40,6 +40,9 @@ namespace TnR_SS
 
             services.AddDbContext<TnR_SSContext>(options => options.UseSqlServer(Configuration.GetConnectionString("TnR_SS")));
             /*services.AddDbContext<TnR_SSContext>(options => options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("TnR_SS")));*/
+
+            services.ConfigureRepositories()
+                .ConfigureSupervisor();
 
             services.AddIdentity<UserInfor, RoleUser>(cfg =>
             {

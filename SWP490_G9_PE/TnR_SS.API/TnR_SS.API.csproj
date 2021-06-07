@@ -27,10 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TnR_SS.Entity\TnR_SS.Entity.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Update="Common\HandleOTP\Model\StringeeReqModel.cs">
       <ExcludeFromSourceAnalysis>True</ExcludeFromSourceAnalysis>
       <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
@@ -38,9 +34,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\OTPManagement\Model\ResponseModel\" />
-    <Folder Include="Configurations--\" />
-    <Folder Include="Controllers--\" />
+    <Folder Include="Model\ErrorModel\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TnR_SS.DataEFCore\TnR_SS.DataEFCore.csproj" />
+    <ProjectReference Include="..\TnR_SS.Domain\TnR_SS.Domain.csproj" />
   </ItemGroup>
 
 </Project>
