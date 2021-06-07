@@ -1,4 +1,4 @@
-﻿namespace TnR_SS.API.Common.OTPManagement.Model
+﻿namespace TnR_SS.API.Areas.OTPManagement.Model.RequestModel
 {
     public class StringeeReqModel
     {

@@ -3,20 +3,18 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using TnR_SS.API.Areas.OTPManagement.Model.RequestModel;
 
 namespace TnR_SS.API.Areas.AccountManagement.Model.RequestModel
 {
-    public class ResetPasswordReqModel : OTPReqModel
+    public class ResetPasswordReqModel
     {
-        /*[Required]
+        [Required]
+        public int OTPID { get; set; }
+        [Required]
         public string PhoneNumber { get; set; }
-
         [Required]
-        [StringLength(6)]
         public string OTP { get; set; }
-
-        [Required]
-        public int OTPID { get; set; }*/
 
         [Required]
         [MinLength(8)]

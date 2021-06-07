@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TnR_SS.API.Areas.AccountManagement.Model.RequestModel
+namespace TnR_SS.API.Areas.OTPManagement.Model.RequestModel
 {
     public class OTPReqModel
     {

@@ -31,7 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Common\OTPManagement\Model\StringeeReqModel.cs">
+    <Compile Update="Areas\OTPManagement\Model\RequestModel\StringeeReqModel.cs">
       <ExcludeFromSourceAnalysis>True</ExcludeFromSourceAnalysis>
       <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
     </Compile>

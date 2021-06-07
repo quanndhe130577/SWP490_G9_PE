@@ -8,10 +8,11 @@ using System.Net.Http;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using TnR_SS.API.Common.OTPManagement.Model;
+using TnR_SS.API.Areas.OTPManagement.Model.RequestModel;
+using TnR_SS.API.Areas.OTPManagement.Model.ResponseModel;
 using TnR_SS.Entity.Models;
 
-namespace TnR_SS.API.Common.OTPManagement
+namespace TnR_SS.API.Areas.OTPManagement
 {
     public static class TestOTP_Stringee
     {

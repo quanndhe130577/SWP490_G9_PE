@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace TnR_SS.API.Common.OTPManagement.Model
+namespace TnR_SS.API.Areas.OTPManagement.Model.ResponseModel
 {
     public class StringeeResModel
     {

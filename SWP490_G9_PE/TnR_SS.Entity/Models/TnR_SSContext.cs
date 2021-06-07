@@ -23,7 +23,7 @@ namespace TnR_SS.Entity.Models
         public virtual DbSet<OTP> OTPs { get; set; }
 
         /*protected override void OnConfiguring(DbContextOptionsBuilder options)
-    => options.UseSqlServer("DataSource=app.db");*/
+    => options.UseSqlServer("Server=localhost;Database=TnR_SS;Trusted_Connection=True;");*/
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

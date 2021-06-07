@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Identity;
 using System;
 using TnR_SS.API.Areas.AccountManagement.Model.RequestModel;
 using TnR_SS.API.Areas.AccountManagement.Model.ResponseModel;
@@ -25,7 +24,6 @@ namespace TnR_SS.API.Areas.AccountManagement.Common
                 });
 
             CreateMap<UpdateUserReqModel, UserInfor>();
-            CreateMap<ResetPasswordReqModel, OTPReqModel>();
 
             CreateMap<UserInfor, UserResModel>().ForMember(destination => destination.UserID, options => options.MapFrom(source => source.Id));
 
