@@ -46,22 +46,6 @@ namespace TnR_SS.API.Common.HandleOTP
             return new JwtSecurityTokenHandler().CreateEncodedJwt(tokenDescriptor);
         }
 
-        private async Task<int> SaveOTPAsync(string phoneNumber, string code)
-        {
-            OTP otp = new OTP()
-            {
-                Code = code,
-                PhoneNumber = phoneNumber,
-                ExpiredDate = DateTime.Now.AddMinutes(1),
-                Status = OTPStatus.Waiting.ToString()
-            };
-
-            await _dbContext.OTPs.AddAsync(otp);
-            await _dbContext.SaveChangesAsync();
-
-            return otp.ID;
-        }
-
         public static string ModifyPhoneNumber(string phoneNumber)
         {
             return phoneNumber;

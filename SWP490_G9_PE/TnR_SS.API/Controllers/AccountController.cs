@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using TnR_SS.API.Common.GoogleDriveAPI;
 using TnR_SS.API.Common.Response;
 using TnR_SS.API.Common.Token;
 using TnR_SS.API.Model.AccountModel.RequestModel;
@@ -284,6 +285,14 @@ namespace TnR_SS.API.Controller
             return new ResponseBuilder().Success("Logout Success").ResponseModel;
         }
         #endregion
+
+        [HttpPost]
+        [Route("test-api")]
+        [AllowAnonymous]
+        public async Task TestUploadData()
+        {
+            await HandleGoogleDriveAPI.UploadImageToDrive();
+        }
 
     }
 }
