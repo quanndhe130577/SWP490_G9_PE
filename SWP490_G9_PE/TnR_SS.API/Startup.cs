@@ -10,7 +10,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using System.Linq;
 using System.Text;
-using TnR_SS.API.Common.HandleOTP;
 using TnR_SS.API.Common.Response;
 using TnR_SS.API.Configurations;
 using TnR_SS.API.Middleware.ErrorHandle;
@@ -112,7 +111,7 @@ namespace TnR_SS
                     };
                 });
 
-            services.AddTransient<HandleOTP>();
+            //services.AddTransient<HandleOTP>();
             /*services.Configure<SecurityStampValidatorOptions>(options =>
             {
                 // enables immediate logout, after updating the user's stat.
