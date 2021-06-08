@@ -28,6 +28,5 @@ namespace TnR_SS.Domain.Supervisor
             _userInforRepository = userInforRepository;
             _roleUserRepository = roleUserRepository;
         }
-
     }
 }

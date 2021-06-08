@@ -18,7 +18,7 @@ namespace TnR_SS.Domain.Supervisor
 
         //role
         Task<bool> RoleExistsAsync(string roleName);
-        Task<string> GetRoleDisplayName(UserInfor user);
+        Task<string> GetRoleDisplayNameAsync(UserInfor user);
         List<RoleUser> GetAllRoleUser();
         Task<IdentityResult> AddRoleUserAsync(RoleUser role);
         //user

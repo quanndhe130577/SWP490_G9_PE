@@ -8,8 +8,9 @@ namespace TnR_SS.API.Model.AccountModel.RequestModel
         public int OTPID { get; set; }
         [Required]
         public string PhoneNumber { get; set; }
+
         [Required]
-        public string OTP { get; set; }
+        public string Code { get; set; }
 
         [Required]
         [MinLength(8)]
@@ -22,6 +23,6 @@ namespace TnR_SS.API.Model.AccountModel.RequestModel
         public string ConfirmPassword { get; set; }
 
         [Required]
-        public string Token { get; set; }
+        public string ResetToken { get; set; }
     }
 }

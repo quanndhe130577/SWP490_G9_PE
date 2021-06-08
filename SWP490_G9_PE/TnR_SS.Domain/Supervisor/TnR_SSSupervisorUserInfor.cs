@@ -35,7 +35,7 @@ namespace TnR_SS.Domain.Supervisor
 
         public async Task<SignInResult> SignInWithPasswordAsync(UserInfor user, string password)
         {
-            return await _userInforRepository.SignInWithPasswordAsync(user, password);
+            return await _userInforRepository.PasswordSignInAsync(user, password);
         }
         public async Task SignInAsync(UserInfor user)
         {

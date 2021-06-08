@@ -20,12 +20,10 @@ namespace TnR_SS.DataEFCore.Repositories
         public async Task AddAsync(OTP otp)
         {
             await _context.OTPs.AddAsync(otp);
+            await _context.SaveChangesAsync();
         }
 
-        public void Dispose()
-        {
-            throw new NotImplementedException();
-        }
+        public void Dispose() => _context.Dispose();
 
         public async Task<OTP> FindByIdAsync(int otpId)
         {
@@ -35,6 +33,13 @@ namespace TnR_SS.DataEFCore.Repositories
         public List<OTP> GetByPhoneNumber(string phoneNumber)
         {
             return _context.OTPs.Where(x => x.PhoneNumber == phoneNumber).ToList();
+        }
+
+        public async Task UpdateStatusAsync(int otpid)
+        {
+            var otp = await _context.OTPs.FindAsync(otpid);
+            otp.Status = OTPStatus.Done.ToString();
+            await _context.SaveChangesAsync();
         }
     }
 }

@@ -16,7 +16,6 @@ namespace TnR_SS.Domain.IRepositories
         UserInfor GetUserByPhoneNumber(string phoneNumber);
         Task SignOutAsync();
         Task<SignInResult> PasswordSignInAsync(UserInfor user, string password);
-        Task<SignInResult> SignInWithPasswordAsync(UserInfor user, string password);
         Task SignInAsync(UserInfor user);
         UserInfor GetUserById(int id);
         Task<IdentityResult> UpdateAsync(UserInfor user);

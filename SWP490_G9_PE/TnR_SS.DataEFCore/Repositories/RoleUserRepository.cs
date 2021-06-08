@@ -30,10 +30,7 @@ namespace TnR_SS.DataEFCore.Repositories
             return await _roleManager.CreateAsync(role);
         }
 
-        public void Dispose()
-        {
-            throw new NotImplementedException();
-        }
+        public void Dispose() => _context.Dispose();
 
         public async Task<RoleUser> FindByNameAsync(string roleName)
         {

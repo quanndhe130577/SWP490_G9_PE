@@ -53,48 +53,13 @@ namespace TnR_SS.API.Controller
                 return new ResponseBuilder().Error("Phone Number existed").ResponseModel;
             }
 
-            string token = HandleOTP.GetStringeeToken();
-
-            var client = new HttpClient();
-            client.DefaultRequestHeaders.Add("X-STRINGEE-AUTH", token);
-
-            Random rd = new Random();
-            string OTP_string = rd.Next(1, 999999).ToString("D6");
-
-            var checkOTPExsits = _tnrssSupervisor.CheckPhoneOTPExists(phoneNumber);
-            if (checkOTPExsits)
+            var otpId = await SendOTPByStringee(phoneNumber);
+            if (otpId == 0)
             {
-                return new ResponseBuilder<Object>().Error("Wait a minute to resend OTP").ResponseModel;
+                return new ResponseBuilder().Error("Wait a minute then resend OTP").ResponseModel;
             }
 
-            StringeeReqModel smsModel = new StringeeReqModel();
-            SMSContentReqModel sms = new SMSContentReqModel()
-            {
-                From = "TnR",
-                To = HandleOTP.ModifyPhoneNumber(phoneNumber),
-                Text = "Your OTP is " + OTP_string
-            };
-            smsModel.SMS = sms;
-
-            var response = await client.PostAsync("https://api.stringee.com/v1/sms", new StringContent(JsonConvert.SerializeObject(smsModel), Encoding.UTF8, "application/json"));
-            var rs = await response.Content.ReadAsStringAsync();
-            StringeeResModel stringeeResModel = JsonConvert.DeserializeObject<StringeeResModel>(rs);
-            if (stringeeResModel.SMSSent == "0")
-            {
-                return new ResponseBuilder<Object>().Error("Send OTP error").ResponseModel;
-            }
-
-            OTP otp = new OTP()
-            {
-                Code = OTP_string,
-                PhoneNumber = phoneNumber,
-                ExpiredDate = DateTime.Now.AddMinutes(1),
-                Status = OTPStatus.Waiting.ToString()
-            };
-
-            await _tnrssSupervisor.AddOTPAsync(otp);
-
-            return new ResponseBuilder<Object>().Success("Success").WithData(new { OTPID = otp.ID }).ResponseModel;
+            return new ResponseBuilder<Object>().Success("Success").WithData(new { OTPID = otpId }).ResponseModel;
         }
 
         [HttpPost("check-register")]
@@ -121,52 +86,16 @@ namespace TnR_SS.API.Controller
                 return new ResponseBuilder().WithCode(HttpStatusCode.NotFound).WithMessage("Phone Number haven't registered yet").ResponseModel;
             }
 
-            //generate OTP
-            string stringee_token = HandleOTP.GetStringeeToken();
-
-            var client = new HttpClient();
-            client.DefaultRequestHeaders.Add("X-STRINGEE-AUTH", stringee_token);
-
-            Random rd = new Random();
-            string OTP_string = rd.Next(1, 999999).ToString("D6");
-
-            var checkOTPExsits = _tnrssSupervisor.CheckPhoneOTPExists(phoneNumber);
-            if (checkOTPExsits)
+            var otpId = await SendOTPByStringee(phoneNumber);
+            if (otpId == 0)
             {
-                return new ResponseBuilder<Object>().Error("Wait a minute to resend OTP").ResponseModel;
+                return new ResponseBuilder().Error("Wait a minute then resend OTP").ResponseModel;
             }
-
-            StringeeReqModel smsModel = new StringeeReqModel();
-            SMSContentReqModel sms = new SMSContentReqModel()
-            {
-                From = "TnR",
-                To = HandleOTP.ModifyPhoneNumber(phoneNumber),
-                Text = "Your OTP is " + OTP_string
-            };
-            smsModel.SMS = sms;
-
-            var response = await client.PostAsync("https://api.stringee.com/v1/sms", new StringContent(JsonConvert.SerializeObject(smsModel), Encoding.UTF8, "application/json"));
-            var rs = await response.Content.ReadAsStringAsync();
-            StringeeResModel stringeeResModel = JsonConvert.DeserializeObject<StringeeResModel>(rs);
-            if (stringeeResModel.SMSSent == "0")
-            {
-                return new ResponseBuilder<Object>().Error("Send OTP error").ResponseModel;
-            }
-
-            OTP otp = new OTP()
-            {
-                Code = OTP_string,
-                PhoneNumber = phoneNumber,
-                ExpiredDate = DateTime.Now.AddMinutes(1),
-                Status = OTPStatus.Waiting.ToString()
-            };
-
-            await _tnrssSupervisor.AddOTPAsync(otp);
 
             //generate reset token
             var token = await _tnrssSupervisor.GetPasswordResetTokenAsync(userInfor);
 
-            return new ResponseBuilder<Object>().Success("Success").WithData(new { resetToken = token, otpid = otp.ID }).ResponseModel;
+            return new ResponseBuilder<Object>().Success("Success").WithData(new { resetToken = token, otpid = otpId }).ResponseModel;
         }
         #endregion
 
@@ -190,27 +119,38 @@ namespace TnR_SS.API.Controller
                 return new ResponseBuilder().Error("Phone Number existed").ResponseModel;
             }
 
-            //send OTP
-            //generate OTP
-            string stringee_token = HandleOTP.GetStringeeToken();
+            var otpId = await SendOTPByStringee(dataModel.NewPhoneNumber);
+            if (otpId == 0)
+            {
+                return new ResponseBuilder().Error("Wait a minute then resend OTP").ResponseModel;
+            }
+
+            return new ResponseBuilder<Object>().Success("Success").WithData(new { OTPID = otpId }).ResponseModel;
+        }
+        #endregion
+
+        private async Task<int> SendOTPByStringee(string phoneNumber)
+        {
+            string token = HandleOTP.GetStringeeToken();
 
             var client = new HttpClient();
-            client.DefaultRequestHeaders.Add("X-STRINGEE-AUTH", stringee_token);
+            client.DefaultRequestHeaders.Add("X-STRINGEE-AUTH", token);
 
             Random rd = new Random();
             string OTP_string = rd.Next(1, 999999).ToString("D6");
 
-            var checkOTPExsits = _tnrssSupervisor.CheckPhoneOTPExists(dataModel.NewPhoneNumber);
+            var checkOTPExsits = _tnrssSupervisor.CheckPhoneOTPExists(phoneNumber);
             if (checkOTPExsits)
             {
-                return new ResponseBuilder<Object>().Error("Wait a minute to resend OTP").ResponseModel;
+                //return new ResponseBuilder().Error("Wait a minute to resend OTP").ResponseModel;
+                return 0;
             }
 
             StringeeReqModel smsModel = new StringeeReqModel();
             SMSContentReqModel sms = new SMSContentReqModel()
             {
                 From = "TnR",
-                To = HandleOTP.ModifyPhoneNumber(dataModel.NewPhoneNumber),
+                To = HandleOTP.ModifyPhoneNumber(phoneNumber),
                 Text = "Your OTP is " + OTP_string
             };
             smsModel.SMS = sms;
@@ -220,21 +160,23 @@ namespace TnR_SS.API.Controller
             StringeeResModel stringeeResModel = JsonConvert.DeserializeObject<StringeeResModel>(rs);
             if (stringeeResModel.SMSSent == "0")
             {
-                return new ResponseBuilder<Object>().Error("Send OTP error").ResponseModel;
+                //return new ResponseBuilder<Object>().Error("Send OTP error").ResponseModel;
+                //return 0;
             }
 
+
+            //create OTP
             OTP otp = new OTP()
             {
                 Code = OTP_string,
-                PhoneNumber = dataModel.NewPhoneNumber,
+                PhoneNumber = phoneNumber,
                 ExpiredDate = DateTime.Now.AddMinutes(1),
                 Status = OTPStatus.Waiting.ToString()
             };
 
             await _tnrssSupervisor.AddOTPAsync(otp);
 
-            return new ResponseBuilder<Object>().Success("Success").WithData(new { OTPID = otp.ID }).ResponseModel;
+            return otp.ID;
         }
-        #endregion
     }
 }

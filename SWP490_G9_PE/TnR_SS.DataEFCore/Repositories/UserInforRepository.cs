@@ -46,10 +46,7 @@ namespace TnR_SS.DataEFCore.Repositories
             return await _userManager.DeleteAsync(user);
         }
 
-        public void Dispose()
-        {
-            throw new NotImplementedException();
-        }
+        public void Dispose() => _context.Dispose();
 
         public async Task<string> GeneratePasswordResetTokenAsync(UserInfor user)
         {
@@ -84,11 +81,6 @@ namespace TnR_SS.DataEFCore.Repositories
         public async Task SignInAsync(UserInfor user)
         {
             await _signInManager.SignInAsync(user, false);
-        }
-
-        public Task<SignInResult> SignInWithPasswordAsync(UserInfor user, string password)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task SignOutAsync()

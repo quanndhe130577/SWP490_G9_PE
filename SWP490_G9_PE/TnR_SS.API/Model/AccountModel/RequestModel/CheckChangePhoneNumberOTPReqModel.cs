@@ -10,9 +10,7 @@ namespace TnR_SS.API.Model.AccountModel.RequestModel
         [Required]
         public int OTPID { get; set; }
         [Required]
-        public string PhoneNumber { get; set; }
-        [Required]
-        public string OTP { get; set; }
+        public string Code { get; set; }
 
     }
 }
