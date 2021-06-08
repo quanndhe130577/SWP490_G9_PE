@@ -2,20 +2,17 @@
 using Google.Apis.Drive.v3;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
-using Google.Cloud.Storage.V1;
+using Microsoft.AspNetCore.Http;
 using MimeTypes;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace TnR_SS.API.Common.GoogleDriveAPI
 {
     public class HandleGoogleDriveAPI
     {
-        static string[] Scopes = { DriveService.Scope.DriveReadonly };
+        /*static string[] Scopes = { DriveService.Scope.DriveReadonly };
         static string ApplicationName = "Drive API .NET Quickstart";
         public static async Task UploadImageToDrive()
         {
@@ -68,7 +65,7 @@ namespace TnR_SS.API.Common.GoogleDriveAPI
 
         public static async Task UploadImageToDrive2()
         {
-            /*string[] scopes = new string[] { DriveService.Scope.Drive,
+            *//*string[] scopes = new string[] { DriveService.Scope.Drive,
                                DriveService.Scope.DriveFile,};
             var clientId = "61668390816-6s3btjhpj6fbc6m1hcpu8pbq445g7tn2.apps.googleusercontent.com";      // From https://console.developers.google.com  
             var clientSecret = "WAKHl-Koi40LbZxsKWh2oubW";          // From https://console.developers.google.com  
@@ -78,7 +75,7 @@ namespace TnR_SS.API.Common.GoogleDriveAPI
                 ClientId = clientId,
                 ClientSecret = clientSecret
             }, scopes,
-            Environment.UserName, CancellationToken.None, new FileDataStore("MyAppsToken"));*/
+            Environment.UserName, CancellationToken.None, new FileDataStore("MyAppsToken"));*//*
             //Once consent is recieved, your token will be stored locally on the AppData directory, so that next time you wont be prompted for consent.   
 
             UserCredential credential;
@@ -182,10 +179,10 @@ namespace TnR_SS.API.Common.GoogleDriveAPI
             {
                 Console.WriteLine(obj);
             }
-        }
+        }*/
 
-        /*//add scope
-        public static string[] Scopes = { Google.Apis.Drive.v3.DriveService.Scope.Drive };
+        //add scope
+        public static string[] Scopes = { DriveService.Scope.Drive };
 
         //create Drive API service.
         public static DriveService GetService()
@@ -193,11 +190,9 @@ namespace TnR_SS.API.Common.GoogleDriveAPI
             //get Credentials from client_secret.json file 
             UserCredential credential;
             //Root Folder of project
-            var CSPath = System.Web.Hosting.HostingEnvironment.MapPath("~/");
-            using (var stream = new FileStream(Path.Combine(CSPath, "client_secret_860319795502-th86n6pjkjmc53j0503u22j16a9r3c2r.apps.googleusercontent.com.json"), FileMode.Open, FileAccess.Read))
+            using (var stream = new FileStream(@"E:\CapstoneProject\Source Code\SWP490_G9_PE\SWP490_G9_PE\TnR_SS.API\credentials.json", FileMode.Open, FileAccess.Read))
             {
-                String FolderPath = System.Web.Hosting.HostingEnvironment.MapPath("~/"); ;
-                String FilePath = Path.Combine(FolderPath, "DriveServiceCredentials.json");
+                String FilePath = @"E:\CapstoneProject\Source Code\SWP490_G9_PE\SWP490_G9_PE\TnR_SS.API\DriveServiceCredentials.json";
                 credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
                     GoogleClientSecrets.Load(stream).Secrets,
                     Scopes,
@@ -206,7 +201,7 @@ namespace TnR_SS.API.Common.GoogleDriveAPI
                     new FileDataStore(FilePath, true)).Result;
             }
             //create Drive API service.
-            DriveService service = new Google.Apis.Drive.v3.DriveService(new BaseClientService.Initializer()
+            DriveService service = new DriveService(new BaseClientService.Initializer()
             {
                 HttpClientInitializer = credential,
                 ApplicationName = "GoogleDriveMVCUpload",
@@ -216,29 +211,42 @@ namespace TnR_SS.API.Common.GoogleDriveAPI
 
 
         //file Upload to the Google Drive root folder.
-        public static void UplaodFileOnDrive(HttpPostedFileBase file)
+        public static void UplaodFileOnDrive(string imgBase64)
         {
-            if (file != null && file.ContentLength > 0)
+            String path = @"D"; //Path
+
+            //Check if directory exist
+            if (!System.IO.Directory.Exists(path))
             {
-                //create service
-                DriveService service = GetService();
-                string path = Path.Combine(HttpContext.Current.Server.MapPath("~/GoogleDriveFiles"),
-                Path.GetFileName(file.FileName));
-                file.SaveAs(path);
-                var FileMetaData = new Google.Apis.Drive.v3.Data.File();
-                FileMetaData.Name = Path.GetFileName(file.FileName);
-                FileMetaData.MimeType = MimeMapping.GetMimeMapping(path);
-                FilesResource.CreateMediaUpload request;
-                using (var stream = new System.IO.FileStream(path, System.IO.FileMode.Open))
-                {
-                    request = service.Files.Create(FileMetaData, stream, FileMetaData.MimeType);
-                    request.Fields = "id";
-                    request.Upload();
-                }
-
-
-
+                System.IO.Directory.CreateDirectory(path); //Create directory if it doesn't exist
             }
-        }*/
+
+            string imageName = "chaulenba.jpg";
+
+            //set the image path
+            string imgPath = Path.Combine(path, imageName);
+
+            byte[] imageBytes = Convert.FromBase64String(imgBase64);
+
+            File.WriteAllBytes(imgPath, imageBytes);
+
+            // full path to file in temp location
+            var filePath = Path.GetTempFileName();
+
+            //create service
+            DriveService service = GetService();
+
+            var FileMetaData = new Google.Apis.Drive.v3.Data.File();
+            FileMetaData.Name = Path.GetFileName(imageName);
+            FileMetaData.MimeType = MimeTypeMap.GetMimeType(path);
+            FilesResource.CreateMediaUpload request;
+            using (var stream = new System.IO.FileStream(path, System.IO.FileMode.Open))
+            {
+                request = service.Files.Create(FileMetaData, stream, FileMetaData.MimeType);
+                request.Fields = "id";
+                request.Upload();
+            }
+
+        }
     }
 }

@@ -287,12 +287,13 @@ namespace TnR_SS.API.Controller
         }
         #endregion
 
-        [HttpPost]
+        [HttpGet]
         [Route("test-api")]
         [AllowAnonymous]
         public async Task TestUploadData()
         {
-            await HandleGoogleDriveAPI.UploadImageToDrive();
+            //await HandleGoogleDriveAPI.UploadImageToDrive();
+            HandleGoogleDriveAPI.GetService();
         }
 
     }
