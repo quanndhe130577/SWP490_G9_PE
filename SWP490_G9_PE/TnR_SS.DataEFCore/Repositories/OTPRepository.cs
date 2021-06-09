@@ -38,8 +38,13 @@ namespace TnR_SS.DataEFCore.Repositories
         public async Task UpdateStatusAsync(int otpid)
         {
             var otp = await _context.OTPs.FindAsync(otpid);
-            otp.Status = OTPStatus.Done.ToString();
-            await _context.SaveChangesAsync();
+            if (otp is not null)
+            {
+                otp.Status = OTPStatus.Done.ToString();
+                otp.ExpiredDate = DateTime.Now.AddMinutes(30);
+                await _context.SaveChangesAsync();
+            }
+
         }
     }
 }

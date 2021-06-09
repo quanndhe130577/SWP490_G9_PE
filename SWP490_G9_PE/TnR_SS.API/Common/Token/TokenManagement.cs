@@ -31,22 +31,6 @@ namespace TnR_SS.API.Common.Token
 
         }
 
-        public static bool ValidateToken(HttpContext _context, int id)
-        {
-            var currentUser = _context.User;
-
-            if (currentUser.HasClaim(c => c.Type == "ID"))
-            {
-                int claimdId = int.Parse(currentUser.Claims.FirstOrDefault(c => c.Type == "ID").Value);
-                if (claimdId == id)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
         public static bool CheckUserIdFromToken(HttpContext _context, int userId)
         {
             var currentUser = _context.User;

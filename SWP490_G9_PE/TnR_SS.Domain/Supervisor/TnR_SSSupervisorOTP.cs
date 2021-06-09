@@ -18,7 +18,7 @@ namespace TnR_SS.Domain.Supervisor
                 return false;
             }
 
-            if (otpInfor.PhoneNumber == phoneNumber && otpInfor.Status == OTPStatus.Done.ToString())
+            if (otpInfor.PhoneNumber == phoneNumber && otpInfor.Status == OTPStatus.Done.ToString() && otpInfor.ExpiredDate > DateTime.Now )
             {
                 return true;
             }

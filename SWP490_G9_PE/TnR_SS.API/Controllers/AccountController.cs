@@ -161,6 +161,8 @@ namespace TnR_SS.API.Controller
             if (result.Succeeded)
             {
                 var registerResModel = _mapper.Map<UserInfor, UserResModel>(userInfor);
+                //set role 
+                registerResModel.RoleDisplayName = await _tnrssSupervisor.GetRoleDisplayNameAsync(userInfor);
                 return new ResponseBuilder<UserResModel>().Success("Update Success").WithData(registerResModel).ResponseModel;
             }
 

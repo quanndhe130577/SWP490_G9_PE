@@ -15,19 +15,19 @@ namespace TnR_SS.API.Model
         public MapperProfile()
         {
             CreateMap<RegisterUserReqModel, UserInfor>().ForMember(destination => destination.UserName, options => options.MapFrom(source => source.PhoneNumber))
-                .AfterMap( async (source, destination) =>
+                .AfterMap((source, destination) =>
                 {
                     /*if (string.IsNullOrEmpty(destination.SecurityStamp))
                     {
                         destination.SecurityStamp = Guid.NewGuid().ToString();
                     }*/
-                    destination.Avatar = await HandleImgurAPI.UploadImgurAsync(source.AvatarBase64);
+                    destination.Avatar = HandleImgurAPI.UploadImgurAsync(source.AvatarBase64);
                     destination.CreatedDate = DateTime.Now;
                 });
 
-            CreateMap<UpdateUserReqModel, UserInfor>().AfterMap(async (source, destination) =>
+            CreateMap<UpdateUserReqModel, UserInfor>().AfterMap((source, destination) =>
             {
-                destination.Avatar = await HandleImgurAPI.UploadImgurAsync(source.AvatarBase64);
+                destination.Avatar = HandleImgurAPI.UploadImgurAsync(source.AvatarBase64);
             });
 
             CreateMap<UserInfor, UserResModel>().ForMember(destination => destination.UserID, options => options.MapFrom(source => source.Id));
