@@ -1,18 +1,13 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using System;
 using System.Net;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using TnR_SS.API.Common.HandleOTP;
-using TnR_SS.API.Common.HandleOTP.Model;
 using TnR_SS.API.Common.Response;
 using TnR_SS.API.Common.Token;
 using TnR_SS.Domain.ApiModels.OTPModel.RequestModel;
-using TnR_SS.Domain.Entities;
 using TnR_SS.Domain.Supervisor;
 
 namespace TnR_SS.API.Controller
@@ -21,19 +16,6 @@ namespace TnR_SS.API.Controller
     [ApiController]
     public class OTPController : ControllerBase
     {
-        /*private readonly TnR_SSContext _context;
-        private readonly UserManager<UserInfor> _userManager;
-        private readonly IMapper _mapper;
-        private readonly HandleOTP _handleOTP;
-
-        public OTPController(TnR_SSContext context, UserManager<UserInfor> userManager, SignInManager<UserInfor> signInManager, RoleManager<RoleUser> roleManager, IMapper mapper, HandleOTP handleOTP)
-        {
-            _context = context;
-            _userManager = userManager;
-            _mapper = mapper;
-            _handleOTP = handleOTP;
-        }*/
-
         private readonly IMapper _mapper;
         private readonly ITnR_SSSupervisor _tnrssSupervisor;
 
@@ -53,7 +35,14 @@ namespace TnR_SS.API.Controller
                 return new ResponseBuilder().Error("Phone Number existed").ResponseModel;
             }
 
-            var otpId = await SendOTPByStringee(phoneNumber);
+            var checkOTPExsits = _tnrssSupervisor.CheckPhoneOTPExists(phoneNumber);
+            if (checkOTPExsits)
+            {
+                return new ResponseBuilder().Error("Wait a minute then resend OTP").ResponseModel;
+            }
+
+            string token = StringeeToken.GetStringeeToken();
+            var otpId = await _tnrssSupervisor.SendOTPByStringee(token, phoneNumber);
             if (otpId == 0)
             {
                 return new ResponseBuilder().Error("Wait a minute then resend OTP").ResponseModel;
@@ -86,16 +75,23 @@ namespace TnR_SS.API.Controller
                 return new ResponseBuilder().WithCode(HttpStatusCode.NotFound).WithMessage("Phone Number haven't registered yet").ResponseModel;
             }
 
-            var otpId = await SendOTPByStringee(phoneNumber);
+            var checkOTPExsits = _tnrssSupervisor.CheckPhoneOTPExists(phoneNumber);
+            if (checkOTPExsits)
+            {
+                return new ResponseBuilder().Error("Wait a minute then resend OTP").ResponseModel;
+            }
+
+            string token = StringeeToken.GetStringeeToken();
+            var otpId = await _tnrssSupervisor.SendOTPByStringee(token, phoneNumber);
             if (otpId == 0)
             {
                 return new ResponseBuilder().Error("Wait a minute then resend OTP").ResponseModel;
             }
 
             //generate reset token
-            var token = await _tnrssSupervisor.GetPasswordResetTokenAsync(userInfor);
+            var token_reset = await _tnrssSupervisor.GetPasswordResetTokenAsync(userInfor);
 
-            return new ResponseBuilder<Object>().Success("Success").WithData(new { resetToken = token, otpid = otpId }).ResponseModel;
+            return new ResponseBuilder<Object>().Success("Success").WithData(new { resetToken = token_reset, otpid = otpId }).ResponseModel;
         }
         #endregion
 
@@ -119,7 +115,14 @@ namespace TnR_SS.API.Controller
                 return new ResponseBuilder().Error("Phone Number existed").ResponseModel;
             }
 
-            var otpId = await SendOTPByStringee(dataModel.NewPhoneNumber);
+            var checkOTPExsits = _tnrssSupervisor.CheckPhoneOTPExists(dataModel.NewPhoneNumber);
+            if (checkOTPExsits)
+            {
+                return new ResponseBuilder().Error("Wait a minute then resend OTP").ResponseModel;
+            }
+
+            string token = StringeeToken.GetStringeeToken();
+            var otpId = await _tnrssSupervisor.SendOTPByStringee(token, dataModel.NewPhoneNumber);
             if (otpId == 0)
             {
                 return new ResponseBuilder().Error("Wait a minute then resend OTP").ResponseModel;
@@ -129,7 +132,7 @@ namespace TnR_SS.API.Controller
         }
         #endregion
 
-        private async Task<int> SendOTPByStringee(string phoneNumber)
+       /* private async Task<int> SendOTPByStringee(string phoneNumber)
         {
             string token = HandleOTP.GetStringeeToken();
 
@@ -142,7 +145,6 @@ namespace TnR_SS.API.Controller
             var checkOTPExsits = _tnrssSupervisor.CheckPhoneOTPExists(phoneNumber);
             if (checkOTPExsits)
             {
-                //return new ResponseBuilder().Error("Wait a minute to resend OTP").ResponseModel;
                 return 0;
             }
 
@@ -176,6 +178,6 @@ namespace TnR_SS.API.Controller
             await _tnrssSupervisor.AddOTPAsync(otp);
 
             return otp.ID;
-        }
+        }*/
     }
 }

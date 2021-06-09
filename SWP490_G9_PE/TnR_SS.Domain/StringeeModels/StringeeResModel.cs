@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace TnR_SS.API.Common.HandleOTP.Model
+namespace TnR_SS.Domain.StringeeModel
 {
     public class StringeeResModel
     {
