@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+    <PackageReference Include="DevExpress.Xpo" Version="19.2.5" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.6" />
@@ -26,7 +27,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TnR_SS.Entity\TnR_SS.Entity.csproj" />
+    <Compile Update="Common\HandleOTP\Model\StringeeReqModel.cs">
+      <ExcludeFromSourceAnalysis>True</ExcludeFromSourceAnalysis>
+      <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Model\ErrorModel\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TnR_SS.DataEFCore\TnR_SS.DataEFCore.csproj" />
+    <ProjectReference Include="..\TnR_SS.Domain\TnR_SS.Domain.csproj" />
   </ItemGroup>
 
 </Project>

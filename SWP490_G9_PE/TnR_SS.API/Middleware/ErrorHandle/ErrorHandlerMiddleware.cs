@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
 using TnR_SS.API.Common.Response;
+using TnR_SS.API.Common.Token;
 
 namespace TnR_SS.API.Middleware.ErrorHandle
 {
@@ -19,6 +20,16 @@ namespace TnR_SS.API.Middleware.ErrorHandle
         {
             try
             {
+                if (!String.IsNullOrEmpty(context.Request.Query["id"]))
+                {
+                    int id = int.Parse(context.Request.Query["id"]);
+
+                    if (!TokenManagement.CheckUserIdFromToken(context, id))
+                    {
+                        throw new Exception("Access denied");
+                    }
+                }
+                    
                 await _next(context);
             }
             catch (Exception error)
@@ -37,12 +48,16 @@ namespace TnR_SS.API.Middleware.ErrorHandle
                         response.StatusCode = (int)HttpStatusCode.InternalServerError;
                         break;
                 }*/
-
-                ResponseBuilder rpb = new ResponseBuilder().Error(error?.InnerException?.Message);
+                ResponseBuilder rpb = new ResponseBuilder().Error(error?.InnerException == null ? error?.Message : error?.InnerException.Message);
                 //var result = JsonSerializer.Serialize(rpb.ResponseModel);
                 var result = JsonConvert.SerializeObject(rpb.ResponseModel);
                 await response.WriteAsync(result);
             }
+        }
+
+        private Exception Exception(string v)
+        {
+            throw new NotImplementedException();
         }
     }
 }

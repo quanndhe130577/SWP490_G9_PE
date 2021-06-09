@@ -38,7 +38,7 @@ namespace TnR_SS.API.Common.Response
             this.ResponseModel = new ResponseModel<object>();
             this.ResponseModel.Success = false;
             this.ResponseModel.StatusCode = HttpStatusCode.BadRequest;
-            this.ResponseModel.Message = "Errors";
+            this.ResponseModel.Message = rs[0];
             ((ResponseModel<object>)this.ResponseModel).Data = new { errors = rs };
             return this;
         }
