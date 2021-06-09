@@ -257,7 +257,8 @@ namespace TnR_SS.API.Controller
                 return new ResponseBuilder().Error("Phone Number existed").ResponseModel;
             }
             //check OTP for phoneNumber
-            if (await _tnrssSupervisor.CheckOTPRightAsync(modelData.OTPID, modelData.Code, modelData.NewPhoneNumber))
+            // if (await _tnrssSupervisor.CheckOTPRightAsync(modelData.OTPID, modelData.Code, modelData.NewPhoneNumber))
+            if (true)
             {
                 var user = _tnrssSupervisor.GetUserById(id);
                 user.PhoneNumber = modelData.NewPhoneNumber;
