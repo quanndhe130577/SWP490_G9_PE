@@ -2,6 +2,6 @@
 {
     public class UpdateUserReqModel : UserModel
     {
-
+        public string AvatarBase64 { get; set; }
     }
 }

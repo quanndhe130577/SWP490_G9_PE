@@ -20,7 +20,5 @@ namespace TnR_SS.API.Model.AccountModel
         [Required]
         public string IdentifyCode { get; set; }
 
-        public string Avatar { get; set; }
-
     }
 }

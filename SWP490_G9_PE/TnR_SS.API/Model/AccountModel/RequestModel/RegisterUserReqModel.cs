@@ -4,6 +4,8 @@ namespace TnR_SS.API.Model.AccountModel.RequestModel
 {
     public class RegisterUserReqModel : UserModel
     {
+        public string AvatarBase64 { get; set; }
+
         [Required]
         [MinLength(8)]
         public string Password { get; set; }

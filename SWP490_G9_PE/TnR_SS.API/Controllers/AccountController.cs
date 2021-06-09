@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using TnR_SS.API.Common.GoogleDriveAPI;
+using TnR_SS.API.Common.ImgurAPI;
 using TnR_SS.API.Common.Response;
 using TnR_SS.API.Common.Token;
 using TnR_SS.API.Model.AccountModel.RequestModel;
@@ -160,7 +160,8 @@ namespace TnR_SS.API.Controller
 
             if (result.Succeeded)
             {
-                return new ResponseBuilder().Success("Update Success").ResponseModel;
+                var registerResModel = _mapper.Map<UserInfor, UserResModel>(userInfor);
+                return new ResponseBuilder<UserResModel>().Success("Update Success").WithData(registerResModel).ResponseModel;
             }
 
             var errors = result.Errors.Select(x => x.Description).ToList();
@@ -286,15 +287,6 @@ namespace TnR_SS.API.Controller
             return new ResponseBuilder().Success("Logout Success").ResponseModel;
         }
         #endregion
-
-        [HttpGet]
-        [Route("test-api")]
-        [AllowAnonymous]
-        public async Task TestUploadData()
-        {
-            //await HandleGoogleDriveAPI.UploadImageToDrive();
-            HandleGoogleDriveAPI.GetService();
-        }
 
     }
 }

@@ -164,7 +164,6 @@ namespace TnR_SS.API.Controller
                 //return 0;
             }
 
-
             //create OTP
             OTP otp = new OTP()
             {

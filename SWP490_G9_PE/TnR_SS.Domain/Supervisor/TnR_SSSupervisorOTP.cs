@@ -33,7 +33,7 @@ namespace TnR_SS.Domain.Supervisor
                 return false;
             }
 
-            if (otpInfor.PhoneNumber == phoneNumber && otpInfor.Code == otp && otpInfor.Status.Equals(OTPStatus.Waiting.ToString()))
+            if (otpInfor.PhoneNumber == phoneNumber && otpInfor.Code == otp && otpInfor.Status.Equals(OTPStatus.Waiting.ToString()) && otpInfor.ExpiredDate > DateTime.Now)
             {
                 await _otpRepository.UpdateStatusAsync(otpId);
                 return true;
