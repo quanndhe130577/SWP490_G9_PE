@@ -274,7 +274,7 @@ namespace TnR_SS.API.Controller
             }
 
 
-            return new ResponseBuilder().Error("Invalid OTP").ResponseModel;
+            // return new ResponseBuilder().Error("Invalid OTP").ResponseModel;
         }
         #endregion
 
