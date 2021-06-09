@@ -63,7 +63,7 @@ namespace TnR_SS
                 options.AddDefaultPolicy(
                     builder =>
                     {
-                        builder.WithOrigins("http://localhost:3010")
+                        builder.WithOrigins("http://localhost:3000")
                             .AllowCredentials()
                             .AllowAnyMethod()
                             .AllowAnyHeader();

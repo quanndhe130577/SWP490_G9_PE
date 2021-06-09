@@ -286,5 +286,14 @@ namespace TnR_SS.API.Controller
         }
         #endregion
 
+         #region Get User Info 
+       [HttpGet("getUserInfo/{id}")]
+        public ResponseModel GetUserInfo(int id)
+        {
+            var user = _tnrssSupervisor.GetUserById(id);
+            return new ResponseBuilder<UserResModel>().Success("Login success").WithData(_mapper.Map<UserInfor, UserResModel>(user)).ResponseModel;
+        }
+        #endregion
+
     }
 }
