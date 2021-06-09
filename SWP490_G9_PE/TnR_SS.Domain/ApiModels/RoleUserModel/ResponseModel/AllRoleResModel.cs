@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TnR_SS.API.Model.RoleUserModel.RequestModel
+namespace TnR_SS.Domain.ApiModels.RoleUserModel.RequestModel
 {
     public class AllRoleResModel
     {

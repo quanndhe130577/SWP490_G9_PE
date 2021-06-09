@@ -1,4 +1,4 @@
-﻿namespace TnR_SS.API.Model.AccountModel.RequestModel
+﻿namespace TnR_SS.Domain.ApiModels.AccountModel.RequestModel
 {
     public class UpdateUserReqModel : UserModel
     {

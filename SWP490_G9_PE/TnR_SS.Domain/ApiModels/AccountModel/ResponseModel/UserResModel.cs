@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TnR_SS.API.Model.AccountModel.ResponseModel
+namespace TnR_SS.Domain.ApiModels.AccountModel.ResponseModel
 {
     public class UserResModel : UserModel
     {

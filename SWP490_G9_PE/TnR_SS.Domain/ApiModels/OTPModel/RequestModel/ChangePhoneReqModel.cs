@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace TnR_SS.API.Model.OTPModel.RequestModel
+namespace TnR_SS.Domain.ApiModels.OTPModel.RequestModel
 {
     public class ChangePhoneReqModel
     {

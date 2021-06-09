@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 using TnR_SS.API.Common.ImgurAPI;
 using TnR_SS.API.Common.Response;
 using TnR_SS.API.Common.Token;
-using TnR_SS.API.Model.AccountModel.RequestModel;
-using TnR_SS.API.Model.AccountModel.ResponseModel;
+using TnR_SS.Domain.ApiModels.AccountModel.RequestModel;
+using TnR_SS.Domain.ApiModels.AccountModel.ResponseModel;
 using TnR_SS.Domain.Entities;
 using TnR_SS.Domain.Supervisor;
 
@@ -70,7 +70,10 @@ namespace TnR_SS.API.Controller
                     return new ResponseBuilder().Error("Role user does not existed").ResponseModel;
                 }
 
+
+
                 var userInfor = _mapper.Map<RegisterUserReqModel, UserInfor>(userData);
+                userInfor.Avatar = HandleImgurAPI.UploadImgurAsync(userData.AvatarBase64);
                 var result = await _tnrssSupervisor.CreateAsync(userInfor, userData.Password);
 
                 if (result.Succeeded)
@@ -156,6 +159,7 @@ namespace TnR_SS.API.Controller
             }
 
             userInfor = _mapper.Map<UpdateUserReqModel, UserInfor>(userData, userInfor);
+            userInfor.Avatar = HandleImgurAPI.UploadImgurAsync(userData.AvatarBase64);
             var result = await _tnrssSupervisor.UpdateUserAsync(userInfor);
 
             if (result.Succeeded)

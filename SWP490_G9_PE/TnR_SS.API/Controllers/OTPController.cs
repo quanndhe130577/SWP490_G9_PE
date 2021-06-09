@@ -11,7 +11,7 @@ using TnR_SS.API.Common.HandleOTP;
 using TnR_SS.API.Common.HandleOTP.Model;
 using TnR_SS.API.Common.Response;
 using TnR_SS.API.Common.Token;
-using TnR_SS.API.Model.OTPModel.RequestModel;
+using TnR_SS.Domain.ApiModels.OTPModel.RequestModel;
 using TnR_SS.Domain.Entities;
 using TnR_SS.Domain.Supervisor;
 

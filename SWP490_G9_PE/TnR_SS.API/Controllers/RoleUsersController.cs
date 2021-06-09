@@ -5,8 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TnR_SS.API.Common.Response;
-using TnR_SS.API.Model.RoleUserModel.RequestModel;
-using TnR_SS.API.Model.RoleUserModel.ResponseModel;
+using TnR_SS.Domain.ApiModels.RoleUserModel.RequestModel;
+using TnR_SS.Domain.ApiModels.RoleUserModel.ResponseModel;
 using TnR_SS.Domain.Entities;
 using TnR_SS.Domain.Supervisor;
 

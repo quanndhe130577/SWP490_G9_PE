@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace TnR_SS.API.Model.RoleUserModel.ResponseModel
+namespace TnR_SS.Domain.ApiModels.RoleUserModel.ResponseModel
 {
     public class CreateRoleReqModel
     {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace TnR_SS.API.Model.AccountModel.RequestModel
+namespace TnR_SS.Domain.ApiModels.AccountModel.RequestModel
 {
     public class LoginReqModel
     {

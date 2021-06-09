@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace TnR_SS.API.Model.AccountModel.ResponseModel
+namespace TnR_SS.Domain.ApiModels.AccountModel.ResponseModel
 {
     public class LoginResModel
     {
