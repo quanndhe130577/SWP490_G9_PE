@@ -25,15 +25,18 @@ namespace TnR_SS.DataEFCore
         public virtual DbSet<OTP> OTPs { get; set; }
         public virtual DbSet<PondOwner> PondOwners { get; set; }
         public virtual DbSet<TongKetMua> TongKetMuas { get; set; }
-
+        public virtual DbSet<Ro> Ros { get; set; }
+        public virtual DbSet<FishType> FishTypes { get; set; }
+        
         /*protected override void OnConfiguring(DbContextOptionsBuilder options)
     => options.UseSqlServer("Server=localhost;Database=TnR_SS;Trusted_Connection=True;");*/
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
-            if (options.IsConfigured)
+            /*if (options.IsConfigured)
             {
-                options.UseSqlServer("Server = localhost; Database = TnR_SS; Trusted_Connection = True;", builder => builder.EnableRetryOnFailure());
-            }
+            }*/
+            options.UseSqlServer("Server = localhost; Database = TnR_SS; Trusted_Connection = True;", builder => builder.EnableRetryOnFailure());
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -46,7 +49,9 @@ namespace TnR_SS.DataEFCore
             new UserInforConfiguration(modelBuilder.Entity<UserInfor>());
             new PondOwnerConfiguration(modelBuilder.Entity<PondOwner>());
             new TongKetMuaConfiguration(modelBuilder.Entity<TongKetMua>());
-
+            new RoConfiguration(modelBuilder.Entity<Ro>());
+            new FishTypeConfiguration(modelBuilder.Entity<FishType>());
+            
             OnModelCreatingPartial(modelBuilder);
         }
 
