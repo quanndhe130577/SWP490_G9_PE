@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TnR_SS.DataEFCore;
 
 namespace TnR_SS.DataEFCore.Migrations
 {
     [DbContext(typeof(TnR_SSContext))]
-    partial class TnR_SSContextModelSnapshot : ModelSnapshot
+    [Migration("20210610151154_AddRoTable")]
+    partial class AddRoTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -121,40 +123,6 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("TnR_SS.Domain.Entities.FishType", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("ID")
-                        .UseIdentityColumn();
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nchar")
-                        .IsFixedLength(true);
-
-                    b.Property<string>("FishName")
-                        .IsRequired()
-                        .HasColumnType("nchar")
-                        .IsFixedLength(true);
-
-                    b.Property<float>("MaxWeight")
-                        .HasMaxLength(12)
-                        .HasColumnType("real");
-
-                    b.Property<float>("MinWeight")
-                        .HasMaxLength(12)
-                        .HasColumnType("real");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("FishType");
-                });
-
             modelBuilder.Entity("TnR_SS.Domain.Entities.OTP", b =>
                 {
                     b.Property<int>("ID")
@@ -244,7 +212,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "e14368cf-41e1-4a59-bcb8-9dedaf2543ec",
+                            ConcurrencyStamp = "535c93a2-e966-4649-9653-a99ffcc4742d",
                             DisplayName = "Admin",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
@@ -252,7 +220,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "d2920100-585d-4569-b9bb-001bebb06b7f",
+                            ConcurrencyStamp = "c0b66f27-4d9b-457f-89bf-f985a1ae4701",
                             DisplayName = "Thương lái",
                             Name = "Trader",
                             NormalizedName = "TRADER"
@@ -260,7 +228,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "c5833868-76b4-47a2-b6d2-6a5dc4768a2e",
+                            ConcurrencyStamp = "fe9bce20-3d69-4acd-9dce-2a59ab1a0e16",
                             DisplayName = "Chủ bến",
                             Name = "Weight Recorder",
                             NormalizedName = "WEIGHT RECORDER"
