@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TnR_SS.DataEFCore;
 
 namespace TnR_SS.DataEFCore.Migrations
 {
     [DbContext(typeof(TnR_SSContext))]
-    partial class TnR_SSContextModelSnapshot : ModelSnapshot
+    [Migration("20210610151916_addPondOwnerEntity")]
+    partial class addPondOwnerEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -216,7 +218,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "9663d868-b09b-4f02-b8d1-208a76afc952",
+                            ConcurrencyStamp = "2d4f4585-c432-4b00-a848-61a50c6f1f8f",
                             DisplayName = "Admin",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
@@ -224,7 +226,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "385b5624-8962-45ab-bed6-45d483f99820",
+                            ConcurrencyStamp = "f2b345de-5668-4abd-8f03-e73a59adaaf0",
                             DisplayName = "Thương lái",
                             Name = "Trader",
                             NormalizedName = "TRADER"
@@ -232,54 +234,11 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "09cd8d3c-7928-4d41-9714-37231cdc6be3",
+                            ConcurrencyStamp = "557cc5a5-3b0d-48d1-8bc9-fb6cc6bd2e1f",
                             DisplayName = "Chủ bến",
                             Name = "Weight Recorder",
                             NormalizedName = "WEIGHT RECORDER"
                         });
-                });
-
-            modelBuilder.Entity("TnR_SS.Domain.Entities.TongKetMua", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<double>("PayForPondOwner")
-                        .HasColumnType("float");
-
-                    b.Property<double>("PondBackMoney")
-                        .HasColumnType("float");
-
-                    b.Property<Guid>("PondOwnerID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<double>("TienGioiThieu")
-                        .HasColumnType("float");
-
-                    b.Property<double>("TotalAmount")
-                        .HasColumnType("float");
-
-                    b.Property<double>("TotalWeight")
-                        .HasColumnType("float");
-
-                    b.Property<int>("TraderID")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("isPaid")
-                        .HasColumnType("bit");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("PondOwnerID");
-
-                    b.HasIndex("TraderID");
-
-                    b.ToTable("TongKetMuas");
                 });
 
             modelBuilder.Entity("TnR_SS.Domain.Entities.UserInfor", b =>
@@ -434,37 +393,6 @@ namespace TnR_SS.DataEFCore.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("TnR_SS.Domain.Entities.TongKetMua", b =>
-                {
-                    b.HasOne("TnR_SS.Domain.Entities.PondOwner", "PondOwner")
-                        .WithMany("TongKetMuas")
-                        .HasForeignKey("PondOwnerID")
-                        .HasConstraintName("FK_TongKetMua_PondOwner")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TnR_SS.Domain.Entities.UserInfor", "UserInfor")
-                        .WithMany("TongKetMuas")
-                        .HasForeignKey("TraderID")
-                        .HasConstraintName("FK_TongKetMua_UserInfor")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("PondOwner");
-
-                    b.Navigation("UserInfor");
-                });
-
-            modelBuilder.Entity("TnR_SS.Domain.Entities.PondOwner", b =>
-                {
-                    b.Navigation("TongKetMuas");
-                });
-
-            modelBuilder.Entity("TnR_SS.Domain.Entities.UserInfor", b =>
-                {
-                    b.Navigation("TongKetMuas");
                 });
 #pragma warning restore 612, 618
         }

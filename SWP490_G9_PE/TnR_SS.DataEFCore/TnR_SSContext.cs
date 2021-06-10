@@ -23,6 +23,8 @@ namespace TnR_SS.DataEFCore
         public virtual DbSet<RoleUser> RoleUsers { get; set; }
         public virtual DbSet<UserInfor> UserInfors { get; set; }
         public virtual DbSet<OTP> OTPs { get; set; }
+        public virtual DbSet<PondOwner> PondOwners { get; set; }
+        public virtual DbSet<TongKetMua> TongKetMuas { get; set; }
 
         /*protected override void OnConfiguring(DbContextOptionsBuilder options)
     => options.UseSqlServer("Server=localhost;Database=TnR_SS;Trusted_Connection=True;");*/
@@ -42,6 +44,8 @@ namespace TnR_SS.DataEFCore
             new OTPConfiguration(modelBuilder.Entity<OTP>());
             new RoleUserConfiguration(modelBuilder.Entity<RoleUser>());
             new UserInforConfiguration(modelBuilder.Entity<UserInfor>());
+            new PondOwnerConfiguration(modelBuilder.Entity<PondOwner>());
+            new TongKetMuaConfiguration(modelBuilder.Entity<TongKetMua>());
 
             OnModelCreatingPartial(modelBuilder);
         }
