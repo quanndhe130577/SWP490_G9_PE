@@ -8,7 +8,7 @@ using TnR_SS.Domain.Supervisor;
 
 namespace TnR_SS.API.Controllers
 {
-    [Route("api/Ro")]
+    [Route("api/basket")]
     [ApiController]
     public class BasketController : ControllerBase
     {
@@ -17,11 +17,6 @@ namespace TnR_SS.API.Controllers
         public BasketController(ITnR_SSSupervisor tnrssSupervisor)
         {
             _tnrssSupervisor = tnrssSupervisor;
-        }
-
-        public async Task<Basket> CreateRoAsync(Basket ro)
-        {
-            
         }
     }
 }
