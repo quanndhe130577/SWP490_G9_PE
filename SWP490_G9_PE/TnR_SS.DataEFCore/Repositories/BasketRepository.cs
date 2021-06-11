@@ -17,29 +17,31 @@ namespace TnR_SS.DataEFCore.Repositories
             _context = context;
         }
 
-        public List<Basket> ListAllRo() => _context.Baskets.ToList();
+        public List<Basket> ListAllBasket() => _context.Baskets.ToList();
 
-        public async Task<Basket> FindRoByIdAsync(int roID) => await _context.Baskets.FindAsync(roID);
+        public async Task<Basket> FindBasketByIdAsync(int basketId) => await _context.Baskets.FindAsync(basketId);
 
-        public async Task CreateRoAsync(Basket ro)
+        public async Task CreateBasketAsync(Basket basket)
         {
-            await _context.Baskets.AddAsync(ro);
+            basket.CreatedAt = DateTime.Now;
+            await _context.Baskets.AddAsync(basket);
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteRoByIdAsync(int roID)
+        public async Task DeleteBasketByIdAsync(int basketId)
         {
-            var ro = await _context.Baskets.FindAsync(roID);
-            _context.Baskets.Remove(ro);
+            var basket = await _context.Baskets.FindAsync(basketId);
+            _context.Baskets.Remove(basket);
             await _context.SaveChangesAsync();
         }
 
         public void Dispose() => _context.Dispose();
 
-        public async Task UpdateRoAsync(Basket ro, string type, int weight)
+        public async Task UpdateBasketAsync(Basket basket, string type, int weight)
         {
-            ro = new Basket() { Type = type, Weight = weight };
-            _context.Baskets.Update(ro);
+            basket.UpdatedAt = DateTime.Now;
+            basket = new Basket() { Type = type, Weight = weight };
+            _context.Baskets.Update(basket);
             await _context.SaveChangesAsync();
         }
 

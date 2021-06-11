@@ -9,19 +9,19 @@ namespace TnR_SS.Domain.Supervisor
 {
     public partial class TnR_SSSupervisor
     {
-        public bool CheckRoExist(string typeRo)
+        public bool CheckBasketExist(string typeRo)
         {
-            List<Basket> list = _basketRepository.ListAllRo();
+            List<Basket> list = _basketRepository.ListAllBasket();
             var rs = list.FirstOrDefault(x => x.Type == typeRo);
             return rs is not null;
         }
 
-        public async Task<bool> CreateRo(string typeRo, int weight)
+        public async Task<bool> CreateBasket(string typeRo, int weight)
         {
             if (typeRo != null && weight != 0)
             {
                 Basket ro = new() { Type = typeRo, Weight = weight };
-                await _basketRepository.CreateRoAsync(ro);
+                await _basketRepository.CreateBasketAsync(ro);
                 return true;
             }
             else
@@ -30,12 +30,12 @@ namespace TnR_SS.Domain.Supervisor
             }
         }
 
-        public async Task<bool> UpdateRo(Basket ro, string typeRo, int weight)
+        public async Task<bool> UpdateBasket(Basket ro, string typeRo, int weight)
         {
             if (typeRo != null && weight != 0)
             {
                 ro = new Basket() { Type = typeRo, Weight = weight };
-                await _basketRepository.UpdateRoAsync(ro, typeRo, weight);
+                await _basketRepository.UpdateBasketAsync(ro, typeRo, weight);
                 return true;
             }
             else

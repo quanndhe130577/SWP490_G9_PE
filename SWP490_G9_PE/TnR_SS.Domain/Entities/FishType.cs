@@ -16,7 +16,6 @@ namespace TnR_SS.Domain.Entities
         public int ID { get; set; }
         [Required]
         public string FishName { get; set; }
-
         public string Description { get; set; }
         [Required]
         public float MinWeight { get; set; }
