@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace TnR_SS.Domain.Entities
 {
+    [Table("TongKetMua")]
     public class TongKetMua
     {
         [Key]
@@ -40,5 +41,7 @@ namespace TnR_SS.Domain.Entities
         [Required]
         public int TraderID { get; set; }
         public UserInfor UserInfor { get; set; }
+
+        public List<TransactionBuy> TransactionBuys { get; set; }
     }
 }

@@ -1,22 +1,18 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using TnR_SS.Domain.ApiModels.AccountModel.RequestModel;
 using TnR_SS.Domain.ApiModels.AccountModel.ResponseModel;
-using TnR_SS.Domain.Common;
 using TnR_SS.Domain.Entities;
 
 namespace TnR_SS.Domain.Supervisor
 {
     public partial class TnR_SSSupervisor
     {
-        public async Task<IdentityResult> CreateAsync(RegisterUserReqModel userData, string imgurClientId)
+        public async Task<IdentityResult> CreateAsync(RegisterUserReqModel userData, string avatarLink)
         {
             var userInfor = _mapper.Map<RegisterUserReqModel, UserInfor>(userData);
-            userInfor.Avatar = HandleImgurAPI.UploadImgurAsync(userData.AvatarBase64, imgurClientId);
+            userInfor.Avatar = avatarLink;
             var result = await _userInforRepository.CreateAsync(userInfor, userData.Password);
             if (result.Succeeded)
             {
@@ -77,11 +73,10 @@ namespace TnR_SS.Domain.Supervisor
             return _userInforRepository.GetUserById(id);
         }
 
-        public async Task<IdentityResult> UpdateUserAsync(UpdateUserReqModel user, int id, string imgurClientId)
+        public async Task<IdentityResult> UpdateUserAsync(UpdateUserReqModel user, int id, string avatarLink)
         {
             var userInfor = _userInforRepository.GetUserById(id);
             userInfor = _mapper.Map<UpdateUserReqModel, UserInfor>(user, userInfor);
-            userInfor.Avatar = HandleImgurAPI.UploadImgurAsync(user.AvatarBase64, imgurClientId);
             return await _userInforRepository.UpdateAsync(userInfor);
         }
 

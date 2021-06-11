@@ -8,6 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TnR_SS.Domain.Entities
 {
+    [Table("UserInfor")]
     public partial class UserInfor : IdentityUser<int>
     {
         [Required]

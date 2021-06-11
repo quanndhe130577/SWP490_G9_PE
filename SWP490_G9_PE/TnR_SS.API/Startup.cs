@@ -14,6 +14,7 @@ using TnR_SS.API.Common.Response;
 using TnR_SS.API.Configurations;
 using TnR_SS.API.Middleware.ErrorHandle;
 using TnR_SS.DataEFCore;
+using TnR_SS.Domain.ApiModels;
 using TnR_SS.Domain.Entities;
 
 namespace TnR_SS
@@ -92,7 +93,7 @@ namespace TnR_SS
                 };
         });
 
-            services.AddAutoMapper(typeof(Startup));
+            services.AddAutoMapper(typeof(MapperProfile));
 
             //services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 

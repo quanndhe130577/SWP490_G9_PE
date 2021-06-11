@@ -27,7 +27,8 @@ namespace TnR_SS.DataEFCore
         public virtual DbSet<TongKetMua> TongKetMuas { get; set; }
         public virtual DbSet<Ro> Ros { get; set; }
         public virtual DbSet<FishType> FishTypes { get; set; }
-        
+        public virtual DbSet<TransactionBuy> TransactionBuys { get; set; }
+
         /*protected override void OnConfiguring(DbContextOptionsBuilder options)
     => options.UseSqlServer("Server=localhost;Database=TnR_SS;Trusted_Connection=True;");*/
         protected override void OnConfiguring(DbContextOptionsBuilder options)
@@ -51,7 +52,8 @@ namespace TnR_SS.DataEFCore
             new TongKetMuaConfiguration(modelBuilder.Entity<TongKetMua>());
             new RoConfiguration(modelBuilder.Entity<Ro>());
             new FishTypeConfiguration(modelBuilder.Entity<FishType>());
-            
+            new TransactionBuyConfiguration(modelBuilder.Entity<TransactionBuy>());
+
             OnModelCreatingPartial(modelBuilder);
         }
 

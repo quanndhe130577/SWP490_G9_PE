@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using TnR_SS.Domain.ApiModels.AccountModel.RequestModel;
 using TnR_SS.Domain.ApiModels.AccountModel.ResponseModel;
@@ -13,20 +10,22 @@ namespace TnR_SS.Domain.Supervisor
 {
     public interface ITnR_SSSupervisor
     {
-        // OTP
+        #region OTP
         Task<bool> CheckOTPDoneAsync(int otpId, string phoneNumber);
         Task<bool> CheckOTPRightAsync(int otpId, string otp, string phoneNumber);
         bool CheckPhoneOTPExists(string phoneNumber);
-        Task AddOTPAsync(OTP otp);
-        Task<int> SendOTPByStringee(string token, string phoneNumber);
+        Task<int> AddOTPAsync(string code, string phoneNumber);
+        #endregion
 
-        //role
+        #region Role
         Task<bool> RoleExistsAsync(string roleName);
         Task<string> GetRoleDisplayNameAsync(UserInfor user);
         List<AllRoleResModel> GetAllResRoles();
         Task<IdentityResult> AddRoleUserAsync(RoleUser role);
-        //user
-        Task<IdentityResult> CreateAsync(RegisterUserReqModel userData, string imgurClientId);
+        #endregion
+
+        #region UserInfor
+        Task<IdentityResult> CreateAsync(RegisterUserReqModel userData, string avatarLink);
         Task<IdentityResult> AddToRoleAsync(UserInfor user, string role);
         Task<IdentityResult> DeleteAsync(UserInfor user);
         UserInfor GetUserByPhoneNumber(string phoneNumber);
@@ -34,7 +33,7 @@ namespace TnR_SS.Domain.Supervisor
         Task<UserResModel> SignInWithPasswordAsync(UserInfor user, string password);
         Task SignInAsync(UserInfor user);
         UserInfor GetUserById(int id);
-        Task<IdentityResult> UpdateUserAsync(UpdateUserReqModel user, int id, string imgurClientId);
+        Task<IdentityResult> UpdateUserAsync(UpdateUserReqModel user, int id, string avatarLink);
         Task<IdentityResult> UpdatePhoneNumberAsync(int id, string newPhone);
         Task<IdentityResult> ChangeUserPasswordAsync(UserInfor user, string currentPassword, string newPassword);
         Task<IdentityResult> ResetUserPasswordAsync(UserInfor user, string token, string newPassword);
@@ -43,5 +42,9 @@ namespace TnR_SS.Domain.Supervisor
         Task<string> GetPasswordResetTokenAsync(UserInfor user);
         Task<bool> CheckUserPassword(UserInfor user, string password);
         Task<UserResModel> GetUserResModelByIdAsync(int id);
+        #endregion
+
+        #region Fishtype
+        #endregion
     }
 }

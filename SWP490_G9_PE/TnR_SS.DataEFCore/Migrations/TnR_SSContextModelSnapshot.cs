@@ -15,17 +15,17 @@ namespace TnR_SS.DataEFCore.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .UseIdentityColumns()
                 .HasAnnotation("Relational:Collation", "Latin1_General_CI_AS")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.6");
+                .HasAnnotation("ProductVersion", "5.0.6")
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -48,7 +48,7 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -127,7 +127,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID")
-                        .UseIdentityColumn();
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime");
@@ -161,7 +161,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID")
-                        .UseIdentityColumn();
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Code")
                         .IsRequired()
@@ -220,7 +220,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID")
-                        .UseIdentityColumn();
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -230,11 +230,16 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.Property<float>("Weight")
                         .HasColumnType("real");
 
+                    b.HasKey("ID");
+
+                    b.ToTable("Ro");
                 });
+
             modelBuilder.Entity("TnR_SS.Domain.Entities.RoleUser", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ConcurrencyStamp")
@@ -266,7 +271,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "9663d868-b09b-4f02-b8d1-208a76afc952",
+                            ConcurrencyStamp = "5e6218e6-64b4-4610-b4ae-b5ccaff785b5",
                             DisplayName = "Admin",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
@@ -274,7 +279,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "385b5624-8962-45ab-bed6-45d483f99820",
+                            ConcurrencyStamp = "867fe0f6-dfe5-44aa-8e21-f6bb676dc8a4",
                             DisplayName = "Thương lái",
                             Name = "Trader",
                             NormalizedName = "TRADER"
@@ -282,7 +287,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "09cd8d3c-7928-4d41-9714-37231cdc6be3",
+                            ConcurrencyStamp = "f5b4bd94-d7a3-4728-bc3a-3f7d2bee8413",
                             DisplayName = "Chủ bến",
                             Name = "Weight Recorder",
                             NormalizedName = "WEIGHT RECORDER"
@@ -326,109 +331,144 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.HasKey("ID");
 
                     b.HasIndex("PondOwnerID");
+
+                    b.HasIndex("TraderID");
+
+                    b.ToTable("TongKetMua");
+                });
+
+            modelBuilder.Entity("TnR_SS.Domain.Entities.TransactionBuy", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<double>("BuyPrice")
+                        .HasColumnType("float");
+
+                    b.Property<int>("FishTypeID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TongKetMuaId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("FishTypeID");
+
+                    b.HasIndex("RoId");
+
+                    b.HasIndex("TongKetMuaId");
+
+                    b.ToTable("TransactionBuy");
                 });
 
             modelBuilder.Entity("TnR_SS.Domain.Entities.UserInfor", b =>
-        {
-            b.Property<int>("Id")
-                .ValueGeneratedOnAdd()
-                .HasColumnType("int")
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("ID")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            b.Property<int>("AccessFailedCount")
-                .HasColumnType("int");
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
 
-            b.Property<string>("Avatar")
-                .IsUnicode(false)
-                .HasColumnType("varchar(max)");
+                    b.Property<string>("Avatar")
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(max)");
 
-            b.Property<string>("ConcurrencyStamp")
-                .IsConcurrencyToken()
-                .HasColumnType("nvarchar(max)");
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
 
-            b.Property<DateTime>("CreatedDate")
-                .HasColumnType("datetime");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime");
 
-            b.Property<DateTime>("Dob")
-                .HasColumnType("date")
-                .HasColumnName("DOB");
+                    b.Property<DateTime>("Dob")
+                        .HasColumnType("date")
+                        .HasColumnName("DOB");
 
-            b.Property<string>("Email")
-                .HasMaxLength(256)
-                .HasColumnType("nvarchar(256)");
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
-            b.Property<bool>("EmailConfirmed")
-                .HasColumnType("bit");
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
 
-            b.Property<string>("FirstName")
-                .IsRequired()
-                .HasMaxLength(50)
-                .HasColumnType("nvarchar(50)");
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-            b.Property<string>("IdentifyCode")
-                .HasMaxLength(20)
-                .IsUnicode(false)
-                .HasColumnType("varchar(20)");
+                    b.Property<string>("IdentifyCode")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(20)");
 
-            b.Property<string>("Lastname")
-                .IsRequired()
-                .HasMaxLength(50)
-                .HasColumnType("nvarchar(50)");
+                    b.Property<string>("Lastname")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-            b.Property<bool>("LockoutEnabled")
-                .HasColumnType("bit");
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
 
-            b.Property<DateTimeOffset?>("LockoutEnd")
-                .HasColumnType("datetimeoffset");
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
 
-            b.Property<string>("NormalizedEmail")
-                .HasMaxLength(256)
-                .HasColumnType("nvarchar(256)");
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
-            b.Property<string>("NormalizedUserName")
-                .HasMaxLength(256)
-                .HasColumnType("nvarchar(256)");
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
-            b.Property<string>("PasswordHash")
-                .HasColumnType("nvarchar(max)");
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
 
-            b.Property<string>("PhoneNumber")
-                .IsRequired()
-                .HasMaxLength(12)
-                .IsUnicode(false)
-                .HasColumnType("varchar(12)");
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(12)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(12)");
 
-            b.Property<bool>("PhoneNumberConfirmed")
-                .HasColumnType("bit");
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
 
-            b.Property<string>("SecurityStamp")
-                .HasColumnType("nvarchar(max)");
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
 
-            b.Property<bool>("TwoFactorEnabled")
-                .HasColumnType("bit");
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
 
-            b.Property<string>("UserName")
-                .HasMaxLength(256)
-                .HasColumnType("nvarchar(256)");
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
-            b.HasKey("Id");
+                    b.HasKey("Id");
 
-            b.HasIndex("NormalizedEmail")
-                .HasDatabaseName("EmailIndex");
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
 
-            b.HasIndex("NormalizedUserName")
-                .IsUnique()
-                .HasDatabaseName("UserNameIndex")
-                .HasFilter("[NormalizedUserName] IS NOT NULL");
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-            b.HasIndex(new[] { "Id", "PhoneNumber" }, "UC_PhoneNumber")
-                .IsUnique();
+                    b.HasIndex(new[] { "Id", "PhoneNumber" }, "UC_PhoneNumber")
+                        .IsUnique();
 
-            b.HasIndex(new[] { "PhoneNumber" }, "UQ_PhoneNumber")
-                .IsUnique();
+                    b.HasIndex(new[] { "PhoneNumber" }, "UQ_PhoneNumber")
+                        .IsUnique();
 
-            b.ToTable("UserInfor");
-        });
+                    b.ToTable("UserInfor");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
@@ -502,9 +542,54 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.Navigation("UserInfor");
                 });
 
+            modelBuilder.Entity("TnR_SS.Domain.Entities.TransactionBuy", b =>
+                {
+                    b.HasOne("TnR_SS.Domain.Entities.FishType", "FishType")
+                        .WithMany("TransactionBuys")
+                        .HasForeignKey("FishTypeID")
+                        .HasConstraintName("FK_TransactionBuy_FishType")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TnR_SS.Domain.Entities.Ro", "Ro")
+                        .WithMany("TransactionBuys")
+                        .HasForeignKey("RoId")
+                        .HasConstraintName("FK_TransactionBuy_Ro")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TnR_SS.Domain.Entities.TongKetMua", "TongKetMua")
+                        .WithMany("TransactionBuys")
+                        .HasForeignKey("TongKetMuaId")
+                        .HasConstraintName("FK_TransactionBuy_TongKetMua")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("FishType");
+
+                    b.Navigation("Ro");
+
+                    b.Navigation("TongKetMua");
+                });
+
+            modelBuilder.Entity("TnR_SS.Domain.Entities.FishType", b =>
+                {
+                    b.Navigation("TransactionBuys");
+                });
+
             modelBuilder.Entity("TnR_SS.Domain.Entities.PondOwner", b =>
                 {
                     b.Navigation("TongKetMuas");
+                });
+
+            modelBuilder.Entity("TnR_SS.Domain.Entities.Ro", b =>
+                {
+                    b.Navigation("TransactionBuys");
+                });
+
+            modelBuilder.Entity("TnR_SS.Domain.Entities.TongKetMua", b =>
+                {
+                    b.Navigation("TransactionBuys");
                 });
 
             modelBuilder.Entity("TnR_SS.Domain.Entities.UserInfor", b =>
@@ -512,7 +597,6 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.Navigation("TongKetMuas");
                 });
 #pragma warning restore 612, 618
-
         }
     }
 }

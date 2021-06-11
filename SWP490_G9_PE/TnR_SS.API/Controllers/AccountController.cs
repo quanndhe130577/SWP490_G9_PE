@@ -1,8 +1,12 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using TnR_SS.API.Common.ImgurAPI;
 using TnR_SS.API.Common.Response;
@@ -11,6 +15,9 @@ using TnR_SS.Domain.ApiModels.AccountModel.RequestModel;
 using TnR_SS.Domain.ApiModels.AccountModel.ResponseModel;
 using TnR_SS.Domain.Entities;
 using TnR_SS.Domain.Supervisor;
+using Twilio;
+using Twilio.Rest.Api.V2010.Account;
+using Twilio.Types;
 
 namespace TnR_SS.API.Controller
 {
@@ -19,23 +26,6 @@ namespace TnR_SS.API.Controller
     [ApiController]
     public class AccountController : ControllerBase
     {
-        /*private readonly TnR_SSContext _context;
-        private readonly UserManager<UserInfor> _userManager;
-        private readonly SignInManager<UserInfor> _signInManager;
-        private readonly RoleManager<RoleUser> _roleManager;
-        private readonly IMapper _mapper;
-        private readonly HandleOTP _handleOTP;
-
-        public AccountController(TnR_SSContext context, UserManager<UserInfor> userManager, SignInManager<UserInfor> signInManager,
-            RoleManager<RoleUser> roleManager, IMapper mapper, HandleOTP handleOTP)
-        {
-            _context = context;
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _roleManager = roleManager;
-            _mapper = mapper;
-            _handleOTP = handleOTP;
-        }*/
         private readonly ITnR_SSSupervisor _tnrssSupervisor;
 
         public AccountController(ITnR_SSSupervisor tnrssSupervisor, IMapper mapper)
@@ -68,7 +58,9 @@ namespace TnR_SS.API.Controller
                     return new ResponseBuilder().Error("Role user does not existed").ResponseModel;
                 }
 
-                var result = await _tnrssSupervisor.CreateAsync(userData, Startup.StaticConfig["Imgur:client-id"]);
+                string avatarLink = await ImgurAPI.UploadImgurAsync(userData.AvatarBase64);
+
+                var result = await _tnrssSupervisor.CreateAsync(userData, avatarLink);
                 if (result.Succeeded)
                 {
                     return new ResponseBuilder().Success("Register Success").ResponseModel;
@@ -105,7 +97,7 @@ namespace TnR_SS.API.Controller
                         Token = token,
                         User = userResModel
                     };
-                    ResponseBuilder<LoginResModel> rpB = new ResponseBuilder<LoginResModel>().Success("Login success").WithData(rlm);
+                    return new ResponseBuilder<LoginResModel>().Success("Login success").WithData(rlm).ResponseModel;
                 }
 
                 return new ResponseBuilder().Error("Invalid Phone number or password").ResponseModel;
@@ -125,7 +117,8 @@ namespace TnR_SS.API.Controller
                 return new ResponseBuilder().Error("Access denied").ResponseModel;
             }
 
-            var result = await _tnrssSupervisor.UpdateUserAsync(userData, id, Startup.StaticConfig["Imgur:client-id"]);
+            string avatarLink = await ImgurAPI.UploadImgurAsync(userData.AvatarBase64);
+            var result = await _tnrssSupervisor.UpdateUserAsync(userData, id, avatarLink);
 
             if (result.Succeeded)
             {
@@ -252,5 +245,47 @@ namespace TnR_SS.API.Controller
         }
         #endregion
 
+
+        #region Test
+        [HttpPost]
+        [Route("test")]
+        [AllowAnonymous]
+        public async Task<string> Test()
+        {
+            // Find your Account Sid and Auth Token at twilio.com/user/account
+            // To set up environmental variables, see http://twil.io/secure
+            const string accountSid = "AC096a65d5931a6b5ff70f5e644f6dbf6f";
+            const string authToken = "fcd61c440ca7dec2f07fcb6314ed4ee0";
+
+            // Initialize the Twilio client
+            TwilioClient.Init(accountSid, authToken);
+
+            // make an associative array of people we know, indexed by phone number
+            var people = new Dictionary<string, string>() {
+                {"+84936169232", "Quannd"},
+                {"+84969360445", "Ductva"}
+            };
+            var rs = "";
+            // Iterate over all our friends
+            /*foreach (var person in people)
+            {
+                // Send a new outgoing SMS by POSTing to the Messages resource
+                var ms = MessageResource.Create(
+                    from: new PhoneNumber("+12676425842"), // From number, must be an SMS-enabled Twilio number
+                    to: new PhoneNumber(person.Key), // To number, if using Sandbox see note above
+                                                     // Message content
+                    body: $"Hey {person.Value} Monkey Party at 6PM. Bring Bananas!");
+
+                rs += ms.Status;
+            }*/
+            var message = MessageResource.Create(
+                body: "Your OTP is 123456",
+                from: new Twilio.Types.PhoneNumber("+12676425842"),
+                to: new Twilio.Types.PhoneNumber("+84969360445")
+            );
+
+            return message.Status.ToString();
+        }
     }
+    #endregion
 }

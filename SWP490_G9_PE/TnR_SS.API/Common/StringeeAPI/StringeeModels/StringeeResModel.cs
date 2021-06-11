@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace TnR_SS.Domain.StringeeModel
+namespace TnR_SS.API.Common.StringeeAPI
 {
     public class StringeeResModel
     {

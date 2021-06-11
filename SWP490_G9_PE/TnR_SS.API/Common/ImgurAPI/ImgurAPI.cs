@@ -11,9 +11,9 @@ using System.Threading.Tasks;
 
 namespace TnR_SS.API.Common.ImgurAPI
 {
-    public class HandleImgurAPI
+    public class ImgurAPI
     {
-        public static string UploadImgurAsync(string imgBase64)
+        public static async Task<string> UploadImgurAsync(string imgBase64)
         {
             if (imgBase64 is null)
             {
@@ -27,12 +27,12 @@ namespace TnR_SS.API.Common.ImgurAPI
             using (MemoryStream ms = new MemoryStream(bytes))
             {
                 var imageEndpoint = new ImageEndpoint(apiClient, httpClient);
-                var imageUpload = imageEndpoint.UploadImageAsync(ms).Result;
+                var imageUpload = await imageEndpoint.UploadImageAsync(ms);
                 return imageUpload.Link;
             }
         }
 
-        public static async Task<string> UploadImgurv1Async(string imgBase64)
+        /*public static async Task<string> UploadImgurv1Async(string imgBase64)
         {
             if (imgBase64 is null)
             {
@@ -54,6 +54,6 @@ namespace TnR_SS.API.Common.ImgurAPI
             return rs;
 
 
-        }
+        }*/
     }
 }

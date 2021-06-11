@@ -8,23 +8,26 @@ using System.Threading.Tasks;
 
 namespace TnR_SS.Domain.Entities
 {
-    [Table("FishType")]
-    public class FishType
+    [Table("TransactionBuy")]
+    public class TransactionBuy
     {
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
-        [Required]
-        public string FishName { get; set; }
 
-        public string Description { get; set; }
         [Required]
-        public float MinWeight { get; set; }
-        [Required]
-        public float MaxWeight { get; set; }
-        [Required]
-        public DateTime Date { get; set; }
+        public int FishTypeID { get; set; }
+        public FishType FishType { get; set; }
 
-        public List<TransactionBuy> TransactionBuys { get; set; }
+        [Required]
+        public double BuyPrice { get; set; }
+
+        [Required]
+        public int RoId { get; set; }
+        public Ro Ro { get; set; }
+
+        [Required]
+        public int TongKetMuaId { get; set; }
+        public TongKetMua TongKetMua { get; set; }
     }
 }

@@ -18,5 +18,6 @@ namespace TnR_SS.Domain.Entities
         [Required]
         public float Weight { get; set; }
 
+        public List<TransactionBuy> TransactionBuys { get; set; }
     }
 }
