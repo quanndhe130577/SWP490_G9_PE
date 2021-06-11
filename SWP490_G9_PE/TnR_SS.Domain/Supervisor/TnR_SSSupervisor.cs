@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,7 @@ namespace TnR_SS.Domain.Supervisor
         private readonly IOTPRepository _otpRepository;
         private readonly IUserInforRepository _userInforRepository;
         private readonly IRoleUserRepository _roleUserRepository;
+        private readonly IMapper _mapper;
 
         public TnR_SSSupervisor()
         {
@@ -21,12 +23,14 @@ namespace TnR_SS.Domain.Supervisor
 
         public TnR_SSSupervisor(IOTPRepository otpRepository,
             IUserInforRepository userInforRepository,
-            IRoleUserRepository roleUserRepository
+            IRoleUserRepository roleUserRepository,
+             IMapper mapper
         )
         {
             _otpRepository = otpRepository;
             _userInforRepository = userInforRepository;
             _roleUserRepository = roleUserRepository;
+            _mapper = mapper;
         }
     }
 }

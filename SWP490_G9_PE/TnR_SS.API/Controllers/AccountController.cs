@@ -36,13 +36,11 @@ namespace TnR_SS.API.Controller
             _mapper = mapper;
             _handleOTP = handleOTP;
         }*/
-        private readonly IMapper _mapper;
         private readonly ITnR_SSSupervisor _tnrssSupervisor;
 
         public AccountController(ITnR_SSSupervisor tnrssSupervisor, IMapper mapper)
         {
             _tnrssSupervisor = tnrssSupervisor;
-            _mapper = mapper;
         }
 
         #region Register      
@@ -70,31 +68,14 @@ namespace TnR_SS.API.Controller
                     return new ResponseBuilder().Error("Role user does not existed").ResponseModel;
                 }
 
-
-
-                var userInfor = _mapper.Map<RegisterUserReqModel, UserInfor>(userData);
-                userInfor.Avatar = HandleImgurAPI.UploadImgurAsync(userData.AvatarBase64);
-                var result = await _tnrssSupervisor.CreateAsync(userInfor, userData.Password);
-
+                var result = await _tnrssSupervisor.CreateAsync(userData, Startup.StaticConfig["Imgur:client-id"]);
                 if (result.Succeeded)
                 {
-                    //add role to user
-                    var result_addUserToRole = await _tnrssSupervisor.AddToRoleAsync(userInfor, userData.RoleNormalizedName);
-                    if (result_addUserToRole.Succeeded)
-                    {
-                        return new ResponseBuilder().Success("Register Success").ResponseModel;
-                    }
-
-                    //add role to user failed
-                    await _tnrssSupervisor.DeleteAsync(userInfor);
-                    var errors1 = result_addUserToRole.Errors.Select(x => x.Description).ToList();
-                    return new ResponseBuilder().Errors(errors1).ResponseModel;
-
+                    return new ResponseBuilder().Success("Register Success").ResponseModel;
                 }
 
                 var errors = result.Errors.Select(x => x.Description).ToList();
                 return new ResponseBuilder().Errors(errors).ResponseModel;
-
             }
 
             return new ResponseBuilder().Error("Invalid information").ResponseModel;
@@ -115,24 +96,16 @@ namespace TnR_SS.API.Controller
                     return new ResponseBuilder().Error("User not found").ResponseModel;
                 }
 
-                await _tnrssSupervisor.SignOutAsync();
-                var userSigninResult = await _tnrssSupervisor.SignInWithPasswordAsync(user, userData.Password);
-                if (userSigninResult.Succeeded)
+                var userResModel = await _tnrssSupervisor.SignInWithPasswordAsync(user, userData.Password);
+                if (userResModel != null)
                 {
-
-                    await _tnrssSupervisor.SignInAsync(user);
                     var token = TokenManagement.GetTokenUser(user.Id);
                     LoginResModel rlm = new LoginResModel()
                     {
                         Token = token,
-                        User = _mapper.Map<UserInfor, UserResModel>(user)
+                        User = userResModel
                     };
-
-                    //set role 
-                    rlm.User.RoleDisplayName = await _tnrssSupervisor.GetRoleDisplayNameAsync(user);
-
                     ResponseBuilder<LoginResModel> rpB = new ResponseBuilder<LoginResModel>().Success("Login success").WithData(rlm);
-                    return rpB.ResponseModel;
                 }
 
                 return new ResponseBuilder().Error("Invalid Phone number or password").ResponseModel;
@@ -152,22 +125,12 @@ namespace TnR_SS.API.Controller
                 return new ResponseBuilder().Error("Access denied").ResponseModel;
             }
 
-            var userInfor = _tnrssSupervisor.GetUserById(id);
-            if (userInfor is null)
-            {
-                return new ResponseBuilder().WithCode(HttpStatusCode.NotFound).WithMessage("User have not registered").ResponseModel;
-            }
-
-            userInfor = _mapper.Map<UpdateUserReqModel, UserInfor>(userData, userInfor);
-            userInfor.Avatar = HandleImgurAPI.UploadImgurAsync(userData.AvatarBase64);
-            var result = await _tnrssSupervisor.UpdateUserAsync(userInfor);
+            var result = await _tnrssSupervisor.UpdateUserAsync(userData, id, Startup.StaticConfig["Imgur:client-id"]);
 
             if (result.Succeeded)
             {
-                var registerResModel = _mapper.Map<UserInfor, UserResModel>(userInfor);
-                //set role 
-                registerResModel.RoleDisplayName = await _tnrssSupervisor.GetRoleDisplayNameAsync(userInfor);
-                return new ResponseBuilder<UserResModel>().Success("Update Success").WithData(registerResModel).ResponseModel;
+                var userResModel = await _tnrssSupervisor.GetUserResModelByIdAsync(id);
+                return new ResponseBuilder<UserResModel>().Success("Update Success").WithData(userResModel).ResponseModel;
             }
 
             var errors = result.Errors.Select(x => x.Description).ToList();
@@ -203,9 +166,9 @@ namespace TnR_SS.API.Controller
                     LoginResModel rlm = new LoginResModel()
                     {
                         Token = token,
-                        User = _mapper.Map<UserInfor, UserResModel>(userInfor)
+                        User = await _tnrssSupervisor.GetUserResModelByIdAsync(id)
                     };
-                    rlm.User.RoleDisplayName = await _tnrssSupervisor.GetRoleDisplayNameAsync(userInfor);
+
                     return new ResponseBuilder<LoginResModel>().Success("Update Success").WithData(rlm).ResponseModel;
                 }
                 else
@@ -231,7 +194,6 @@ namespace TnR_SS.API.Controller
                 return new ResponseBuilder().WithCode(HttpStatusCode.NotFound).WithMessage("Invalid Information").ResponseModel;
             }
 
-            // check OTP for User
             if (!await _tnrssSupervisor.CheckOTPRightAsync(resetData.OTPID, resetData.Code, resetData.PhoneNumber))
             {
                 return new ResponseBuilder().Error("Invalid OTP").ResponseModel;
@@ -264,13 +226,10 @@ namespace TnR_SS.API.Controller
             {
                 return new ResponseBuilder().Error("Phone Number existed").ResponseModel;
             }
-            //check OTP for phoneNumber
+
             if (await _tnrssSupervisor.CheckOTPRightAsync(modelData.OTPID, modelData.Code, modelData.NewPhoneNumber))
             {
-                var user = _tnrssSupervisor.GetUserById(id);
-                user.PhoneNumber = modelData.NewPhoneNumber;
-
-                var rs = await _tnrssSupervisor.UpdateUserAsync(user);
+                var rs = await _tnrssSupervisor.UpdatePhoneNumberAsync(id, modelData.NewPhoneNumber);
                 if (rs.Succeeded)
                 {
                     return new ResponseBuilder().Success("Success").ResponseModel;

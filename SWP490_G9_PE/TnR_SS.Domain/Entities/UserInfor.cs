@@ -20,5 +20,7 @@ namespace TnR_SS.Domain.Entities
         public string IdentifyCode { get; set; }
         public string Avatar { get; set; }
         public DateTime CreatedDate { get; set; }
+
+        public List<TongKetMua> TongKetMuas { get; set; }
     }
 }

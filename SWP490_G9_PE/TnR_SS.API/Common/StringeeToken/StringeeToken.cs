@@ -1,28 +1,20 @@
 ﻿using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Net.Http;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
-using TnR_SS.API.Common.HandleOTP.Model;
-using TnR_SS.DataEFCore;
-using TnR_SS.Domain.Entities;
 
 namespace TnR_SS.API.Common.HandleOTP
 {
-    public class HandleOTP
+    public class StringeeToken
     {
-
         public static string GetStringeeToken()
         {
             //var iss = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Startup.StaticConfig["JwtStringee:iss"]));
 
             var apiKeySecret = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Startup.StaticConfig["JwtStringee:apiKeySecret"])); //key
-            var credentials = new Microsoft.IdentityModel.Tokens.SigningCredentials(apiKeySecret, SecurityAlgorithms.HmacSha256Signature);// ma hoa key
+            var credentials = new SigningCredentials(apiKeySecret, SecurityAlgorithms.HmacSha256Signature);// ma hoa key
 
             //var jti = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Startup.StaticConfig["JwtStringee:apiKeySecret"] + "-" + DateTime.Now));
 
@@ -44,11 +36,6 @@ namespace TnR_SS.API.Common.HandleOTP
             //var secToken = new JwtSecurityToken(obj_header, obj_payload);
 
             return new JwtSecurityTokenHandler().CreateEncodedJwt(tokenDescriptor);
-        }
-
-        public static string ModifyPhoneNumber(string phoneNumber)
-        {
-            return phoneNumber;
         }
     }
 }

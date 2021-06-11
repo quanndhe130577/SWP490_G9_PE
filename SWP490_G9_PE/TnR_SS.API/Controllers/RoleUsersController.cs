@@ -30,14 +30,7 @@ namespace TnR_SS.API.Controller
         [Route("get-all")]
         public ResponseModel GetRoleUsers()
         {
-            //var roles = await _roleManager.Roles.ToListAsync();
-            List<AllRoleResModel> roleRes = new List<AllRoleResModel>();
-            foreach (var role in _tnrssSupervisor.GetAllRoleUser())
-            {
-                roleRes.Add(_mapper.Map<RoleUser, AllRoleResModel>(role));
-            }
-
-            return new ResponseBuilder<List<AllRoleResModel>>().Success("Get list role success").WithData(roleRes).ResponseModel;
+            return new ResponseBuilder<List<AllRoleResModel>>().Success("Get list role success").WithData(_tnrssSupervisor.GetAllResRoles()).ResponseModel;
         }
 
         [HttpPost]

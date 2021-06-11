@@ -33,11 +33,4 @@
     <ProjectReference Include="..\TnR_SS.Domain\TnR_SS.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Compile Update="Common\HandleOTP\Model\StringeeReqModel.cs">
-      <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
-      <ExcludeFromSourceAnalysis>True</ExcludeFromSourceAnalysis>
-    </Compile>
-  </ItemGroup>
-
 </Project>

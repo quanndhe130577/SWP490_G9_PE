@@ -3,29 +3,31 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TnR_SS.DataEFCore;
 
 namespace TnR_SS.DataEFCore.Migrations
 {
     [DbContext(typeof(TnR_SSContext))]
-    partial class TnR_SSContextModelSnapshot : ModelSnapshot
+    [Migration("20210610190454_addTongKetMuaEntity")]
+    partial class addTongKetMuaEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .UseIdentityColumns()
                 .HasAnnotation("Relational:Collation", "Latin1_General_CI_AS")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.6");
+                .HasAnnotation("ProductVersion", "5.0.6")
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -48,7 +50,7 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -121,47 +123,13 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("TnR_SS.Domain.Entities.FishType", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("ID")
-                        .UseIdentityColumn();
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nchar")
-                        .IsFixedLength(true);
-
-                    b.Property<string>("FishName")
-                        .IsRequired()
-                        .HasColumnType("nchar")
-                        .IsFixedLength(true);
-
-                    b.Property<float>("MaxWeight")
-                        .HasMaxLength(12)
-                        .HasColumnType("real");
-
-                    b.Property<float>("MinWeight")
-                        .HasMaxLength(12)
-                        .HasColumnType("real");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("FishType");
-                });
-
             modelBuilder.Entity("TnR_SS.Domain.Entities.OTP", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("ID")
-                        .UseIdentityColumn();
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Code")
                         .IsRequired()
@@ -214,27 +182,11 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.ToTable("PondOwner");
                 });
 
-            modelBuilder.Entity("TnR_SS.Domain.Entities.Ro", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("ID")
-                        .UseIdentityColumn();
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nchar")
-                        .IsFixedLength(true);
-
-                    b.Property<float>("Weight")
-                        .HasColumnType("real");
-
-                });
             modelBuilder.Entity("TnR_SS.Domain.Entities.RoleUser", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ConcurrencyStamp")
@@ -326,109 +278,114 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.HasKey("ID");
 
                     b.HasIndex("PondOwnerID");
+
+                    b.HasIndex("TraderID");
+
+                    b.ToTable("TongKetMuas");
                 });
 
             modelBuilder.Entity("TnR_SS.Domain.Entities.UserInfor", b =>
-        {
-            b.Property<int>("Id")
-                .ValueGeneratedOnAdd()
-                .HasColumnType("int")
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("ID")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            b.Property<int>("AccessFailedCount")
-                .HasColumnType("int");
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
 
-            b.Property<string>("Avatar")
-                .IsUnicode(false)
-                .HasColumnType("varchar(max)");
+                    b.Property<string>("Avatar")
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(max)");
 
-            b.Property<string>("ConcurrencyStamp")
-                .IsConcurrencyToken()
-                .HasColumnType("nvarchar(max)");
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
 
-            b.Property<DateTime>("CreatedDate")
-                .HasColumnType("datetime");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime");
 
-            b.Property<DateTime>("Dob")
-                .HasColumnType("date")
-                .HasColumnName("DOB");
+                    b.Property<DateTime>("Dob")
+                        .HasColumnType("date")
+                        .HasColumnName("DOB");
 
-            b.Property<string>("Email")
-                .HasMaxLength(256)
-                .HasColumnType("nvarchar(256)");
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
-            b.Property<bool>("EmailConfirmed")
-                .HasColumnType("bit");
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
 
-            b.Property<string>("FirstName")
-                .IsRequired()
-                .HasMaxLength(50)
-                .HasColumnType("nvarchar(50)");
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-            b.Property<string>("IdentifyCode")
-                .HasMaxLength(20)
-                .IsUnicode(false)
-                .HasColumnType("varchar(20)");
+                    b.Property<string>("IdentifyCode")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(20)");
 
-            b.Property<string>("Lastname")
-                .IsRequired()
-                .HasMaxLength(50)
-                .HasColumnType("nvarchar(50)");
+                    b.Property<string>("Lastname")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-            b.Property<bool>("LockoutEnabled")
-                .HasColumnType("bit");
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
 
-            b.Property<DateTimeOffset?>("LockoutEnd")
-                .HasColumnType("datetimeoffset");
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
 
-            b.Property<string>("NormalizedEmail")
-                .HasMaxLength(256)
-                .HasColumnType("nvarchar(256)");
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
-            b.Property<string>("NormalizedUserName")
-                .HasMaxLength(256)
-                .HasColumnType("nvarchar(256)");
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
-            b.Property<string>("PasswordHash")
-                .HasColumnType("nvarchar(max)");
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
 
-            b.Property<string>("PhoneNumber")
-                .IsRequired()
-                .HasMaxLength(12)
-                .IsUnicode(false)
-                .HasColumnType("varchar(12)");
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(12)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(12)");
 
-            b.Property<bool>("PhoneNumberConfirmed")
-                .HasColumnType("bit");
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
 
-            b.Property<string>("SecurityStamp")
-                .HasColumnType("nvarchar(max)");
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
 
-            b.Property<bool>("TwoFactorEnabled")
-                .HasColumnType("bit");
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
 
-            b.Property<string>("UserName")
-                .HasMaxLength(256)
-                .HasColumnType("nvarchar(256)");
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
-            b.HasKey("Id");
+                    b.HasKey("Id");
 
-            b.HasIndex("NormalizedEmail")
-                .HasDatabaseName("EmailIndex");
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
 
-            b.HasIndex("NormalizedUserName")
-                .IsUnique()
-                .HasDatabaseName("UserNameIndex")
-                .HasFilter("[NormalizedUserName] IS NOT NULL");
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-            b.HasIndex(new[] { "Id", "PhoneNumber" }, "UC_PhoneNumber")
-                .IsUnique();
+                    b.HasIndex(new[] { "Id", "PhoneNumber" }, "UC_PhoneNumber")
+                        .IsUnique();
 
-            b.HasIndex(new[] { "PhoneNumber" }, "UQ_PhoneNumber")
-                .IsUnique();
+                    b.HasIndex(new[] { "PhoneNumber" }, "UQ_PhoneNumber")
+                        .IsUnique();
 
-            b.ToTable("UserInfor");
-        });
+                    b.ToTable("UserInfor");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
@@ -512,7 +469,6 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.Navigation("TongKetMuas");
                 });
 #pragma warning restore 612, 618
-
         }
     }
 }
