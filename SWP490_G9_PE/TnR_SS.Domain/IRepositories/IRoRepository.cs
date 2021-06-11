@@ -9,10 +9,11 @@ namespace TnR_SS.Domain.IRepositories
 {
     public interface IRoRepository : IDisposable
     {
-        Task CreateRoAsync(Ro ro);
-        Task UpdateRoAsync(Ro ro);
+        Task CreateRoAsync(Basket ro);
+        Task UpdateRoAsync(Basket ro);
         Task DeleteRoByIdAsync(int roID);
-        List<Ro> ListAllRo();
-        Task<Ro> FindRoByIdAsync(int roID)
+        List<Basket> ListAllRo();
+        Task<Basket> FindRoByIdAsync(int roID);
+
     }
 }

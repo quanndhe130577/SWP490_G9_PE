@@ -11,7 +11,7 @@ namespace TnR_SS.Domain.Supervisor
     {
         public bool CheckRoExist(string typeRo)
         {
-            List<Ro> list = _roRepository.ListAllRo();
+            List<Basket> list = _roRepository.ListAllRo();
             var rs = list.FirstOrDefault(x => x.Type == typeRo);
             return rs is not null;
         }
@@ -20,7 +20,7 @@ namespace TnR_SS.Domain.Supervisor
         {
             if (typeRo != null && weight != 0)
             {
-                Ro ro = new() { Type = typeRo, Weight = weight };
+                Basket ro = new() { Type = typeRo, Weight = weight };
                 await _roRepository.CreateRoAsync(ro);
                 return true;
             }
@@ -30,11 +30,11 @@ namespace TnR_SS.Domain.Supervisor
             }
         }
 
-        public async Task<bool> UpdateRo(Ro ro, string typeRo, int weight)
+        public async Task<bool> UpdateRo(Basket ro, string typeRo, int weight)
         {
             if (typeRo != null && weight != 0)
             {
-                ro = new() { Type = typeRo, Weight = weight };
+                ro = new Basket() { Type = typeRo, Weight = weight };
                 await _roRepository.UpdateRoAsync(ro);
                 return true;
             }
