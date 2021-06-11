@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Threading.Tasks;
 using TnR_SS.Domain.IRepositories;
 
@@ -20,6 +21,9 @@ namespace TnR_SS.DataEFCore.Repositories
         }
         public async Task AddAsync(T entity)
         {
+            Type t = entity.GetType();
+            PropertyInfo prop = t.GetProperty("CreatedAt");
+            prop.SetValue(entity, DateTime.Now);
             await dbSet.AddAsync(entity);
             await _context.SaveChangesAsync();
         }

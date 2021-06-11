@@ -51,6 +51,7 @@ namespace TnR_SS.Domain.Supervisor
         bool CheckBasketExist(string type);
         Task<bool> CreateBasket(string type, int weight);
         Task<bool> UpdateBasket(Basket basket, string type, int weight);
+        void CreateBasketTest();
 
         #endregion
 

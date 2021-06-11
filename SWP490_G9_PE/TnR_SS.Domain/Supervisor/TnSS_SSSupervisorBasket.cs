@@ -43,5 +43,11 @@ namespace TnR_SS.Domain.Supervisor
                 return false;
             }
         }
+
+        public void CreateBasketTest()
+        {
+            Basket bk = new Basket();
+            _basketRepository.AddAsync(bk);
+        }
     }
 }
