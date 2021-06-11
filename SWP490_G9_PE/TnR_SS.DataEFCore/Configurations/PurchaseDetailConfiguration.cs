@@ -27,7 +27,7 @@ namespace TnR_SS.DataEFCore.Configurations
             entity.Property(e => e.TongKetMuaId)
                 .IsRequired();
             entity.HasOne(p => p.TongKetMua)
-                .WithMany(b => b.TransactionBuys)
+                .WithMany(b => b.PurchaseDetails)
                 .HasForeignKey(p => p.TongKetMuaId)
                 .HasConstraintName("FK_PurchaseDetail_TongKetMua");
 

@@ -28,6 +28,7 @@ namespace TnR_SS.DataEFCore.Repositories
 
         public async Task<IdentityResult> ChangePasswordAsync(UserInfor user, string currentPassword, string newPassword)
         {
+            user.UpdatedAt = DateTime.Now;
             return await _userManager.ChangePasswordAsync(user, currentPassword, newPassword);
         }
 
@@ -38,6 +39,7 @@ namespace TnR_SS.DataEFCore.Repositories
 
         public async Task<IdentityResult> CreateAsync(UserInfor user, string password)
         {
+            user.CreatedAt = DateTime.Now;
             return await _userManager.CreateAsync(user, password);
         }
 
@@ -75,6 +77,7 @@ namespace TnR_SS.DataEFCore.Repositories
 
         public async Task<IdentityResult> ResetUserPasswordAsync(UserInfor user, string token, string newPassword)
         {
+            user.UpdatedAt = DateTime.Now;
             return await _userManager.ResetPasswordAsync(user, token, newPassword);
         }
 
@@ -90,6 +93,7 @@ namespace TnR_SS.DataEFCore.Repositories
 
         public async Task<IdentityResult> UpdateAsync(UserInfor user)
         {
+            user.UpdatedAt = DateTime.Now;
             return await _userManager.UpdateAsync(user);
         }
     }

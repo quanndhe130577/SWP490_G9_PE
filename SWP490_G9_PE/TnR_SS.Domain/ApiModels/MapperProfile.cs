@@ -13,11 +13,11 @@ namespace TnR_SS.Domain.ApiModels
 
         public MapperProfile()
         {
-            CreateMap<RegisterUserReqModel, UserInfor>().ForMember(destination => destination.UserName, options => options.MapFrom(source => source.PhoneNumber))
-                .AfterMap((source, destination) =>
+            CreateMap<RegisterUserReqModel, UserInfor>().ForMember(destination => destination.UserName, options => options.MapFrom(source => source.PhoneNumber));
+                /*.AfterMap((source, destination) =>
                 {
                     destination.CreatedDate = DateTime.Now;
-                });
+                });*/
 
             CreateMap<UpdateUserReqModel, UserInfor>();
 

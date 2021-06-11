@@ -26,7 +26,7 @@ namespace TnR_SS.DataEFCore.Configurations
 
             entity.Property(e => e.Avatar).IsUnicode(false);
 
-            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+            entity.Property(e => e.CreatedAt).HasColumnType("datetime");
 
             entity.Property(e => e.Dob)
                 .HasColumnType("date")

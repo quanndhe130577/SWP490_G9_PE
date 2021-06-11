@@ -21,6 +21,9 @@ namespace TnR_SS.Domain.Entities
         [Required]
         public double BuyPrice { get; set; }
 
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
+
         [Required]
         public int BasketId { get; set; }
         public Basket Basket { get; set; }

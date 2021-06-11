@@ -17,7 +17,6 @@ namespace TnR_SS.Domain.Entities
         public string Type { get; set; }
         [Required]
         public float Weight { get; set; }
-
         public List<PurchaseDetail> PurchaseDetails { get; set; }
     }
 }

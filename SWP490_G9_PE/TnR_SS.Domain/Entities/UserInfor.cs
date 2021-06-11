@@ -20,7 +20,8 @@ namespace TnR_SS.Domain.Entities
         public DateTime Dob { get; set; }
         public string IdentifyCode { get; set; }
         public string Avatar { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
 
         public List<Purchase> Purchases { get; set; }
     }

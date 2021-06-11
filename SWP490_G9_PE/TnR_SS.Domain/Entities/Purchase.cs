@@ -24,9 +24,10 @@ namespace TnR_SS.Domain.Entities
         public double PayForPondOwner { get; set; }
 
         [Required]
-        public DateTime Date { get; set; }
+        public DateTime Createdat { get; set; }
 
-        public double TienGioiThieu { get; set; }
+        public double Commission { get; set; }
+        public DateTime UpdatedAt { get; set; }
 
         [Required]
         public bool isPaid { get; set; }
@@ -41,6 +42,6 @@ namespace TnR_SS.Domain.Entities
         public int TraderID { get; set; }
         public UserInfor UserInfor { get; set; }
 
-        public List<PurchaseDetail> TransactionBuys { get; set; }
+        public List<PurchaseDetail> PurchaseDetails { get; set; }
     }
 }
