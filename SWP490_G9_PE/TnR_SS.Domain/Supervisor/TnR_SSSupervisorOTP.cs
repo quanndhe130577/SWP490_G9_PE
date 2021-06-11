@@ -12,7 +12,6 @@ namespace TnR_SS.Domain.Supervisor
 {
     public partial class TnR_SSSupervisor
     {
-
         public async Task<bool> CheckOTPDoneAsync(int otpId, string phoneNumber)
         {
             //var otpInfor = await _dbContext.OTPs.FindAsync(otpId);

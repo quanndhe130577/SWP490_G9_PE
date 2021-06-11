@@ -25,6 +25,7 @@ namespace TnR_SS.Domain.Supervisor
         Task<string> GetRoleDisplayNameAsync(UserInfor user);
         List<AllRoleResModel> GetAllResRoles();
         Task<IdentityResult> AddRoleUserAsync(RoleUser role);
+
         //user
         Task<IdentityResult> CreateAsync(RegisterUserReqModel userData, string imgurClientId);
         Task<IdentityResult> AddToRoleAsync(UserInfor user, string role);
@@ -43,5 +44,11 @@ namespace TnR_SS.Domain.Supervisor
         Task<string> GetPasswordResetTokenAsync(UserInfor user);
         Task<bool> CheckUserPassword(UserInfor user, string password);
         Task<UserResModel> GetUserResModelByIdAsync(int id);
+
+        #region Rổ
+        bool CheckRoExist(string typeRo);
+        Task<bool> CreateRo(string typeRo, int weight);
+        Task<bool> UpdateRo(Ro ro, string typeRo, int weight);
+        #endregion
     }
 }
