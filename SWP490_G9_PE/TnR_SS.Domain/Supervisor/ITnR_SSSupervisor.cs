@@ -45,7 +45,13 @@ namespace TnR_SS.Domain.Supervisor
         #endregion
 
         #region Fishtype
+        #endregion
+
+        #region Basket
+        bool CheckRoExist(string typeRo);
+        Task<bool> CreateRo(string typeRo, int weight);
         Task<bool> UpdateRo(Basket ro, string typeRo, int weight);
+
         #endregion
     }
 }

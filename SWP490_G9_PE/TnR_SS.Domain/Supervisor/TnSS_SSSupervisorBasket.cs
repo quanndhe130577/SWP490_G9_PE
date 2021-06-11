@@ -34,7 +34,7 @@ namespace TnR_SS.Domain.Supervisor
         {
             if (typeRo != null && weight != 0)
             {
-                ro = new() { Type = typeRo, Weight = weight };
+                ro = new Basket() { Type = typeRo, Weight = weight };
                 await _basketRepository.UpdateRoAsync(ro);
                 return true;
             }

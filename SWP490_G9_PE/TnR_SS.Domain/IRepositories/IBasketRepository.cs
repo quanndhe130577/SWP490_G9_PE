@@ -14,5 +14,6 @@ namespace TnR_SS.Domain.IRepositories
         Task DeleteRoByIdAsync(int roID);
         List<Basket> ListAllRo();
         Task<Basket> FindRoByIdAsync(int roID);
+
     }
 }
