@@ -25,6 +25,15 @@ namespace TnR_SS.DataEFCore.Configurations
             entity.Property(e => e.Weight)
                 .IsRequired();
 
+            entity.Property(e => e.CreatedAt)
+                .IsRequired()
+                .HasColumnType("datetime");
+
+            entity.Property(e => e.UpdatedAt)
+                .IsRequired()
+                .HasColumnType("datetime");
+
+
         }
     }
 }
