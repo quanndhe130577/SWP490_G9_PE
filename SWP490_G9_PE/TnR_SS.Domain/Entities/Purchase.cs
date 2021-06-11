@@ -8,8 +8,7 @@ using System.Threading.Tasks;
 
 namespace TnR_SS.Domain.Entities
 {
-    [Table("TongKetMua")]
-    public class TongKetMua
+    public class Purchase
     {
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
@@ -42,6 +41,6 @@ namespace TnR_SS.Domain.Entities
         public int TraderID { get; set; }
         public UserInfor UserInfor { get; set; }
 
-        public List<TransactionBuy> TransactionBuys { get; set; }
+        public List<PurchaseDetail> TransactionBuys { get; set; }
     }
 }

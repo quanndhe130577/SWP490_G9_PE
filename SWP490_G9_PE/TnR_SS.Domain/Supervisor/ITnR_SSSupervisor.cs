@@ -45,7 +45,7 @@ namespace TnR_SS.Domain.Supervisor
         #endregion
 
         #region Fishtype
-        Task<bool> UpdateRo(Ro ro, string typeRo, int weight);
+        Task<bool> UpdateRo(Basket ro, string typeRo, int weight);
         #endregion
     }
 }

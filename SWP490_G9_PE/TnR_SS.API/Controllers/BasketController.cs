@@ -10,16 +10,16 @@ namespace TnR_SS.API.Controllers
 {
     [Route("api/Ro")]
     [ApiController]
-    public class RoController : ControllerBase
+    public class BasketController : ControllerBase
     {
         private readonly ITnR_SSSupervisor _tnrssSupervisor;
 
-        public RoController(ITnR_SSSupervisor tnrssSupervisor)
+        public BasketController(ITnR_SSSupervisor tnrssSupervisor)
         {
             _tnrssSupervisor = tnrssSupervisor;
         }
 
-        public async Task<Ro> CreateRoAsync(Ro ro)
+        public async Task<Basket> CreateRoAsync(Basket ro)
         {
             
         }

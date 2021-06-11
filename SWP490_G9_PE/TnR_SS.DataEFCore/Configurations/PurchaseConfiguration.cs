@@ -9,25 +9,25 @@ using TnR_SS.Domain.Entities;
 
 namespace TnR_SS.DataEFCore.Configurations
 {
-    public class TongKetMuaConfiguration
+    public class PurchaseConfiguration
     {
-        public TongKetMuaConfiguration(EntityTypeBuilder<TongKetMua> entity)
+        public PurchaseConfiguration(EntityTypeBuilder<Purchase> entity)
         {
-            entity.ToTable("TongKetMua");
+            entity.ToTable("Purchase");
 
             entity.Property(e => e.TraderID)
                 .IsRequired();
             entity.HasOne(p => p.UserInfor)
-               .WithMany(b => b.TongKetMuas)
+               .WithMany(b => b.Purchases)
                .HasForeignKey(p => p.TraderID)
-               .HasConstraintName("FK_TongKetMua_UserInfor");
+               .HasConstraintName("FK_Purchase_UserInfor");
 
             entity.Property(e => e.PondOwnerID)
                 .IsRequired();
             entity.HasOne(p => p.PondOwner)
-                .WithMany(b => b.TongKetMuas)
+                .WithMany(b => b.Purchases)
                 .HasForeignKey(p => p.PondOwnerID)
-                .HasConstraintName("FK_TongKetMua_PondOwner");
+                .HasConstraintName("FK_Purchase_PondOwner");
 
             entity.Property(e => e.TotalAmount)
                 .IsRequired();

@@ -22,6 +22,6 @@ namespace TnR_SS.Domain.Entities
         public string Avatar { get; set; }
         public DateTime CreatedDate { get; set; }
 
-        public List<TongKetMua> TongKetMuas { get; set; }
+        public List<Purchase> Purchases { get; set; }
     }
 }

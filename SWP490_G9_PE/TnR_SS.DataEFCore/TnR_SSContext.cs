@@ -24,10 +24,10 @@ namespace TnR_SS.DataEFCore
         public virtual DbSet<UserInfor> UserInfors { get; set; }
         public virtual DbSet<OTP> OTPs { get; set; }
         public virtual DbSet<PondOwner> PondOwners { get; set; }
-        public virtual DbSet<TongKetMua> TongKetMuas { get; set; }
-        public virtual DbSet<Basket> Ros { get; set; }
+        public virtual DbSet<Purchase> Purchases { get; set; }
+        public virtual DbSet<Basket> Baskets { get; set; }
         public virtual DbSet<FishType> FishTypes { get; set; }
-        public virtual DbSet<TransactionBuy> TransactionBuys { get; set; }
+        public virtual DbSet<PurchaseDetail> PurchaseDetails { get; set; }
 
         /*protected override void OnConfiguring(DbContextOptionsBuilder options)
     => options.UseSqlServer("Server=localhost;Database=TnR_SS;Trusted_Connection=True;");*/
@@ -49,10 +49,10 @@ namespace TnR_SS.DataEFCore
             new RoleUserConfiguration(modelBuilder.Entity<RoleUser>());
             new UserInforConfiguration(modelBuilder.Entity<UserInfor>());
             new PondOwnerConfiguration(modelBuilder.Entity<PondOwner>());
-            new TongKetMuaConfiguration(modelBuilder.Entity<TongKetMua>());
+            new PurchaseConfiguration(modelBuilder.Entity<Purchase>());
             new BasketConfiguration(modelBuilder.Entity<Basket>());
             new FishTypeConfiguration(modelBuilder.Entity<FishType>());
-            new TransactionBuyConfiguration(modelBuilder.Entity<TransactionBuy>());
+            new PurchaseDetailConfiguration(modelBuilder.Entity<PurchaseDetail>());
 
             OnModelCreatingPartial(modelBuilder);
         }

@@ -25,6 +25,6 @@ namespace TnR_SS.Domain.Entities
         [Required]
         public DateTime Date { get; set; }
 
-        public List<TransactionBuy> TransactionBuys { get; set; }
+        public List<PurchaseDetail> PurchaseDetails { get; set; }
     }
 }

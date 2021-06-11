@@ -8,8 +8,7 @@ using System.Threading.Tasks;
 
 namespace TnR_SS.Domain.Entities
 {
-    [Table("TransactionBuy")]
-    public class TransactionBuy
+    public class PurchaseDetail
     {
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
@@ -28,6 +27,6 @@ namespace TnR_SS.Domain.Entities
 
         [Required]
         public int TongKetMuaId { get; set; }
-        public TongKetMua TongKetMua { get; set; }
+        public Purchase TongKetMua { get; set; }
     }
 }

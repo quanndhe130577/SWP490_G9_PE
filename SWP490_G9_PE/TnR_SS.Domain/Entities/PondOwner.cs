@@ -25,6 +25,6 @@ namespace TnR_SS.Domain.Entities
             this.ID = Guid.NewGuid();
         }
 
-        public List<TongKetMua> TongKetMuas { get; set; }
+        public List<Purchase> Purchases { get; set; }
     }
 }

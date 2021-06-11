@@ -4,30 +4,32 @@ using TnR_SS.Domain.Entities;
 
 namespace TnR_SS.DataEFCore.Configurations
 {
-    public class TransactionBuyConfiguration
+    public class PurchaseDetailConfiguration
     {
-        public TransactionBuyConfiguration(EntityTypeBuilder<TransactionBuy> entity)
+        public PurchaseDetailConfiguration(EntityTypeBuilder<PurchaseDetail> entity)
         {
+            entity.ToTable("PurchaseDetail");
+
             entity.Property(e => e.FishTypeID)
                 .IsRequired();
             entity.HasOne(p => p.FishType)
-               .WithMany(b => b.TransactionBuys)
+               .WithMany(b => b.PurchaseDetails)
                .HasForeignKey(p => p.FishTypeID)
-               .HasConstraintName("FK_TransactionBuy_FishType");
+               .HasConstraintName("FK_PurchaseDetail_FishType");
 
             entity.Property(e => e.BasketId)
                 .IsRequired();
             entity.HasOne(p => p.Basket)
-                .WithMany(b => b.TransactionBuys)
+                .WithMany(b => b.PurchaseDetails)
                 .HasForeignKey(p => p.BasketId)
-                .HasConstraintName("FK_TransactionBuy_Basket");
+                .HasConstraintName("FK_PurchaseDetail_Basket");
 
             entity.Property(e => e.TongKetMuaId)
                 .IsRequired();
             entity.HasOne(p => p.TongKetMua)
                 .WithMany(b => b.TransactionBuys)
                 .HasForeignKey(p => p.TongKetMuaId)
-                .HasConstraintName("FK_TransactionBuy_TongKetMua");
+                .HasConstraintName("FK_PurchaseDetail_TongKetMua");
 
             entity.Property(e => e.ID)
                 .IsRequired();
