@@ -11,7 +11,7 @@ namespace TnR_SS.Domain.Supervisor
         public async Task<bool> CheckOTPDoneAsync(int otpId, string phoneNumber)
         {
             //var otpInfor = await _dbContext.OTPs.FindAsync(otpId);
-            var otpInfor = await _otpRepository.FindByIdAsync(otpId);
+            var otpInfor = await _otpRepository.FindAsync(otpId);
             if (otpInfor is null)
             {
                 return false;
@@ -27,7 +27,7 @@ namespace TnR_SS.Domain.Supervisor
 
         public async Task<bool> CheckOTPRightAsync(int otpId, string otp, string phoneNumber)
         {
-            var otpInfor = await _otpRepository.FindByIdAsync(otpId);
+            var otpInfor = await _otpRepository.FindAsync(otpId);
             if (otpInfor is null)
             {
                 return false;

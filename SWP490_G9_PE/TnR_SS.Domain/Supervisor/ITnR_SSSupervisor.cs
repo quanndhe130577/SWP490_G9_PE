@@ -53,5 +53,8 @@ namespace TnR_SS.Domain.Supervisor
         Task<bool> UpdateRo(Basket ro, string typeRo, int weight);
 
         #endregion
+
+        #region Purchase
+        #endregion
     }
 }

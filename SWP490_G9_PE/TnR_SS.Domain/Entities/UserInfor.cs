@@ -13,8 +13,10 @@ namespace TnR_SS.Domain.Entities
     {
         [Required]
         public string FirstName { get; set; }
+
         [Required]
         public string Lastname { get; set; }
+
         [Required]
         public override string PhoneNumber { get; set; }
         public DateTime Dob { get; set; }
