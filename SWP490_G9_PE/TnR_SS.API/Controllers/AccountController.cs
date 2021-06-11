@@ -143,7 +143,7 @@ namespace TnR_SS.API.Controller
         #endregion
 
         #region update user
-        [HttpPut("update/{id}")]
+        [HttpPut("user/update/{id}")]
         //[Route("update")]
         public async Task<ResponseModel> UpdateUserInfor(int id, UpdateUserReqModel userData)
         {
@@ -177,7 +177,7 @@ namespace TnR_SS.API.Controller
         #endregion
 
         #region change password
-        [HttpPut("change-password/{id}")]
+        [HttpPut("user/change-password/{id}")]
         //[Route("change-password")]
         public async Task<ResponseModel> ChangePassword(int id, [FromBody] ChangePasswordReqModel changePasswordModel)
         {
@@ -220,7 +220,7 @@ namespace TnR_SS.API.Controller
         #endregion
 
         #region Reset Password
-        [HttpPost("reset-password")]
+        [HttpPost("user/reset-password")]
         [AllowAnonymous]
         public async Task<ResponseModel> ResetPassword(ResetPasswordReqModel resetData)
         {
@@ -252,7 +252,7 @@ namespace TnR_SS.API.Controller
 
         #region change PhoneNumber 
 
-        [HttpPost("check-change-phone-otp/{id}")]
+        [HttpPost("user/change-phone-number/{id}")]
         public async Task<ResponseModel> CheckChangePhoneNumberOTP(int id, CheckChangePhoneNumberOTPReqModel modelData)
         {
             if (!TokenManagement.CheckUserIdFromToken(HttpContext, id))
@@ -279,7 +279,6 @@ namespace TnR_SS.API.Controller
                 var errors = rs.Errors.Select(x => x.Description).ToList();
                 return new ResponseBuilder().Errors(errors).ResponseModel;
             }
-
 
             return new ResponseBuilder().Error("Invalid OTP").ResponseModel;
         }
