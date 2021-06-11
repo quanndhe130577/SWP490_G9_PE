@@ -13,10 +13,18 @@ namespace TnR_SS.Domain.Entities
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
+
         [Required]
         public string Type { get; set; }
+
         [Required]
         public float Weight { get; set; }
+
+        [Required]
+        public DateTime CreatedAt { get; set; }
+
+        [Required]
+        public DateTime UpdatedAt { get; set; }
 
         public List<PurchaseDetail> PurchaseDetails { get; set; }
     }

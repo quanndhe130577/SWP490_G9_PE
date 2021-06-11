@@ -24,7 +24,10 @@ namespace TnR_SS.Domain.Entities
         public float MaxWeight { get; set; }
         [Required]
         public DateTime Date { get; set; }
-
+        [Required]
+        public DateTime CreatedAt { get; set; }
+        [Required]
+        public DateTime UpdatedAt { get; set; }
         public List<PurchaseDetail> PurchaseDetails { get; set; }
     }
 }
