@@ -48,9 +48,9 @@ namespace TnR_SS.Domain.Supervisor
         #endregion
 
         #region Basket
-        bool CheckRoExist(string typeRo);
-        Task<bool> CreateRo(string typeRo, int weight);
-        Task<bool> UpdateRo(Basket ro, string typeRo, int weight);
+        bool CheckBasketExist(string type);
+        Task<bool> CreateBasket(string type, int weight);
+        Task<bool> UpdateBasket(Basket basket, string type, int weight);
 
         #endregion
 

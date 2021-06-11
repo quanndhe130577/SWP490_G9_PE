@@ -9,11 +9,10 @@ namespace TnR_SS.Domain.IRepositories
 {
     public interface IBasketRepository : IDisposable
     {
-        Task CreateRoAsync(Basket ro);
-        Task UpdateRoAsync(Basket ro, string type, int weight);
-        Task DeleteRoByIdAsync(int roID);
-        List<Basket> ListAllRo();
-        Task<Basket> FindRoByIdAsync(int roID);
-
+        Task CreateBasketAsync(Basket basket);
+        Task UpdateBasketAsync(Basket basket, string type, int weight);
+        Task DeleteBasketByIdAsync(int basketID);
+        List<Basket> ListAllBasket();
+        Task<Basket> FindBasketByIdAsync(int basketID);
     }
 }
