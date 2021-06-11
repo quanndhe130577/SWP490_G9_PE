@@ -15,6 +15,7 @@ namespace TnR_SS.Domain.Supervisor
         private readonly IOTPRepository _otpRepository;
         private readonly IUserInforRepository _userInforRepository;
         private readonly IRoleUserRepository _roleUserRepository;
+        private readonly IRoRepository _roRepository;
         private readonly IMapper _mapper;
 
         public TnR_SSSupervisor()
@@ -24,12 +25,14 @@ namespace TnR_SS.Domain.Supervisor
         public TnR_SSSupervisor(IOTPRepository otpRepository,
             IUserInforRepository userInforRepository,
             IRoleUserRepository roleUserRepository,
+            IRoRepository roRepository,
              IMapper mapper
         )
         {
             _otpRepository = otpRepository;
             _userInforRepository = userInforRepository;
             _roleUserRepository = roleUserRepository;
+            _roRepository = roRepository;
             _mapper = mapper;
         }
     }

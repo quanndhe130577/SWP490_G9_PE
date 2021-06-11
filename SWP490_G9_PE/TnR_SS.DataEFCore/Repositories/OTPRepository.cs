@@ -44,7 +44,6 @@ namespace TnR_SS.DataEFCore.Repositories
                 otp.ExpiredDate = DateTime.Now.AddMinutes(30);
                 await _context.SaveChangesAsync();
             }
-
         }
     }
 }
