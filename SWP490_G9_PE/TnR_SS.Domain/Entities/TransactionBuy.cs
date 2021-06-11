@@ -23,8 +23,8 @@ namespace TnR_SS.Domain.Entities
         public double BuyPrice { get; set; }
 
         [Required]
-        public int RoId { get; set; }
-        public Ro Ro { get; set; }
+        public int BasketId { get; set; }
+        public Basket Basket { get; set; }
 
         [Required]
         public int TongKetMuaId { get; set; }

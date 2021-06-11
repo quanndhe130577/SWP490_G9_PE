@@ -15,12 +15,12 @@ namespace TnR_SS.DataEFCore.Configurations
                .HasForeignKey(p => p.FishTypeID)
                .HasConstraintName("FK_TransactionBuy_FishType");
 
-            entity.Property(e => e.RoId)
+            entity.Property(e => e.BasketId)
                 .IsRequired();
-            entity.HasOne(p => p.Ro)
+            entity.HasOne(p => p.Basket)
                 .WithMany(b => b.TransactionBuys)
-                .HasForeignKey(p => p.RoId)
-                .HasConstraintName("FK_TransactionBuy_Ro");
+                .HasForeignKey(p => p.BasketId)
+                .HasConstraintName("FK_TransactionBuy_Basket");
 
             entity.Property(e => e.TongKetMuaId)
                 .IsRequired();

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TnR_SS.DataEFCore;
 
 namespace TnR_SS.DataEFCore.Migrations
 {
     [DbContext(typeof(TnR_SSContext))]
-    partial class TnR_SSContextModelSnapshot : ModelSnapshot
+    [Migration("20210611141434_renameRoToBasket")]
+    partial class renameRoToBasket
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -265,13 +267,13 @@ namespace TnR_SS.DataEFCore.Migrations
                         .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
-                    b.ToTable("RoleUser");
+                    b.ToTable("AspNetRoles");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "bd8b431c-a757-4bc4-84b0-c95410633c4b",
+                            ConcurrencyStamp = "22cd6048-e999-4a19-9276-f03ef37afc2c",
                             DisplayName = "Admin",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
@@ -279,7 +281,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "35ad9bde-412c-40a6-9708-2f45e88af580",
+                            ConcurrencyStamp = "caab21d4-f700-43df-a709-1f3deafc62fd",
                             DisplayName = "Thương lái",
                             Name = "Trader",
                             NormalizedName = "TRADER"
@@ -287,7 +289,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "ec73f9eb-3a8f-49a1-aab5-d6341d2a1300",
+                            ConcurrencyStamp = "86d82f5e-2f80-4fcb-9b03-30c2807eb65d",
                             DisplayName = "Chủ bến",
                             Name = "Weight Recorder",
                             NormalizedName = "WEIGHT RECORDER"

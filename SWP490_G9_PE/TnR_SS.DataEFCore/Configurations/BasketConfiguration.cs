@@ -9,12 +9,12 @@ using TnR_SS.Domain.Entities;
 
 namespace TnR_SS.DataEFCore.Configurations
 {
-    public class RoConfiguration
+    public class BasketConfiguration
     {
-        public RoConfiguration(EntityTypeBuilder<Ro> entity)
+        public BasketConfiguration(EntityTypeBuilder<Basket> entity)
         {
 
-            entity.ToTable("Ro");
+            entity.ToTable("Basket");
 
             entity.Property(e => e.ID).HasColumnName("ID");
 

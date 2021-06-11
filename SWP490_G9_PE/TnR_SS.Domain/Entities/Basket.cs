@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace TnR_SS.Domain.Entities
 {
-    public class Ro
+    public class Basket
     {
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]

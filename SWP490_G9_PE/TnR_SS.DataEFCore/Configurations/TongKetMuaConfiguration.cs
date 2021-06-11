@@ -13,6 +13,8 @@ namespace TnR_SS.DataEFCore.Configurations
     {
         public TongKetMuaConfiguration(EntityTypeBuilder<TongKetMua> entity)
         {
+            entity.ToTable("TongKetMua");
+
             entity.Property(e => e.TraderID)
                 .IsRequired();
             entity.HasOne(p => p.UserInfor)

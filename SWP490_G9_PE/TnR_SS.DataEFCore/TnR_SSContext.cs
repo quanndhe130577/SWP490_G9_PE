@@ -25,7 +25,7 @@ namespace TnR_SS.DataEFCore
         public virtual DbSet<OTP> OTPs { get; set; }
         public virtual DbSet<PondOwner> PondOwners { get; set; }
         public virtual DbSet<TongKetMua> TongKetMuas { get; set; }
-        public virtual DbSet<Ro> Ros { get; set; }
+        public virtual DbSet<Basket> Ros { get; set; }
         public virtual DbSet<FishType> FishTypes { get; set; }
         public virtual DbSet<TransactionBuy> TransactionBuys { get; set; }
 
@@ -50,7 +50,7 @@ namespace TnR_SS.DataEFCore
             new UserInforConfiguration(modelBuilder.Entity<UserInfor>());
             new PondOwnerConfiguration(modelBuilder.Entity<PondOwner>());
             new TongKetMuaConfiguration(modelBuilder.Entity<TongKetMua>());
-            new RoConfiguration(modelBuilder.Entity<Ro>());
+            new BasketConfiguration(modelBuilder.Entity<Basket>());
             new FishTypeConfiguration(modelBuilder.Entity<FishType>());
             new TransactionBuyConfiguration(modelBuilder.Entity<TransactionBuy>());
 
