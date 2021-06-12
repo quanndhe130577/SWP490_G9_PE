@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TnR_SS.Domain.ApiModels.BasketModel.ResponseModel;
 using TnR_SS.Domain.Entities;
 
 namespace TnR_SS.Domain.Supervisor
@@ -20,8 +21,8 @@ namespace TnR_SS.Domain.Supervisor
         {
             if (typeRo != null && weight != 0)
             {
-                Basket ro = new() { Type = typeRo, Weight = weight };
-                await _basketRepository.CreateBasketAsync(ro);
+                Basket basket = new() { Type = typeRo, Weight = weight };
+                await _basketRepository.CreateAsync(basket);
                 return true;
             }
             else
@@ -30,19 +31,11 @@ namespace TnR_SS.Domain.Supervisor
             }
         }
 
-        public async Task<bool> UpdateBasket(Basket ro, string typeRo, int weight)
+        public async Task UpdateBasket(BasketApiModel basketRes)
         {
-            if (typeRo != null && weight != 0)
-            {
-                ro = new Basket() { Type = typeRo, Weight = weight };
-                await _basketRepository.UpdateBasketAsync(ro, typeRo, weight);
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            var basket = await _basketRepository.FindAsync(basketRes.ID);
+            basket = _mapper.Map<BasketApiModel, Basket>(basketRes, basket);
+            await _basketRepository.UpdateAsync(basket);
         }
-
     }
 }

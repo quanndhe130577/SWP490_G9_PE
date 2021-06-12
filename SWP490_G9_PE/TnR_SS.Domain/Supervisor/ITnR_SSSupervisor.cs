@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using TnR_SS.Domain.ApiModels.AccountModel.RequestModel;
 using TnR_SS.Domain.ApiModels.AccountModel.ResponseModel;
+using TnR_SS.Domain.ApiModels.BasketModel.ResponseModel;
 using TnR_SS.Domain.ApiModels.RoleUserModel.RequestModel;
 using TnR_SS.Domain.Entities;
 
@@ -52,8 +53,7 @@ namespace TnR_SS.Domain.Supervisor
         #region Basket
         bool CheckBasketExist(string type);
         Task<bool> CreateBasket(string type, int weight);
-        Task<bool> UpdateBasket(Basket basket, string type, int weight);
-        void CreateBasketTest();
+        Task UpdateBasket(BasketApiModel basketRes);
 
         #endregion
 

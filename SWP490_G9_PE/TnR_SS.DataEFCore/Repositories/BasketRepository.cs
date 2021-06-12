@@ -17,12 +17,12 @@ namespace TnR_SS.DataEFCore.Repositories
 
         //public async Task<Basket> FindBasketByIdAsync(int basketId) => await _context.Baskets.FindAsync(basketId);
 
-        public async Task CreateBasketAsync(Basket basket)
+        /*public async Task CreateBasketAsync(Basket basket)
         {
             basket.CreatedAt = DateTime.Now;
             await _context.Baskets.AddAsync(basket);
             await _context.SaveChangesAsync();
-        }
+        }*/
 
         public async Task DeleteBasketByIdAsync(int basketId)
         {

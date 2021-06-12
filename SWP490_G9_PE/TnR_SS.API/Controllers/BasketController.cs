@@ -18,5 +18,7 @@ namespace TnR_SS.API.Controllers
         {
             _tnrssSupervisor = tnrssSupervisor;
         }
+
+
     }
 }

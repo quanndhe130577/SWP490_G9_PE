@@ -19,4 +19,9 @@
     <PackageReference Include="Twilio" Version="5.61.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ApiModels\BasketModel\RequestModel\" />
+    <Folder Include="ApiModels\BasketModel\ResponseModel\" />
+  </ItemGroup>
+
 </Project>
