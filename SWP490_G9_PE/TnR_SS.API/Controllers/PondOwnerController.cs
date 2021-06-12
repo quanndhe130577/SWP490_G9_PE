@@ -27,6 +27,13 @@ namespace TnR_SS.API.Controllers
         }
 
         [HttpGet]
+        [Route("getAll")]
+        public ResponseModel GetAll(int id)
+        {
+            var rs = _tnrssSupervisor.PondOwner.GetAll().Select(po => _mapper.Map<PondOwnerResModel>(po)).ToList();
+            return new ResponseBuilder<List<PondOwnerResModel>>().Success("Get Info Success").WithData(rs).ResponseModel;
+        }
+        [HttpGet]
         [Route("getByTraderId/{id}")]
         public ResponseModel GetByTraderId(int id)
         {
@@ -35,7 +42,7 @@ namespace TnR_SS.API.Controllers
         }
 
         [HttpPost]
-        [Route("addNewPondOwner/{id}")]
+        [Route("addNewPondOwner")]
         public async Task<ResponseModel> AddNewPondOwner(PondOwnerResModel pondOwner)
         {
             var valid = Valid(pondOwner);
