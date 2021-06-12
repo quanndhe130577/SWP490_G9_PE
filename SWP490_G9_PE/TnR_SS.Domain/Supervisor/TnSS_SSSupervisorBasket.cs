@@ -44,10 +44,5 @@ namespace TnR_SS.Domain.Supervisor
             }
         }
 
-        public void CreateBasketTest()
-        {
-            Basket bk = new Basket();
-            _basketRepository.AddAsync(bk);
-        }
     }
 }

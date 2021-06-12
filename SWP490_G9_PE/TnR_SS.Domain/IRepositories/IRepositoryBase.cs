@@ -26,12 +26,12 @@ namespace TnR_SS.Domain.IRepositories
             string includeProperties = null
             );
 
-        Task AddAsync(T entity);
+        Task CreateAsync(T entity);
 
         Task UpdateAsync(T entity);
 
-        Task RemoveByIdAsync(int id);
+        Task DeleteByIdAsync(int id);
 
-        Task RemoveAsync(T entity);
+        Task DeleteAsync(T entity);
     }
 }

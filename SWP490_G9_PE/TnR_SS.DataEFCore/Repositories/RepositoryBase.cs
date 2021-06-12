@@ -19,7 +19,7 @@ namespace TnR_SS.DataEFCore.Repositories
             _context = context;
             this.dbSet = context.Set<T>();
         }
-        public async Task AddAsync(T entity)
+        public virtual async Task CreateAsync(T entity)
         {
             Type t = entity.GetType();
             PropertyInfo createdAt = t.GetProperty("CreatedAt");
@@ -41,12 +41,12 @@ namespace TnR_SS.DataEFCore.Repositories
 
         public void Dispose() => _context.Dispose();
 
-        public async Task<T> FindAsync(params object[] value)
+        public virtual async Task<T> FindAsync(params object[] value)
         {
             return await dbSet.FindAsync(value);
         }
 
-        public int CountRecords(Expression<Func<T, bool>> filter = null)
+        public virtual int CountRecords(Expression<Func<T, bool>> filter = null)
         {
             IQueryable<T> query = dbSet;
             if (filter != null)
@@ -57,7 +57,7 @@ namespace TnR_SS.DataEFCore.Repositories
             return query.Count();
         }
 
-        public IEnumerable<T> GetAll(Expression<Func<T, bool>> filter = null,
+        public virtual IEnumerable<T> GetAll(Expression<Func<T, bool>> filter = null,
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, string includeProperties = null,
             int? skip = null, int? take = null)
         {
@@ -93,7 +93,7 @@ namespace TnR_SS.DataEFCore.Repositories
             return query;
         }
 
-        public T GetFirstOrDefault(Expression<Func<T, bool>> filter = null, string includeProperties = null)
+        public virtual T GetFirstOrDefault(Expression<Func<T, bool>> filter = null, string includeProperties = null)
         {
             IQueryable<T> query = dbSet;
             if (filter != null)
@@ -113,19 +113,19 @@ namespace TnR_SS.DataEFCore.Repositories
             return query.FirstOrDefault();
         }
 
-        public async Task RemoveByIdAsync(int id)
+        public virtual async Task DeleteByIdAsync(int id)
         {
             T entityToRemove = dbSet.Find(id);
-            await RemoveAsync(entityToRemove);
+            await DeleteAsync(entityToRemove);
         }
 
-        public async Task RemoveAsync(T entity)
+        public virtual async Task DeleteAsync(T entity)
         {
             dbSet.Remove(entity);
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(T entity)
+        public virtual async Task UpdateAsync(T entity)
         {
             Type t = entity.GetType();
             PropertyInfo updatedAt = t.GetProperty("UpdatedAt");
