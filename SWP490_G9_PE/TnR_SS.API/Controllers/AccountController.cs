@@ -27,10 +27,12 @@ namespace TnR_SS.API.Controller
     public class AccountController : ControllerBase
     {
         private readonly ITnR_SSSupervisor _tnrssSupervisor;
+        private readonly IMapper _mapper;
 
-        public AccountController(ITnR_SSSupervisor tnrssSupervisor)
+        public AccountController(ITnR_SSSupervisor tnrssSupervisor,IMapper mapper)
         {
             _tnrssSupervisor = tnrssSupervisor;
+            _mapper = mapper;
         }
 
         #region Register      
@@ -42,10 +44,10 @@ namespace TnR_SS.API.Controller
             if (ModelState.IsValid)
             {
                 //check OTP for phoneNumber
-                if (!await _tnrssSupervisor.CheckOTPDoneAsync(userData.OTPID, userData.PhoneNumber))
-                {
-                    return new ResponseBuilder().Error("Access denied").ResponseModel;
-                }
+                //if (!await _tnrssSupervisor.CheckOTPDoneAsync(userData.OTPID, userData.PhoneNumber))
+                //{
+                //    return new ResponseBuilder().Error("Access denied").ResponseModel;
+                //}
 
                 if (_tnrssSupervisor.CheckUserPhoneExists(userData.PhoneNumber))
                 {
