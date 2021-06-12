@@ -7,7 +7,7 @@ using TnR_SS.Domain.Entities;
 
 namespace TnR_SS.Domain.IRepositories
 {
-    public interface IBasketRepository : IDisposable
+    public interface IBasketRepository : IRepositoryBase
     {
         Task CreateBasketAsync(Basket basket);
         Task UpdateBasketAsync(Basket basket, string type, int weight);
