@@ -13,7 +13,7 @@ namespace TnR_SS.Domain.Supervisor
         {
             var userInfor = _mapper.Map<RegisterUserReqModel, UserInfor>(userData);
             userInfor.Avatar = avatarLink;
-            var result = await _userInforRepository.CreateAsync(userInfor, userData.Password);
+            var result = await _userInforRepository.CreateWithPasswordAsync(userInfor, userData.Password);
             if (result.Succeeded)
             {
                 //add role to user

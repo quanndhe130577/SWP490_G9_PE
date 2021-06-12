@@ -59,10 +59,14 @@ namespace TnR_SS.Domain.Supervisor
                 Status = OTPStatus.Waiting.ToString()
             };
 
-            await _otpRepository.AddAsync(otp);
+            await _otpRepository.CreateAsync(otp);
             return otp.ID;
         }
 
-        
+        public void CreateOTPTest()
+        {
+            OTP bk = new OTP();
+            _otpRepository.CreateAsync(bk);
+        }
     }
 }

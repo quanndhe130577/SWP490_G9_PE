@@ -8,7 +8,7 @@ using TnR_SS.Domain.Entities;
 
 namespace TnR_SS.Domain.IRepositories
 {
-    public interface IRoleUserRepository : IDisposable
+    public interface IRoleUserRepository : IRepositoryBase<RoleUser>
     {
         Task<bool> RoleExistsAsync(string roleName);
         Task<RoleUser> FindByNameAsync(string roleName);

@@ -16,6 +16,10 @@ namespace TnR_SS.Domain.Supervisor
         private readonly IUserInforRepository _userInforRepository;
         private readonly IRoleUserRepository _roleUserRepository;
         private readonly IBasketRepository _basketRepository;
+        private readonly IPondOwnerRepository _pondOwnerRepository;
+        private readonly IPurchaseDetailRepository _purchaseDetailRepository;
+        private readonly IPurchaseRepository _purchaseRepository;
+        private readonly IFishTypeRepository _fishTypeRepository;
         private readonly IMapper _mapper;
 
         public TnR_SSSupervisor()
@@ -25,14 +29,22 @@ namespace TnR_SS.Domain.Supervisor
         public TnR_SSSupervisor(IOTPRepository otpRepository,
             IUserInforRepository userInforRepository,
             IRoleUserRepository roleUserRepository,
-            IBasketRepository roRepository,
-             IMapper mapper
+            IBasketRepository basketRepository,
+            IPondOwnerRepository pondOwnerRepository,
+            IPurchaseDetailRepository purchaseDetailRepository,
+            IPurchaseRepository purchaseRepository,
+            IFishTypeRepository fishTypeRepository,
+            IMapper mapper
         )
         {
             _otpRepository = otpRepository;
             _userInforRepository = userInforRepository;
             _roleUserRepository = roleUserRepository;
-            _basketRepository = roRepository;
+            _basketRepository = basketRepository;
+            _pondOwnerRepository = pondOwnerRepository;
+            _purchaseDetailRepository = purchaseDetailRepository;
+            _purchaseRepository = purchaseRepository;
+            _fishTypeRepository = fishTypeRepository;
             _mapper = mapper;
         }
     }

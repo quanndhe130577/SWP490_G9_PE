@@ -8,18 +8,14 @@ using TnR_SS.Domain.IRepositories;
 
 namespace TnR_SS.DataEFCore.Repositories
 {
-    public class BasketRepository : IBasketRepository
+    public class BasketRepository : RepositoryBase<Basket>, IBasketRepository
     {
-        private readonly TnR_SSContext _context;
 
-        public BasketRepository(TnR_SSContext context)
-        {
-            _context = context;
-        }
+        public BasketRepository(TnR_SSContext context) : base(context) { }
 
         public List<Basket> ListAllBasket() => _context.Baskets.ToList();
 
-        public async Task<Basket> FindBasketByIdAsync(int basketId) => await _context.Baskets.FindAsync(basketId);
+        //public async Task<Basket> FindBasketByIdAsync(int basketId) => await _context.Baskets.FindAsync(basketId);
 
         public async Task CreateBasketAsync(Basket basket)
         {
@@ -35,12 +31,11 @@ namespace TnR_SS.DataEFCore.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public void Dispose() => _context.Dispose();
-
         public async Task UpdateBasketAsync(Basket basket, string type, int weight)
         {
             basket.UpdatedAt = DateTime.Now;
-            basket = new Basket() { Type = type, Weight = weight };
+            basket.Type = type;
+            basket.Weight = weight;
             _context.Baskets.Update(basket);
             await _context.SaveChangesAsync();
         }

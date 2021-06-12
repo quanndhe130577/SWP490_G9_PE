@@ -43,5 +43,6 @@ namespace TnR_SS.Domain.Supervisor
                 return false;
             }
         }
+
     }
 }

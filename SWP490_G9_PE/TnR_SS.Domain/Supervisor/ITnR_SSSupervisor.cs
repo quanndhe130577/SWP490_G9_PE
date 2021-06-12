@@ -15,6 +15,8 @@ namespace TnR_SS.Domain.Supervisor
         Task<bool> CheckOTPRightAsync(int otpId, string otp, string phoneNumber);
         bool CheckPhoneOTPExists(string phoneNumber);
         Task<int> AddOTPAsync(string code, string phoneNumber);
+
+        void CreateOTPTest();
         #endregion
 
         #region Role
@@ -51,6 +53,7 @@ namespace TnR_SS.Domain.Supervisor
         bool CheckBasketExist(string type);
         Task<bool> CreateBasket(string type, int weight);
         Task<bool> UpdateBasket(Basket basket, string type, int weight);
+        void CreateBasketTest();
 
         #endregion
 
