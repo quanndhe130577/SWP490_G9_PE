@@ -29,7 +29,7 @@ namespace TnR_SS.Domain.IRepositories
 
         Task CreateAsync(T entity);
 
-        Task<T> UpdateAsync(T entity);
+        Task UpdateAsync(T entity);
 
         Task DeleteByIdAsync(int id);
 

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using TnR_SS.Domain.ApiModels.AccountModel.RequestModel;
 using TnR_SS.Domain.ApiModels.AccountModel.ResponseModel;
 using TnR_SS.Domain.ApiModels.BasketModel.ResponseModel;
+using TnR_SS.Domain.ApiModels.PurchaseModal;
 using TnR_SS.Domain.ApiModels.RoleUserModel.RequestModel;
 using TnR_SS.Domain.Entities;
 
@@ -56,6 +57,7 @@ namespace TnR_SS.Domain.Supervisor
         #endregion
 
         #region Purchase
+        Task<int> CreatePurchaseAsync(PurchaseApiModel purchaseModel);
         #endregion
     }
 }
