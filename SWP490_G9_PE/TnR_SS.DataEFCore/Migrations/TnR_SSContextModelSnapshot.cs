@@ -121,6 +121,73 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("TnR_SS.Domain.Entities.Basket", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("ID")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nchar")
+                        .IsFixedLength(true);
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime");
+
+                    b.Property<float>("Weight")
+                        .HasColumnType("real");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Basket");
+                });
+
+            modelBuilder.Entity("TnR_SS.Domain.Entities.FishType", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("ID")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nchar")
+                        .IsFixedLength(true);
+
+                    b.Property<string>("FishName")
+                        .IsRequired()
+                        .HasColumnType("nchar")
+                        .IsFixedLength(true);
+
+                    b.Property<float>("MaxWeight")
+                        .HasMaxLength(12)
+                        .HasColumnType("real");
+
+                    b.Property<float>("MinWeight")
+                        .HasMaxLength(12)
+                        .HasColumnType("real");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("FishType");
+                });
+
             modelBuilder.Entity("TnR_SS.Domain.Entities.OTP", b =>
                 {
                     b.Property<int>("ID")
@@ -153,6 +220,124 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.ToTable("OTP");
                 });
 
+            modelBuilder.Entity("TnR_SS.Domain.Entities.PondOwner", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("ID");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(12)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(12)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("PondOwner");
+                });
+
+            modelBuilder.Entity("TnR_SS.Domain.Entities.Purchase", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<double>("Commission")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double>("PayForPondOwner")
+                        .HasColumnType("float");
+
+                    b.Property<double>("PondBackMoney")
+                        .HasColumnType("float");
+
+                    b.Property<Guid>("PondOwnerID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<double>("TotalAmount")
+                        .HasColumnType("float");
+
+                    b.Property<double>("TotalWeight")
+                        .HasColumnType("float");
+
+                    b.Property<int>("TraderID")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("isPaid")
+                        .HasColumnType("bit");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("PondOwnerID");
+
+                    b.HasIndex("TraderID");
+
+                    b.ToTable("Purchase");
+                });
+
+            modelBuilder.Entity("TnR_SS.Domain.Entities.PurchaseDetail", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BasketId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("BuyPrice")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("FishTypeID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TongKetMuaId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("BasketId");
+
+                    b.HasIndex("FishTypeID");
+
+                    b.HasIndex("TongKetMuaId");
+
+                    b.ToTable("PurchaseDetail");
+                });
+
             modelBuilder.Entity("TnR_SS.Domain.Entities.RoleUser", b =>
                 {
                     b.Property<int>("Id")
@@ -163,6 +348,9 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
@@ -176,6 +364,9 @@ namespace TnR_SS.DataEFCore.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
@@ -183,32 +374,38 @@ namespace TnR_SS.DataEFCore.Migrations
                         .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
-                    b.ToTable("AspNetRoles");
+                    b.ToTable("RoleUser");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "26244b77-a930-4660-9483-a804db931628",
+                            ConcurrencyStamp = "2c8d0985-4101-4da4-a9d3-de7e0da640ea",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Admin",
                             Name = "Admin",
-                            NormalizedName = "ADMIN"
+                            NormalizedName = "ADMIN",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "39dba883-892d-4917-aa50-8539027c134a",
+                            ConcurrencyStamp = "d91f01c2-6b64-45bd-930f-5564691a2a80",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Thương lái",
                             Name = "Trader",
-                            NormalizedName = "TRADER"
+                            NormalizedName = "TRADER",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "a6b3354b-301d-4562-9b8e-d09df949cc2b",
+                            ConcurrencyStamp = "900c7ea8-b09d-4af5-8b02-aa068ac724ed",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Chủ bến",
                             Name = "Weight Recorder",
-                            NormalizedName = "WEIGHT RECORDER"
+                            NormalizedName = "WEIGHT RECORDER",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
 
@@ -231,7 +428,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime");
 
                     b.Property<DateTime>("Dob")
@@ -291,6 +488,9 @@ namespace TnR_SS.DataEFCore.Migrations
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
@@ -364,6 +564,82 @@ namespace TnR_SS.DataEFCore.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("TnR_SS.Domain.Entities.Purchase", b =>
+                {
+                    b.HasOne("TnR_SS.Domain.Entities.PondOwner", "PondOwner")
+                        .WithMany("Purchases")
+                        .HasForeignKey("PondOwnerID")
+                        .HasConstraintName("FK_Purchase_PondOwner")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TnR_SS.Domain.Entities.UserInfor", "UserInfor")
+                        .WithMany("Purchases")
+                        .HasForeignKey("TraderID")
+                        .HasConstraintName("FK_Purchase_UserInfor")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PondOwner");
+
+                    b.Navigation("UserInfor");
+                });
+
+            modelBuilder.Entity("TnR_SS.Domain.Entities.PurchaseDetail", b =>
+                {
+                    b.HasOne("TnR_SS.Domain.Entities.Basket", "Basket")
+                        .WithMany("PurchaseDetails")
+                        .HasForeignKey("BasketId")
+                        .HasConstraintName("FK_PurchaseDetail_Basket")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TnR_SS.Domain.Entities.FishType", "FishType")
+                        .WithMany("PurchaseDetails")
+                        .HasForeignKey("FishTypeID")
+                        .HasConstraintName("FK_PurchaseDetail_FishType")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TnR_SS.Domain.Entities.Purchase", "TongKetMua")
+                        .WithMany("PurchaseDetails")
+                        .HasForeignKey("TongKetMuaId")
+                        .HasConstraintName("FK_PurchaseDetail_TongKetMua")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Basket");
+
+                    b.Navigation("FishType");
+
+                    b.Navigation("TongKetMua");
+                });
+
+            modelBuilder.Entity("TnR_SS.Domain.Entities.Basket", b =>
+                {
+                    b.Navigation("PurchaseDetails");
+                });
+
+            modelBuilder.Entity("TnR_SS.Domain.Entities.FishType", b =>
+                {
+                    b.Navigation("PurchaseDetails");
+                });
+
+            modelBuilder.Entity("TnR_SS.Domain.Entities.PondOwner", b =>
+                {
+                    b.Navigation("Purchases");
+                });
+
+            modelBuilder.Entity("TnR_SS.Domain.Entities.Purchase", b =>
+                {
+                    b.Navigation("PurchaseDetails");
+                });
+
+            modelBuilder.Entity("TnR_SS.Domain.Entities.UserInfor", b =>
+                {
+                    b.Navigation("Purchases");
                 });
 #pragma warning restore 612, 618
         }

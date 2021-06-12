@@ -32,3 +32,4 @@ _ReSharper*/
 packages/
 /SWP490_G9_PE/TnR_SS.API/Properties/PublishProfiles/FolderProfile.pubxml
 .DS_Store
+*.orig

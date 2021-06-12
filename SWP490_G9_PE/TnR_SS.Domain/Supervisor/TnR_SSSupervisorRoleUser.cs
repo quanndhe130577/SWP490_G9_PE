@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TnR_SS.Domain.ApiModels.RoleUserModel.RequestModel;
 using TnR_SS.Domain.Entities;
 
 namespace TnR_SS.Domain.Supervisor
@@ -19,13 +20,21 @@ namespace TnR_SS.Domain.Supervisor
             var userRoles = await _userInforRepository.GetRolesAsync(user);
             return _roleUserRepository.FindByNameAsync(userRoles[0]).Result.DisplayName;
         }
-        public List<RoleUser> GetAllRoleUser()
+        public List<AllRoleResModel> GetAllResRoles()
         {
-            return _roleUserRepository.AllRoleUser();
+            var userRoles = _roleUserRepository.AllRoleUser();
+            List<AllRoleResModel> roleRes = new List<AllRoleResModel>();
+            foreach (var role in userRoles)
+            {
+                roleRes.Add(_mapper.Map<RoleUser, AllRoleResModel>(role));
+            }
+
+            return roleRes;
         }
         public async Task<IdentityResult> AddRoleUserAsync(RoleUser role)
         {
-            return await _roleUserRepository.CreateAsync(role);
+            return await _roleUserRepository.CreateIdentityAsync(role);
         }
+
     }
 }

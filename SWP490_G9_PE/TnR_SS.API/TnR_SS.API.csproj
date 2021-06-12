@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
     <PackageReference Include="DevExpress.Xpo" Version="19.2.5" />
+    <PackageReference Include="Imgur.API" Version="5.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.6" />
@@ -21,25 +22,23 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.13" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
+    <PackageReference Include="MimeTypeMapOfficial" Version="1.0.17" />
     <PackageReference Include="StringeeSDK" Version="1.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.4" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.11.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Common\HandleOTP\Model\StringeeReqModel.cs">
-      <ExcludeFromSourceAnalysis>True</ExcludeFromSourceAnalysis>
-      <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Model\ErrorModel\" />
+    <PackageReference Include="Twilio" Version="5.61.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\TnR_SS.DataEFCore\TnR_SS.DataEFCore.csproj" />
     <ProjectReference Include="..\TnR_SS.Domain\TnR_SS.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Common\StringeeAPI\StringeeModels\StringeeReqModel.cs">
+      <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
+      <ExcludeFromSourceAnalysis>True</ExcludeFromSourceAnalysis>
+    </Compile>
   </ItemGroup>
 
 </Project>

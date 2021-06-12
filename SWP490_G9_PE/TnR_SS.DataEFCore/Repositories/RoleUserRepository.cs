@@ -9,14 +9,14 @@ using TnR_SS.Domain.IRepositories;
 
 namespace TnR_SS.DataEFCore.Repositories
 {
-    public class RoleUserRepository : IRoleUserRepository
+    public class RoleUserRepository : RepositoryBase<RoleUser>, IRoleUserRepository
     {
-        private readonly TnR_SSContext _context;
+        //private readonly TnR_SSContext _context;
         private readonly RoleManager<RoleUser> _roleManager;
 
-        public RoleUserRepository(TnR_SSContext context, RoleManager<RoleUser> roleManager)
+        public RoleUserRepository(TnR_SSContext context, RoleManager<RoleUser> roleManager) : base(context)
         {
-            _context = context;
+            //_context = context;
             _roleManager = roleManager;
         }
 
@@ -25,12 +25,14 @@ namespace TnR_SS.DataEFCore.Repositories
             return _roleManager.Roles.ToList();
         }
 
-        public async Task<IdentityResult> CreateAsync(RoleUser role)
+        public async Task<IdentityResult> CreateIdentityAsync(RoleUser role)
         {
+            role.CreatedAt = DateTime.Now;
+            role.UpdatedAt = DateTime.Now;
             return await _roleManager.CreateAsync(role);
         }
 
-        public void Dispose() => _context.Dispose();
+        //public void Dispose() => _context.Dispose();
 
         public async Task<RoleUser> FindByNameAsync(string roleName)
         {

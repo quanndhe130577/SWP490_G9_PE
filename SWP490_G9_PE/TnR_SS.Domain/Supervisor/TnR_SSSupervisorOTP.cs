@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using TnR_SS.Domain.Entities;
 
@@ -12,28 +11,29 @@ namespace TnR_SS.Domain.Supervisor
         public async Task<bool> CheckOTPDoneAsync(int otpId, string phoneNumber)
         {
             //var otpInfor = await _dbContext.OTPs.FindAsync(otpId);
-            var otpInfor = await _otpRepository.FindByIdAsync(otpId);
+            var otpInfor = await _otpRepository.FindAsync(otpId);
             if (otpInfor is null)
             {
                 return false;
             }
 
-            if (otpInfor.PhoneNumber == phoneNumber && otpInfor.Status == OTPStatus.Done.ToString())
+            if (otpInfor.PhoneNumber == phoneNumber && otpInfor.Status == OTPStatus.Done.ToString() && otpInfor.ExpiredDate > DateTime.Now)
             {
                 return true;
             }
 
             return false;
         }
+
         public async Task<bool> CheckOTPRightAsync(int otpId, string otp, string phoneNumber)
         {
-            var otpInfor = await _otpRepository.FindByIdAsync(otpId);
+            var otpInfor = await _otpRepository.FindAsync(otpId);
             if (otpInfor is null)
             {
                 return false;
             }
 
-            if (otpInfor.PhoneNumber == phoneNumber && otpInfor.Code == otp && otpInfor.Status.Equals(OTPStatus.Waiting.ToString()))
+            if (otpInfor.PhoneNumber == phoneNumber && otpInfor.Code == otp && otpInfor.Status.Equals(OTPStatus.Waiting.ToString()) && otpInfor.ExpiredDate > DateTime.Now)
             {
                 await _otpRepository.UpdateStatusAsync(otpId);
                 return true;
@@ -49,9 +49,24 @@ namespace TnR_SS.Domain.Supervisor
             return rs is not null;
         }
 
-        public async Task AddOTPAsync(OTP otp)
+        public async Task<int> AddOTPAsync(string code, string phoneNumber)
         {
-            await _otpRepository.AddAsync(otp);
+            OTP otp = new()
+            {
+                Code = code,
+                PhoneNumber = phoneNumber,
+                ExpiredDate = DateTime.Now.AddMinutes(1),
+                Status = OTPStatus.Waiting.ToString()
+            };
+
+            await _otpRepository.CreateAsync(otp);
+            return otp.ID;
+        }
+
+        public void CreateOTPTest()
+        {
+            OTP bk = new OTP();
+            _otpRepository.CreateAsync(bk);
         }
     }
 }

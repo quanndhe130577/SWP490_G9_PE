@@ -1,15 +1,23 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
+using TnR_SS.API.Common.ImgurAPI;
 using TnR_SS.API.Common.Response;
 using TnR_SS.API.Common.Token;
-using TnR_SS.API.Model.AccountModel.RequestModel;
-using TnR_SS.API.Model.AccountModel.ResponseModel;
+using TnR_SS.Domain.ApiModels.AccountModel.RequestModel;
+using TnR_SS.Domain.ApiModels.AccountModel.ResponseModel;
 using TnR_SS.Domain.Entities;
 using TnR_SS.Domain.Supervisor;
+using Twilio;
+using Twilio.Rest.Api.V2010.Account;
+using Twilio.Types;
 
 namespace TnR_SS.API.Controller
 {
@@ -18,30 +26,11 @@ namespace TnR_SS.API.Controller
     [ApiController]
     public class AccountController : ControllerBase
     {
-        /*private readonly TnR_SSContext _context;
-        private readonly UserManager<UserInfor> _userManager;
-        private readonly SignInManager<UserInfor> _signInManager;
-        private readonly RoleManager<RoleUser> _roleManager;
-        private readonly IMapper _mapper;
-        private readonly HandleOTP _handleOTP;
-
-        public AccountController(TnR_SSContext context, UserManager<UserInfor> userManager, SignInManager<UserInfor> signInManager,
-            RoleManager<RoleUser> roleManager, IMapper mapper, HandleOTP handleOTP)
-        {
-            _context = context;
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _roleManager = roleManager;
-            _mapper = mapper;
-            _handleOTP = handleOTP;
-        }*/
-        private readonly IMapper _mapper;
         private readonly ITnR_SSSupervisor _tnrssSupervisor;
 
-        public AccountController(ITnR_SSSupervisor tnrssSupervisor, IMapper mapper)
+        public AccountController(ITnR_SSSupervisor tnrssSupervisor)
         {
             _tnrssSupervisor = tnrssSupervisor;
-            _mapper = mapper;
         }
 
         #region Register      
@@ -69,28 +58,16 @@ namespace TnR_SS.API.Controller
                     return new ResponseBuilder().Error("Role user does not existed").ResponseModel;
                 }
 
-                var userInfor = _mapper.Map<RegisterUserReqModel, UserInfor>(userData);
-                var result = await _tnrssSupervisor.CreateAsync(userInfor, userData.Password);
+                string avatarLink = await ImgurAPI.UploadImgurAsync(userData.AvatarBase64);
 
+                var result = await _tnrssSupervisor.CreateAsync(userData, avatarLink);
                 if (result.Succeeded)
                 {
-                    //add role to user
-                    var result_addUserToRole = await _tnrssSupervisor.AddToRoleAsync(userInfor, userData.RoleNormalizedName);
-                    if (result_addUserToRole.Succeeded)
-                    {
-                        return new ResponseBuilder().Success("Register Success").ResponseModel;
-                    }
-
-                    //add role to user failed
-                    await _tnrssSupervisor.DeleteAsync(userInfor);
-                    var errors1 = result_addUserToRole.Errors.Select(x => x.Description).ToList();
-                    return new ResponseBuilder().Errors(errors1).ResponseModel;
-
+                    return new ResponseBuilder().Success("Register Success").ResponseModel;
                 }
 
                 var errors = result.Errors.Select(x => x.Description).ToList();
                 return new ResponseBuilder().Errors(errors).ResponseModel;
-
             }
 
             return new ResponseBuilder().Error("Invalid information").ResponseModel;
@@ -111,24 +88,16 @@ namespace TnR_SS.API.Controller
                     return new ResponseBuilder().Error("User not found").ResponseModel;
                 }
 
-                await _tnrssSupervisor.SignOutAsync();
-                var userSigninResult = await _tnrssSupervisor.SignInWithPasswordAsync(user, userData.Password);
-                if (userSigninResult.Succeeded)
+                var userResModel = await _tnrssSupervisor.SignInWithPasswordAsync(user, userData.Password);
+                if (userResModel != null)
                 {
-
-                    await _tnrssSupervisor.SignInAsync(user);
                     var token = TokenManagement.GetTokenUser(user.Id);
                     LoginResModel rlm = new LoginResModel()
                     {
                         Token = token,
-                        User = _mapper.Map<UserInfor, UserResModel>(user)
+                        User = userResModel
                     };
-
-                    //set role 
-                    rlm.User.RoleDisplayName = await _tnrssSupervisor.GetRoleDisplayNameAsync(user);
-
-                    ResponseBuilder<LoginResModel> rpB = new ResponseBuilder<LoginResModel>().Success("Login success").WithData(rlm);
-                    return rpB.ResponseModel;
+                    return new ResponseBuilder<LoginResModel>().Success("Login success").WithData(rlm).ResponseModel;
                 }
 
                 return new ResponseBuilder().Error("Invalid Phone number or password").ResponseModel;
@@ -139,7 +108,7 @@ namespace TnR_SS.API.Controller
         #endregion
 
         #region update user
-        [HttpPut("update/{id}")]
+        [HttpPut("user/update/{id}")]
         //[Route("update")]
         public async Task<ResponseModel> UpdateUserInfor(int id, UpdateUserReqModel userData)
         {
@@ -148,18 +117,13 @@ namespace TnR_SS.API.Controller
                 return new ResponseBuilder().Error("Access denied").ResponseModel;
             }
 
-            var userInfor = _tnrssSupervisor.GetUserById(id);
-            if (userInfor is null)
-            {
-                return new ResponseBuilder().WithCode(HttpStatusCode.NotFound).WithMessage("User have not registered").ResponseModel;
-            }
-
-            userInfor = _mapper.Map<UpdateUserReqModel, UserInfor>(userData, userInfor);
-            var result = await _tnrssSupervisor.UpdateUserAsync(userInfor);
+            string avatarLink = await ImgurAPI.UploadImgurAsync(userData.AvatarBase64);
+            var result = await _tnrssSupervisor.UpdateUserAsync(userData, id, avatarLink);
 
             if (result.Succeeded)
             {
-                return new ResponseBuilder().Success("Update Success").ResponseModel;
+                var userResModel = await _tnrssSupervisor.GetUserResModelByIdAsync(id);
+                return new ResponseBuilder<UserResModel>().Success("Update Success").WithData(userResModel).ResponseModel;
             }
 
             var errors = result.Errors.Select(x => x.Description).ToList();
@@ -169,7 +133,7 @@ namespace TnR_SS.API.Controller
         #endregion
 
         #region change password
-        [HttpPut("change-password/{id}")]
+        [HttpPut("user/change-password/{id}")]
         //[Route("change-password")]
         public async Task<ResponseModel> ChangePassword(int id, [FromBody] ChangePasswordReqModel changePasswordModel)
         {
@@ -195,9 +159,9 @@ namespace TnR_SS.API.Controller
                     LoginResModel rlm = new LoginResModel()
                     {
                         Token = token,
-                        User = _mapper.Map<UserInfor, UserResModel>(userInfor)
+                        User = await _tnrssSupervisor.GetUserResModelByIdAsync(id)
                     };
-                    rlm.User.RoleDisplayName = await _tnrssSupervisor.GetRoleDisplayNameAsync(userInfor);
+
                     return new ResponseBuilder<LoginResModel>().Success("Update Success").WithData(rlm).ResponseModel;
                 }
                 else
@@ -212,7 +176,7 @@ namespace TnR_SS.API.Controller
         #endregion
 
         #region Reset Password
-        [HttpPost("reset-password")]
+        [HttpPost("user/reset-password")]
         [AllowAnonymous]
         public async Task<ResponseModel> ResetPassword(ResetPasswordReqModel resetData)
         {
@@ -223,7 +187,6 @@ namespace TnR_SS.API.Controller
                 return new ResponseBuilder().WithCode(HttpStatusCode.NotFound).WithMessage("Invalid Information").ResponseModel;
             }
 
-            // check OTP for User
             if (!await _tnrssSupervisor.CheckOTPRightAsync(resetData.OTPID, resetData.Code, resetData.PhoneNumber))
             {
                 return new ResponseBuilder().Error("Invalid OTP").ResponseModel;
@@ -244,7 +207,7 @@ namespace TnR_SS.API.Controller
 
         #region change PhoneNumber 
 
-        [HttpPost("check-change-phone-otp/{id}")]
+        [HttpPost("user/change-phone-number/{id}")]
         public async Task<ResponseModel> CheckChangePhoneNumberOTP(int id, CheckChangePhoneNumberOTPReqModel modelData)
         {
             if (!TokenManagement.CheckUserIdFromToken(HttpContext, id))
@@ -256,14 +219,11 @@ namespace TnR_SS.API.Controller
             {
                 return new ResponseBuilder().Error("Phone Number existed").ResponseModel;
             }
-            //check OTP for phoneNumber
-            // if (await _tnrssSupervisor.CheckOTPRightAsync(modelData.OTPID, modelData.Code, modelData.NewPhoneNumber))
-            if (true)
-            {
-                var user = _tnrssSupervisor.GetUserById(id);
-                user.PhoneNumber = modelData.NewPhoneNumber;
 
-                var rs = await _tnrssSupervisor.UpdateUserAsync(user);
+            // if (await _tnrssSupervisor.CheckOTPRightAsync(modelData.OTPID, modelData.Code, modelData.NewPhoneNumber))
+            if(true)
+            {
+                var rs = await _tnrssSupervisor.UpdatePhoneNumberAsync(id, modelData.NewPhoneNumber);
                 if (rs.Succeeded)
                 {
                     return new ResponseBuilder().Success("Success").ResponseModel;
@@ -272,7 +232,6 @@ namespace TnR_SS.API.Controller
                 var errors = rs.Errors.Select(x => x.Description).ToList();
                 return new ResponseBuilder().Errors(errors).ResponseModel;
             }
-
 
             // return new ResponseBuilder().Error("Invalid OTP").ResponseModel;
         }
@@ -296,5 +255,13 @@ namespace TnR_SS.API.Controller
         }
         #endregion
 
+        #region Test
+        [HttpGet("test")]
+        [AllowAnonymous]
+        public void Test()
+        {
+            //_tnrssSupervisor.CreateOTPTest();
+        }
+        #endregion
     }
 }

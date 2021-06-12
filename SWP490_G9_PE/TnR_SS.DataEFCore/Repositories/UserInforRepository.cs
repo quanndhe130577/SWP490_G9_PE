@@ -8,15 +8,13 @@ using TnR_SS.Domain.IRepositories;
 
 namespace TnR_SS.DataEFCore.Repositories
 {
-    public class UserInforRepository : IUserInforRepository
+    public class UserInforRepository : RepositoryBase<UserInfor>, IUserInforRepository
     {
-        private readonly TnR_SSContext _context;
         private readonly UserManager<UserInfor> _userManager;
         private readonly SignInManager<UserInfor> _signInManager;
 
-        public UserInforRepository(TnR_SSContext context, UserManager<UserInfor> userManager, SignInManager<UserInfor> signInManager)
+        public UserInforRepository(TnR_SSContext context, UserManager<UserInfor> userManager, SignInManager<UserInfor> signInManager) : base(context)
         {
-            _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
         }
@@ -28,6 +26,7 @@ namespace TnR_SS.DataEFCore.Repositories
 
         public async Task<IdentityResult> ChangePasswordAsync(UserInfor user, string currentPassword, string newPassword)
         {
+            user.UpdatedAt = DateTime.Now;
             return await _userManager.ChangePasswordAsync(user, currentPassword, newPassword);
         }
 
@@ -36,17 +35,16 @@ namespace TnR_SS.DataEFCore.Repositories
             return await _userManager.CheckPasswordAsync(user, password);
         }
 
-        public async Task<IdentityResult> CreateAsync(UserInfor user, string password)
+        public async Task<IdentityResult> CreateWithPasswordAsync(UserInfor user, string password)
         {
+            user.CreatedAt = DateTime.Now;
             return await _userManager.CreateAsync(user, password);
         }
 
-        public async Task<IdentityResult> DeleteAsync(UserInfor user)
+        public override async Task<IdentityResult> DeleteAsync(UserInfor user)
         {
             return await _userManager.DeleteAsync(user);
         }
-
-        public void Dispose() => _context.Dispose();
 
         public async Task<string> GeneratePasswordResetTokenAsync(UserInfor user)
         {
@@ -75,6 +73,7 @@ namespace TnR_SS.DataEFCore.Repositories
 
         public async Task<IdentityResult> ResetUserPasswordAsync(UserInfor user, string token, string newPassword)
         {
+            user.UpdatedAt = DateTime.Now;
             return await _userManager.ResetPasswordAsync(user, token, newPassword);
         }
 
@@ -88,9 +87,15 @@ namespace TnR_SS.DataEFCore.Repositories
             await _signInManager.SignOutAsync();
         }
 
-        public async Task<IdentityResult> UpdateAsync(UserInfor user)
+        public async Task<IdentityResult> UpdateIdentityAsync(UserInfor user)
         {
+            user.UpdatedAt = DateTime.Now;
             return await _userManager.UpdateAsync(user);
+        }
+
+        public async Task<IdentityResult> DeleteIdentityAsync(UserInfor userInfor)
+        {
+            return await _userManager.DeleteAsync(userInfor);
         }
     }
 }

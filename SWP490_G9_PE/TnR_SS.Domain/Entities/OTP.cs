@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TnR_SS.Domain.Entities
 {
+    [Table("OTP")]
     public class OTP
     {
         [Key]

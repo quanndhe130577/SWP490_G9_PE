@@ -7,11 +7,11 @@ using TnR_SS.Domain.Entities;
 
 namespace TnR_SS.Domain.IRepositories
 {
-    public interface IOTPRepository : IDisposable
+    public interface IOTPRepository : IRepositoryBase<OTP>
     {
-        Task<OTP> FindByIdAsync(int otpId);
+        //Task<OTP> FindByIdAsync(int otpId);
         List<OTP> GetByPhoneNumber(string phoneNumber);
-        Task AddAsync(OTP otp);
+        //Task AddAsync(OTP otp);
         Task UpdateStatusAsync(int otpid);
     }
 }

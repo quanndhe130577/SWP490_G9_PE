@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,8 @@ namespace TnR_SS.DataEFCore.Configurations
     {
         public RoleUserConfiguration(EntityTypeBuilder<RoleUser> entity)
         {
+            entity.ToTable("RoleUser");
+
             var listRole = new RoleUser[]
              {
                 new RoleUser(){ Id = 1, Name = "Admin", DisplayName = "Admin", NormalizedName = "ADMIN"},

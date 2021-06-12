@@ -11,7 +11,12 @@ namespace TnR_SS.API.Configurations
         {
             services.AddScoped<IOTPRepository, OTPRepository>()
                 .AddScoped<IRoleUserRepository, RoleUserRepository>()
-                .AddScoped<IUserInforRepository, UserInforRepository>();
+                .AddScoped<IUserInforRepository, UserInforRepository>()
+                .AddScoped<IBasketRepository, BasketRepository>()
+                .AddScoped<IFishTypeRepository, FishTypeRepository>()
+                .AddScoped<IPondOwnerRepository, PondOwnerRepository>()
+                .AddScoped<IPurchaseDetailRepository, PurchaseDetailRepository>()
+                .AddScoped<IPurchaseRepository, PurchaseRepository>();
 
             return services;
         }
