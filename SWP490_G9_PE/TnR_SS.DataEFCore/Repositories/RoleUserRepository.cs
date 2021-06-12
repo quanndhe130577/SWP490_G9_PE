@@ -25,7 +25,7 @@ namespace TnR_SS.DataEFCore.Repositories
             return _roleManager.Roles.ToList();
         }
 
-        public override async Task<IdentityResult> CreateAsync(RoleUser role)
+        public async Task<IdentityResult> CreateIdentityAsync(RoleUser role)
         {
             role.CreatedAt = DateTime.Now;
             role.UpdatedAt = DateTime.Now;

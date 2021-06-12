@@ -12,7 +12,7 @@ namespace TnR_SS.Domain.IRepositories
     {
         Task<IdentityResult> CreateWithPasswordAsync(UserInfor user, string password);
         Task<IdentityResult> AddToRoleAsync(UserInfor user, string role);
-        Task<IdentityResult> DeleteAsync(UserInfor user);
+        Task<IdentityResult> DeleteIdentityAsync(UserInfor user);
         UserInfor GetUserByPhoneNumber(string phoneNumber);
         Task SignOutAsync();
         Task<SignInResult> PasswordSignInAsync(UserInfor user, string password);
@@ -24,5 +24,6 @@ namespace TnR_SS.Domain.IRepositories
         Task<IList<string>> GetRolesAsync(UserInfor user);
         Task<string> GeneratePasswordResetTokenAsync(UserInfor user);
         Task<bool> CheckPasswordAsync(UserInfor user, string password);
+        Task<IdentityResult> UpdateIdentityAsync(UserInfor user);
     }
 }

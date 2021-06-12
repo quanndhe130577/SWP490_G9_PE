@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TnR_SS.Domain.ApiModels.AccountModel
 {
-    public class UserModel
+    public class UserInforApiModel
     {
         [Required]
         [MaxLength(50)]

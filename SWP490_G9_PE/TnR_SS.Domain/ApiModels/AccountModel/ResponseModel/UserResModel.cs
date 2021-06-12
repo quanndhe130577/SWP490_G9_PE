@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TnR_SS.Domain.ApiModels.AccountModel.ResponseModel
 {
-    public class UserResModel : UserModel
+    public class UserResModel : UserInforApiModel
     {
         public int UserID { get; set; }
 

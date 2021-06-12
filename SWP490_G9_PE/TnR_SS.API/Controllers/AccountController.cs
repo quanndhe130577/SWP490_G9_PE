@@ -250,7 +250,7 @@ namespace TnR_SS.API.Controller
         [AllowAnonymous]
         public void Test()
         {
-            _tnrssSupervisor.CreateOTPTest();
+            //_tnrssSupervisor.CreateOTPTest();
         }
         #endregion
     }
