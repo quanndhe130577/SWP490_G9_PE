@@ -16,8 +16,6 @@ namespace TnR_SS.Domain.Supervisor
         Task<bool> CheckOTPRightAsync(int otpId, string otp, string phoneNumber);
         bool CheckPhoneOTPExists(string phoneNumber);
         Task<int> AddOTPAsync(string code, string phoneNumber);
-
-        void CreateOTPTest();
         #endregion
 
         #region Role

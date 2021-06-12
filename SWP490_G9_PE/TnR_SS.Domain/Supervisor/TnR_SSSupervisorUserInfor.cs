@@ -35,7 +35,7 @@ namespace TnR_SS.Domain.Supervisor
         }
         public async Task<IdentityResult> DeleteAsync(UserInfor user)
         {
-            return await _userInforRepository.DeleteAsync(user);
+            return await _userInforRepository.DeleteIdentityAsync(user);
         }
 
         public UserInfor GetUserByPhoneNumber(string phoneNumber)
@@ -77,7 +77,7 @@ namespace TnR_SS.Domain.Supervisor
         {
             var userInfor = _userInforRepository.GetUserById(id);
             userInfor = _mapper.Map<UpdateUserReqModel, UserInfor>(user, userInfor);
-            return await _userInforRepository.UpdateAsync(userInfor);
+            return await _userInforRepository.UpdateIdentityAsync(userInfor);
         }
 
         public async Task<UserResModel> GetUserResModelByIdAsync(int id)
@@ -125,7 +125,7 @@ namespace TnR_SS.Domain.Supervisor
             var user = _userInforRepository.GetUserById(id);
             user.PhoneNumber = newPhone;
 
-            return await _userInforRepository.UpdateAsync(user);
+            return await _userInforRepository.UpdateIdentityAsync(user);
         }
     }
 }

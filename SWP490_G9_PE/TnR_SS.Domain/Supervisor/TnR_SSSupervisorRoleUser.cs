@@ -33,7 +33,7 @@ namespace TnR_SS.Domain.Supervisor
         }
         public async Task<IdentityResult> AddRoleUserAsync(RoleUser role)
         {
-            return await _roleUserRepository.CreateAsync(role);
+            return await _roleUserRepository.CreateIdentityAsync(role);
         }
 
     }

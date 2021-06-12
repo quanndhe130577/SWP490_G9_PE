@@ -13,6 +13,6 @@ namespace TnR_SS.Domain.IRepositories
         Task<bool> RoleExistsAsync(string roleName);
         Task<RoleUser> FindByNameAsync(string roleName);
         List<RoleUser> AllRoleUser();
-        Task<IdentityResult> CreateAsync(RoleUser role);
+        Task<IdentityResult> CreateIdentityAsync(RoleUser role);
     }
 }

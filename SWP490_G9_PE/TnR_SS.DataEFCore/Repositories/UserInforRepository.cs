@@ -87,10 +87,15 @@ namespace TnR_SS.DataEFCore.Repositories
             await _signInManager.SignOutAsync();
         }
 
-        public override async Task<IdentityResult> UpdateAsync(UserInfor user)
+        public async Task<IdentityResult> UpdateIdentityAsync(UserInfor user)
         {
             user.UpdatedAt = DateTime.Now;
             return await _userManager.UpdateAsync(user);
+        }
+
+        public async Task<IdentityResult> DeleteIdentityAsync(UserInfor userInfor)
+        {
+            return await _userManager.DeleteAsync(userInfor);
         }
     }
 }

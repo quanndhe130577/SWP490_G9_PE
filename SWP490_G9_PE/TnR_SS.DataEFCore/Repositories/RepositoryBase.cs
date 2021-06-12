@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -137,5 +138,6 @@ namespace TnR_SS.DataEFCore.Repositories
             dbSet.Update(entity);
             await _context.SaveChangesAsync();
         }
+
     }
 }
