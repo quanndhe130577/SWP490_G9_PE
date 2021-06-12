@@ -3,6 +3,7 @@ using System;
 using TnR_SS.Domain.ApiModels.AccountModel.RequestModel;
 using TnR_SS.Domain.ApiModels.AccountModel.ResponseModel;
 using TnR_SS.Domain.ApiModels.BasketModel.ResponseModel;
+using TnR_SS.Domain.ApiModels.PondOwnerModel;
 using TnR_SS.Domain.ApiModels.PurchaseModal;
 using TnR_SS.Domain.ApiModels.RoleUserModel.RequestModel;
 using TnR_SS.Domain.ApiModels.RoleUserModel.ResponseModel;
@@ -39,6 +40,9 @@ namespace TnR_SS.Domain.ApiModels
             #region Purchase
             CreateMap<PurchaseApiModel, Purchase>();
             #endregion
+
+
+            CreateMap<PondOwnerResModel, PondOwner>().ReverseMap();
         }
 
     }

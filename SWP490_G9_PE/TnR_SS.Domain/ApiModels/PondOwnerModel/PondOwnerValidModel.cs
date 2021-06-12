@@ -3,8 +3,7 @@ namespace TnR_SS.Domain.ApiModels.PondOwnerModel
 {
     public class PondOwnerValidModel
     {
-        public PondOwnerValidModel()
-        {
-        }
+        public bool IsValid { get; set; }
+        public string Message { get; set; }
     }
 }
