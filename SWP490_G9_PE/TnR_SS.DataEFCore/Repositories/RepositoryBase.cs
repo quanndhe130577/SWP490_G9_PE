@@ -22,8 +22,19 @@ namespace TnR_SS.DataEFCore.Repositories
         public async Task AddAsync(T entity)
         {
             Type t = entity.GetType();
-            PropertyInfo prop = t.GetProperty("CreatedAt");
-            prop.SetValue(entity, DateTime.Now);
+            PropertyInfo createdAt = t.GetProperty("CreatedAt");
+            if (createdAt is not null)
+            {
+                createdAt.SetValue(entity, DateTime.Now);
+            }
+
+
+            PropertyInfo updatedAt = t.GetProperty("UpdatedAt");
+            if (updatedAt is not null)
+            {
+                updatedAt.SetValue(entity, DateTime.Now);
+            }
+
             await dbSet.AddAsync(entity);
             await _context.SaveChangesAsync();
         }
@@ -116,6 +127,13 @@ namespace TnR_SS.DataEFCore.Repositories
 
         public async Task UpdateAsync(T entity)
         {
+            Type t = entity.GetType();
+            PropertyInfo updatedAt = t.GetProperty("UpdatedAt");
+            if (updatedAt is not null)
+            {
+                updatedAt.SetValue(entity, DateTime.Now);
+            }
+
             dbSet.Update(entity);
             await _context.SaveChangesAsync();
         }

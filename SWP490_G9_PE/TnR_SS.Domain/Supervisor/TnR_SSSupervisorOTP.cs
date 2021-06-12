@@ -63,6 +63,10 @@ namespace TnR_SS.Domain.Supervisor
             return otp.ID;
         }
 
-        
+        public void CreateOTPTest()
+        {
+            OTP bk = new OTP();
+            _otpRepository.AddAsync(bk);
+        }
     }
 }
