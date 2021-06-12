@@ -10,28 +10,18 @@ namespace TnR_SS.Domain.Supervisor
 {
     public partial class TnR_SSSupervisor
     {
-        public bool CheckBasketExist(string typeRo)
+        public List<BasketApiModel> GetAllBasket()
         {
-            List<Basket> list = _basketRepository.ListAllBasket();
-            var rs = list.FirstOrDefault(x => x.Type == typeRo);
-            return rs is not null;
+            return (List<BasketApiModel>)_basketRepository.GetAllAsync();
         }
 
-        public async Task<bool> CreateBasket(string typeRo, int weight)
+        public async Task CreateBasketAsync(BasketApiModel basketRes)
         {
-            if (typeRo != null && weight != 0)
-            {
-                Basket basket = new() { Type = typeRo, Weight = weight };
-                await _basketRepository.CreateAsync(basket);
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            var basket = _mapper.Map<BasketApiModel, Basket>(basketRes);
+            await _basketRepository.CreateAsync(basket);
         }
 
-        public async Task UpdateBasket(BasketApiModel basketRes)
+        public async Task UpdateBasketAsync(BasketApiModel basketRes)
         {
             var basket = await _basketRepository.FindAsync(basketRes.ID);
             basket = _mapper.Map<BasketApiModel, Basket>(basketRes, basket);

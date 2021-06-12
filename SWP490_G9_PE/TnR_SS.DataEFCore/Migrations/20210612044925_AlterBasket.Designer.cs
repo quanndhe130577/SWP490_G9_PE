@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TnR_SS.DataEFCore;
 
 namespace TnR_SS.DataEFCore.Migrations
 {
     [DbContext(typeof(TnR_SSContext))]
-    partial class TnR_SSContextModelSnapshot : ModelSnapshot
+    [Migration("20210612044925_AlterBasket")]
+    partial class AlterBasket
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -134,8 +136,8 @@ namespace TnR_SS.DataEFCore.Migrations
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nchar")
+                        .IsFixedLength(true);
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime");
@@ -377,7 +379,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "81d767ba-b28e-4c1e-88cf-306af74bbb2e",
+                            ConcurrencyStamp = "0dbcff3d-493e-4e4f-b2d8-fdc00d83fb80",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Admin",
                             Name = "Admin",
@@ -387,7 +389,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "8600d0ba-aac8-472f-89b7-8ca55c8a0036",
+                            ConcurrencyStamp = "82e3f2ed-1294-486b-a55f-b5be5ff8d59e",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Thương lái",
                             Name = "Trader",
@@ -397,7 +399,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "b1bd101d-cb66-4c8d-8f76-e14cffe3f8b8",
+                            ConcurrencyStamp = "e8effeae-9f4e-42f4-91a6-e2c9fd8f5b95",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Chủ bến",
                             Name = "Weight Recorder",

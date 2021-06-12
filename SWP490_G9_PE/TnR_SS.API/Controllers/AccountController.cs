@@ -60,7 +60,7 @@ namespace TnR_SS.API.Controller
 
                 string avatarLink = await ImgurAPI.UploadImgurAsync(userData.AvatarBase64);
 
-                var result = await _tnrssSupervisor.CreateAsync(userData, avatarLink);
+                var result = await _tnrssSupervisor.CreateUserAsync(userData, avatarLink);
                 if (result.Succeeded)
                 {
                     return new ResponseBuilder().Success("Register Success").ResponseModel;

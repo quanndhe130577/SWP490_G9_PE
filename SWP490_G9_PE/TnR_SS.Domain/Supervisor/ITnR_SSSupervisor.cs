@@ -26,9 +26,9 @@ namespace TnR_SS.Domain.Supervisor
         #endregion
 
         #region UserInfor
-        Task<IdentityResult> CreateAsync(RegisterUserReqModel userData, string avatarLink);
+        Task<IdentityResult> CreateUserAsync(RegisterUserReqModel userData, string avatarLink);
         Task<IdentityResult> AddToRoleAsync(UserInfor user, string role);
-        Task<IdentityResult> DeleteAsync(UserInfor user);
+        Task<IdentityResult> DeleteUserAsync(UserInfor user);
         UserInfor GetUserByPhoneNumber(string phoneNumber);
         Task SignOutAsync();
         Task<UserResModel> SignInWithPasswordAsync(UserInfor user, string password);
@@ -49,9 +49,9 @@ namespace TnR_SS.Domain.Supervisor
         #endregion
 
         #region Basket
-        bool CheckBasketExist(string type);
-        Task<bool> CreateBasket(string type, int weight);
-        Task UpdateBasket(BasketApiModel basketRes);
+        List<BasketApiModel> GetAllBasket();
+        Task CreateBasketAsync(BasketApiModel basketRes);
+        Task UpdateBasketAsync(BasketApiModel basketRes);
 
         #endregion
 

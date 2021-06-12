@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TnR_SS.API.Common.Response;
+using TnR_SS.Domain.ApiModels.BasketModel.ResponseModel;
 using TnR_SS.Domain.Entities;
 using TnR_SS.Domain.Supervisor;
 
@@ -19,6 +22,12 @@ namespace TnR_SS.API.Controllers
             _tnrssSupervisor = tnrssSupervisor;
         }
 
-
+        [HttpPost("create")]
+        [AllowAnonymous]
+        public async Task<ResponseModel> CreateNewBasketAsync(BasketApiModel basketRes)
+        {
+            await _tnrssSupervisor.CreateBasketAsync(basketRes);
+            return new ResponseBuilder().Success("Create Basket Success").ResponseModel;
+        }
     }
 }

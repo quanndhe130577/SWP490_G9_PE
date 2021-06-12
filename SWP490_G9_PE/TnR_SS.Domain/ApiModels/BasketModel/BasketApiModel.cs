@@ -14,6 +14,6 @@ namespace TnR_SS.Domain.ApiModels.BasketModel.ResponseModel
         [Required]
         public string Type { get; set; }
         [Required]
-        public float Weight { get; set; }
+        public double Weight { get; set; }
     }
 }

@@ -19,7 +19,7 @@ namespace TnR_SS.Domain.IRepositories
             string includeProperties = null,
             int? skip = null, int? take = null
             );
-
+        IEnumerable<T> GetAllAsync();
         int CountRecords(Expression<Func<T, bool>> filter = null);
 
         T GetFirstOrDefault(
@@ -29,7 +29,7 @@ namespace TnR_SS.Domain.IRepositories
 
         Task CreateAsync(T entity);
 
-        Task<T> UpdateAsync(T entity);
+        Task UpdateAsync(T entity);
 
         Task DeleteByIdAsync(int id);
 

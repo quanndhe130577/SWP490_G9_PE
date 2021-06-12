@@ -139,5 +139,9 @@ namespace TnR_SS.DataEFCore.Repositories
             await _context.SaveChangesAsync();
         }
 
+        public IEnumerable<T> GetAllAsync()
+        {
+            return (IEnumerable<T>)dbSet.AsAsyncEnumerable();
+        }
     }
 }
