@@ -30,9 +30,8 @@ namespace TnR_SS.Domain.Entities
         [Required]
         public double Price { get; set; }
 
-       /* [Required]
+        [Required]
         public int TraderID { get; set; }
-        public UserInfor Trader { get; set; }*/
 
         public List<PurchaseDetail> PurchaseDetails { get; set; }
     }

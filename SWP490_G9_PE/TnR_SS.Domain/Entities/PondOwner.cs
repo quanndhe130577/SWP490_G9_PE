@@ -22,9 +22,8 @@ namespace TnR_SS.Domain.Entities
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 
-        /*[Required]
+        [Required]
         public int TraderID { get; set; }
-        public UserInfor Trader { get; set; }*/
 
         public PondOwner()
         {
