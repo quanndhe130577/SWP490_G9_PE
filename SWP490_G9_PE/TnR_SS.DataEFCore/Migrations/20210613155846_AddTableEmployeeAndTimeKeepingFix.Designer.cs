@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TnR_SS.DataEFCore;
 
 namespace TnR_SS.DataEFCore.Migrations
 {
     [DbContext(typeof(TnR_SSContext))]
-    partial class TnR_SSContextModelSnapshot : ModelSnapshot
+    [Migration("20210613155846_AddTableEmployeeAndTimeKeepingFix")]
+    partial class AddTableEmployeeAndTimeKeepingFix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -183,14 +185,13 @@ namespace TnR_SS.DataEFCore.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("TraderId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("TraderId");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime");
 
                     b.HasKey("ID");
-
-                    b.HasIndex("TraderId");
 
                     b.ToTable("Employee");
                 });
@@ -436,7 +437,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "f3667bf8-18db-40be-b5c1-14c5025e002a",
+                            ConcurrencyStamp = "dc9f9be7-f79f-4db6-9896-3486f9182cab",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Admin",
                             Name = "Admin",
@@ -446,7 +447,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "c698ae5c-eaf3-4b8f-b4e3-c1c3b1c8cc5d",
+                            ConcurrencyStamp = "3236d282-1d71-4df3-bada-83ff05b18c28",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Thương lái",
                             Name = "Trader",
@@ -456,7 +457,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "6c10d3a9-7751-4c14-a984-e113c7a9140a",
+                            ConcurrencyStamp = "4a8682a0-d260-4c33-b26a-8a421db4bf9c",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Chủ bến",
                             Name = "Weight Recorder",
@@ -477,7 +478,8 @@ namespace TnR_SS.DataEFCore.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<int>("EmpId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("EmpId");
 
                     b.Property<double>("Money")
                         .HasColumnType("float");
@@ -498,8 +500,6 @@ namespace TnR_SS.DataEFCore.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ID");
-
-                    b.HasIndex("EmpId");
 
                     b.ToTable("TimeKeeping");
                 });
@@ -661,18 +661,6 @@ namespace TnR_SS.DataEFCore.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TnR_SS.Domain.Entities.Employee", b =>
-                {
-                    b.HasOne("TnR_SS.Domain.Entities.UserInfor", "UserInfor")
-                        .WithMany("Employees")
-                        .HasForeignKey("TraderId")
-                        .HasConstraintName("FK_Employee_UserInfor")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("UserInfor");
-                });
-
             modelBuilder.Entity("TnR_SS.Domain.Entities.Purchase", b =>
                 {
                     b.HasOne("TnR_SS.Domain.Entities.PondOwner", "PondOwner")
@@ -724,26 +712,9 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.Navigation("TongKetMua");
                 });
 
-            modelBuilder.Entity("TnR_SS.Domain.Entities.TimeKeeping", b =>
-                {
-                    b.HasOne("TnR_SS.Domain.Entities.Employee", "Employee")
-                        .WithMany("TimeKeepings")
-                        .HasForeignKey("EmpId")
-                        .HasConstraintName("FK_TimeKeeping_Employee")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Employee");
-                });
-
             modelBuilder.Entity("TnR_SS.Domain.Entities.Basket", b =>
                 {
                     b.Navigation("PurchaseDetails");
-                });
-
-            modelBuilder.Entity("TnR_SS.Domain.Entities.Employee", b =>
-                {
-                    b.Navigation("TimeKeepings");
                 });
 
             modelBuilder.Entity("TnR_SS.Domain.Entities.FishType", b =>
@@ -763,8 +734,6 @@ namespace TnR_SS.DataEFCore.Migrations
 
             modelBuilder.Entity("TnR_SS.Domain.Entities.UserInfor", b =>
                 {
-                    b.Navigation("Employees");
-
                     b.Navigation("Purchases");
                 });
 #pragma warning restore 612, 618
