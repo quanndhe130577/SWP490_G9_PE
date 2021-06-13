@@ -8,14 +8,9 @@ using TnR_SS.Domain.IRepositories;
 
 namespace TnR_SS.DataEFCore.Repositories
 {
-    public class FishTypeRepository : IFishTypeRepository
+    public class FishTypeRepository : RepositoryBase<FishType>, IFishTypeRepository
     {
-        private readonly TnR_SSContext _context;
-
-        public FishTypeRepository(TnR_SSContext context)
-        {
-            _context = context;
-        }
+        public FishTypeRepository(TnR_SSContext context) : base(context) { }
 
         public async Task CreateFishTypeAsync(FishType fishType)
         {
@@ -30,8 +25,6 @@ namespace TnR_SS.DataEFCore.Repositories
             _context.Baskets.Remove(fishType);
             await _context.SaveChangesAsync();
         }
-
-        public void Dispose() => _context.Dispose();
 
         public async Task<FishType> FindFishTypeByIdAsync(int fishTypeID) => await _context.FishTypes.FindAsync(fishTypeID);
 

@@ -19,7 +19,7 @@ namespace TnR_SS.Domain.IRepositories
             string includeProperties = null,
             int? skip = null, int? take = null
             );
-
+        IEnumerable<T> GetAllAsync();
         int CountRecords(Expression<Func<T, bool>> filter = null);
 
         T GetFirstOrDefault(

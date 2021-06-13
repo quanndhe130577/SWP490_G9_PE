@@ -9,7 +9,7 @@ namespace TnR_SS.Domain.Supervisor
 {
     public partial class TnR_SSSupervisor
     {
-        public async Task<IdentityResult> CreateAsync(RegisterUserReqModel userData, string avatarLink)
+        public async Task<IdentityResult> CreateUserAsync(RegisterUserReqModel userData, string avatarLink)
         {
             var userInfor = _mapper.Map<RegisterUserReqModel, UserInfor>(userData);
             userInfor.Avatar = avatarLink;
@@ -33,7 +33,7 @@ namespace TnR_SS.Domain.Supervisor
         {
             return await _userInforRepository.AddToRoleAsync(user, role);
         }
-        public async Task<IdentityResult> DeleteAsync(UserInfor user)
+        public async Task<IdentityResult> DeleteUserAsync(UserInfor user)
         {
             return await _userInforRepository.DeleteIdentityAsync(user);
         }

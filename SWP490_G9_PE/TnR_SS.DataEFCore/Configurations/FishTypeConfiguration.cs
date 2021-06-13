@@ -20,11 +20,11 @@ namespace TnR_SS.DataEFCore.Configurations
 
             entity.Property(e => e.FishName)
                 .IsRequired()
-                .IsFixedLength(true);
+                .HasMaxLength(50);
 
             entity.Property(e => e.Description)
                 .IsRequired()
-                .IsFixedLength(true);
+                .HasMaxLength(50);
 
             entity.Property(e => e.MinWeight)
                 .HasMaxLength(12)
@@ -46,6 +46,14 @@ namespace TnR_SS.DataEFCore.Configurations
                 .HasColumnType("datetime")
                 .IsRequired();
 
+            entity.Property(e => e.Price)
+                .IsRequired();
+
+
+            /*entity.HasOne(p => p.Trader)
+               .WithMany(b => b.FishTypes)
+               .HasForeignKey(p => p.TraderID)
+               .HasConstraintName("FK_FishType_UserInfor");*/
         }
     }
 }

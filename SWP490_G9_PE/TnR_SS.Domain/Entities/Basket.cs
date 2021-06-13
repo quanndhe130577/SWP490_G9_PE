@@ -18,7 +18,7 @@ namespace TnR_SS.Domain.Entities
         public string Type { get; set; }
 
         [Required]
-        public float Weight { get; set; }
+        public double Weight { get; set; }
 
         [Required]
         public DateTime CreatedAt { get; set; }

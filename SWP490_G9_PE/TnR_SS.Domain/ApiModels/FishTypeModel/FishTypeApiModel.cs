@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TnR_SS.Domain.Entities
+namespace TnR_SS.Domain.ApiModels.FishTypeModel
 {
-    [Table("FishType")]
-    public class FishType
+    public class FishTypeApiModel
     {
-        [Key]
-        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
+        [Required]
         public int ID { get; set; }
         [Required]
         public string FishName { get; set; }
@@ -24,15 +21,6 @@ namespace TnR_SS.Domain.Entities
         [Required]
         public DateTime Date { get; set; }
         [Required]
-        public DateTime CreatedAt { get; set; }
-        [Required]
-        public DateTime UpdatedAt { get; set; }
-        [Required]
         public double Price { get; set; }
-
-        [Required]
-        public int TraderID { get; set; }
-
-        public List<PurchaseDetail> PurchaseDetails { get; set; }
     }
 }

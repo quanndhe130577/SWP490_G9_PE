@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TnR_SS.API.Common.Response;
+using TnR_SS.Domain.ApiModels.FishTypeModel;
 using TnR_SS.Domain.Supervisor;
 
 namespace TnR_SS.API.Controllers
@@ -18,6 +21,20 @@ namespace TnR_SS.API.Controllers
             _tnrssSupervisor = tnrssSupervisor;
         }
 
+        [HttpPost("create")]
+        [AllowAnonymous]
+        public async Task<ResponseModel> CreateNewBasketAsync(FishTypeApiModel fishTypeModel)
+        {
+            await _tnrssSupervisor.CreateFishTypeAsync(fishTypeModel);
+            return new ResponseBuilder<FishTypeApiModel>().Success("Create Fish Type Success").WithData(fishTypeModel).ResponseModel;
+        }
 
+        [HttpPost("getallfishtype")]
+        [AllowAnonymous]
+        public ResponseModel GetAllFishType()
+        {
+            List<FishTypeApiModel> list = _tnrssSupervisor.GetAllFishType();
+            return new ResponseBuilder<List<FishTypeApiModel>>().Success("Get all type").WithData(list).ResponseModel;
+        }
     }
 }

@@ -20,7 +20,7 @@ namespace TnR_SS.DataEFCore.Configurations
 
             entity.Property(e => e.Type)
                 .IsRequired()
-                .IsFixedLength(true);
+                .HasMaxLength(50);
 
             entity.Property(e => e.Weight)
                 .IsRequired();

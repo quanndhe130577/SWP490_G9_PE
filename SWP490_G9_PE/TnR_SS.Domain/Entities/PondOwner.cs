@@ -22,6 +22,9 @@ namespace TnR_SS.Domain.Entities
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 
+        [Required]
+        public int TraderID { get; set; }
+
         public PondOwner()
         {
             this.ID = Guid.NewGuid();

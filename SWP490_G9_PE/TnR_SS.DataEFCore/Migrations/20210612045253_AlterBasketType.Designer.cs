@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TnR_SS.DataEFCore;
 
 namespace TnR_SS.DataEFCore.Migrations
 {
     [DbContext(typeof(TnR_SSContext))]
-    partial class TnR_SSContextModelSnapshot : ModelSnapshot
+    [Migration("20210612045253_AlterBasketType")]
+    partial class AlterBasketType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -164,13 +166,13 @@ namespace TnR_SS.DataEFCore.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nchar")
+                        .IsFixedLength(true);
 
                     b.Property<string>("FishName")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nchar")
+                        .IsFixedLength(true);
 
                     b.Property<float>("MaxWeight")
                         .HasMaxLength(12)
@@ -179,12 +181,6 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.Property<float>("MinWeight")
                         .HasMaxLength(12)
                         .HasColumnType("real");
-
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
-
-                    b.Property<int>("TraderID")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime");
@@ -251,9 +247,6 @@ namespace TnR_SS.DataEFCore.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(12)");
 
-                    b.Property<int>("TraderID")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
@@ -272,10 +265,7 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.Property<double>("Commission")
                         .HasColumnType("float");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("Date")
+                    b.Property<DateTime>("Createdat")
                         .HasColumnType("datetime2");
 
                     b.Property<double>("PayForPondOwner")
@@ -389,7 +379,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "82a1876d-3aff-4c51-9f7f-8547b893bbf9",
+                            ConcurrencyStamp = "81d767ba-b28e-4c1e-88cf-306af74bbb2e",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Admin",
                             Name = "Admin",
@@ -399,7 +389,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "a7d06bdd-3787-4eca-a8a6-0765d793b6c4",
+                            ConcurrencyStamp = "8600d0ba-aac8-472f-89b7-8ca55c8a0036",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Thương lái",
                             Name = "Trader",
@@ -409,7 +399,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "32f5bd91-6eaa-4e0e-9df8-6ffa0f64d393",
+                            ConcurrencyStamp = "b1bd101d-cb66-4c8d-8f76-e14cffe3f8b8",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Chủ bến",
                             Name = "Weight Recorder",

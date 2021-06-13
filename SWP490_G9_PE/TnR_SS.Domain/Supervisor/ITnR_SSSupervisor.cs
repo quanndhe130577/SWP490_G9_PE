@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using TnR_SS.Domain.ApiModels.AccountModel.RequestModel;
 using TnR_SS.Domain.ApiModels.AccountModel.ResponseModel;
 using TnR_SS.Domain.ApiModels.BasketModel.ResponseModel;
+using TnR_SS.Domain.ApiModels.FishTypeModel;
 using TnR_SS.Domain.ApiModels.PurchaseModal;
 using TnR_SS.Domain.ApiModels.RoleUserModel.RequestModel;
 using TnR_SS.Domain.Entities;
@@ -13,7 +14,9 @@ namespace TnR_SS.Domain.Supervisor
 {
     public interface ITnR_SSSupervisor
     {
+        int Complete();
         IPondOwnerRepository PondOwner { get; }
+
         #region OTP
         Task<bool> CheckOTPDoneAsync(int otpId, string phoneNumber);
         Task<bool> CheckOTPRightAsync(int otpId, string otp, string phoneNumber);
@@ -29,9 +32,9 @@ namespace TnR_SS.Domain.Supervisor
         #endregion
 
         #region UserInfor
-        Task<IdentityResult> CreateAsync(RegisterUserReqModel userData, string avatarLink);
+        Task<IdentityResult> CreateUserAsync(RegisterUserReqModel userData, string avatarLink);
         Task<IdentityResult> AddToRoleAsync(UserInfor user, string role);
-        Task<IdentityResult> DeleteAsync(UserInfor user);
+        Task<IdentityResult> DeleteUserAsync(UserInfor user);
         UserInfor GetUserByPhoneNumber(string phoneNumber);
         Task SignOutAsync();
         Task<UserResModel> SignInWithPasswordAsync(UserInfor user, string password);
@@ -49,12 +52,15 @@ namespace TnR_SS.Domain.Supervisor
         #endregion
 
         #region Fishtype
+        List<FishTypeApiModel> GetAllFishType();
+        Task CreateFishTypeAsync(FishTypeApiModel fishTypeModel);
+        Task UpdateFishTypeAsync(FishTypeApiModel fishTypeModel);
         #endregion
 
         #region Basket
-        bool CheckBasketExist(string type);
-        Task<bool> CreateBasket(string type, int weight);
-        Task UpdateBasket(BasketApiModel basketRes);
+        List<BasketApiModel> GetAllBasket();
+        Task CreateBasketAsync(BasketApiModel basketRes);
+        Task UpdateBasketAsync(BasketApiModel basketRes);
 
         #endregion
 
