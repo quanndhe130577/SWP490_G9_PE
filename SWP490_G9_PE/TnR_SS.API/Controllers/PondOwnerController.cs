@@ -52,7 +52,7 @@ namespace TnR_SS.API.Controllers
                 PondOwner owner = _mapper.Map<PondOwner>(pondOwner);
                 owner.ID = Guid.NewGuid();
                 owner.CreatedAt = DateTime.Now;
-                await _tnrssSupervisor.PondOwner.UpdateAsync(owner);
+                await _tnrssSupervisor.PondOwner.CreateAsync(owner);
                 return new ResponseBuilder<List<PondOwnerResModel>>().Success("Thêm thành công").ResponseModel;
             }
             else
@@ -74,8 +74,11 @@ namespace TnR_SS.API.Controllers
             }
             if (pondOwner.PhoneNumber == null)
             {
-
                 return new PondOwnerValidModel() { IsValid = false, Message = "Điện thoại không được để trống" };
+            }
+            if(pondOwner.TraderID==0) 
+            {
+                return new PondOwnerValidModel() { IsValid = false, Message = "Người bán cá không được để trống" };
             }
             return new PondOwnerValidModel() { IsValid = true, Message = "Cập nhật thành công" };
         }
