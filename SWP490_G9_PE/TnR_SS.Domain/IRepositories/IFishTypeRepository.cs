@@ -7,7 +7,7 @@ using TnR_SS.Domain.Entities;
 
 namespace TnR_SS.Domain.IRepositories
 {
-    public interface IFishTypeRepository : IDisposable
+    public interface IFishTypeRepository : IRepositoryBase<FishType>
     {
         Task CreateFishTypeAsync(FishType basket);
         Task UpdateFishTypeAsync(FishType basket, string type, int weight);

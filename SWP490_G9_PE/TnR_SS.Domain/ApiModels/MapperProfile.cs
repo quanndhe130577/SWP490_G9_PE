@@ -3,6 +3,7 @@ using System;
 using TnR_SS.Domain.ApiModels.AccountModel.RequestModel;
 using TnR_SS.Domain.ApiModels.AccountModel.ResponseModel;
 using TnR_SS.Domain.ApiModels.BasketModel.ResponseModel;
+using TnR_SS.Domain.ApiModels.FishTypeModel;
 using TnR_SS.Domain.ApiModels.RoleUserModel.RequestModel;
 using TnR_SS.Domain.ApiModels.RoleUserModel.ResponseModel;
 using TnR_SS.Domain.Entities;
@@ -26,6 +27,8 @@ namespace TnR_SS.Domain.ApiModels
             CreateMap<CreateRoleReqModel, RoleUser>();
             CreateMap<Basket, BasketApiModel>();
             CreateMap<BasketApiModel, Basket>();
+            CreateMap<FishType, FishTypeApiModel>();
+            CreateMap<FishTypeApiModel, FishType>();
         }
 
     }
