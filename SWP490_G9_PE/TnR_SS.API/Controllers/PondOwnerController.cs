@@ -37,8 +37,8 @@ namespace TnR_SS.API.Controllers
         [Route("getByTraderId/{id}")]
         public ResponseModel GetByTraderId(int id)
         {
-            // var rs = _tnrssSupervisor.PondOwner.GetAll(filter:po=>po.TraderID == id).Select(po => _mapper.Map<PondOwnerResModel>(po)).ToList();            
-            var rs = _tnrssSupervisor.PondOwner.GetPondOwnerByTraderId(id);
+            var rs = _tnrssSupervisor.PondOwner.GetAll(filter:po=>po.TraderID == id).Select(po => _mapper.Map<PondOwnerResModel>(po)).ToList();            
+            // var rs = _tnrssSupervisor.PondOwner.GetPondOwnerByTraderId(id);
             return new ResponseBuilder<List<PondOwnerResModel>>().Success("Get Info Success").WithData(rs).ResponseModel;
         }
 
