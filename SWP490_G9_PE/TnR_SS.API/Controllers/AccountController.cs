@@ -28,7 +28,7 @@ namespace TnR_SS.API.Controller
     {
         private readonly ITnR_SSSupervisor _tnrssSupervisor;
 
-        public AccountController(ITnR_SSSupervisor tnrssSupervisor, IMapper mapper)
+        public AccountController(ITnR_SSSupervisor tnrssSupervisor)
         {
             _tnrssSupervisor = tnrssSupervisor;
         }

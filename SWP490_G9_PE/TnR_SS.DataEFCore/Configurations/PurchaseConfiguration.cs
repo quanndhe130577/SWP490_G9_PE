@@ -38,7 +38,7 @@ namespace TnR_SS.DataEFCore.Configurations
             entity.Property(e => e.PayForPondOwner)
                 .IsRequired();
 
-            entity.Property(e => e.Createdat)
+            entity.Property(e => e.CreatedAt)
                 .IsRequired();
 
             entity.Property(e => e.TotalAmount)
