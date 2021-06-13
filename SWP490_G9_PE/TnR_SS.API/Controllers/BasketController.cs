@@ -24,10 +24,18 @@ namespace TnR_SS.API.Controllers
 
         [HttpPost("create")]
         [AllowAnonymous]
-        public async Task<ResponseModel> CreateNewBasketAsync(BasketApiModel basketRes)
+        public async Task<ResponseModel> CreateNewBasketAsync(BasketApiModel basketApi)
         {
-            await _tnrssSupervisor.CreateBasketAsync(basketRes);
-            return new ResponseBuilder().Success("Create Basket Success").ResponseModel;
+            await _tnrssSupervisor.CreateBasketAsync(basketApi);
+            return new ResponseBuilder<BasketApiModel>().Success("Create Basket Success").WithData(basketApi).ResponseModel;
+        }
+
+        [HttpPost("getallbasket")]
+        [AllowAnonymous]
+        public ResponseModel GetAllBasket()
+        {
+            List<BasketApiModel> list = _tnrssSupervisor.GetAllBasket();
+            return new ResponseBuilder<List<BasketApiModel>>().Success("Get all basket").WithData(list).ResponseModel;
         }
     }
 }

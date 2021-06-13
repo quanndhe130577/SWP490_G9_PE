@@ -12,7 +12,13 @@ namespace TnR_SS.Domain.Supervisor
     {
         public List<BasketApiModel> GetAllBasket()
         {
-            return (List<BasketApiModel>)_basketRepository.GetAllAsync();
+            var listBaskets = _basketRepository.GetAllAsync();
+            List<BasketApiModel> list = new List<BasketApiModel>();
+            foreach (var basket in listBaskets)
+            {
+                list.Add(_mapper.Map<Basket, BasketApiModel>(basket));
+            }
+            return list;
         }
 
         public async Task CreateBasketAsync(BasketApiModel basketRes)

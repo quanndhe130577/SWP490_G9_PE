@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using TnR_SS.Domain.ApiModels.AccountModel.RequestModel;
 using TnR_SS.Domain.ApiModels.AccountModel.ResponseModel;
 using TnR_SS.Domain.ApiModels.BasketModel.ResponseModel;
+using TnR_SS.Domain.ApiModels.FishTypeModel;
 using TnR_SS.Domain.ApiModels.RoleUserModel.RequestModel;
 using TnR_SS.Domain.Entities;
 
@@ -48,6 +49,9 @@ namespace TnR_SS.Domain.Supervisor
         #endregion
 
         #region Fishtype
+        List<FishTypeApiModel> GetAllFishType();
+        Task CreateFishTypeAsync(FishTypeApiModel fishTypeModel);
+        Task UpdateFishTypeAsync(FishTypeApiModel fishTypeModel);
         #endregion
 
         #region Basket
