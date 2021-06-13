@@ -248,7 +248,7 @@ namespace TnR_SS.API.Controller
         }
         #endregion
 
-         #region Get User Info 
+        #region Get User Info 
        [HttpGet("getUserInfo/{id}")]
         public ResponseModel GetUserInfo(int id)
         {
