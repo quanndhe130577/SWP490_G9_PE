@@ -28,7 +28,7 @@ namespace TnR_SS.API.Controllers
 
         /*[HttpGet]
         [Route("getAll")]
-        public ResponseModel GetAll(int id)
+        public ResponseModel GetAll()
         {
             var rs = _tnrssSupervisor.PondOwner.GetAll().Select(po => _mapper.Map<PondOwnerResModel>(po)).ToList();
             return new ResponseBuilder<List<PondOwnerResModel>>().Success("Get Info Success").WithData(rs).ResponseModel;
@@ -70,8 +70,11 @@ namespace TnR_SS.API.Controllers
             }
             if (pondOwner.PhoneNumber == null)
             {
-
                 return new PondOwnerValidModel() { IsValid = false, Message = "Điện thoại không được để trống" };
+            }
+            if(pondOwner.TraderID==0) 
+            {
+                return new PondOwnerValidModel() { IsValid = false, Message = "Người bán cá không được để trống" };
             }
             return new PondOwnerValidModel() { IsValid = true, Message = "Cập nhật thành công" };
         }

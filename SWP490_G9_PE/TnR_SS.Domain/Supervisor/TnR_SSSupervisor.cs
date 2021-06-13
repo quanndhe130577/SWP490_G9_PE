@@ -15,6 +15,7 @@ namespace TnR_SS.Domain.Supervisor
     {
         private readonly IUnitOfWork _unitOfWork;
 
+ 
         private readonly IMapper _mapper;
 
         public TnR_SSSupervisor()
@@ -25,6 +26,11 @@ namespace TnR_SS.Domain.Supervisor
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+        }
+
+        public int Complete()
+        {
+            return 0;
         }
 
     }
