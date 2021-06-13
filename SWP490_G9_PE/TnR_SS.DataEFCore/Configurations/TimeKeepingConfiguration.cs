@@ -24,9 +24,6 @@ namespace TnR_SS.DataEFCore.Configurations
                 .HasForeignKey(p => p.EmpId)
                 .HasConstraintName("FK_TimeKeeping_Employee");
 
-            entity.Property(e => e.Money)
-                .IsRequired();
-
             entity.Property(e => e.Note)
                 .HasMaxLength(50);
 
@@ -38,11 +35,9 @@ namespace TnR_SS.DataEFCore.Configurations
                 .IsRequired();
 
             entity.Property(e => e.CreatedAt)
-                .IsRequired()
                 .HasColumnType("datetime");
 
             entity.Property(e => e.UpdatedAt)
-                .IsRequired()
                 .HasColumnType("datetime");
 
         }

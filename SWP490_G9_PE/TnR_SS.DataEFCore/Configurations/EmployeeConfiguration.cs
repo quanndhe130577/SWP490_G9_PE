@@ -22,11 +22,9 @@ namespace TnR_SS.DataEFCore.Configurations
                 .HasMaxLength(50);
 
             entity.Property(e => e.LastName)
-                .IsRequired()
                 .HasMaxLength(50);
 
             entity.Property(e => e.DOB)
-                .IsRequired()
                 .HasColumnType("datetime");
 
             entity.Property(e => e.Address)
@@ -39,17 +37,16 @@ namespace TnR_SS.DataEFCore.Configurations
 
             entity.Property(e => e.TraderId)
                 .IsRequired();
+
             entity.HasOne(p => p.UserInfor)
                 .WithMany(b => b.Employees)
                 .HasForeignKey(p => p.TraderId)
                 .HasConstraintName("FK_Employee_UserInfor");
 
             entity.Property(e => e.CreatedAt)
-                .IsRequired()
                 .HasColumnType("datetime");
 
             entity.Property(e => e.UpdatedAt)
-                .IsRequired()
                 .HasColumnType("datetime");
         }
     }

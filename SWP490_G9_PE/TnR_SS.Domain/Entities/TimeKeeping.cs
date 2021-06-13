@@ -14,20 +14,23 @@ namespace TnR_SS.Domain.Entities
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
+
         [Required]
         public int WorkDay { get; set; }
+
         [Required]
         public string Status { get; set; }
-        [Required]
-        public int EmpId { get; set; }
-        [Required]
+
         public double Money { get; set; }
+
         public string Note { get; set; }
-        [Required]
+
         public DateTime CreatedAt { get; set; }
-        [Required]
+
         public DateTime UpdatedAt { get; set; }
 
+        [Required]
+        public int EmpId { get; set; }
         public Employee Employee { get; set; }
     }
 }
