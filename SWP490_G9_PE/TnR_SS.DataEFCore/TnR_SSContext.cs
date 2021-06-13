@@ -28,6 +28,8 @@ namespace TnR_SS.DataEFCore
         public virtual DbSet<Basket> Baskets { get; set; }
         public virtual DbSet<FishType> FishTypes { get; set; }
         public virtual DbSet<PurchaseDetail> PurchaseDetails { get; set; }
+        public virtual DbSet<Employee> Employees { get; set; }
+        public virtual DbSet<TimeKeeping> TimeKeepings { get; set; }
 
         /*protected override void OnConfiguring(DbContextOptionsBuilder options)
     => options.UseSqlServer("Server=localhost;Database=TnR_SS;Trusted_Connection=True;");*/
@@ -53,6 +55,8 @@ namespace TnR_SS.DataEFCore
             new BasketConfiguration(modelBuilder.Entity<Basket>());
             new FishTypeConfiguration(modelBuilder.Entity<FishType>());
             new PurchaseDetailConfiguration(modelBuilder.Entity<PurchaseDetail>());
+            new EmployeeConfiguration(modelBuilder.Entity<Employee>());
+            new TimeKeepingConfiguration(modelBuilder.Entity<TimeKeeping>());
 
             OnModelCreatingPartial(modelBuilder);
         }
