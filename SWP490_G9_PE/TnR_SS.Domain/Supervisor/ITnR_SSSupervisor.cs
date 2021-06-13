@@ -8,12 +8,14 @@ using TnR_SS.Domain.ApiModels.FishTypeModel;
 using TnR_SS.Domain.ApiModels.PurchaseModal;
 using TnR_SS.Domain.ApiModels.RoleUserModel.RequestModel;
 using TnR_SS.Domain.Entities;
+using TnR_SS.Domain.IRepositories;
 
 namespace TnR_SS.Domain.Supervisor
 {
     public interface ITnR_SSSupervisor
     {
         int Complete();
+        IPondOwnerRepository PondOwner { get; }
 
         #region OTP
         Task<bool> CheckOTPDoneAsync(int otpId, string phoneNumber);

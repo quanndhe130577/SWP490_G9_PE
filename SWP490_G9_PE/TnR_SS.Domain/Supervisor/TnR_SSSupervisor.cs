@@ -22,6 +22,7 @@ namespace TnR_SS.Domain.Supervisor
         private readonly IFishTypeRepository _fishTypeRepository;
  
         private readonly IMapper _mapper;
+        public IPondOwnerRepository PondOwner { get; }
 
         public TnR_SSSupervisor()
         {
@@ -47,6 +48,7 @@ namespace TnR_SS.Domain.Supervisor
             _purchaseRepository = purchaseRepository;
             _fishTypeRepository = fishTypeRepository;
             _mapper = mapper;
+            PondOwner = pondOwnerRepository;
         }
 
         public int Complete()

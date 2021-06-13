@@ -27,10 +27,12 @@ namespace TnR_SS.API.Controller
     public class AccountController : ControllerBase
     {
         private readonly ITnR_SSSupervisor _tnrssSupervisor;
+        private readonly IMapper _mapper;
 
-        public AccountController(ITnR_SSSupervisor tnrssSupervisor)
+        public AccountController(ITnR_SSSupervisor tnrssSupervisor,IMapper mapper)
         {
             _tnrssSupervisor = tnrssSupervisor;
+            _mapper = mapper;
         }
 
         #region Register      
@@ -42,10 +44,10 @@ namespace TnR_SS.API.Controller
             if (ModelState.IsValid)
             {
                 //check OTP for phoneNumber
-                if (!await _tnrssSupervisor.CheckOTPDoneAsync(userData.OTPID, userData.PhoneNumber))
-                {
-                    return new ResponseBuilder().Error("Access denied").ResponseModel;
-                }
+                //if (!await _tnrssSupervisor.CheckOTPDoneAsync(userData.OTPID, userData.PhoneNumber))
+                //{
+                //    return new ResponseBuilder().Error("Access denied").ResponseModel;
+                //}
 
                 if (_tnrssSupervisor.CheckUserPhoneExists(userData.PhoneNumber))
                 {
@@ -220,7 +222,8 @@ namespace TnR_SS.API.Controller
                 return new ResponseBuilder().Error("Phone Number existed").ResponseModel;
             }
 
-            if (await _tnrssSupervisor.CheckOTPRightAsync(modelData.OTPID, modelData.Code, modelData.NewPhoneNumber))
+            // if (await _tnrssSupervisor.CheckOTPRightAsync(modelData.OTPID, modelData.Code, modelData.NewPhoneNumber))
+            if(true)
             {
                 var rs = await _tnrssSupervisor.UpdatePhoneNumberAsync(id, modelData.NewPhoneNumber);
                 if (rs.Succeeded)
@@ -232,7 +235,7 @@ namespace TnR_SS.API.Controller
                 return new ResponseBuilder().Errors(errors).ResponseModel;
             }
 
-            return new ResponseBuilder().Error("Invalid OTP").ResponseModel;
+            // return new ResponseBuilder().Error("Invalid OTP").ResponseModel;
         }
         #endregion
 
@@ -242,6 +245,15 @@ namespace TnR_SS.API.Controller
         {
             await _tnrssSupervisor.SignOutAsync();
             return new ResponseBuilder().Success("Logout Success").ResponseModel;
+        }
+        #endregion
+
+         #region Get User Info 
+       [HttpGet("getUserInfo/{id}")]
+        public ResponseModel GetUserInfo(int id)
+        {
+            var user = _tnrssSupervisor.GetUserById(id);
+            return new ResponseBuilder<UserResModel>().Success("Login success").WithData(_mapper.Map<UserInfor, UserResModel>(user)).ResponseModel;
         }
         #endregion
 
