@@ -11,6 +11,8 @@ namespace TnR_SS.Domain.Supervisor
 {
     public interface ITnR_SSSupervisor
     {
+        int Complete();
+
         #region OTP
         Task<bool> CheckOTPDoneAsync(int otpId, string phoneNumber);
         Task<bool> CheckOTPRightAsync(int otpId, string otp, string phoneNumber);

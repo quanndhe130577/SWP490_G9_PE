@@ -20,6 +20,7 @@ namespace TnR_SS.Domain.Supervisor
         private readonly IPurchaseDetailRepository _purchaseDetailRepository;
         private readonly IPurchaseRepository _purchaseRepository;
         private readonly IFishTypeRepository _fishTypeRepository;
+ 
         private readonly IMapper _mapper;
 
         public TnR_SSSupervisor()
@@ -46,6 +47,11 @@ namespace TnR_SS.Domain.Supervisor
             _purchaseRepository = purchaseRepository;
             _fishTypeRepository = fishTypeRepository;
             _mapper = mapper;
+        }
+
+        public int Complete()
+        {
+            return 0;
         }
     }
 }
