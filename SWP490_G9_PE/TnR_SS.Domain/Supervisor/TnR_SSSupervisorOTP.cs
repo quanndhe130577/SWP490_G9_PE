@@ -11,7 +11,7 @@ namespace TnR_SS.Domain.Supervisor
         public async Task<bool> CheckOTPDoneAsync(int otpId, string phoneNumber)
         {
             //var otpInfor = await _dbContext.OTPs.FindAsync(otpId);
-            var otpInfor = await _otpRepository.FindAsync(otpId);
+            var otpInfor = await _unitOfWork.OTPs.FindAsync(otpId);
             if (otpInfor is null)
             {
                 return false;
@@ -27,7 +27,7 @@ namespace TnR_SS.Domain.Supervisor
 
         public async Task<bool> CheckOTPRightAsync(int otpId, string otp, string phoneNumber)
         {
-            var otpInfor = await _otpRepository.FindAsync(otpId);
+            var otpInfor = await _unitOfWork.OTPs.FindAsync(otpId);
             if (otpInfor is null)
             {
                 return false;
@@ -35,7 +35,7 @@ namespace TnR_SS.Domain.Supervisor
 
             if (otpInfor.PhoneNumber == phoneNumber && otpInfor.Code == otp && otpInfor.Status.Equals(OTPStatus.Waiting.ToString()) && otpInfor.ExpiredDate > DateTime.Now)
             {
-                await _otpRepository.UpdateStatusAsync(otpId);
+                await _unitOfWork.OTPs.UpdateStatusAsync(otpId);
                 return true;
             }
 
@@ -44,7 +44,7 @@ namespace TnR_SS.Domain.Supervisor
 
         public bool CheckPhoneOTPExists(string phoneNumber)
         {
-            List<OTP> otps = _otpRepository.GetByPhoneNumber(phoneNumber);
+            List<OTP> otps = _unitOfWork.OTPs.GetByPhoneNumber(phoneNumber);
             var rs = otps.FirstOrDefault(x => x.ExpiredDate >= DateTime.Now);
             return rs is not null;
         }
@@ -59,14 +59,14 @@ namespace TnR_SS.Domain.Supervisor
                 Status = OTPStatus.Waiting.ToString()
             };
 
-            await _otpRepository.CreateAsync(otp);
+            await _unitOfWork.OTPs.CreateAsync(otp);
             return otp.ID;
         }
 
         public void CreateOTPTest()
         {
             OTP bk = new OTP();
-            _otpRepository.CreateAsync(bk);
+            _unitOfWork.OTPs.CreateAsync(bk);
         }
     }
 }

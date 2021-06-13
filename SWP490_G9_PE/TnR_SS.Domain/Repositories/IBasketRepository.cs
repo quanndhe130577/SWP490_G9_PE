@@ -5,14 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using TnR_SS.Domain.Entities;
 
-namespace TnR_SS.Domain.IRepositories
+namespace TnR_SS.Domain.Repositories
 {
     public interface IBasketRepository : IRepositoryBase<Basket>
     {
-        //Task CreateBasketAsync(Basket basket);
         Task UpdateBasketAsync(Basket basket, string type, int weight);
         Task DeleteBasketByIdAsync(int basketID);
         List<Basket> ListAllBasket();
-        //Task<Basket> FindBasketByIdAsync(int basketID);
     }
 }

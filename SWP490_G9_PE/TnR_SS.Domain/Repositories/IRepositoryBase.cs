@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TnR_SS.Domain.Entities;
 
-namespace TnR_SS.Domain.IRepositories
+namespace TnR_SS.Domain.Repositories
 {
     public interface IRepositoryBase<T> : IDisposable where T  : class
     {

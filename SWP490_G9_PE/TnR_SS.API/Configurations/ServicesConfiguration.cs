@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using TnR_SS.DataEFCore.Repositories;
-using TnR_SS.Domain.IRepositories;
+using TnR_SS.Domain.Repositories;
 using TnR_SS.Domain.Supervisor;
 
 namespace TnR_SS.API.Configurations

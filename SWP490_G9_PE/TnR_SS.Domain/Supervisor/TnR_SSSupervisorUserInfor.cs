@@ -13,14 +13,14 @@ namespace TnR_SS.Domain.Supervisor
         {
             var userInfor = _mapper.Map<RegisterUserReqModel, UserInfor>(userData);
             userInfor.Avatar = avatarLink;
-            var result = await _userInforRepository.CreateWithPasswordAsync(userInfor, userData.Password);
+            var result = await _unitOfWork.UserInfors.CreateWithPasswordAsync(userInfor, userData.Password);
             if (result.Succeeded)
             {
                 //add role to user
-                var result_addUserToRole = await _userInforRepository.AddToRoleAsync(userInfor, userData.RoleNormalizedName);
+                var result_addUserToRole = await _unitOfWork.UserInfors.AddToRoleAsync(userInfor, userData.RoleNormalizedName);
                 if (!result_addUserToRole.Succeeded)
                 {
-                    await _userInforRepository.DeleteAsync(userInfor);
+                    await _unitOfWork.UserInfors.DeleteAsync(userInfor);
                 }
 
                 return result_addUserToRole;
@@ -31,30 +31,30 @@ namespace TnR_SS.Domain.Supervisor
 
         public async Task<IdentityResult> AddToRoleAsync(UserInfor user, string role)
         {
-            return await _userInforRepository.AddToRoleAsync(user, role);
+            return await _unitOfWork.UserInfors.AddToRoleAsync(user, role);
         }
         public async Task<IdentityResult> DeleteUserAsync(UserInfor user)
         {
-            return await _userInforRepository.DeleteIdentityAsync(user);
+            return await _unitOfWork.UserInfors.DeleteIdentityAsync(user);
         }
 
         public UserInfor GetUserByPhoneNumber(string phoneNumber)
         {
-            return _userInforRepository.GetUserByPhoneNumber(phoneNumber);
+            return _unitOfWork.UserInfors.GetUserByPhoneNumber(phoneNumber);
         }
 
         public async Task SignOutAsync()
         {
-            await _userInforRepository.SignOutAsync();
+            await _unitOfWork.UserInfors.SignOutAsync();
         }
 
         public async Task<UserResModel> SignInWithPasswordAsync(UserInfor user, string password)
         {
             await SignOutAsync();
-            var userSigninResult = await _userInforRepository.PasswordSignInAsync(user, password);
+            var userSigninResult = await _unitOfWork.UserInfors.PasswordSignInAsync(user, password);
             if (userSigninResult.Succeeded)
             {
-                await _userInforRepository.SignInAsync(user);
+                await _unitOfWork.UserInfors.SignInAsync(user);
                 var userResModel = _mapper.Map<UserInfor, UserResModel>(user);
                 userResModel.RoleDisplayName = await GetRoleDisplayNameAsync(user);
                 return userResModel;
@@ -65,24 +65,24 @@ namespace TnR_SS.Domain.Supervisor
 
         public async Task SignInAsync(UserInfor user)
         {
-            await _userInforRepository.SignInAsync(user);
+            await _unitOfWork.UserInfors.SignInAsync(user);
         }
 
         public UserInfor GetUserById(int id)
         {
-            return _userInforRepository.GetUserById(id);
+            return _unitOfWork.UserInfors.GetUserById(id);
         }
 
         public async Task<IdentityResult> UpdateUserAsync(UpdateUserReqModel user, int id, string avatarLink)
         {
-            var userInfor = _userInforRepository.GetUserById(id);
+            var userInfor = _unitOfWork.UserInfors.GetUserById(id);
             userInfor = _mapper.Map<UpdateUserReqModel, UserInfor>(user, userInfor);
-            return await _userInforRepository.UpdateIdentityAsync(userInfor);
+            return await _unitOfWork.UserInfors.UpdateIdentityAsync(userInfor);
         }
 
         public async Task<UserResModel> GetUserResModelByIdAsync(int id)
         {
-            var userInfor = _userInforRepository.GetUserById(id);
+            var userInfor = _unitOfWork.UserInfors.GetUserById(id);
             var userResModel = _mapper.Map<UserInfor, UserResModel>(userInfor);
             userResModel.RoleDisplayName = await GetRoleDisplayNameAsync(userInfor);
 
@@ -91,41 +91,41 @@ namespace TnR_SS.Domain.Supervisor
 
         public async Task<IdentityResult> ChangeUserPasswordAsync(UserInfor user, string currentPassword, string newPassword)
         {
-            return await _userInforRepository.ChangePasswordAsync(user, currentPassword, newPassword);
+            return await _unitOfWork.UserInfors.ChangePasswordAsync(user, currentPassword, newPassword);
         }
 
         public async Task<IdentityResult> ResetUserPasswordAsync(UserInfor user, string token, string newPassword)
         {
-            return await _userInforRepository.ResetUserPasswordAsync(user, token, newPassword);
+            return await _unitOfWork.UserInfors.ResetUserPasswordAsync(user, token, newPassword);
         }
 
         public async Task<IList<string>> GetUserRolesAsync(UserInfor user)
         {
-            return await _userInforRepository.GetRolesAsync(user);
+            return await _unitOfWork.UserInfors.GetRolesAsync(user);
         }
         public bool CheckUserPhoneExists(string phoneNumber)
         {
-            var user = _userInforRepository.GetUserByPhoneNumber(phoneNumber);
+            var user = _unitOfWork.UserInfors.GetUserByPhoneNumber(phoneNumber);
             return user is not null;
         }
 
         public async Task<string> GetPasswordResetTokenAsync(UserInfor user)
         {
-            return await _userInforRepository.GeneratePasswordResetTokenAsync(user);
+            return await _unitOfWork.UserInfors.GeneratePasswordResetTokenAsync(user);
         }
 
         public async Task<bool> CheckUserPassword(UserInfor user, string password)
         {
-            var rs = await _userInforRepository.CheckPasswordAsync(user, password);
+            var rs = await _unitOfWork.UserInfors.CheckPasswordAsync(user, password);
             return rs;
         }
 
         public async Task<IdentityResult> UpdatePhoneNumberAsync(int id, string newPhone)
         {
-            var user = _userInforRepository.GetUserById(id);
+            var user = _unitOfWork.UserInfors.GetUserById(id);
             user.PhoneNumber = newPhone;
 
-            return await _userInforRepository.UpdateIdentityAsync(user);
+            return await _unitOfWork.UserInfors.UpdateIdentityAsync(user);
         }
     }
 }

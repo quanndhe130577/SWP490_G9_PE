@@ -1,7 +1,8 @@
 ﻿using System;
 namespace TnR_SS.Domain.ApiModels.PondOwnerModel
 {
-    public class PondOwnerResModel
+    public class PondOwnerAPIModel
+
     {
         public Guid ID { get; set; }
         public string Name { get; set; }

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
-using TnR_SS.Domain.IRepositories;
+using TnR_SS.Domain.Repositories;
 
 namespace TnR_SS.DataEFCore.Repositories
 {

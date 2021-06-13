@@ -12,7 +12,7 @@ namespace TnR_SS.Domain.Supervisor
     {
         public List<FishTypeApiModel> GetAllFishType()
         {
-            var listType = _fishTypeRepository.GetAllAsync();
+            var listType = _unitOfWork.FishTypes.GetAllAsync();
             List<FishTypeApiModel> list = new List<FishTypeApiModel>();
             foreach(var type in listType)
             {
@@ -24,14 +24,14 @@ namespace TnR_SS.Domain.Supervisor
         public async Task CreateFishTypeAsync(FishTypeApiModel fishTypeModel)
         {
             var fishType = _mapper.Map<FishTypeApiModel, FishType>(fishTypeModel);
-            await _fishTypeRepository.CreateAsync(fishType);
+            await _unitOfWork.FishTypes.CreateAsync(fishType);
         }
 
         public async Task UpdateFishTypeAsync(FishTypeApiModel fishTypeModel)
         {
-            var fishType = await _fishTypeRepository.FindAsync(fishTypeModel.ID);
+            var fishType = await _unitOfWork.FishTypes.FindAsync(fishTypeModel.ID);
             fishType = _mapper.Map<FishTypeApiModel, FishType>(fishTypeModel, fishType);
-            await _fishTypeRepository.UpdateAsync(fishType);
+            await _unitOfWork.FishTypes.UpdateAsync(fishType);
         }
     }
 }

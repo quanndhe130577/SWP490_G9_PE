@@ -12,7 +12,7 @@ namespace TnR_SS.Domain.Supervisor
     {
         public List<BasketApiModel> GetAllBasket()
         {
-            var listBaskets = _basketRepository.GetAllAsync();
+            var listBaskets = _unitOfWork.Baskets.GetAllAsync();
             List<BasketApiModel> list = new List<BasketApiModel>();
             foreach (var basket in listBaskets)
             {
@@ -24,14 +24,14 @@ namespace TnR_SS.Domain.Supervisor
         public async Task CreateBasketAsync(BasketApiModel basketRes)
         {
             var basket = _mapper.Map<BasketApiModel, Basket>(basketRes);
-            await _basketRepository.CreateAsync(basket);
+            await _unitOfWork.Baskets.CreateAsync(basket);
         }
 
         public async Task UpdateBasketAsync(BasketApiModel basketRes)
         {
-            var basket = await _basketRepository.FindAsync(basketRes.ID);
+            var basket = await _unitOfWork.Baskets.FindAsync(basketRes.ID);
             basket = _mapper.Map<BasketApiModel, Basket>(basketRes, basket);
-            await _basketRepository.UpdateAsync(basket);
+            await _unitOfWork.Baskets.UpdateAsync(basket);
         }
     }
 }

@@ -6,21 +6,19 @@ using System.Threading.Tasks;
 using AutoMapper;
 using TnR_SS.Domain.ApiModels.PondOwnerModel;
 using TnR_SS.Domain.Entities;
-using TnR_SS.Domain.IRepositories;
+using TnR_SS.Domain.Repositories;
 
 namespace TnR_SS.DataEFCore.Repositories
 {
     public class PondOwnerRepository : RepositoryBase<PondOwner>, IPondOwnerRepository
     {
-        private readonly IMapper _mapper;
-        public PondOwnerRepository(TnR_SSContext context, IMapper mapper) : base(context)
+        public PondOwnerRepository(TnR_SSContext context) : base(context)
         {
-            _mapper = mapper;
         }
 
-        public List<PondOwnerResModel> GetPondOwnerByTraderId(int traderId)
+        public List<PondOwner> GetAllByTraderId(int traderId)
         {
-            List<PondOwnerResModel> owners = new();
+            List<PondOwner> owners = new();
             var rs = from pondOwner in _context.PondOwners.AsEnumerable()
                      join purchases in _context.Purchases.AsEnumerable() on pondOwner.ID.ToString() equals purchases.PondOwnerID.ToString()
                      where purchases.TraderID == traderId
@@ -28,7 +26,7 @@ namespace TnR_SS.DataEFCore.Repositories
                      select listOwner;
             foreach (var o in rs)
             {
-                owners.Add(_mapper.Map<PondOwnerResModel>(o.ToList()[0]));
+                owners.Add(o.ToList()[0]);
             }
             return owners;
         }

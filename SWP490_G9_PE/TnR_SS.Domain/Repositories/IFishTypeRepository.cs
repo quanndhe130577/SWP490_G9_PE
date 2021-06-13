@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TnR_SS.Domain.Entities;
 
-namespace TnR_SS.Domain.IRepositories
+namespace TnR_SS.Domain.Repositories
 {
     public interface IFishTypeRepository : IRepositoryBase<FishType>
     {

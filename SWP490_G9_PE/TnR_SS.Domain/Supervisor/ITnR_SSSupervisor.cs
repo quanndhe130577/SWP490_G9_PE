@@ -5,17 +5,15 @@ using TnR_SS.Domain.ApiModels.AccountModel.RequestModel;
 using TnR_SS.Domain.ApiModels.AccountModel.ResponseModel;
 using TnR_SS.Domain.ApiModels.BasketModel.ResponseModel;
 using TnR_SS.Domain.ApiModels.FishTypeModel;
+using TnR_SS.Domain.ApiModels.PondOwnerModel;
 using TnR_SS.Domain.ApiModels.PurchaseModal;
 using TnR_SS.Domain.ApiModels.RoleUserModel.RequestModel;
 using TnR_SS.Domain.Entities;
-using TnR_SS.Domain.IRepositories;
 
 namespace TnR_SS.Domain.Supervisor
 {
     public interface ITnR_SSSupervisor
     {
-        int Complete();
-        IPondOwnerRepository PondOwner { get; }
 
         #region OTP
         Task<bool> CheckOTPDoneAsync(int otpId, string phoneNumber);
@@ -66,6 +64,11 @@ namespace TnR_SS.Domain.Supervisor
 
         #region Purchase
         Task<int> CreatePurchaseAsync(PurchaseApiModel purchaseModel);
+        #endregion
+
+        #region PondOwner
+        List<PondOwnerAPIModel> GetPondOwnerByTraderId(int traderId);
+        Task<int> AddPondOwner(PondOwnerAPIModel pondOwnerModel);
         #endregion
     }
 }

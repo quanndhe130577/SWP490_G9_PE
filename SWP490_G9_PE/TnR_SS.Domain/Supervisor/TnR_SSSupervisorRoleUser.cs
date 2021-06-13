@@ -13,16 +13,16 @@ namespace TnR_SS.Domain.Supervisor
     {
         public async Task<bool> RoleExistsAsync(string roleName)
         {
-            return await _roleUserRepository.RoleExistsAsync(roleName);
+            return await _unitOfWork.RoleUsers.RoleExistsAsync(roleName);
         }
         public async Task<string> GetRoleDisplayNameAsync(UserInfor user)
         {
-            var userRoles = await _userInforRepository.GetRolesAsync(user);
-            return _roleUserRepository.FindByNameAsync(userRoles[0]).Result.DisplayName;
+            var userRoles = await _unitOfWork.UserInfors.GetRolesAsync(user);
+            return _unitOfWork.RoleUsers.FindByNameAsync(userRoles[0]).Result.DisplayName;
         }
         public List<AllRoleResModel> GetAllResRoles()
         {
-            var userRoles = _roleUserRepository.AllRoleUser();
+            var userRoles = _unitOfWork.RoleUsers.AllRoleUser();
             List<AllRoleResModel> roleRes = new List<AllRoleResModel>();
             foreach (var role in userRoles)
             {
@@ -33,7 +33,7 @@ namespace TnR_SS.Domain.Supervisor
         }
         public async Task<IdentityResult> AddRoleUserAsync(RoleUser role)
         {
-            return await _roleUserRepository.CreateIdentityAsync(role);
+            return await _unitOfWork.RoleUsers.CreateIdentityAsync(role);
         }
 
     }

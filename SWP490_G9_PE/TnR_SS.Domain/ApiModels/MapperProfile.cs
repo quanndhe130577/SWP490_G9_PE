@@ -19,10 +19,10 @@ namespace TnR_SS.Domain.ApiModels
         {
             #region UserInfor
             CreateMap<RegisterUserReqModel, UserInfor>().ForMember(destination => destination.UserName, options => options.MapFrom(source => source.PhoneNumber));
-                /*.AfterMap((source, destination) =>
-                {
-                    destination.CreatedDate = DateTime.Now;
-                });*/
+            /*.AfterMap((source, destination) =>
+            {
+                destination.CreatedDate = DateTime.Now;
+            });*/
 
             CreateMap<UpdateUserReqModel, UserInfor>();
             CreateMap<UserInfor, UserResModel>().ForMember(destination => destination.UserID, options => options.MapFrom(source => source.Id));
@@ -44,8 +44,9 @@ namespace TnR_SS.Domain.ApiModels
             CreateMap<PurchaseApiModel, Purchase>();
             #endregion
 
-
-            CreateMap<PondOwnerResModel, PondOwner>().ReverseMap();
+            #region PondOwner
+            CreateMap<PondOwnerAPIModel, PondOwner>().ReverseMap();
+            #endregion
         }
 
     }

@@ -26,41 +26,38 @@ namespace TnR_SS.API.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
+        /*[HttpGet]
         [Route("getAll")]
         public ResponseModel GetAll(int id)
         {
             var rs = _tnrssSupervisor.PondOwner.GetAll().Select(po => _mapper.Map<PondOwnerResModel>(po)).ToList();
             return new ResponseBuilder<List<PondOwnerResModel>>().Success("Get Info Success").WithData(rs).ResponseModel;
-        }
+        }*/
         [HttpGet]
         [Route("getByTraderId/{id}")]
         public ResponseModel GetByTraderId(int id)
         {
-            var rs = _tnrssSupervisor.PondOwner.GetPondOwnerByTraderId(id);
-            return new ResponseBuilder<List<PondOwnerResModel>>().Success("Get Info Success").WithData(rs).ResponseModel;
+            var rs = _tnrssSupervisor.GetPondOwnerByTraderId(id);
+            return new ResponseBuilder<List<PondOwnerAPIModel>>().Success("Get Info Success").WithData(rs).ResponseModel;
         }
 
         [HttpPost]
         [Route("addNewPondOwner")]
-        public async Task<ResponseModel> AddNewPondOwner(PondOwnerResModel pondOwner)
+        public async Task<ResponseModel> AddNewPondOwner(PondOwnerAPIModel pondOwner)
         {
             var valid = Valid(pondOwner);
             if (valid.IsValid)
             {
-                PondOwner owner = _mapper.Map<PondOwner>(pondOwner);
-                owner.ID = Guid.NewGuid();
-                owner.CreatedAt = DateTime.Now;
-                await _tnrssSupervisor.PondOwner.UpdateAsync(owner);
-                return new ResponseBuilder<List<PondOwnerResModel>>().Success("Thêm thành công").ResponseModel;
+                await _tnrssSupervisor.AddPondOwner(pondOwner);
+                return new ResponseBuilder<List<PondOwnerAPIModel>>().Success("Thêm thành công").ResponseModel;
             }
             else
             {
-                return new ResponseBuilder<List<PondOwnerResModel>>().Error(valid.Message).ResponseModel;
+                return new ResponseBuilder<List<PondOwnerAPIModel>>().Error(valid.Message).ResponseModel;
             }
         }
 
-        public static PondOwnerValidModel Valid(PondOwnerResModel pondOwner)
+        public static PondOwnerValidModel Valid(PondOwnerAPIModel pondOwner)
         {
             if (pondOwner.Name == null)
             {

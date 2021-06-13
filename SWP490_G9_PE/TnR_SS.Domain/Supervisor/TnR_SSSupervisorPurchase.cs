@@ -13,7 +13,7 @@ namespace TnR_SS.Domain.Supervisor
         public async Task<int> CreatePurchaseAsync(PurchaseApiModel purchaseModel)
         {
             var purchase = _mapper.Map<PurchaseApiModel, Purchase>(purchaseModel);
-            await _purchaseRepository.CreateAsync(purchase);
+            await _unitOfWork.Purchases.CreateAsync(purchase);
             return purchase.ID;
         }
     }

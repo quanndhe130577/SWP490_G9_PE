@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TnR_SS.Domain.Entities;
-using TnR_SS.Domain.IRepositories;
+using TnR_SS.Domain.Repositories;
 
 namespace TnR_SS.DataEFCore.Repositories
 {
