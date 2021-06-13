@@ -18,7 +18,7 @@ namespace TnR_SS.DataEFCore.Repositories
 
         public List<PondOwner> GetAllByTraderId(int traderId)
         {
-            List<PondOwner> owners = new();
+            /*List<PondOwner> owners = new();
             var rs = from pondOwner in _context.PondOwners.AsEnumerable()
                      join purchases in _context.Purchases.AsEnumerable() on pondOwner.ID.ToString() equals purchases.PondOwnerID.ToString()
                      where purchases.TraderID == traderId
@@ -29,6 +29,9 @@ namespace TnR_SS.DataEFCore.Repositories
                 owners.Add(o.ToList()[0]);
             }
             return owners;
+             */
+            return _context.PondOwners.Where(x => x.TraderID == traderId).ToList();
+
         }
     }
 }

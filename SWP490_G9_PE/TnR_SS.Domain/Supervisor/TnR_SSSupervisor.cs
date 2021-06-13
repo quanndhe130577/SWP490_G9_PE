@@ -28,10 +28,5 @@ namespace TnR_SS.Domain.Supervisor
             _unitOfWork = unitOfWork;
         }
 
-        public int Complete()
-        {
-            return 0;
-        }
-
     }
 }
