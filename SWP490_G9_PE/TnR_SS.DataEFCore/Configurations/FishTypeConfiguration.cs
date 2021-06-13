@@ -48,6 +48,12 @@ namespace TnR_SS.DataEFCore.Configurations
 
             entity.Property(e => e.Price)
                 .IsRequired();
+
+
+            /*entity.HasOne(p => p.Trader)
+               .WithMany(b => b.FishTypes)
+               .HasForeignKey(p => p.TraderID)
+               .HasConstraintName("FK_FishType_UserInfor");*/
         }
     }
 }
