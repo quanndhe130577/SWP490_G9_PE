@@ -32,6 +32,7 @@ namespace TnR_SS.Domain.Entities
 
         [Required]
         public int TraderID { get; set; }
+        public UserInfor Trader { get; set; }
 
         public List<PurchaseDetail> PurchaseDetails { get; set; }
     }

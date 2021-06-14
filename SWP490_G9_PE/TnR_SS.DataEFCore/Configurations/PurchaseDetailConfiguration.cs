@@ -15,6 +15,7 @@ namespace TnR_SS.DataEFCore.Configurations
             entity.HasOne(p => p.FishType)
                .WithMany(b => b.PurchaseDetails)
                .HasForeignKey(p => p.FishTypeID)
+               .OnDelete(DeleteBehavior.ClientNoAction)
                .HasConstraintName("FK_PurchaseDetail_FishType");
 
             entity.Property(e => e.BasketId)
@@ -22,14 +23,16 @@ namespace TnR_SS.DataEFCore.Configurations
             entity.HasOne(p => p.Basket)
                 .WithMany(b => b.PurchaseDetails)
                 .HasForeignKey(p => p.BasketId)
+                .OnDelete(DeleteBehavior.ClientNoAction)
                 .HasConstraintName("FK_PurchaseDetail_Basket");
 
-            entity.Property(e => e.TongKetMuaId)
+            entity.Property(e => e.PurchaseId)
                 .IsRequired();
-            entity.HasOne(p => p.TongKetMua)
+            entity.HasOne(p => p.Purchase)
                 .WithMany(b => b.PurchaseDetails)
-                .HasForeignKey(p => p.TongKetMuaId)
-                .HasConstraintName("FK_PurchaseDetail_TongKetMua");
+                .HasForeignKey(p => p.PurchaseId)
+                .OnDelete(DeleteBehavior.ClientNoAction)
+                .HasConstraintName("FK_PurchaseDetail_Purchase");
 
             entity.Property(e => e.ID)
                 .IsRequired();
