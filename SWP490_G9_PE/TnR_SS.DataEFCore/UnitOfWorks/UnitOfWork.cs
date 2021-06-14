@@ -1,9 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TnR_SS.DataEFCore.Repositories;
 using TnR_SS.Domain.Entities;
 using TnR_SS.Domain.Repositories;
