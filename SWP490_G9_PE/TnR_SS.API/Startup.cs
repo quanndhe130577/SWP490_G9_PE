@@ -42,7 +42,8 @@ namespace TnR_SS
             /*services.AddDbContext<TnR_SSContext>(options => options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("TnR_SS")));*/
 
             services.ConfigureRepositories()
-                .ConfigureSupervisor();
+                .ConfigureSupervisor()
+                .ConfigureUnitOfWork();
 
             services.AddIdentity<UserInfor, RoleUser>(cfg =>
             {
@@ -90,8 +91,8 @@ namespace TnR_SS
                         ValidAudience = Configuration["Jwt:Audience"],
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"])),
                         RequireExpirationTime = true
-                };
-        });
+                    };
+                });
 
             services.AddAutoMapper(typeof(MapperProfile));
 
@@ -100,18 +101,18 @@ namespace TnR_SS
             // handle ModelBiding Exception
             services.AddMvc().ConfigureApiBehaviorOptions(options =>
                 {
-            //options.SuppressModelStateInvalidFilter = true;
+                    //options.SuppressModelStateInvalidFilter = true;
 
-            options.InvalidModelStateResponseFactory = actionContext =>
-            {
-                var errors = actionContext.ModelState
-                    .Where(e => e.Value.Errors.Count > 0)
-                    .Select(e => e.Value.Errors.First().ErrorMessage).ToList();
-                ResponseBuilder rpb = new ResponseBuilder().Errors(errors);
+                    options.InvalidModelStateResponseFactory = actionContext =>
+                    {
+                        var errors = actionContext.ModelState
+                            .Where(e => e.Value.Errors.Count > 0)
+                            .Select(e => e.Value.Errors.First().ErrorMessage).ToList();
+                        ResponseBuilder rpb = new ResponseBuilder().Errors(errors);
 
-                return new BadRequestObjectResult(rpb.ResponseModel);
-            };
-        });
+                        return new BadRequestObjectResult(rpb.ResponseModel);
+                    };
+                });
 
             //services.AddTransient<HandleOTP>();
             /*services.Configure<SecurityStampValidatorOptions>(options =>
@@ -126,58 +127,58 @@ namespace TnR_SS
             });*/
         }
 
-    // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-    {
-        if (env.IsDevelopment())
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseExceptionHandler("/api/error-local-development");
-            //app.UseDeveloperExceptionPage();
-            /*app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SWP490_G9_PE v1"));*/
+            if (env.IsDevelopment())
+            {
+                app.UseExceptionHandler("/api/error-local-development");
+                //app.UseDeveloperExceptionPage();
+                /*app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SWP490_G9_PE v1"));*/
 
-            // exception handler
-            app.UseMiddleware<ErrorHandlerMiddleware>();
+                // exception handler
+                app.UseMiddleware<ErrorHandlerMiddleware>();
+            }
+            else
+            {
+                app.UseExceptionHandler("/api/error");
+                // exception handler
+                app.UseMiddleware<ErrorHandlerMiddleware>();
+            }
+
+
+
+            //HSTS
+
+            //HttpsRedirection
+            app.UseHttpsRedirection();
+
+            //static file
+
+            //routing
+            app.UseRouting();
+
+            //use cors
+            app.UseCors();
+
+            //response caching
+            //app.UseResponseCaching();
+
+            //authentication
+            app.UseAuthentication();
+
+            //authorization
+            app.UseAuthorization();
+
+            //custom
+
+            //end point
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
+
         }
-        else
-        {
-            app.UseExceptionHandler("/api/error");
-            // exception handler
-            app.UseMiddleware<ErrorHandlerMiddleware>();
-        }
-
-
-
-        //HSTS
-
-        //HttpsRedirection
-        app.UseHttpsRedirection();
-
-        //static file
-
-        //routing
-        app.UseRouting();
-
-        //use cors
-        app.UseCors();
-
-        //response caching
-        //app.UseResponseCaching();
-
-        //authentication
-        app.UseAuthentication();
-
-        //authorization
-        app.UseAuthorization();
-
-        //custom
-
-        //end point
-        app.UseEndpoints(endpoints =>
-        {
-            endpoints.MapControllers();
-        });
-
     }
-}
 }
