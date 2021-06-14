@@ -30,7 +30,7 @@ namespace TnR_SS.Domain.Entities
         public Basket Basket { get; set; }
 
         [Required]
-        public int TongKetMuaId { get; set; }
-        public Purchase TongKetMua { get; set; }
+        public int PurchaseId { get; set; }
+        public Purchase Purchase { get; set; }
     }
 }

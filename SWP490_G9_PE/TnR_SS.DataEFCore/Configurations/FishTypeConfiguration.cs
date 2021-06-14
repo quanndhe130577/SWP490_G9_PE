@@ -50,10 +50,11 @@ namespace TnR_SS.DataEFCore.Configurations
                 .IsRequired();
 
 
-            /*entity.HasOne(p => p.Trader)
+            entity.HasOne(p => p.Trader)
                .WithMany(b => b.FishTypes)
                .HasForeignKey(p => p.TraderID)
-               .HasConstraintName("FK_FishType_UserInfor");*/
+               .OnDelete(DeleteBehavior.ClientNoAction)
+               .HasConstraintName("FK_FishType_UserInfor");
         }
     }
 }

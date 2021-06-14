@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TnR_SS.DataEFCore;
 
 namespace TnR_SS.DataEFCore.Migrations
 {
     [DbContext(typeof(TnR_SSContext))]
-    partial class TnR_SSContextModelSnapshot : ModelSnapshot
+    [Migration("20210614104353_addFK_PondOwner_UserInforBySetOnDelete")]
+    partial class addFK_PondOwner_UserInforBySetOnDelete
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -237,8 +239,6 @@ namespace TnR_SS.DataEFCore.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("TraderID");
-
                     b.ToTable("FishType");
                 });
 
@@ -380,7 +380,7 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.Property<int>("FishTypeID")
                         .HasColumnType("int");
 
-                    b.Property<int>("PurchaseId")
+                    b.Property<int>("TongKetMuaId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -392,7 +392,7 @@ namespace TnR_SS.DataEFCore.Migrations
 
                     b.HasIndex("FishTypeID");
 
-                    b.HasIndex("PurchaseId");
+                    b.HasIndex("TongKetMuaId");
 
                     b.ToTable("PurchaseDetail");
                 });
@@ -439,7 +439,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "132668e1-70d2-424c-a955-06bbde91a34b",
+                            ConcurrencyStamp = "2bc3bf1a-ca0d-4d82-a382-824720816f94",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Admin",
                             Name = "Admin",
@@ -449,7 +449,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "c9ff4d9b-853e-4e76-b6f1-4d24aec9b124",
+                            ConcurrencyStamp = "59de8a88-cc47-4b5b-b7fb-643d6cb644ac",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Thương lái",
                             Name = "Trader",
@@ -459,7 +459,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "53776147-563e-4bad-baf0-9c6121e5c703",
+                            ConcurrencyStamp = "6ec51015-d001-4331-908d-dcae2ee39c8e",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Chủ bến",
                             Name = "Weight Recorder",
@@ -676,25 +676,13 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.Navigation("UserInfor");
                 });
 
-            modelBuilder.Entity("TnR_SS.Domain.Entities.FishType", b =>
-                {
-                    b.HasOne("TnR_SS.Domain.Entities.UserInfor", "Trader")
-                        .WithMany("FishTypes")
-                        .HasForeignKey("TraderID")
-                        .HasConstraintName("FK_FishType_UserInfor")
-                        .OnDelete(DeleteBehavior.ClientNoAction)
-                        .IsRequired();
-
-                    b.Navigation("Trader");
-                });
-
             modelBuilder.Entity("TnR_SS.Domain.Entities.PondOwner", b =>
                 {
                     b.HasOne("TnR_SS.Domain.Entities.UserInfor", "Trader")
                         .WithMany("PondOwners")
                         .HasForeignKey("TraderID")
                         .HasConstraintName("FK_PondOwner_UserInfor")
-                        .OnDelete(DeleteBehavior.ClientNoAction)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
                     b.Navigation("Trader");
@@ -706,14 +694,13 @@ namespace TnR_SS.DataEFCore.Migrations
                         .WithMany("Purchases")
                         .HasForeignKey("PondOwnerID")
                         .HasConstraintName("FK_Purchase_PondOwner")
-                        .OnDelete(DeleteBehavior.ClientNoAction)
                         .IsRequired();
 
                     b.HasOne("TnR_SS.Domain.Entities.UserInfor", "UserInfor")
                         .WithMany("Purchases")
                         .HasForeignKey("TraderID")
                         .HasConstraintName("FK_Purchase_UserInfor")
-                        .OnDelete(DeleteBehavior.ClientNoAction)
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired();
 
                     b.Navigation("PondOwner");
@@ -727,28 +714,28 @@ namespace TnR_SS.DataEFCore.Migrations
                         .WithMany("PurchaseDetails")
                         .HasForeignKey("BasketId")
                         .HasConstraintName("FK_PurchaseDetail_Basket")
-                        .OnDelete(DeleteBehavior.ClientNoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("TnR_SS.Domain.Entities.FishType", "FishType")
                         .WithMany("PurchaseDetails")
                         .HasForeignKey("FishTypeID")
                         .HasConstraintName("FK_PurchaseDetail_FishType")
-                        .OnDelete(DeleteBehavior.ClientNoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TnR_SS.Domain.Entities.Purchase", "Purchase")
+                    b.HasOne("TnR_SS.Domain.Entities.Purchase", "TongKetMua")
                         .WithMany("PurchaseDetails")
-                        .HasForeignKey("PurchaseId")
-                        .HasConstraintName("FK_PurchaseDetail_Purchase")
-                        .OnDelete(DeleteBehavior.ClientNoAction)
+                        .HasForeignKey("TongKetMuaId")
+                        .HasConstraintName("FK_PurchaseDetail_TongKetMua")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Basket");
 
                     b.Navigation("FishType");
 
-                    b.Navigation("Purchase");
+                    b.Navigation("TongKetMua");
                 });
 
             modelBuilder.Entity("TnR_SS.Domain.Entities.TimeKeeping", b =>
@@ -791,8 +778,6 @@ namespace TnR_SS.DataEFCore.Migrations
             modelBuilder.Entity("TnR_SS.Domain.Entities.UserInfor", b =>
                 {
                     b.Navigation("Employees");
-
-                    b.Navigation("FishTypes");
 
                     b.Navigation("PondOwners");
 

@@ -30,10 +30,11 @@ namespace TnR_SS.DataEFCore.Configurations
             entity.Property(e => e.Address)
                 .IsRequired();
 
-            /*entity.HasOne(p => p.Trader)
+            entity.HasOne(p => p.Trader)
                .WithMany(b => b.PondOwners)
                .HasForeignKey(p => p.TraderID)
-               .HasConstraintName("FK_PondOwner_UserInfor");*/
+               .OnDelete(DeleteBehavior.ClientNoAction)
+               .HasConstraintName("FK_PondOwner_UserInfor");
         }
     }
 }
