@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TnR_SS.API.Common.Response;
 using TnR_SS.Domain.ApiModels.FishTypeModel;
+using TnR_SS.Domain.ApiModels.FishTypeModel.ResponseModel;
 using TnR_SS.Domain.Supervisor;
 
 namespace TnR_SS.API.Controllers
@@ -23,10 +24,10 @@ namespace TnR_SS.API.Controllers
 
         [HttpPost("create")]
         [AllowAnonymous]
-        public async Task<ResponseModel> CreateNewFishTypeAsync(FishTypeApiModel fishTypeModel)
+        public async Task<ResponseModel> CreateNewFishTypeAsync(ListTypeModel listType)
         {
-            await _tnrssSupervisor.CreateFishTypeAsync(fishTypeModel);
-            return new ResponseBuilder<FishTypeApiModel>().Success("Create Fish Type Success").WithData(fishTypeModel).ResponseModel;
+            await _tnrssSupervisor.CreateFishTypeAsync(listType.ListFishType);
+            return new ResponseBuilder().Success("Create Fish Type Success").ResponseModel;
         }
 
         [HttpPost("getall/{id}")]

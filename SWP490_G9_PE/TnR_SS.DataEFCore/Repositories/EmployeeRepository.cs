@@ -12,5 +12,6 @@ namespace TnR_SS.DataEFCore.Repositories
     {
         public EmployeeRepository(TnR_SSContext context) : base(context) { }
 
+
     }
 }

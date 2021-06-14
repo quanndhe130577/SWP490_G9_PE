@@ -25,10 +25,17 @@ namespace TnR_SS.Domain.Supervisor
             
         }
 
-        public async Task CreateFishTypeAsync(FishTypeApiModel fishTypeModel)
+        public async Task CreateFishTypeAsync(List<FishTypeApiModel> listType)
         {
-            var fishType = _mapper.Map<FishTypeApiModel, FishType>(fishTypeModel);
-            await _unitOfWork.FishTypes.CreateAsync(fishType);
+            foreach(var obj in listType)
+            {
+                var fishType = _mapper.Map<FishTypeApiModel, FishType>(obj);
+                await _unitOfWork.FishTypes.CreateAsync(fishType);
+            }
+            _unitOfWork.SaveChanges();
+            var a = _unitOfWork.SaveChanges();
+            
+
         }
 
         public async Task UpdateFishTypeAsync(FishTypeApiModel fishTypeModel)
