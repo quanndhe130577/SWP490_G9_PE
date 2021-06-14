@@ -41,11 +41,6 @@ namespace TnR_SS.DataEFCore.Repositories
             return await _userManager.CreateAsync(user, password);
         }
 
-        public override async Task<IdentityResult> DeleteAsync(UserInfor user)
-        {
-            return await _userManager.DeleteAsync(user);
-        }
-
         public async Task<string> GeneratePasswordResetTokenAsync(UserInfor user)
         {
             return await _userManager.GeneratePasswordResetTokenAsync(user);

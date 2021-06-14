@@ -49,6 +49,11 @@ namespace TnR_SS.DataEFCore.Configurations
                 .HasMaxLength(12)
                 .IsUnicode(false);
 
+            entity.Property(e => e.CreatedAt)
+                .IsRequired();
+
+            entity.Property(e => e.UpdatedAt)
+                .IsRequired();
         }
     }
 }

@@ -25,13 +25,15 @@ namespace TnR_SS.Domain.Supervisor
         {
             var fishType = _mapper.Map<FishTypeApiModel, FishType>(fishTypeModel);
             await _unitOfWork.FishTypes.CreateAsync(fishType);
+            await _unitOfWork.SaveChangeAsync();
         }
 
         public async Task UpdateFishTypeAsync(FishTypeApiModel fishTypeModel)
         {
             var fishType = await _unitOfWork.FishTypes.FindAsync(fishTypeModel.ID);
             fishType = _mapper.Map<FishTypeApiModel, FishType>(fishTypeModel, fishType);
-            await _unitOfWork.FishTypes.UpdateAsync(fishType);
+            _unitOfWork.FishTypes.Update(fishType);
+            await _unitOfWork.SaveChangeAsync();
         }
     }
 }

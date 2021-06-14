@@ -20,8 +20,9 @@ namespace TnR_SS.Domain.Entities
 
         [Required]
         public double BuyPrice { get; set; }
-
+        [Required]
         public DateTime CreatedAt { get; set; }
+        [Required]
         public DateTime UpdatedAt { get; set; }
 
         [Required]

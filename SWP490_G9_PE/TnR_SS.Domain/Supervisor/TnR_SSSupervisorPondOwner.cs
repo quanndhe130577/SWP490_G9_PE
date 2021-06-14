@@ -26,7 +26,7 @@ namespace TnR_SS.Domain.Supervisor
             PondOwner pondOwner = _mapper.Map<PondOwnerAPIModel, PondOwner>(pondOwnerModel);
             pondOwner.ID = Guid.NewGuid();
             await _unitOfWork.PondOwners.CreateAsync(pondOwner);
-            return _unitOfWork.SaveChanges();
+            return await _unitOfWork.SaveChangeAsync();
         }
     }
 }

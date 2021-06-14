@@ -9,7 +9,7 @@ namespace TnR_SS.Domain.Repositories
 {
     public interface IBasketRepository : IRepositoryBase<Basket>
     {
-        Task UpdateBasketAsync(Basket basket, string type, int weight);
+        void UpdateBasket(Basket basket, string type, int weight);
         Task DeleteBasketByIdAsync(int basketID);
         List<Basket> ListAllBasket();
     }

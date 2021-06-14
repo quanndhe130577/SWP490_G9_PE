@@ -37,7 +37,6 @@ namespace TnR_SS.DataEFCore.Repositories
             }
 
             await dbSet.AddAsync(entity);
-            await _context.SaveChangesAsync();
         }
 
         public void Dispose() => _context.Dispose();
@@ -114,19 +113,18 @@ namespace TnR_SS.DataEFCore.Repositories
             return query.FirstOrDefault();
         }
 
-        public virtual async Task DeleteByIdAsync(int id)
+        public virtual void DeleteById(int id)
         {
             T entityToRemove = dbSet.Find(id);
-            await DeleteAsync(entityToRemove);
+            Delete(entityToRemove);
         }
 
-        public virtual async Task DeleteAsync(T entity)
+        public virtual void Delete(T entity)
         {
             dbSet.Remove(entity);
-            await _context.SaveChangesAsync();
         }
 
-        public virtual async Task UpdateAsync(T entity)
+        public virtual void Update(T entity)
         {
             Type t = entity.GetType();
             PropertyInfo updatedAt = t.GetProperty("UpdatedAt");
@@ -136,7 +134,6 @@ namespace TnR_SS.DataEFCore.Repositories
             }
 
             dbSet.Update(entity);
-            await _context.SaveChangesAsync();
         }
 
         public IEnumerable<T> GetAllAsync()

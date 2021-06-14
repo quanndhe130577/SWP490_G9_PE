@@ -17,8 +17,9 @@ namespace TnR_SS.Domain.Entities
         {
             this.DisplayName = displayName;
         }
-
+        [Required]
         public DateTime CreatedAt { get; set; }
+        [Required]
         public DateTime UpdatedAt { get; set; }
 
         public RoleUser() : base()

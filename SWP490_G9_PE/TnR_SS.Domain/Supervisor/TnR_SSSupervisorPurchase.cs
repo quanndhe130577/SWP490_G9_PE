@@ -14,7 +14,8 @@ namespace TnR_SS.Domain.Supervisor
         {
             var purchase = _mapper.Map<PurchaseApiModel, Purchase>(purchaseModel);
             await _unitOfWork.Purchases.CreateAsync(purchase);
-            return purchase.ID;
+            var rs = await _unitOfWork.SaveChangeAsync();
+            return rs == 0 ? rs : purchase.ID;
         }
     }
 }

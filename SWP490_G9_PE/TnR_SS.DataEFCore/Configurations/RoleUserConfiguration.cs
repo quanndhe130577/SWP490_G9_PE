@@ -25,6 +25,11 @@ namespace TnR_SS.DataEFCore.Configurations
 
             entity.HasData(listRole);
 
+            entity.Property(e => e.CreatedAt)
+                .IsRequired();
+
+            entity.Property(e => e.UpdatedAt)
+                .IsRequired();
         }
     }
 }

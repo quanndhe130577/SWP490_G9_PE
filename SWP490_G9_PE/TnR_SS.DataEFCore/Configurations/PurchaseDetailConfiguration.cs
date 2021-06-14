@@ -37,6 +37,11 @@ namespace TnR_SS.DataEFCore.Configurations
             entity.Property(e => e.BuyPrice)
                 .IsRequired();
 
+            entity.Property(e => e.CreatedAt)
+                .IsRequired();
+
+            entity.Property(e => e.UpdatedAt)
+                .IsRequired();
         }
     }
 }
