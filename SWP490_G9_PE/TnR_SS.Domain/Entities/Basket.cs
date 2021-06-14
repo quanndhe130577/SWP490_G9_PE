@@ -26,6 +26,7 @@ namespace TnR_SS.Domain.Entities
         [Required]
         public DateTime UpdatedAt { get; set; }
 
+
         public List<PurchaseDetail> PurchaseDetails { get; set; }
     }
 }

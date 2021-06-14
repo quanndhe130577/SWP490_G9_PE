@@ -16,21 +16,20 @@ namespace TnR_SS.DataEFCore.Repositories
         {
             fishType.CreatedAt = DateTime.Now;
             await _context.FishTypes.AddAsync(fishType);
-            await _context.SaveChangesAsync();
         }
 
         public async Task DeleteFishTypeByIdAsync(int fishTypeID)
         {
             var fishType = await _context.Baskets.FindAsync(fishTypeID);
             _context.Baskets.Remove(fishType);
-            await _context.SaveChangesAsync();
         }
 
         public async Task<FishType> FindFishTypeByIdAsync(int fishTypeID) => await _context.FishTypes.FindAsync(fishTypeID);
 
-        public List<FishType> ListAllFishType()
+        public List<FishType> ListFishTypeByTraderID(int id)
         {
-            throw new NotImplementedException();
+            var list = _context.FishTypes.Where(a => a.TraderID == id).ToList();
+            return list;
         }
 
         public Task UpdateFishTypeAsync(FishType fishType, string type, int weight)

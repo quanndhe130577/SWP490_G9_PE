@@ -29,11 +29,11 @@ namespace TnR_SS.API.Controllers
             return new ResponseBuilder<FishTypeApiModel>().Success("Create Fish Type Success").WithData(fishTypeModel).ResponseModel;
         }
 
-        [HttpPost("getallfishtype")]
+        [HttpPost("getall/{id}")]
         [AllowAnonymous]
-        public ResponseModel GetAllFishType()
+        public ResponseModel GetAllFishType(int id)
         {
-            List<FishTypeApiModel> list = _tnrssSupervisor.GetAllFishType();
+            List<FishTypeApiModel> list = _tnrssSupervisor.GetAllFishType(id);
             return new ResponseBuilder<List<FishTypeApiModel>>().Success("Get all type").WithData(list).ResponseModel;
         }
     }
