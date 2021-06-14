@@ -18,7 +18,8 @@ namespace TnR_SS.API.Configurations
                 .AddScoped<IFishTypeRepository, FishTypeRepository>()
                 .AddScoped<IPondOwnerRepository, PondOwnerRepository>()
                 .AddScoped<IPurchaseDetailRepository, PurchaseDetailRepository>()
-                .AddScoped<IPurchaseRepository, PurchaseRepository>();
+                .AddScoped<IPurchaseRepository, PurchaseRepository>()
+                .AddScoped<IEmployeeRepository, EmployeeRepository>();
 
             return services;
         }

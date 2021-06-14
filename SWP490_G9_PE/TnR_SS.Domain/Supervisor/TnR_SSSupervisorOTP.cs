@@ -62,6 +62,9 @@ namespace TnR_SS.Domain.Supervisor
 
             await _unitOfWork.OTPs.CreateAsync(otp);
             await _unitOfWork.SaveChangeAsync();
+            {
+                throw new Exception("Lỗi thêm Otp");
+            }
             return otp.ID;
         }
     }

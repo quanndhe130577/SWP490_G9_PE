@@ -10,15 +10,19 @@ namespace TnR_SS.Domain.Supervisor
 {
     public partial class TnR_SSSupervisor
     {
-        public List<FishTypeApiModel> GetAllFishType()
+        public List<FishTypeApiModel> GetAllFishType(int id)
         {
-            var listType = _unitOfWork.FishTypes.GetAllAsync();
+            /*var listType = _unitOfWork.FishTypes.GetAllAsync();
             List<FishTypeApiModel> list = new List<FishTypeApiModel>();
             foreach(var type in listType)
             {
                 list.Add(_mapper.Map<FishType, FishTypeApiModel>(type));
             }
-            return list;
+            return list;*/
+
+            return _unitOfWork.FishTypes.GetAll(x => x.TraderID == id)
+                .Select(x=> _mapper.Map<FishType, FishTypeApiModel>(x)).ToList();
+            
         }
 
         public async Task CreateFishTypeAsync(FishTypeApiModel fishTypeModel)

@@ -1,39 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TnR_SS.Domain.Entities
+namespace TnR_SS.Domain.ApiModels.EmployeeModel
 {
-    [Table("Employee")]
-    public class Employee
+    public class EmployeeApiModel
     {
-        [Key]
-        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
+        [Required]
         public int ID { get; set; }
         [Required]
         public string FirstName { get; set; }
-
         public string LastName { get; set; }
-        
         public DateTime DOB { get; set; }
-
         [Required]
         public string PhoneNumber { get; set; }
-
         [Required]
         public string Address { get; set; }
         [Required]
-        public DateTime CreatedAt { get; set; }
-        [Required]
-        public DateTime UpdatedAt { get; set; }
-
-        [Required]
         public int TraderId { get; set; }
-        public UserInfor UserInfor { get; set; }
-        public List<TimeKeeping> TimeKeepings { get; set; }
     }
 }

@@ -23,17 +23,17 @@ namespace TnR_SS.API.Controllers
 
         [HttpPost("create")]
         [AllowAnonymous]
-        public async Task<ResponseModel> CreateNewBasketAsync(FishTypeApiModel fishTypeModel)
+        public async Task<ResponseModel> CreateNewFishTypeAsync(FishTypeApiModel fishTypeModel)
         {
             await _tnrssSupervisor.CreateFishTypeAsync(fishTypeModel);
             return new ResponseBuilder<FishTypeApiModel>().Success("Create Fish Type Success").WithData(fishTypeModel).ResponseModel;
         }
 
-        [HttpPost("getallfishtype")]
+        [HttpPost("getall/{id}")]
         [AllowAnonymous]
-        public ResponseModel GetAllFishType()
+        public ResponseModel GetAllFishType(int id)
         {
-            List<FishTypeApiModel> list = _tnrssSupervisor.GetAllFishType();
+            List<FishTypeApiModel> list = _tnrssSupervisor.GetAllFishType(id);
             return new ResponseBuilder<List<FishTypeApiModel>>().Success("Get all type").WithData(list).ResponseModel;
         }
     }
