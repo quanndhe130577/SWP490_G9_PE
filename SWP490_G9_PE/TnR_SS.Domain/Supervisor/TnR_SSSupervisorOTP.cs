@@ -36,6 +36,7 @@ namespace TnR_SS.Domain.Supervisor
             if (otpInfor.PhoneNumber == phoneNumber && otpInfor.Code == otp && otpInfor.Status.Equals(OTPStatus.Waiting.ToString()) && otpInfor.ExpiredDate > DateTime.Now)
             {
                 await _unitOfWork.OTPs.UpdateStatusAsync(otpId);
+                await _unitOfWork.SaveChangeAsync();
                 return true;
             }
 
@@ -60,17 +61,11 @@ namespace TnR_SS.Domain.Supervisor
             };
 
             await _unitOfWork.OTPs.CreateAsync(otp);
-            if (_unitOfWork.SaveChanges() != 1)
+            await _unitOfWork.SaveChangeAsync();
             {
                 throw new Exception("Lỗi thêm Otp");
             }
             return otp.ID;
-        }
-
-        public void CreateOTPTest()
-        {
-            OTP bk = new OTP();
-            _unitOfWork.OTPs.CreateAsync(bk);
         }
     }
 }

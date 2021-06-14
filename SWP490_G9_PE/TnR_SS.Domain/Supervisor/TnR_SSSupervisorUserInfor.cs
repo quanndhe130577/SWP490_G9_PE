@@ -20,7 +20,7 @@ namespace TnR_SS.Domain.Supervisor
                 var result_addUserToRole = await _unitOfWork.UserInfors.AddToRoleAsync(userInfor, userData.RoleNormalizedName);
                 if (!result_addUserToRole.Succeeded)
                 {
-                    await _unitOfWork.UserInfors.DeleteAsync(userInfor);
+                    await _unitOfWork.UserInfors.DeleteIdentityAsync(userInfor);
                 }
 
                 return result_addUserToRole;

@@ -29,7 +29,7 @@ namespace TnR_SS.API.Controller
         private readonly ITnR_SSSupervisor _tnrssSupervisor;
         private readonly IMapper _mapper;
 
-        public AccountController(ITnR_SSSupervisor tnrssSupervisor,IMapper mapper)
+        public AccountController(ITnR_SSSupervisor tnrssSupervisor, IMapper mapper)
         {
             _tnrssSupervisor = tnrssSupervisor;
             _mapper = mapper;
@@ -82,6 +82,7 @@ namespace TnR_SS.API.Controller
         [AllowAnonymous]
         public async Task<ResponseModel> Login([FromBody] LoginReqModel userData)
         {
+            _tnrssSupervisor.Test();
             if (ModelState.IsValid)
             {
                 var user = _tnrssSupervisor.GetUserByPhoneNumber(userData.PhoneNumber);
@@ -223,7 +224,7 @@ namespace TnR_SS.API.Controller
             }
 
             // if (await _tnrssSupervisor.CheckOTPRightAsync(modelData.OTPID, modelData.Code, modelData.NewPhoneNumber))
-            if(true)
+            if (true)
             {
                 var rs = await _tnrssSupervisor.UpdatePhoneNumberAsync(id, modelData.NewPhoneNumber);
                 if (rs.Succeeded)
@@ -249,7 +250,7 @@ namespace TnR_SS.API.Controller
         #endregion
 
         #region Get User Info 
-       [HttpGet("getUserInfo/{id}")]
+        [HttpGet("getUserInfo/{id}")]
         public ResponseModel GetUserInfo(int id)
         {
             var user = _tnrssSupervisor.GetUserById(id);

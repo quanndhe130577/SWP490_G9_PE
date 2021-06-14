@@ -25,13 +25,15 @@ namespace TnR_SS.Domain.Supervisor
         {
             var basket = _mapper.Map<BasketApiModel, Basket>(basketRes);
             await _unitOfWork.Baskets.CreateAsync(basket);
+            await _unitOfWork.SaveChangeAsync();
         }
 
         public async Task UpdateBasketAsync(BasketApiModel basketRes)
         {
             var basket = await _unitOfWork.Baskets.FindAsync(basketRes.ID);
             basket = _mapper.Map<BasketApiModel, Basket>(basketRes, basket);
-            await _unitOfWork.Baskets.UpdateAsync(basket);
+            _unitOfWork.Baskets.Update(basket);
+            await _unitOfWork.SaveChangeAsync();
         }
     }
 }

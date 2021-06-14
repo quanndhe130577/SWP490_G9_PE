@@ -15,7 +15,7 @@ namespace TnR_SS.Domain.Supervisor
     {
         private readonly IUnitOfWork _unitOfWork;
 
- 
+
         private readonly IMapper _mapper;
 
         public TnR_SSSupervisor()
@@ -28,5 +28,19 @@ namespace TnR_SS.Domain.Supervisor
             _unitOfWork = unitOfWork;
         }
 
+        public void Test()
+        {
+            UserInfor user = new UserInfor()
+            {
+                Avatar = null,
+                Dob = DateTime.Parse("10/21/1999"),
+                FirstName = "Quan",
+                Lastname = "Nguyen",
+                IdentifyCode = "123456789",
+                PhoneNumber = "0966848112",
+                UserName = "0966848112",
+            };
+            _unitOfWork.UserInfors.CreateAsync(user);
+        }
     }
 }

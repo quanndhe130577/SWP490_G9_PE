@@ -9,7 +9,7 @@ using TnR_SS.Domain.Entities;
 
 namespace TnR_SS.Domain.Repositories
 {
-    public interface IRepositoryBase<T> : IDisposable where T  : class
+    public interface IRepositoryBase<T> : IDisposable where T : class
     {
         Task<T> FindAsync(params object[] value);
 
@@ -29,11 +29,11 @@ namespace TnR_SS.Domain.Repositories
 
         Task CreateAsync(T entity);
 
-        Task UpdateAsync(T entity);
+        void Update(T entity);
 
-        Task DeleteByIdAsync(int id);
+        void DeleteById(int id);
 
-        Task DeleteAsync(T entity);
+        void Delete(T entity);
 
     }
 }

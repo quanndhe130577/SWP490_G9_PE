@@ -32,8 +32,7 @@ namespace TnR_SS.Domain.Supervisor
                 var fishType = _mapper.Map<FishTypeApiModel, FishType>(obj);
                 await _unitOfWork.FishTypes.CreateAsync(fishType);
             }
-            _unitOfWork.SaveChanges();
-            var a = _unitOfWork.SaveChanges();
+await _unitOfWork.SaveChangeAsync();
             
 
         }
@@ -42,7 +41,8 @@ namespace TnR_SS.Domain.Supervisor
         {
             var fishType = await _unitOfWork.FishTypes.FindAsync(fishTypeModel.ID);
             fishType = _mapper.Map<FishTypeApiModel, FishType>(fishTypeModel, fishType);
-            await _unitOfWork.FishTypes.UpdateAsync(fishType);
+            _unitOfWork.FishTypes.Update(fishType);
+            await _unitOfWork.SaveChangeAsync();
         }
     }
 }

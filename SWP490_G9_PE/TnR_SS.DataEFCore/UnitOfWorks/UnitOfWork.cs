@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
 using TnR_SS.DataEFCore.Repositories;
 using TnR_SS.Domain.Entities;
 using TnR_SS.Domain.Repositories;
@@ -39,9 +40,9 @@ namespace TnR_SS.DataEFCore.UnitOfWorks
 
         public IFishTypeRepository FishTypes { get; private set; }
 
-        public int SaveChanges()
+        public Task<int> SaveChangeAsync()
         {
-            return _context.SaveChanges();
+            return _context.SaveChangesAsync();
         }
 
         public void Dispose()

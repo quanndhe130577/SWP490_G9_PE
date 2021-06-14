@@ -28,16 +28,14 @@ namespace TnR_SS.DataEFCore.Repositories
         {
             var basket = await _context.Baskets.FindAsync(basketId);
             _context.Baskets.Remove(basket);
-            await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateBasketAsync(Basket basket, string type, int weight)
+        public void UpdateBasket(Basket basket, string type, int weight)
         {
             basket.UpdatedAt = DateTime.Now;
             basket.Type = type;
             basket.Weight = weight;
             _context.Baskets.Update(basket);
-            await _context.SaveChangesAsync();
         }
 
     }

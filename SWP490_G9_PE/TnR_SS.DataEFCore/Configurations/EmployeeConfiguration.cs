@@ -44,9 +44,11 @@ namespace TnR_SS.DataEFCore.Configurations
                 .HasConstraintName("FK_Employee_UserInfor");
 
             entity.Property(e => e.CreatedAt)
+                .IsRequired()
                 .HasColumnType("datetime");
 
             entity.Property(e => e.UpdatedAt)
+                .IsRequired()
                 .HasColumnType("datetime");
         }
     }
