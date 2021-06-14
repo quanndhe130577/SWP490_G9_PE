@@ -3,6 +3,7 @@ using System;
 using TnR_SS.Domain.ApiModels.AccountModel.RequestModel;
 using TnR_SS.Domain.ApiModels.AccountModel.ResponseModel;
 using TnR_SS.Domain.ApiModels.BasketModel.ResponseModel;
+using TnR_SS.Domain.ApiModels.EmployeeModel;
 using TnR_SS.Domain.ApiModels.FishTypeModel;
 using TnR_SS.Domain.ApiModels.PondOwnerModel;
 using TnR_SS.Domain.ApiModels.PurchaseModal;
@@ -36,6 +37,9 @@ namespace TnR_SS.Domain.ApiModels
             #region Basket
             CreateMap<Basket, BasketApiModel>();
             CreateMap<BasketApiModel, Basket>();
+            #endregion
+
+            #region Fish Type
             CreateMap<FishType, FishTypeApiModel>();
             CreateMap<FishTypeApiModel, FishType>();
             #endregion
@@ -47,6 +51,13 @@ namespace TnR_SS.Domain.ApiModels
             #region PondOwner
             CreateMap<PondOwnerAPIModel, PondOwner>().ReverseMap();
             #endregion
+
+            #region Employee
+            CreateMap<Employee, EmployeeApiModel>();
+            CreateMap<EmployeeApiModel, FishType>();
+            #endregion
+
+
         }
 
     }
