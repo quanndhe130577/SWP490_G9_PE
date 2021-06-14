@@ -31,5 +31,6 @@ namespace TnR_SS.Domain.Entities
         public List<Employee> Employees { get; set; }
         public List<PondOwner> PondOwners { get; set; }
         public List<FishType> FishTypes { get; set; }
+        public List<Truck> Trucks { get; set; }
     }
 }

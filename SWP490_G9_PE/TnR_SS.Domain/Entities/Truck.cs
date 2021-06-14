@@ -8,30 +8,24 @@ using System.Threading.Tasks;
 
 namespace TnR_SS.Domain.Entities
 {
-    public class PurchaseDetail
+    public class Truck
     {
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
 
         [Required]
-        public int FishTypePriceID { get; set; }
-        public FishTypePrice FishTypePrice { get; set; }
+        public string LicensePlate { get; set; }
 
-        [Required]
-        public double BuyPrice { get; set; }
         [Required]
         public DateTime CreatedAt { get; set; }
         [Required]
         public DateTime UpdatedAt { get; set; }
 
         [Required]
-        public int BasketId { get; set; }
-        public Basket Basket { get; set; }
+        public int TraderID { get; set; }
+        public UserInfor Trader { get; set; }
 
-        [Required]
-        public int PurchaseId { get; set; }
-        public Purchase Purchase { get; set; }
-        public List<LK_PurchaseDeatil_Drum> LK_PurchaseDeatil_Drums { get; set; }
+        public List<Drum> Drums { get; set; }
     }
 }

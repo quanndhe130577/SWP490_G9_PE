@@ -34,7 +34,7 @@ namespace TnR_SS.API.Controllers
         [AllowAnonymous]
         public ResponseModel GetAllFishType(int id)
         {
-            List<FishTypeApiModel> list = _tnrssSupervisor.GetAllFishType(id);
+            List<FishTypeApiModel> list = _tnrssSupervisor.GetAllFishTypeByTraderId(id);
             return new ResponseBuilder<List<FishTypeApiModel>>().Success("Get all type").WithData(list).ResponseModel;
         }
     }
