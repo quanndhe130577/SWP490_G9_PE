@@ -23,7 +23,7 @@ namespace TnR_SS.API.Controllers
 
         [HttpPost("create")]
         [AllowAnonymous]
-        public async Task<ResponseModel> CreateNewBasketAsync(FishTypeApiModel fishTypeModel)
+        public async Task<ResponseModel> CreateNewFishTypeAsync(FishTypeApiModel fishTypeModel)
         {
             await _tnrssSupervisor.CreateFishTypeAsync(fishTypeModel);
             return new ResponseBuilder<FishTypeApiModel>().Success("Create Fish Type Success").WithData(fishTypeModel).ResponseModel;
