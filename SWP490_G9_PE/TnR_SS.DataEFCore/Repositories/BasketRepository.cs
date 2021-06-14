@@ -15,15 +15,6 @@ namespace TnR_SS.DataEFCore.Repositories
 
         public List<Basket> ListAllBasket() => _context.Baskets.ToList();
 
-        //public async Task<Basket> FindBasketByIdAsync(int basketId) => await _context.Baskets.FindAsync(basketId);
-
-        /*public async Task CreateBasketAsync(Basket basket)
-        {
-            basket.CreatedAt = DateTime.Now;
-            await _context.Baskets.AddAsync(basket);
-            await _context.SaveChangesAsync();
-        }*/
-
         public async Task DeleteBasketByIdAsync(int basketId)
         {
             var basket = await _context.Baskets.FindAsync(basketId);

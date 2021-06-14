@@ -52,7 +52,7 @@ namespace TnR_SS.Domain.Supervisor
 
         #region Fishtype
         List<FishTypeApiModel> GetAllFishType(int id);
-        Task CreateFishTypeAsync(List<FishTypeApiModel> listType);
+        Task CreateFishTypeAsync(List<FishTypeApiModel> listType, int traderId);
         Task UpdateFishTypeAsync(FishTypeApiModel fishTypeModel);
         #endregion
 

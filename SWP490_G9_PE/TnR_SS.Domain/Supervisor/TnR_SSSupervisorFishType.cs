@@ -21,20 +21,19 @@ namespace TnR_SS.Domain.Supervisor
             return list;*/
 
             return _unitOfWork.FishTypes.GetAll(x => x.TraderID == id)
-                .Select(x=> _mapper.Map<FishType, FishTypeApiModel>(x)).ToList();
-            
+                .Select(x => _mapper.Map<FishType, FishTypeApiModel>(x)).ToList();
+
         }
 
-        public async Task CreateFishTypeAsync(List<FishTypeApiModel> listType)
+        public async Task CreateFishTypeAsync(List<FishTypeApiModel> listType, int traderId)
         {
-            foreach(var obj in listType)
+            foreach (var obj in listType)
             {
                 var fishType = _mapper.Map<FishTypeApiModel, FishType>(obj);
+                fishType.TraderID = traderId;
                 await _unitOfWork.FishTypes.CreateAsync(fishType);
             }
-await _unitOfWork.SaveChangeAsync();
-            
-
+            await _unitOfWork.SaveChangeAsync();
         }
 
         public async Task UpdateFishTypeAsync(FishTypeApiModel fishTypeModel)

@@ -22,11 +22,11 @@ namespace TnR_SS.API.Controllers
             _tnrssSupervisor = tnrssSupervisor;
         }
 
-        [HttpPost("create")]
+        [HttpPost("create/{traderId}")]
         [AllowAnonymous]
-        public async Task<ResponseModel> CreateNewFishTypeAsync(ListTypeModel listType)
+        public async Task<ResponseModel> CreateNewFishTypeAsync(ListTypeModel listType, int traderId)
         {
-            await _tnrssSupervisor.CreateFishTypeAsync(listType.ListFishType);
+            await _tnrssSupervisor.CreateFishTypeAsync(listType.ListFishType, traderId);
             return new ResponseBuilder().Success("Create Fish Type Success").ResponseModel;
         }
 
