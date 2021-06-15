@@ -8,7 +8,6 @@ namespace TnR_SS.DataEFCore.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             
-
             migrationBuilder.AlterColumn<DateTime>(
                 name: "UpdatedAt",
                 table: "Truck",
@@ -206,8 +205,7 @@ namespace TnR_SS.DataEFCore.Migrations
                 keyValue: 3,
                 column: "ConcurrencyStamp",
                 value: "d34b5fb1-c9ae-4448-a692-1d1ddbd32f90");
-
-          
+         
         }
     }
 }
