@@ -5,6 +5,7 @@ using TnR_SS.Domain.ApiModels.AccountModel.ResponseModel;
 using TnR_SS.Domain.ApiModels.BasketModel.ResponseModel;
 using TnR_SS.Domain.ApiModels.EmployeeModel;
 using TnR_SS.Domain.ApiModels.FishTypeModel;
+using TnR_SS.Domain.ApiModels.FishTypePriceModel;
 using TnR_SS.Domain.ApiModels.PondOwnerModel;
 using TnR_SS.Domain.ApiModels.PurchaseModal;
 using TnR_SS.Domain.ApiModels.RoleUserModel.RequestModel;
@@ -20,10 +21,10 @@ namespace TnR_SS.Domain.ApiModels
         {
             #region UserInfor
             CreateMap<RegisterUserReqModel, UserInfor>().ForMember(destination => destination.UserName, options => options.MapFrom(source => source.PhoneNumber));
-                /*.AfterMap((source, destination) =>
-                {
-                    destination.CreatedDate = DateTime.Now;
-                });*/
+            /*.AfterMap((source, destination) =>
+            {
+                destination.CreatedDate = DateTime.Now;
+            });*/
 
             CreateMap<UpdateUserReqModel, UserInfor>();
             CreateMap<UserInfor, UserResModel>().ForMember(destination => destination.UserID, options => options.MapFrom(source => source.Id));
@@ -39,9 +40,12 @@ namespace TnR_SS.Domain.ApiModels
             CreateMap<BasketApiModel, Basket>();
             #endregion
 
-            #region Fish Type
-            CreateMap<FishType, FishTypeApiModel>();
-            CreateMap<FishTypeApiModel, FishType>();
+            #region FishType
+            CreateMap<FishType, FishTypeWithPriceApiModel>().ReverseMap();
+            #endregion
+
+            #region FishTypePrice
+            CreateMap<FishTypeWithPriceApiModel, FishTypePrice>().ForMember(destination => destination.FishTypeID, options => options.MapFrom(source => source.ID)).ReverseMap();
             #endregion
 
             #region Purchase

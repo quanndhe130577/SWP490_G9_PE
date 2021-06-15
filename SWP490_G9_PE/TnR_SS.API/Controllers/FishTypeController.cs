@@ -21,21 +21,21 @@ namespace TnR_SS.API.Controllers
         {
             _tnrssSupervisor = tnrssSupervisor;
         }
+        /*
+                [HttpPost("create")]
+                [AllowAnonymous]
+                public async Task<ResponseModel> CreateFishTypePriceAsync(ListTypeModel listType)
+                {
+                    await _tnrssSupervisor.CreateFishTypePricesAsync(listType.ListFishType);
+                    return new ResponseBuilder().Success("Create Fish Type Success").ResponseModel;
+                }*/
 
-        [HttpPost("create")]
+        [HttpPost("getall/{traderId}")]
         [AllowAnonymous]
-        public async Task<ResponseModel> CreateFishTypePriceAsync(ListTypeModel listType)
+        public ResponseModel GetAllFishType(int traderId)
         {
-            await _tnrssSupervisor.CreateFishTypePricesAsync(listType.ListFishType);
-            return new ResponseBuilder().Success("Create Fish Type Success").ResponseModel;
-        }
-
-        [HttpPost("getall/{id}")]
-        [AllowAnonymous]
-        public ResponseModel GetAllFishType(int id)
-        {
-            List<FishTypeApiModel> list = _tnrssSupervisor.GetAllFishTypeByTraderId(id);
-            return new ResponseBuilder<List<FishTypeApiModel>>().Success("Get all type").WithData(list).ResponseModel;
+            List<FishTypeWithPriceApiModel> list = _tnrssSupervisor.GetAllLastFishTypeByTraderId(traderId);
+            return new ResponseBuilder<List<FishTypeWithPriceApiModel>>().Success("Get all type").WithData(list).ResponseModel;
         }
     }
 }

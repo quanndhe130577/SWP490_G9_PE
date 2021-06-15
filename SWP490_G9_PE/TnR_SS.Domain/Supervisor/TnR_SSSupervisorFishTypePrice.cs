@@ -10,7 +10,7 @@ namespace TnR_SS.Domain.Supervisor
 {
     public partial class TnR_SSSupervisor
     {
-        public async Task CreateFishTypePricesAsync(List<FishTypeApiModel> listType)
+        public async Task CreateFishTypePricesAsync(List<FishTypeWithPriceApiModel> listType)
         {
             foreach (var obj in listType)
             {

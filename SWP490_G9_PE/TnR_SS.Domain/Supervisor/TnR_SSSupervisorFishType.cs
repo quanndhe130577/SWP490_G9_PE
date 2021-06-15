@@ -10,7 +10,7 @@ namespace TnR_SS.Domain.Supervisor
 {
     public partial class TnR_SSSupervisor
     {
-        public List<FishTypeApiModel> GetAllFishTypeByTraderId(int traderId)
+        public List<FishTypeWithPriceApiModel> GetAllLastFishTypeByTraderId(int traderId)
         {
             /*var listType = _unitOfWork.FishTypes.GetAllAsync();
             List<FishTypeApiModel> list = new List<FishTypeApiModel>();
@@ -21,7 +21,7 @@ namespace TnR_SS.Domain.Supervisor
             return list;*/
 
             var fishTypes = _unitOfWork.FishTypes.GetAll(x => x.TraderID == traderId)
-                .Select(x => _mapper.Map<FishType, FishTypeApiModel>(x)).ToList();
+                .Select(x => _mapper.Map<FishType, FishTypeWithPriceApiModel>(x)).ToList();
 
             foreach (var ft in fishTypes)
             {
@@ -34,20 +34,20 @@ namespace TnR_SS.Domain.Supervisor
 
         }
 
-        public async Task CreateFishTypesAsync(List<FishTypeApiModel> listType)
+        public async Task CreateFishTypesAsync(List<FishTypeWithPriceApiModel> listType)
         {
             foreach (var obj in listType)
             {
-                var fishType = _mapper.Map<FishTypeApiModel, FishType>(obj);
+                var fishType = _mapper.Map<FishTypeWithPriceApiModel, FishType>(obj);
                 await _unitOfWork.FishTypes.CreateAsync(fishType);
             }
             await _unitOfWork.SaveChangeAsync();
         }
 
-        public async Task UpdateFishTypeAsync(FishTypeApiModel fishTypeModel)
+        public async Task UpdateFishTypeAsync(FishTypeWithPriceApiModel fishTypeModel)
         {
             var fishType = await _unitOfWork.FishTypes.FindAsync(fishTypeModel.ID);
-            fishType = _mapper.Map<FishTypeApiModel, FishType>(fishTypeModel, fishType);
+            fishType = _mapper.Map<FishTypeWithPriceApiModel, FishType>(fishTypeModel, fishType);
             _unitOfWork.FishTypes.Update(fishType);
             await _unitOfWork.SaveChangeAsync();
         }

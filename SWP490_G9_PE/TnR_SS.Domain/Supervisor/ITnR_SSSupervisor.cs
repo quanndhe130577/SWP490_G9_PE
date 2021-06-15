@@ -51,13 +51,13 @@ namespace TnR_SS.Domain.Supervisor
         #endregion
 
         #region Fishtype
-        List<FishTypeApiModel> GetAllFishTypeByTraderId(int traderId);
-        Task CreateFishTypesAsync(List<FishTypeApiModel> listType);
-        Task UpdateFishTypeAsync(FishTypeApiModel fishTypeModel);
+        List<FishTypeWithPriceApiModel> GetAllLastFishTypeByTraderId(int traderId);
+        Task CreateFishTypesAsync(List<FishTypeWithPriceApiModel> listType);
+        Task UpdateFishTypeAsync(FishTypeWithPriceApiModel fishTypeModel);
         #endregion
 
         #region FishTypePrice
-        Task CreateFishTypePricesAsync(List<FishTypeApiModel> listType);
+        Task CreateFishTypePricesAsync(List<FishTypeWithPriceApiModel> listType);
         #endregion
 
         #region Basket
@@ -68,7 +68,7 @@ namespace TnR_SS.Domain.Supervisor
         #endregion
 
         #region Purchase
-        Task<int> CreatePurchaseAsync(PurchaseApiModel purchaseModel);
+        Task<int> CreatePurchaseAndFishTypePriceAsync(PurchaseApiModel purchaseModel);
         #endregion
 
         #region PondOwner

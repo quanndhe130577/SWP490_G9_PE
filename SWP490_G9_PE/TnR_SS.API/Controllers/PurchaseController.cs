@@ -33,9 +33,9 @@ namespace TnR_SS.API.Controllers
                 return new ResponseBuilder().Error("Access denied").ResponseModel;
             }
 
-            var puchaseId = await _tnrssSupervisor.CreatePurchaseAsync(purchaseData);
+            var newData = await _tnrssSupervisor.CreatePurchaseAndFishTypePriceAsync(purchaseData);
 
-            return new ResponseBuilder<object>().Success("Create purchase success").WithData(new { purchaseId = puchaseId }).ResponseModel;
+            return new ResponseBuilder<object>().Success("Create purchase success").WithData(new { purchaseData = newData }).ResponseModel;
         }
         #endregion
     }
