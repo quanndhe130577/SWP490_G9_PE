@@ -24,9 +24,9 @@ namespace TnR_SS.API.Controllers
 
         [HttpPost("create")]
         [AllowAnonymous]
-        public async Task<ResponseModel> CreateNewFishTypeAsync(ListTypeModel listType)
+        public async Task<ResponseModel> CreateFishTypePriceAsync(ListTypeModel listType)
         {
-            await _tnrssSupervisor.CreateFishTypeAsync(listType.ListFishType);
+            await _tnrssSupervisor.CreateFishTypePricesAsync(listType.ListFishType);
             return new ResponseBuilder().Success("Create Fish Type Success").ResponseModel;
         }
 

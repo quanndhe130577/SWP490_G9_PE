@@ -34,7 +34,7 @@ namespace TnR_SS.Domain.Supervisor
 
         }
 
-        public async Task CreateFishTypeAsync(List<FishTypeApiModel> listType)
+        public async Task CreateFishTypesAsync(List<FishTypeApiModel> listType)
         {
             foreach (var obj in listType)
             {
