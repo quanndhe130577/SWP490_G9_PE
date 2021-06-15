@@ -11,8 +11,7 @@ namespace TnR_SS.DataEFCore.UnitOfWorks
     {
         private readonly TnR_SSContext _context;
 
-        public UnitOfWork(TnR_SSContext context, UserManager<UserInfor> _userManager, SignInManager<UserInfor> _signInManager,
-            RoleManager<RoleUser> _roleManager)
+        public UnitOfWork(TnR_SSContext context, UserManager<UserInfor> _userManager, SignInManager<UserInfor> _signInManager, RoleManager<RoleUser> _roleManager)
         {
             _context = context;
             OTPs = new OTPRepository(_context);
@@ -23,8 +22,7 @@ namespace TnR_SS.DataEFCore.UnitOfWorks
             PurchaseDetails = new PurchaseDetailRepository(_context);
             Purchases = new PurchaseRepository(_context);
             FishTypes = new FishTypeRepository(_context);
-            Employees = new EmployeeRepository(_context);
-            TimeKeepings = new TimeKeepingRepository(_context);
+            Trucks = new TruckRepository(_context);
         }
 
         public IOTPRepository OTPs { get; private set; }
@@ -42,8 +40,8 @@ namespace TnR_SS.DataEFCore.UnitOfWorks
         public IPurchaseRepository Purchases { get; private set; }
 
         public IFishTypeRepository FishTypes { get; private set; }
-        public IEmployeeRepository Employees { get; private set; }
-        public ITimeKeepingRepository TimeKeepings { get; private set; }
+
+        public ITruckRepository Trucks { get; private set; }
 
         public Task<int> SaveChangeAsync()
         {

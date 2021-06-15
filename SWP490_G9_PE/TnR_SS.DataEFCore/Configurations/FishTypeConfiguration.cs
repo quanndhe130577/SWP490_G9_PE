@@ -38,6 +38,9 @@ namespace TnR_SS.DataEFCore.Configurations
                 .HasColumnType("datetime")
                 .IsRequired();
 
+            entity.Property(e => e.Price)
+                .IsRequired();
+
             entity.Property(e => e.CreatedAt)
                 .HasColumnType("datetime")
                 .IsRequired();
@@ -45,10 +48,6 @@ namespace TnR_SS.DataEFCore.Configurations
             entity.Property(e => e.UpdatedAt)
                 .HasColumnType("datetime")
                 .IsRequired();
-
-            entity.Property(e => e.Price)
-                .IsRequired();
-
 
             entity.HasOne(p => p.Trader)
                .WithMany(b => b.FishTypes)

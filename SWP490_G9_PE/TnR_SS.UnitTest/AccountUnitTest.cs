@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -33,13 +34,12 @@ namespace TnR_SS.UnitTest
         Mock<SignInManager<UserInfor>> GetSignInManagerMock()
         {
             return new Mock<SignInManager<UserInfor>>(
-                    GetUserManagerMock().Object,
-                    /* IHttpContextAccessor contextAccessor */Mock.Of<IHttpContextAccessor>(),
-                    /* IUserClaimsPrincipalFactory<TUser> claimsFactory */Mock.Of<IUserClaimsPrincipalFactory<UserInfor>>(),
-                    /* IOptions<IdentityOptions> optionsAccessor */null,
-                    /* ILogger<SignInManager<TUser>> logger */null,
-                    /* IAuthenticationSchemeProvider schemes */null,
-                    /* IUserConfirmation<TUser> confirmation */null);
+                    GetUserManagerMock(),
+                     new Mock<IHttpContextAccessor>().Object,
+                    new Mock<IUserClaimsPrincipalFactory<UserInfor>>().Object,
+                    new Mock<IOptions<IdentityOptions>>().Object,
+                    new Mock<ILogger<SignInManager<UserInfor>>>().Object,
+                    new Mock<IAuthenticationSchemeProvider>().Object);
         }
 
         [Fact(DisplayName = "Repository: Add account")]

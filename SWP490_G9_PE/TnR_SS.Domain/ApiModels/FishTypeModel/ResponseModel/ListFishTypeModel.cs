@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TnR_SS.Domain.ApiModels.FishTypeModel.ResponseModel
 {
-    public class ListTypeModel
+    public class ListFishTypeModel
     {
         public List<FishTypeApiModel> ListFishType { get; set; }
     }

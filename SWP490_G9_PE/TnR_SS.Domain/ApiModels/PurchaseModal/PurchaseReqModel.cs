@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using TnR_SS.Domain.ApiModels.FishTypeModel;
 
 namespace TnR_SS.Domain.ApiModels.PurchaseModal
 {
-    public class PurchaseApiModel
+    public class PurchaseReqModel
     {
         [Required]
         public DateTime Date { get; set; }

@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using System;
 using TnR_SS.Domain.ApiModels.AccountModel.RequestModel;
 using TnR_SS.Domain.ApiModels.AccountModel.ResponseModel;
 using TnR_SS.Domain.ApiModels.BasketModel.ResponseModel;
@@ -9,6 +8,7 @@ using TnR_SS.Domain.ApiModels.PondOwnerModel;
 using TnR_SS.Domain.ApiModels.PurchaseModal;
 using TnR_SS.Domain.ApiModels.RoleUserModel.RequestModel;
 using TnR_SS.Domain.ApiModels.RoleUserModel.ResponseModel;
+using TnR_SS.Domain.ApiModels.TruckModel;
 using TnR_SS.Domain.Entities;
 
 namespace TnR_SS.Domain.ApiModels
@@ -20,10 +20,10 @@ namespace TnR_SS.Domain.ApiModels
         {
             #region UserInfor
             CreateMap<RegisterUserReqModel, UserInfor>().ForMember(destination => destination.UserName, options => options.MapFrom(source => source.PhoneNumber));
-                /*.AfterMap((source, destination) =>
-                {
-                    destination.CreatedDate = DateTime.Now;
-                });*/
+            /*.AfterMap((source, destination) =>
+            {
+                destination.CreatedDate = DateTime.Now;
+            });*/
 
             CreateMap<UpdateUserReqModel, UserInfor>();
             CreateMap<UserInfor, UserResModel>().ForMember(destination => destination.UserID, options => options.MapFrom(source => source.Id));
@@ -39,13 +39,13 @@ namespace TnR_SS.Domain.ApiModels
             CreateMap<BasketApiModel, Basket>();
             #endregion
 
-            #region Fish Type
-            CreateMap<FishType, FishTypeApiModel>();
-            CreateMap<FishTypeApiModel, FishType>();
+            #region FishType
+            CreateMap<FishType, FishTypeApiModel>().ReverseMap();
             #endregion
 
             #region Purchase
-            CreateMap<PurchaseApiModel, Purchase>();
+            CreateMap<PurchaseReqModel, Purchase>().ReverseMap();
+            CreateMap<PurchaseResModel, Purchase>().ReverseMap();
             #endregion
 
             #region PondOwner
@@ -57,7 +57,9 @@ namespace TnR_SS.Domain.ApiModels
             CreateMap<EmployeeApiModel, FishType>();
             #endregion
 
-
+            #region Truck
+            CreateMap<Truck, TruckApiModel>().ReverseMap();
+            #endregion
         }
 
     }
