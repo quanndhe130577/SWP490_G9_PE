@@ -10,44 +10,32 @@ namespace TnR_SS.Domain.Supervisor
 {
     public partial class TnR_SSSupervisor
     {
-        public List<FishTypeWithPriceResModel> GetAllLastFishTypeByTraderId(int traderId)
+        public List<FishTypeApiModel> GetAllLastFishTypeByTraderId(int traderId)
         {
-            /*var listType = _unitOfWork.FishTypes.GetAllAsync();
+            var listType = _unitOfWork.FishTypes.GetAllLastByTraderId(traderId);
             List<FishTypeApiModel> list = new List<FishTypeApiModel>();
-            foreach(var type in listType)
+            foreach (var type in listType)
             {
                 list.Add(_mapper.Map<FishType, FishTypeApiModel>(type));
             }
-            return list;*/
-
-            var fishTypes = _unitOfWork.FishTypes.GetAll(x => x.TraderID == traderId)
-                .Select(x => _mapper.Map<FishType, FishTypeWithPriceResModel>(x)).ToList();
-
-            foreach (var ft in fishTypes)
-            {
-                var fishTypePrice = _unitOfWork.FishTypePrices.GetTopDateByFishTypeID(ft.FTID);
-                ft.Date = fishTypePrice.Date;
-                ft.Price = fishTypePrice.Price;
-            }
-
-            return fishTypes;
+            return list;
 
         }
 
-        public async Task CreateFishTypesAsync(List<FishTypeWithPriceResModel> listType)
+        public async Task CreateFishTypesAsync(List<FishTypeApiModel> listType)
         {
             foreach (var obj in listType)
             {
-                var fishType = _mapper.Map<FishTypeWithPriceResModel, FishType>(obj);
+                var fishType = _mapper.Map<FishTypeApiModel, FishType>(obj);
                 await _unitOfWork.FishTypes.CreateAsync(fishType);
             }
             await _unitOfWork.SaveChangeAsync();
         }
 
-        public async Task UpdateFishTypeAsync(FishTypeWithPriceResModel fishTypeModel)
+        public async Task UpdateFishTypeAsync(FishTypeApiModel fishTypeModel)
         {
-            var fishType = await _unitOfWork.FishTypes.FindAsync(fishTypeModel.FTID);
-            fishType = _mapper.Map<FishTypeWithPriceResModel, FishType>(fishTypeModel, fishType);
+            var fishType = await _unitOfWork.FishTypes.FindAsync(fishTypeModel.ID);
+            fishType = _mapper.Map<FishTypeApiModel, FishType>(fishTypeModel, fishType);
             _unitOfWork.FishTypes.Update(fishType);
             await _unitOfWork.SaveChangeAsync();
         }

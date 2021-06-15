@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace TnR_SS.Domain.ApiModels.FishTypeModel.ResponseModel
 {
-    public class ListTypeModel
+    public class ListFishTypeModel
     {
-        public List<FishTypeWithPriceResModel> ListFishType { get; set; }
+        public List<FishTypeApiModel> ListFishType { get; set; }
     }
 }

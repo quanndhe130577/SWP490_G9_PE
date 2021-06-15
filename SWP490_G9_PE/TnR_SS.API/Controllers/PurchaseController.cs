@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ namespace TnR_SS.API.Controllers
 {
     [Route("api/purchase")]
     [ApiController]
+    [Authorize]
     public class PurchaseController : ControllerBase
     {
 
@@ -33,9 +35,9 @@ namespace TnR_SS.API.Controllers
                 return new ResponseBuilder().Error("Access denied").ResponseModel;
             }
 
-            var newData = await _tnrssSupervisor.CreatePurchaseAndFishTypePriceAsync(purchaseData);
+            var newData = await _tnrssSupervisor.CreatePurchaseAsync(purchaseData);
 
-            return new ResponseBuilder<object>().Success("Create purchase success").WithData(new { purchaseData = newData }).ResponseModel;
+            return new ResponseBuilder<object>().Success("Create purchase success").WithData(newData).ResponseModel;
         }
         #endregion
     }

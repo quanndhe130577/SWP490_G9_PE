@@ -17,7 +17,7 @@ namespace TnR_SS.Domain.UnitOfWork
         IPurchaseDetailRepository PurchaseDetails { get; }
         IPurchaseRepository Purchases { get; }
         IFishTypeRepository FishTypes { get; }
-        IFishTypePriceRepository FishTypePrices { get; }
+        ITruckRepository Trucks { get; }
         Task<int> SaveChangeAsync();
     }
 }

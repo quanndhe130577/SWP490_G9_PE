@@ -110,7 +110,7 @@ namespace TnR_SS.API.Controller
             }
 
             var user = _tnrssSupervisor.GetUserById(id);
-            if (!await _tnrssSupervisor.CheckUserPassword(user, dataModel.CurrentPassword))
+            if (!await _tnrssSupervisor.CheckUserPassword(user.UserID, dataModel.CurrentPassword))
             {
                 return new ResponseBuilder().Error("Invalid password").ResponseModel;
             }

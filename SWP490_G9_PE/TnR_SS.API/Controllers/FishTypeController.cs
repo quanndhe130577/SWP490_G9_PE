@@ -30,12 +30,12 @@ namespace TnR_SS.API.Controllers
                     return new ResponseBuilder().Success("Create Fish Type Success").ResponseModel;
                 }*/
 
-        [HttpPost("getlastall/{traderId}")]
-        [AllowAnonymous]
+        [HttpGet("getlastall/{traderId}")]
         public ResponseModel GetAllFishType(int traderId)
         {
-            List<FishTypeWithPriceResModel> list = _tnrssSupervisor.GetAllLastFishTypeByTraderId(traderId);
-            return new ResponseBuilder<List<FishTypeWithPriceResModel>>().Success("Get all type").WithData(list).ResponseModel;
+            ListFishTypeModel list = new ListFishTypeModel();
+            list.ListFishType = _tnrssSupervisor.GetAllLastFishTypeByTraderId(traderId);
+            return new ResponseBuilder<ListFishTypeModel>().Success("Get all type").WithData(list).ResponseModel;
         }
     }
 }

@@ -10,13 +10,13 @@ namespace TnR_SS.DataEFCore.Configurations
         {
             entity.ToTable("PurchaseDetail");
 
-            entity.Property(e => e.FishTypePriceID)
+            entity.Property(e => e.FishTypeID)
                 .IsRequired();
-            entity.HasOne(p => p.FishTypePrice)
+            entity.HasOne(p => p.FishType)
                .WithMany(b => b.PurchaseDetails)
-               .HasForeignKey(p => p.FishTypePriceID)
+               .HasForeignKey(p => p.FishTypeID)
                .OnDelete(DeleteBehavior.ClientNoAction)
-               .HasConstraintName("FK_PurchaseDetail_FishTypePrice");
+               .HasConstraintName("FK_PurchaseDetail_FishType");
 
             entity.Property(e => e.BasketId)
                 .IsRequired();

@@ -15,6 +15,11 @@ namespace TnR_SS.Domain.ApiModels.PurchaseModal
         public string PondOwnerName { get; set; }
 
 
-        public List<FishTypeWithPriceResModel> ListFishTypeWithPrice { get; set; }
+        public List<FishTypeApiModel> ListFishTypeWithPrice { get; set; }
+
+        public PurchaseResModel()
+        {
+            this.ListFishTypeWithPrice = new List<FishTypeApiModel>();
+        }
     }
 }

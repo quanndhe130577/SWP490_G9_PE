@@ -1,15 +1,14 @@
 ﻿using AutoMapper;
-using System;
 using TnR_SS.Domain.ApiModels.AccountModel.RequestModel;
 using TnR_SS.Domain.ApiModels.AccountModel.ResponseModel;
 using TnR_SS.Domain.ApiModels.BasketModel.ResponseModel;
 using TnR_SS.Domain.ApiModels.EmployeeModel;
 using TnR_SS.Domain.ApiModels.FishTypeModel;
-using TnR_SS.Domain.ApiModels.FishTypePriceModel;
 using TnR_SS.Domain.ApiModels.PondOwnerModel;
 using TnR_SS.Domain.ApiModels.PurchaseModal;
 using TnR_SS.Domain.ApiModels.RoleUserModel.RequestModel;
 using TnR_SS.Domain.ApiModels.RoleUserModel.ResponseModel;
+using TnR_SS.Domain.ApiModels.TruckModel;
 using TnR_SS.Domain.Entities;
 
 namespace TnR_SS.Domain.ApiModels
@@ -41,15 +40,12 @@ namespace TnR_SS.Domain.ApiModels
             #endregion
 
             #region FishType
-            CreateMap<FishType, FishTypeWithPriceResModel>().ReverseMap();
-            #endregion
-
-            #region FishTypePrice
-            CreateMap<FishTypeWithPriceResModel, FishTypePrice>().ForMember(destination => destination.FishTypeID, options => options.MapFrom(source => source.FTID)).ReverseMap();
+            CreateMap<FishType, FishTypeApiModel>().ReverseMap();
             #endregion
 
             #region Purchase
-            CreateMap<PurchaseReqModel, Purchase>();
+            CreateMap<PurchaseReqModel, Purchase>().ReverseMap();
+            CreateMap<PurchaseResModel, Purchase>().ReverseMap();
             #endregion
 
             #region PondOwner
@@ -61,7 +57,9 @@ namespace TnR_SS.Domain.ApiModels
             CreateMap<EmployeeApiModel, FishType>();
             #endregion
 
-
+            #region Truck
+            CreateMap<Truck, TruckApiModel>().ReverseMap();
+            #endregion
         }
 
     }

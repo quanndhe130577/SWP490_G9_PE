@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace TnR_SS.Domain.ApiModels.FishTypeModel
 {
-    public class FishTypeWithPriceResModel
+    public class FishTypeApiModel
     {
         [Required]
-        public int FTID { get; set; }
+        public int ID { get; set; }
         [Required]
         public string FishName { get; set; }
         public string Description { get; set; }
