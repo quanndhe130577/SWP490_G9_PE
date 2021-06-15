@@ -34,9 +34,6 @@ namespace TnR_SS.DataEFCore.Configurations
                 .HasMaxLength(12)
                 .IsRequired();
 
-            entity.Property(e => e.Date)
-                .HasColumnType("datetime")
-                .IsRequired();
 
             entity.Property(e => e.CreatedAt)
                 .HasColumnType("datetime")
@@ -46,14 +43,11 @@ namespace TnR_SS.DataEFCore.Configurations
                 .HasColumnType("datetime")
                 .IsRequired();
 
-            entity.Property(e => e.Price)
-                .IsRequired();
-
-
-            /*entity.HasOne(p => p.Trader)
+            entity.HasOne(p => p.Trader)
                .WithMany(b => b.FishTypes)
                .HasForeignKey(p => p.TraderID)
-               .HasConstraintName("FK_FishType_UserInfor");*/
+               .OnDelete(DeleteBehavior.ClientNoAction)
+               .HasConstraintName("FK_FishType_UserInfor");
         }
     }
 }

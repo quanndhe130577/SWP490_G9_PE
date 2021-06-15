@@ -10,26 +10,29 @@ namespace TnR_SS.DataEFCore.Configurations
         {
             entity.ToTable("PurchaseDetail");
 
-            entity.Property(e => e.FishTypeID)
+            entity.Property(e => e.FishTypePriceID)
                 .IsRequired();
-            entity.HasOne(p => p.FishType)
+            entity.HasOne(p => p.FishTypePrice)
                .WithMany(b => b.PurchaseDetails)
-               .HasForeignKey(p => p.FishTypeID)
-               .HasConstraintName("FK_PurchaseDetail_FishType");
+               .HasForeignKey(p => p.FishTypePriceID)
+               .OnDelete(DeleteBehavior.ClientNoAction)
+               .HasConstraintName("FK_PurchaseDetail_FishTypePrice");
 
             entity.Property(e => e.BasketId)
                 .IsRequired();
             entity.HasOne(p => p.Basket)
                 .WithMany(b => b.PurchaseDetails)
                 .HasForeignKey(p => p.BasketId)
+                .OnDelete(DeleteBehavior.ClientNoAction)
                 .HasConstraintName("FK_PurchaseDetail_Basket");
 
-            entity.Property(e => e.TongKetMuaId)
+            entity.Property(e => e.PurchaseId)
                 .IsRequired();
-            entity.HasOne(p => p.TongKetMua)
+            entity.HasOne(p => p.Purchase)
                 .WithMany(b => b.PurchaseDetails)
-                .HasForeignKey(p => p.TongKetMuaId)
-                .HasConstraintName("FK_PurchaseDetail_TongKetMua");
+                .HasForeignKey(p => p.PurchaseId)
+                .OnDelete(DeleteBehavior.ClientNoAction)
+                .HasConstraintName("FK_PurchaseDetail_Purchase");
 
             entity.Property(e => e.ID)
                 .IsRequired();

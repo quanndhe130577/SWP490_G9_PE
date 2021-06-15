@@ -16,6 +16,7 @@ namespace TnR_SS.API.Configurations
                 .AddScoped<IUserInforRepository, UserInforRepository>()
                 .AddScoped<IBasketRepository, BasketRepository>()
                 .AddScoped<IFishTypeRepository, FishTypeRepository>()
+                .AddScoped<IFishTypePriceRepository, FishTypePriceRepository>()
                 .AddScoped<IPondOwnerRepository, PondOwnerRepository>()
                 .AddScoped<IPurchaseDetailRepository, PurchaseDetailRepository>()
                 .AddScoped<IPurchaseRepository, PurchaseRepository>()

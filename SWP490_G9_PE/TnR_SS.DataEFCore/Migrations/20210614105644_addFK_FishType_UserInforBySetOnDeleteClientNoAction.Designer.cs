@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TnR_SS.DataEFCore;
 
 namespace TnR_SS.DataEFCore.Migrations
 {
     [DbContext(typeof(TnR_SSContext))]
-    partial class TnR_SSContextModelSnapshot : ModelSnapshot
+    [Migration("20210614105644_addFK_FishType_UserInforBySetOnDeleteClientNoAction")]
+    partial class addFK_FishType_UserInforBySetOnDeleteClientNoAction
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -148,37 +150,6 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.ToTable("Basket");
                 });
 
-            modelBuilder.Entity("TnR_SS.Domain.Entities.Drum", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("ID")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("Number")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TruckID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Type")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("TruckID");
-
-                    b.ToTable("Drum");
-                });
-
             modelBuilder.Entity("TnR_SS.Domain.Entities.Employee", b =>
                 {
                     b.Property<int>("ID")
@@ -236,6 +207,9 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime");
 
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -254,6 +228,9 @@ namespace TnR_SS.DataEFCore.Migrations
                         .HasMaxLength(12)
                         .HasColumnType("real");
 
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
+
                     b.Property<int>("TraderID")
                         .HasColumnType("int");
 
@@ -265,67 +242,6 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.HasIndex("TraderID");
 
                     b.ToTable("FishType");
-                });
-
-            modelBuilder.Entity("TnR_SS.Domain.Entities.FishTypePrice", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("ID")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime");
-
-                    b.Property<int>("FishTypeID")
-                        .HasColumnType("int");
-
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("FishTypeID");
-
-                    b.ToTable("FishTypePrice");
-                });
-
-            modelBuilder.Entity("TnR_SS.Domain.Entities.LK_PurchaseDeatil_Drum", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("DrumID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PurchaseDetailID")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<double>("Weight")
-                        .HasColumnType("float");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("DrumID");
-
-                    b.HasIndex("PurchaseDetailID");
-
-                    b.ToTable("LK_PurchaseDeatil_Drum");
                 });
 
             modelBuilder.Entity("TnR_SS.Domain.Entities.OTP", b =>
@@ -463,7 +379,7 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("FishTypePriceID")
+                    b.Property<int>("FishTypeID")
                         .HasColumnType("int");
 
                     b.Property<int>("PurchaseId")
@@ -476,7 +392,7 @@ namespace TnR_SS.DataEFCore.Migrations
 
                     b.HasIndex("BasketId");
 
-                    b.HasIndex("FishTypePriceID");
+                    b.HasIndex("FishTypeID");
 
                     b.HasIndex("PurchaseId");
 
@@ -525,7 +441,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "7a6d1943-292c-47dc-810d-452a54a47941",
+                            ConcurrencyStamp = "132668e1-70d2-424c-a955-06bbde91a34b",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Admin",
                             Name = "Admin",
@@ -535,7 +451,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "1d8e56fc-02ea-4254-9ee1-d36f151a8876",
+                            ConcurrencyStamp = "c9ff4d9b-853e-4e76-b6f1-4d24aec9b124",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Thương lái",
                             Name = "Trader",
@@ -545,7 +461,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "d3ed689a-1a22-46b0-860a-dc1600a615a1",
+                            ConcurrencyStamp = "53776147-563e-4bad-baf0-9c6121e5c703",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Chủ bến",
                             Name = "Weight Recorder",
@@ -591,35 +507,6 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.HasIndex("EmpId");
 
                     b.ToTable("TimeKeeping");
-                });
-
-            modelBuilder.Entity("TnR_SS.Domain.Entities.Truck", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("ID")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("LicensePlate")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
-
-                    b.Property<int>("TraderID")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("TraderID");
-
-                    b.ToTable("Truck");
                 });
 
             modelBuilder.Entity("TnR_SS.Domain.Entities.UserInfor", b =>
@@ -779,18 +666,6 @@ namespace TnR_SS.DataEFCore.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TnR_SS.Domain.Entities.Drum", b =>
-                {
-                    b.HasOne("TnR_SS.Domain.Entities.Truck", "Truck")
-                        .WithMany("Drums")
-                        .HasForeignKey("TruckID")
-                        .HasConstraintName("FK_Drum_Truck")
-                        .OnDelete(DeleteBehavior.ClientNoAction)
-                        .IsRequired();
-
-                    b.Navigation("Truck");
-                });
-
             modelBuilder.Entity("TnR_SS.Domain.Entities.Employee", b =>
                 {
                     b.HasOne("TnR_SS.Domain.Entities.UserInfor", "UserInfor")
@@ -813,39 +688,6 @@ namespace TnR_SS.DataEFCore.Migrations
                         .IsRequired();
 
                     b.Navigation("Trader");
-                });
-
-            modelBuilder.Entity("TnR_SS.Domain.Entities.FishTypePrice", b =>
-                {
-                    b.HasOne("TnR_SS.Domain.Entities.FishType", "FishType")
-                        .WithMany("FishTypePrices")
-                        .HasForeignKey("FishTypeID")
-                        .HasConstraintName("FK_FishTypePrice_FishType")
-                        .OnDelete(DeleteBehavior.ClientNoAction)
-                        .IsRequired();
-
-                    b.Navigation("FishType");
-                });
-
-            modelBuilder.Entity("TnR_SS.Domain.Entities.LK_PurchaseDeatil_Drum", b =>
-                {
-                    b.HasOne("TnR_SS.Domain.Entities.Drum", "Drum")
-                        .WithMany("LK_PurchaseDeatil_Drums")
-                        .HasForeignKey("DrumID")
-                        .HasConstraintName("FK_LKPurchaseDrum_Drum")
-                        .OnDelete(DeleteBehavior.ClientNoAction)
-                        .IsRequired();
-
-                    b.HasOne("TnR_SS.Domain.Entities.PurchaseDetail", "PurchaseDetail")
-                        .WithMany("LK_PurchaseDeatil_Drums")
-                        .HasForeignKey("PurchaseDetailID")
-                        .HasConstraintName("FK_LKPurchaseDrum_PurchaseDetail")
-                        .OnDelete(DeleteBehavior.ClientNoAction)
-                        .IsRequired();
-
-                    b.Navigation("Drum");
-
-                    b.Navigation("PurchaseDetail");
                 });
 
             modelBuilder.Entity("TnR_SS.Domain.Entities.PondOwner", b =>
@@ -890,10 +732,10 @@ namespace TnR_SS.DataEFCore.Migrations
                         .OnDelete(DeleteBehavior.ClientNoAction)
                         .IsRequired();
 
-                    b.HasOne("TnR_SS.Domain.Entities.FishTypePrice", "FishTypePrice")
+                    b.HasOne("TnR_SS.Domain.Entities.FishType", "FishType")
                         .WithMany("PurchaseDetails")
-                        .HasForeignKey("FishTypePriceID")
-                        .HasConstraintName("FK_PurchaseDetail_FishTypePrice")
+                        .HasForeignKey("FishTypeID")
+                        .HasConstraintName("FK_PurchaseDetail_FishType")
                         .OnDelete(DeleteBehavior.ClientNoAction)
                         .IsRequired();
 
@@ -906,7 +748,7 @@ namespace TnR_SS.DataEFCore.Migrations
 
                     b.Navigation("Basket");
 
-                    b.Navigation("FishTypePrice");
+                    b.Navigation("FishType");
 
                     b.Navigation("Purchase");
                 });
@@ -923,26 +765,9 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.Navigation("Employee");
                 });
 
-            modelBuilder.Entity("TnR_SS.Domain.Entities.Truck", b =>
-                {
-                    b.HasOne("TnR_SS.Domain.Entities.UserInfor", "Trader")
-                        .WithMany("Trucks")
-                        .HasForeignKey("TraderID")
-                        .HasConstraintName("FK_Truck_UserInfor")
-                        .OnDelete(DeleteBehavior.ClientNoAction)
-                        .IsRequired();
-
-                    b.Navigation("Trader");
-                });
-
             modelBuilder.Entity("TnR_SS.Domain.Entities.Basket", b =>
                 {
                     b.Navigation("PurchaseDetails");
-                });
-
-            modelBuilder.Entity("TnR_SS.Domain.Entities.Drum", b =>
-                {
-                    b.Navigation("LK_PurchaseDeatil_Drums");
                 });
 
             modelBuilder.Entity("TnR_SS.Domain.Entities.Employee", b =>
@@ -951,11 +776,6 @@ namespace TnR_SS.DataEFCore.Migrations
                 });
 
             modelBuilder.Entity("TnR_SS.Domain.Entities.FishType", b =>
-                {
-                    b.Navigation("FishTypePrices");
-                });
-
-            modelBuilder.Entity("TnR_SS.Domain.Entities.FishTypePrice", b =>
                 {
                     b.Navigation("PurchaseDetails");
                 });
@@ -970,16 +790,6 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.Navigation("PurchaseDetails");
                 });
 
-            modelBuilder.Entity("TnR_SS.Domain.Entities.PurchaseDetail", b =>
-                {
-                    b.Navigation("LK_PurchaseDeatil_Drums");
-                });
-
-            modelBuilder.Entity("TnR_SS.Domain.Entities.Truck", b =>
-                {
-                    b.Navigation("Drums");
-                });
-
             modelBuilder.Entity("TnR_SS.Domain.Entities.UserInfor", b =>
                 {
                     b.Navigation("Employees");
@@ -989,8 +799,6 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.Navigation("PondOwners");
 
                     b.Navigation("Purchases");
-
-                    b.Navigation("Trucks");
                 });
 #pragma warning restore 612, 618
         }

@@ -8,17 +8,15 @@ using System.Threading.Tasks;
 
 namespace TnR_SS.Domain.Entities
 {
-    [Table("PondOwner")]
-    public class PondOwner
+    public class Truck
     {
         [Key]
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
+        public int ID { get; set; }
+
         [Required]
-        public Guid ID { get; set; }
-        [Required]
-        public string Name { get; set; }
-        public string Address { get; set; }
-        [Required]
-        public string PhoneNumber { get; set; }
+        public string LicensePlate { get; set; }
+
         [Required]
         public DateTime CreatedAt { get; set; }
         [Required]
@@ -28,11 +26,6 @@ namespace TnR_SS.Domain.Entities
         public int TraderID { get; set; }
         public UserInfor Trader { get; set; }
 
-        public PondOwner()
-        {
-            this.ID = Guid.NewGuid();
-        }
-
-        public List<Purchase> Purchases { get; set; }
+        public List<Drum> Drums { get; set; }
     }
 }

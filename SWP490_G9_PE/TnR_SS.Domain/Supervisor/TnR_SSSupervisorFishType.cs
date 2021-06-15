@@ -10,7 +10,7 @@ namespace TnR_SS.Domain.Supervisor
 {
     public partial class TnR_SSSupervisor
     {
-        public List<FishTypeApiModel> GetAllFishType(int id)
+        public List<FishTypeApiModel> GetAllFishTypeByTraderId(int traderId)
         {
             /*var listType = _unitOfWork.FishTypes.GetAllAsync();
             List<FishTypeApiModel> list = new List<FishTypeApiModel>();
@@ -20,17 +20,25 @@ namespace TnR_SS.Domain.Supervisor
             }
             return list;*/
 
-            return _unitOfWork.FishTypes.GetAll(x => x.TraderID == id)
+            var fishTypes = _unitOfWork.FishTypes.GetAll(x => x.TraderID == traderId)
                 .Select(x => _mapper.Map<FishType, FishTypeApiModel>(x)).ToList();
+
+            foreach (var ft in fishTypes)
+            {
+                var fishTypePrice = _unitOfWork.FishTypePrices.GetTopDateByFishTypeID(ft.ID);
+                ft.Date = fishTypePrice.Date;
+                ft.Price = fishTypePrice.Price;
+            }
+
+            return fishTypes;
 
         }
 
-        public async Task CreateFishTypeAsync(List<FishTypeApiModel> listType, int traderId)
+        public async Task CreateFishTypesAsync(List<FishTypeApiModel> listType)
         {
             foreach (var obj in listType)
             {
                 var fishType = _mapper.Map<FishTypeApiModel, FishType>(obj);
-                fishType.TraderID = traderId;
                 await _unitOfWork.FishTypes.CreateAsync(fishType);
             }
             await _unitOfWork.SaveChangeAsync();

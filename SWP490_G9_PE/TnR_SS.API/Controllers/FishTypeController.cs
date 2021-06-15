@@ -24,9 +24,9 @@ namespace TnR_SS.API.Controllers
 
         [HttpPost("create/{traderId}")]
         [AllowAnonymous]
-        public async Task<ResponseModel> CreateNewFishTypeAsync(ListTypeModel listType, int traderId)
+        public async Task<ResponseModel> CreateFishTypePriceAsync(ListTypeModel listType)
         {
-            await _tnrssSupervisor.CreateFishTypeAsync(listType.ListFishType, traderId);
+            await _tnrssSupervisor.CreateFishTypePricesAsync(listType.ListFishType);
             return new ResponseBuilder().Success("Create Fish Type Success").ResponseModel;
         }
 
@@ -34,7 +34,7 @@ namespace TnR_SS.API.Controllers
         [AllowAnonymous]
         public ResponseModel GetAllFishType(int id)
         {
-            List<FishTypeApiModel> list = _tnrssSupervisor.GetAllFishType(id);
+            List<FishTypeApiModel> list = _tnrssSupervisor.GetAllFishTypeByTraderId(id);
             return new ResponseBuilder<List<FishTypeApiModel>>().Success("Get all type").WithData(list).ResponseModel;
         }
     }
