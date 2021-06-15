@@ -8,6 +8,6 @@ namespace TnR_SS.Domain.ApiModels.FishTypeModel.ResponseModel
 {
     public class ListTypeModel
     {
-        public List<FishTypeWithPriceApiModel> ListFishType { get; set; }
+        public List<FishTypeWithPriceResModel> ListFishType { get; set; }
     }
 }

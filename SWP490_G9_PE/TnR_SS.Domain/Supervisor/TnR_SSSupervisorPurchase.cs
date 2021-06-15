@@ -12,13 +12,13 @@ namespace TnR_SS.Domain.Supervisor
 {
     public partial class TnR_SSSupervisor
     {
-        public async Task<PurchaseApiModel> CreatePurchaseAndFishTypePriceAsync(PurchaseApiModel purchaseModel)
+        public async Task<PurchaseReqModel> CreatePurchaseAndFishTypePriceAsync(PurchaseReqModel purchaseModel)
         {
-            var purchase = _mapper.Map<PurchaseApiModel, Purchase>(purchaseModel);
+            var purchase = _mapper.Map<PurchaseReqModel, Purchase>(purchaseModel);
             await _unitOfWork.Purchases.CreateAsync(purchase);
             foreach (var ftp in purchaseModel.ListFishTypeWithPrice)
             {
-                var fishTypePrice = _mapper.Map<FishTypeWithPriceApiModel, FishTypePrice>(ftp);
+                var fishTypePrice = _mapper.Map<FishTypeWithPriceResModel, FishTypePrice>(ftp);
                 await _unitOfWork.FishTypePrices.CreateAsync(fishTypePrice);
             }
             await _unitOfWork.SaveChangeAsync();

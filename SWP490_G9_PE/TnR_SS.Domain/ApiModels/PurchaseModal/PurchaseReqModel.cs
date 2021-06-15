@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TnR_SS.Domain.ApiModels.FishTypeModel;
-using TnR_SS.Domain.ApiModels.FishTypePriceModel;
 
 namespace TnR_SS.Domain.ApiModels.PurchaseModal
 {
-    public class PurchaseApiModel
+    public class PurchaseReqModel
     {
-        public int ID { get; set; }
         [Required]
         public DateTime Date { get; set; }
 
@@ -21,6 +16,5 @@ namespace TnR_SS.Domain.ApiModels.PurchaseModal
         [Required]
         public int TraderID { get; set; }
 
-        public List<FishTypeWithPriceApiModel> ListFishTypeWithPrice { get; set; }
     }
 }

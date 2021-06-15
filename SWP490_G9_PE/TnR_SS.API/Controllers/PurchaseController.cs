@@ -26,7 +26,7 @@ namespace TnR_SS.API.Controllers
         #region create purchase
         [HttpPost("create")]
         //[Route("update")]
-        public async Task<ResponseModel> CreatePurchase(PurchaseApiModel purchaseData)
+        public async Task<ResponseModel> CreatePurchase(PurchaseReqModel purchaseData)
         {
             if (!TokenManagement.CheckUserIdFromToken(HttpContext, purchaseData.TraderID))
             {

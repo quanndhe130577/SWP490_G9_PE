@@ -41,15 +41,15 @@ namespace TnR_SS.Domain.ApiModels
             #endregion
 
             #region FishType
-            CreateMap<FishType, FishTypeWithPriceApiModel>().ReverseMap();
+            CreateMap<FishType, FishTypeWithPriceResModel>().ReverseMap();
             #endregion
 
             #region FishTypePrice
-            CreateMap<FishTypeWithPriceApiModel, FishTypePrice>().ForMember(destination => destination.FishTypeID, options => options.MapFrom(source => source.ID)).ReverseMap();
+            CreateMap<FishTypeWithPriceResModel, FishTypePrice>().ForMember(destination => destination.FishTypeID, options => options.MapFrom(source => source.FTID)).ReverseMap();
             #endregion
 
             #region Purchase
-            CreateMap<PurchaseApiModel, Purchase>();
+            CreateMap<PurchaseReqModel, Purchase>();
             #endregion
 
             #region PondOwner
