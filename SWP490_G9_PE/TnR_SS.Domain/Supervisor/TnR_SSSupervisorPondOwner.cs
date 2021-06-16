@@ -28,5 +28,15 @@ namespace TnR_SS.Domain.Supervisor
             await _unitOfWork.PondOwners.CreateAsync(pondOwner);
             return await _unitOfWork.SaveChangeAsync();
         }
+
+        public async Task<int> EditPondOwner(PondOwnerAPIModel pondOwnerModel)
+        {
+            PondOwner pondOwner = await _unitOfWork.PondOwners.FindAsync(pondOwnerModel.ID);
+            pondOwner.Name = pondOwnerModel.Name;
+            pondOwner.Address = pondOwnerModel.Address;
+            pondOwner.PhoneNumber = pondOwnerModel.PhoneNumber;
+            _unitOfWork.PondOwners.Update(pondOwner);
+            return await _unitOfWork.SaveChangeAsync();
+        }
     }
 }
