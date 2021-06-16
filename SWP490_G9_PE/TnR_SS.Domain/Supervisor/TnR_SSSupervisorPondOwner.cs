@@ -38,5 +38,12 @@ namespace TnR_SS.Domain.Supervisor
             _unitOfWork.PondOwners.Update(pondOwner);
             return await _unitOfWork.SaveChangeAsync();
         }
+
+        public async Task<int> DeletePondOwner(Guid id)
+        {
+            PondOwner pondOwner = await _unitOfWork.PondOwners.FindAsync(id);
+            _unitOfWork.PondOwners.Delete(pondOwner);
+            return await _unitOfWork.SaveChangeAsync();
+        }
     }
 }
