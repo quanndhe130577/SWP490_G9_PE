@@ -12,9 +12,9 @@ namespace TnR_SS.Domain.Supervisor
     {
         public List<EmployeeApiModel> GetAllEmployeeByTraderId(int traderId)
         {
-            var listType = _unitOfWork.Employees.GetAllEmployeeByTraderId(traderId);
+            var listEmp = _unitOfWork.Employees.GetAllEmployeeByTraderId(traderId);
             List<EmployeeApiModel> list = new();
-            foreach (var type in listType)
+            foreach (var type in listEmp)
             {
                 list.Add(_mapper.Map<Employee, EmployeeApiModel>(type));
             }
@@ -29,19 +29,46 @@ namespace TnR_SS.Domain.Supervisor
             await _unitOfWork.SaveChangeAsync();
         }
 
-        public async Task UpdateEmployeeAsync(EmployeeApiModel employee)
+        public async Task UpdateEmployeeAsync(EmployeeApiModel employee, int traderId)
         {
             var empEdit = await _unitOfWork.Employees.FindAsync(employee.ID);
             empEdit = _mapper.Map<EmployeeApiModel, Employee>(employee, empEdit);
-            _unitOfWork.Employees.Update(empEdit);
-            await _unitOfWork.SaveChangeAsync();
+            if (empEdit.TraderId == traderId)
+            {
+                _unitOfWork.Employees.Update(empEdit);
+                await _unitOfWork.SaveChangeAsync();
+            }
+            else
+            {
+                throw new Exception("Update fail");
+            }
         }
 
-        public async Task DeleteEmployeeAsync(int empId)
+        public async Task DeleteEmployeeAsync(int empId, int traderId)
         {
             var empEdit = await _unitOfWork.Employees.FindAsync(empId);
-            _unitOfWork.Employees.Delete(empEdit);
-            await _unitOfWork.SaveChangeAsync();
+            if (empEdit.TraderId == traderId)
+            {
+                _unitOfWork.Employees.Delete(empEdit);
+                await _unitOfWork.SaveChangeAsync();
+            }
+            else
+            {
+                throw new Exception("Update fail");
+            }
+        }
+
+        public EmployeeApiModel GetDetailEmployee(int traderId, int empId)
+        {
+            var listEmp = _unitOfWork.Employees.GetAllEmployeeByTraderId(traderId);
+            foreach (var obj in listEmp)
+            {
+                if (obj.ID == empId)
+                {
+                    return _mapper.Map<Employee, EmployeeApiModel>(obj);
+                }
+            }
+            return null;
         }
     }
 }

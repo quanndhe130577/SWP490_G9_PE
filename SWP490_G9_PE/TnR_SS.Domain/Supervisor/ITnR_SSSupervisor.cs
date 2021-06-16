@@ -82,8 +82,9 @@ namespace TnR_SS.Domain.Supervisor
         #region Employee
         List<EmployeeApiModel> GetAllEmployeeByTraderId(int traderId);
         Task CreateEmployeesAsync(EmployeeApiModel employee, int traderId);
-        Task UpdateEmployeeAsync(EmployeeApiModel employee);
-        Task DeleteEmployeeAsync(int empId);
+        Task UpdateEmployeeAsync(EmployeeApiModel employee, int traderId);
+        Task DeleteEmployeeAsync(int empId, int traderId);
+        EmployeeApiModel GetDetailEmployee(int traderId, int empId);
         #endregion
     }
 }

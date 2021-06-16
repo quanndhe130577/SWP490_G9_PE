@@ -32,7 +32,7 @@ namespace TnR_SS.API.Controllers
             return new ResponseBuilder<ListEmployeeModel>().Success("Get all employee").WithData(list).ResponseModel;
         }
 
-        [HttpGet("create")]
+        [HttpPost("create")]
         public async Task<ResponseModel> CreateEmployeeAsynce(EmployeeApiModel employee)
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
@@ -40,18 +40,28 @@ namespace TnR_SS.API.Controllers
             return new ResponseBuilder().Success("Create Employee Success").ResponseModel;
         }
 
-        [HttpGet("update")]
+        [HttpPost("update")]
         public async Task<ResponseModel> UpdateEmployeeAsync(EmployeeApiModel employee)
         {
-            await _tnrssSupervisor.UpdateEmployeeAsync(employee);
+            var traderId = TokenManagement.GetUserIdInToken(HttpContext);
+            await _tnrssSupervisor.UpdateEmployeeAsync(employee, traderId);
             return new ResponseBuilder().Success("Update Employee Success").ResponseModel;
         }
 
         [HttpPost("delete/{empId}")]
         public async Task<ResponseModel> DeleteEmployeeAsync(int empId)
         {
-            await _tnrssSupervisor.DeleteEmployeeAsync(empId);
+            var traderId = TokenManagement.GetUserIdInToken(HttpContext);
+            await _tnrssSupervisor.DeleteEmployeeAsync(empId, traderId);
             return new ResponseBuilder().Success("Delete Employee Success").ResponseModel;
+        }
+
+        [HttpGet("detail/{empId}")]
+        public ResponseModel DetailEmployee(int empId)
+        {
+            var traderId = TokenManagement.GetUserIdInToken(HttpContext);
+            var detail = _tnrssSupervisor.GetDetailEmployee(traderId, empId);
+            return new ResponseBuilder<EmployeeApiModel>().Success("Get Detail Employee Success").WithData(detail).ResponseModel;
         }
     }
 }
