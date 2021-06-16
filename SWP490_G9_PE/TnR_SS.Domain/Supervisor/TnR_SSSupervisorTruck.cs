@@ -16,10 +16,12 @@ namespace TnR_SS.Domain.Supervisor
             return listTruck.Select(x => _mapper.Map<Truck, TruckApiModel>(x)).ToList();
         }
 
-        public async Task<int> CreateTruckAsync(TruckApiModel truckModel)
+        public async Task<int> CreateTruckAsync(TruckApiModel truckModel, int traderId)
         {
             var truck = _mapper.Map<TruckApiModel, Truck>(truckModel);
+            truck.TraderID = traderId;
             await _unitOfWork.Trucks.CreateAsync(truck);
+            await _unitOfWork.SaveChangeAsync();
             return truck.ID;
         }
     }

@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TnR_SS.API.Common.Response;
+using TnR_SS.API.Common.Token;
 using TnR_SS.Domain.ApiModels.TruckModel;
 using TnR_SS.Domain.Supervisor;
 
@@ -12,6 +14,7 @@ namespace TnR_SS.API.Controllers
 {
     [Route("api/truck")]
     [ApiController]
+    [Authorize]
     public class TruckController : ControllerBase
     {
         private readonly ITnR_SSSupervisor _tnrssSupervisor;
@@ -21,17 +24,19 @@ namespace TnR_SS.API.Controllers
             _tnrssSupervisor = tnrssSupervisor;
         }
 
-        [HttpGet("getall/{traderId}")]
-        public ResponseModel GettAllTruckByTraderId(int traderId)
+        [HttpGet("getall")]
+        public ResponseModel GettAllTruckByTraderId()
         {
+            var traderId = TokenManagement.GetUserIdInToken(HttpContext);
             var listTruck = _tnrssSupervisor.GetAllTruckByTraderId(traderId);
-            return new ResponseBuilder<List<TruckApiModel>>().Success("Get all type").WithData(listTruck).ResponseModel;
+            return new ResponseBuilder<object>().Success("Get all type").WithData(new { listTruck = listTruck }).ResponseModel;
         }
 
         [HttpPost("create")]
-        public ResponseModel CreateTruck(TruckApiModel truckModel)
+        public async Task<ResponseModel> CreateTruck(TruckApiModel truckModel)
         {
-            var truckId = _tnrssSupervisor.CreateTruckAsync(truckModel);
+            var traderId = TokenManagement.GetUserIdInToken(HttpContext);
+            var truckId = await _tnrssSupervisor.CreateTruckAsync(truckModel, traderId);
             return new ResponseBuilder<object>().Success("Create truck success").WithData(new { truckId = truckId }).ResponseModel;
         }
     }

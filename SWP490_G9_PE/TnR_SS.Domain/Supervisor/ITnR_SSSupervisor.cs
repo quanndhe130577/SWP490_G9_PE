@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using TnR_SS.Domain.ApiModels.AccountModel.RequestModel;
 using TnR_SS.Domain.ApiModels.AccountModel.ResponseModel;
 using TnR_SS.Domain.ApiModels.BasketModel.ResponseModel;
+using TnR_SS.Domain.ApiModels.DrumModel;
 using TnR_SS.Domain.ApiModels.FishTypeModel;
 using TnR_SS.Domain.ApiModels.PondOwnerModel;
 using TnR_SS.Domain.ApiModels.PurchaseModal;
@@ -75,7 +76,13 @@ namespace TnR_SS.Domain.Supervisor
 
         #region Truck
         List<TruckApiModel> GetAllTruckByTraderId(int traderId);
-        Task<int> CreateTruckAsync(TruckApiModel truckModel);
+        Task<int> CreateTruckAsync(TruckApiModel truckModel, int traderId);
+        #endregion
+
+        #region Drum
+        List<DrumApiModel> GetAllDrumByTruckId(int truckId);
+        List<DrumApiModel> GetAllDrumByTraderId(int traderId);
+        Task<int> CreateDrumAsync(DrumApiModel drumModel);
         #endregion
     }
 }

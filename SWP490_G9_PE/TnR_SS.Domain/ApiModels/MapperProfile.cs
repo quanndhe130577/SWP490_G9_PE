@@ -2,6 +2,7 @@
 using TnR_SS.Domain.ApiModels.AccountModel.RequestModel;
 using TnR_SS.Domain.ApiModels.AccountModel.ResponseModel;
 using TnR_SS.Domain.ApiModels.BasketModel.ResponseModel;
+using TnR_SS.Domain.ApiModels.DrumModel;
 using TnR_SS.Domain.ApiModels.EmployeeModel;
 using TnR_SS.Domain.ApiModels.FishTypeModel;
 using TnR_SS.Domain.ApiModels.PondOwnerModel;
@@ -59,6 +60,10 @@ namespace TnR_SS.Domain.ApiModels
 
             #region Truck
             CreateMap<Truck, TruckApiModel>().ReverseMap();
+            #endregion
+
+            #region Drum
+            CreateMap<Drum, DrumApiModel>().ReverseMap();
             #endregion
         }
 
