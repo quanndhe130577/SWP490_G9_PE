@@ -14,10 +14,13 @@ namespace TnR_SS.API.Common.Token
         public static string GetTokenUser(int id)
         {
             //create claims details based on the user information
+
+            var now = DateTime.Now;
+
             var claims = new[] {
                     new Claim(JwtRegisteredClaimNames.Sub, Startup.StaticConfig["Jwt:Subject"]),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                    new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
+                    new Claim(JwtRegisteredClaimNames.Iat, now.ToString()),
                     new Claim("ID", id.ToString()),
                    };
 
@@ -25,7 +28,7 @@ namespace TnR_SS.API.Common.Token
 
             var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            var token = new JwtSecurityToken(Startup.StaticConfig["Jwt:Issuer"], Startup.StaticConfig["Jwt:Audience"], claims, expires: DateTime.Now.AddHours(1), signingCredentials: signIn);
+            var token = new JwtSecurityToken(Startup.StaticConfig["Jwt:Issuer"], Startup.StaticConfig["Jwt:Audience"], claims, expires: now.AddHours(1), signingCredentials: signIn);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
 
@@ -38,10 +41,23 @@ namespace TnR_SS.API.Common.Token
             if (currentUser.HasClaim(c => c.Type == "ID"))
             {
                 int claimdId = int.Parse(currentUser.Claims.FirstOrDefault(c => c.Type == "ID").Value);
-                if (userId == claimdId) return true; 
+                if (userId == claimdId) return true;
             }
 
             return false;
+        }
+
+        public static int GetUserIdInToken(HttpContext _context)
+        {
+            var currentUser = _context.User;
+
+            if (currentUser.HasClaim(c => c.Type == "ID"))
+            {
+                int claimdId = int.Parse(currentUser.Claims.FirstOrDefault(c => c.Type == "ID").Value);
+                return claimdId;
+            }
+
+            throw new Exception("Access denied");
         }
     }
 }
