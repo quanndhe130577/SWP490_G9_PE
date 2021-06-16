@@ -34,15 +34,15 @@ namespace TnR_SS.API.Controllers
             return new ResponseBuilder<List<PondOwnerResModel>>().Success("Get Info Success").WithData(rs).ResponseModel;
         }*/
         [HttpGet]
-        [Route("getByTraderId/{id}")]
-        public ResponseModel GetByTraderId(int id)
+        [Route("getall/{traderId}")]
+        public ResponseModel GetByTraderId(int traderId)
         {
-            var rs = _tnrssSupervisor.GetPondOwnerByTraderId(id);
+            var rs = _tnrssSupervisor.GetPondOwnerByTraderId(traderId);
             return new ResponseBuilder<List<PondOwnerAPIModel>>().Success("Get Info Success").WithData(rs).ResponseModel;
         }
 
         [HttpPost]
-        [Route("addNewPondOwner")]
+        [Route("create")]
         public async Task<ResponseModel> AddNewPondOwner(PondOwnerAPIModel pondOwner)
         {
             var valid = Valid(pondOwner);

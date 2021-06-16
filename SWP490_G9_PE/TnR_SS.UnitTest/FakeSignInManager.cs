@@ -21,7 +21,7 @@ namespace TnR_SS.UnitTest
             new Mock<IUserClaimsPrincipalFactory<UserInfor>>().Object,
             new Mock<IOptions<IdentityOptions>>().Object,
             new Mock<ILogger<SignInManager<UserInfor>>>().Object,
-            new Mock<IAuthenticationSchemeProvider>().Object)
+            new Mock<IAuthenticationSchemeProvider>().Object, null)
         { }
     }
 }

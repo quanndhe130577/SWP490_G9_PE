@@ -15,8 +15,8 @@ namespace TnR_SS.Domain.Entities
         public int ID { get; set; }
 
         [Required]
-        public int FishTypePriceID { get; set; }
-        public FishTypePrice FishTypePrice { get; set; }
+        public int FishTypeID { get; set; }
+        public FishType FishType { get; set; }
 
         [Required]
         public double BuyPrice { get; set; }

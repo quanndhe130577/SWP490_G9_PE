@@ -7,8 +7,8 @@ using TnR_SS.Domain.Entities;
 
 namespace TnR_SS.Domain.Repositories
 {
-    public interface IFishTypePriceRepository : IRepositoryBase<FishTypePrice>
+    public interface ITimeKeepingRepository : IRepositoryBase<TimeKeeping>
     {
-        FishTypePrice GetTopDateByFishTypeID(int fishTypeId);
+
     }
 }

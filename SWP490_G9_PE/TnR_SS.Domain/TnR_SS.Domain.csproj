@@ -6,8 +6,11 @@
 
   <ItemGroup>
     <Compile Remove="ApiModels\ErrorModel\**" />
+    <Compile Remove="ApiModels\FishTypeModel\RequestModel\**" />
     <EmbeddedResource Remove="ApiModels\ErrorModel\**" />
+    <EmbeddedResource Remove="ApiModels\FishTypeModel\RequestModel\**" />
     <None Remove="ApiModels\ErrorModel\**" />
+    <None Remove="ApiModels\FishTypeModel\RequestModel\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,7 +25,6 @@
   <ItemGroup>
     <Folder Include="ApiModels\BasketModel\RequestModel\" />
     <Folder Include="ApiModels\BasketModel\ResponseModel\" />
-    <Folder Include="ApiModels\FishTypeModel\RequestModel\" />
     <Folder Include="ApiModels\PondOwnerModel\" />
   </ItemGroup>
 
