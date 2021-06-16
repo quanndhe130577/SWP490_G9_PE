@@ -32,7 +32,7 @@ namespace TnR_SS.API.Controllers
             return new ResponseBuilder<ListEmployeeModel>().Success("Get all employee").WithData(list).ResponseModel;
         }
 
-        [HttpPost("create")]
+        [HttpGet("create")]
         public async Task<ResponseModel> CreateEmployeeAsynce(EmployeeApiModel employee)
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
@@ -40,7 +40,7 @@ namespace TnR_SS.API.Controllers
             return new ResponseBuilder().Success("Create Employee Success").ResponseModel;
         }
 
-        [HttpPost("update")]
+        [HttpGet("update")]
         public async Task<ResponseModel> UpdateEmployeeAsync(EmployeeApiModel employee)
         {
             await _tnrssSupervisor.UpdateEmployeeAsync(employee);
