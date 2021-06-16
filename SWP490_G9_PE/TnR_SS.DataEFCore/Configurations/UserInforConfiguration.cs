@@ -26,10 +26,12 @@ namespace TnR_SS.DataEFCore.Configurations
 
             entity.Property(e => e.Avatar).IsUnicode(false);
 
-            entity.Property(e => e.CreatedAt).HasColumnType("datetime");
+            entity.Property(e => e.CreatedAt)
+                .IsRequired()
+                .HasColumnType("datetime");
 
             entity.Property(e => e.Dob)
-                .HasColumnType("date")
+                .HasColumnType("datetime")
                 .HasColumnName("DOB");
 
             entity.Property(e => e.FirstName)
@@ -48,9 +50,6 @@ namespace TnR_SS.DataEFCore.Configurations
                 .IsRequired()
                 .HasMaxLength(12)
                 .IsUnicode(false);
-
-            entity.Property(e => e.CreatedAt)
-                .IsRequired();
 
             entity.Property(e => e.UpdatedAt)
                 .IsRequired();
