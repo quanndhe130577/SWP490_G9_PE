@@ -10,6 +10,11 @@ namespace TnR_SS.Domain.Supervisor
 {
     public partial class TnR_SSSupervisor
     {
+        public async Task<PondOwner> GetPondOwner(Guid id)
+        {
+            PondOwner pondOwner = await _unitOfWork.PondOwners.FindAsync(id);
+            return pondOwner;
+        }
         public List<PondOwnerAPIModel> GetPondOwnerByTraderId(int traderId)
         {
             var pondOnwers = _unitOfWork.PondOwners.GetAllByTraderId(traderId);
@@ -39,9 +44,8 @@ namespace TnR_SS.Domain.Supervisor
             return await _unitOfWork.SaveChangeAsync();
         }
 
-        public async Task<int> DeletePondOwner(Guid id)
+        public async Task<int> DeletePondOwner(PondOwner pondOwner)
         {
-            PondOwner pondOwner = await _unitOfWork.PondOwners.FindAsync(id);
             _unitOfWork.PondOwners.Delete(pondOwner);
             return await _unitOfWork.SaveChangeAsync();
         }

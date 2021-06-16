@@ -61,7 +61,12 @@ namespace TnR_SS.API.Controllers
         [Route("delete/{id}")]
         public async Task<ResponseModel> Delete(Guid id)
         {
-            int count = await _tnrssSupervisor.DeletePondOwner(id);
+            PondOwner pondOwner = await _tnrssSupervisor.GetPondOwner(id);
+            if (pondOwner == null)
+            {
+                return new ResponseBuilder<List<PondOwnerAPIModel>>().Error("Không tìm thấy chủ ao").ResponseModel;
+            }
+            int count = await _tnrssSupervisor.DeletePondOwner(pondOwner);
             if (count > 0)
             {
                 return new ResponseBuilder<List<PondOwnerAPIModel>>().Success("Xoá thành công").ResponseModel;
@@ -77,6 +82,11 @@ namespace TnR_SS.API.Controllers
         [Route("update")]
         public async Task<ResponseModel> Update(PondOwnerAPIModel pondOwner)
         {
+            PondOwner po = await _tnrssSupervisor.GetPondOwner(pondOwner.ID);
+            if (po == null)
+            {
+                return new ResponseBuilder<List<PondOwnerAPIModel>>().Error("Không tìm thấy chủ ao").ResponseModel;
+            }
             var valid = Valid(pondOwner);
             if (valid.IsValid)
             {
