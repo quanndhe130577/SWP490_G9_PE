@@ -56,7 +56,6 @@ namespace TnR_SS.API.Common.Token
                 int claimdId = int.Parse(currentUser.Claims.FirstOrDefault(c => c.Type == "ID").Value);
                 return claimdId;
             }
-
             throw new Exception("Access denied");
         }
     }

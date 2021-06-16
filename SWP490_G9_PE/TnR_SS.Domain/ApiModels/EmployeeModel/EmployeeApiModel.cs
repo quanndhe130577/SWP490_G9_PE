@@ -19,7 +19,5 @@ namespace TnR_SS.Domain.ApiModels.EmployeeModel
         public string PhoneNumber { get; set; }
         [Required]
         public string Address { get; set; }
-        [Required]
-        public int TraderId { get; set; }
     }
 }

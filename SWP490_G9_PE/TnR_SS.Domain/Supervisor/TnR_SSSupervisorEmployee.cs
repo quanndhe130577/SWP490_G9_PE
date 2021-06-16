@@ -28,5 +28,20 @@ namespace TnR_SS.Domain.Supervisor
             await _unitOfWork.Employees.CreateAsync(obj);
             await _unitOfWork.SaveChangeAsync();
         }
+
+        public async Task UpdateEmployeeAsync(EmployeeApiModel employee)
+        {
+            var empEdit = await _unitOfWork.Employees.FindAsync(employee.ID);
+            empEdit = _mapper.Map<EmployeeApiModel, Employee>(employee, empEdit);
+            _unitOfWork.Employees.Update(empEdit);
+            await _unitOfWork.SaveChangeAsync();
+        }
+
+        public async Task DeleteEmployeeAsync(int empId)
+        {
+            var empEdit = await _unitOfWork.Employees.FindAsync(empId);
+            _unitOfWork.Employees.Delete(empEdit);
+            await _unitOfWork.SaveChangeAsync();
+        }
     }
 }
