@@ -32,7 +32,7 @@ namespace TnR_SS.API.Controllers
         public ResponseModel CreateTruck(TruckApiModel truckModel)
         {
             var truckId = _tnrssSupervisor.CreateTruckAsync(truckModel);
-            return new ResponseBuilder<object>().Success("Get all type").WithData(new { truckId = truckId }).ResponseModel;
+            return new ResponseBuilder<object>().Success("Create truck success").WithData(new { truckId = truckId }).ResponseModel;
         }
     }
 }
