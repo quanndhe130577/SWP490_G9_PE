@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using TnR_SS.Domain.ApiModels.AccountModel.RequestModel;
 using TnR_SS.Domain.ApiModels.AccountModel.ResponseModel;
 using TnR_SS.Domain.ApiModels.BasketModel.ResponseModel;
+using TnR_SS.Domain.ApiModels.EmployeeModel;
 using TnR_SS.Domain.ApiModels.FishTypeModel;
 using TnR_SS.Domain.ApiModels.PondOwnerModel;
 using TnR_SS.Domain.ApiModels.PurchaseModal;
@@ -53,7 +54,7 @@ namespace TnR_SS.Domain.Supervisor
 
         #region Fishtype
         List<FishTypeApiModel> GetAllLastFishTypeByTraderId(int traderId);
-        Task CreateFishTypesAsync(List<FishTypeApiModel> listType);
+        Task CreateFishTypeAsync(List<FishTypeApiModel> listType, int traderId);
         Task UpdateFishTypeAsync(FishTypeApiModel fishTypeModel);
         #endregion
 
@@ -76,6 +77,11 @@ namespace TnR_SS.Domain.Supervisor
         #region Truck
         List<TruckApiModel> GetAllTruckByTraderId(int traderId);
         Task<int> CreateTruckAsync(TruckApiModel truckModel);
+        #endregion
+
+        #region Employee
+        List<EmployeeApiModel> GetAllEmployeeByTraderId(int traderId);
+        Task CreateEmployeesAsync(EmployeeApiModel employee, int traderId);
         #endregion
     }
 }

@@ -9,6 +9,6 @@ namespace TnR_SS.Domain.Repositories
 {
     public interface IEmployeeRepository : IRepositoryBase<Employee>
     {
-
+        List<Employee> GetAllEmployeeByTraderId(int traderId);
     }
 }

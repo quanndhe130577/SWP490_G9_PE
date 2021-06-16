@@ -12,6 +12,13 @@ namespace TnR_SS.DataEFCore.Repositories
     {
         public EmployeeRepository(TnR_SSContext context) : base(context) { }
 
-
+        public List<Employee> GetAllEmployeeByTraderId(int traderId)
+        {
+            var rs = _context.Employees.AsEnumerable().Where(x => x.TraderId == traderId)
+                .OrderByDescending(x => x.FirstName)
+                .GroupBy(x => x.FirstName)
+                .Select(x => x.First()).ToList();
+            return rs;
+        }
     }
 }

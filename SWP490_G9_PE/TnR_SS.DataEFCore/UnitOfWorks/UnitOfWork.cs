@@ -23,6 +23,7 @@ namespace TnR_SS.DataEFCore.UnitOfWorks
             Purchases = new PurchaseRepository(_context);
             FishTypes = new FishTypeRepository(_context);
             Trucks = new TruckRepository(_context);
+            Employees = new EmployeeRepository(_context);
         }
 
         public IOTPRepository OTPs { get; private set; }
@@ -42,6 +43,8 @@ namespace TnR_SS.DataEFCore.UnitOfWorks
         public IFishTypeRepository FishTypes { get; private set; }
 
         public ITruckRepository Trucks { get; private set; }
+
+        public IEmployeeRepository Employees { get; private set; }
 
         public Task<int> SaveChangeAsync()
         {

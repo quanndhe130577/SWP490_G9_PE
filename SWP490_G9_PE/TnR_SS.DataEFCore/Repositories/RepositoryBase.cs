@@ -132,7 +132,6 @@ namespace TnR_SS.DataEFCore.Repositories
             {
                 updatedAt.SetValue(entity, DateTime.Now);
             }
-
             dbSet.Update(entity);
         }
 
