@@ -78,6 +78,8 @@ namespace TnR_SS.Domain.Supervisor
         #endregion
 
         #region TimeKeeping
+        List<TimeKeepingApiModel> GetListTimeKeepingByTraderId(int id);
+        List<TimeKeepingApiModel> GetListTimeKeepingByEmployeeId(int id);
         Task<TimeKeeping> GetTimeKeeping(int id);
         List<TimeKeepingApiModel> GetListTimeKeeping();
         Task<int> AddTimeKeeping(TimeKeepingApiModel timeKeeping);

@@ -9,7 +9,6 @@ namespace TnR_SS.Domain.ApiModels.TimeKeepingModel
 {
     public class TimeKeepingApiModel
     {
-        [Required]
         public int ID { get; set; }
         [Required]
         public int WorkDay { get; set; }

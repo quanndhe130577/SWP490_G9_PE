@@ -21,9 +21,26 @@ namespace TnR_SS.API.Controller
             _tnrssSupervisor = tnrssSupervisor;
             _mapper = mapper;
         }
+
+        [HttpGet]
+        [Route("getByTrader/{id}")]
+        public ResponseModel GetByTraderId(int id)
+        {
+            var rs = _tnrssSupervisor.GetListTimeKeepingByTraderId(id);
+            return new ResponseBuilder<List<TimeKeepingApiModel>>().Success("Get Info Success").WithData(rs).ResponseModel;
+        }
+
+        [HttpGet]
+        [Route("getByEmployee/{id}")]
+        public ResponseModel GetByEmployeeId(int id)
+        {
+            var rs = _tnrssSupervisor.GetListTimeKeepingByEmployeeId(id);
+            return new ResponseBuilder<List<TimeKeepingApiModel>>().Success("Get Info Success").WithData(rs).ResponseModel;
+        }
+
         [HttpGet]
         [Route("getAll")]
-        public ResponseModel GetByTraderId()
+        public ResponseModel GetAll()
         {
             var rs = _tnrssSupervisor.GetListTimeKeeping();
             return new ResponseBuilder<List<TimeKeepingApiModel>>().Success("Get Info Success").WithData(rs).ResponseModel;
@@ -51,7 +68,7 @@ namespace TnR_SS.API.Controller
             TimeKeeping tk = await _tnrssSupervisor.GetTimeKeeping(timeKeeping.ID);
             if (tk == null)
             {
-                return new ResponseBuilder<List<TimeKeepingApiModel>>().Error("Không tìm thấy chủ ao").ResponseModel;
+                return new ResponseBuilder<List<TimeKeepingApiModel>>().Error("Không tìm thấy lịch làm việc").ResponseModel;
             }
             var valid = Valid(timeKeeping);
             if (valid.IsValid)
@@ -85,20 +102,20 @@ namespace TnR_SS.API.Controller
             }
         }
 
-        public static TimeKeepingValidModel Valid(TimeKeepingApiModel pondOwner)
+        public static TimeKeepingValidModel Valid(TimeKeepingApiModel timeKeeping)
         {
-            if (pondOwner.WorkDay == 0)
+            if (timeKeeping.WorkDay == 0)
             {
                 return new TimeKeepingValidModel() { IsValid = false, Message = "Ngày làm việc được để trống" };
             }
-            if (pondOwner.Status == null)
+            if (string.IsNullOrEmpty(timeKeeping.Status))
             {
                 return new TimeKeepingValidModel() { IsValid = false, Message = "Trạng thái không được để trống" };
 
             }
-            if (pondOwner.EmpId == 0)
+            if (timeKeeping.EmpId == 0)
             {
-                return new TimeKeepingValidModel() { IsValid = false, Message = "Không tìm thấy employee" };
+                return new TimeKeepingValidModel() { IsValid = false, Message = "Không tìm thấy nhân viên" };
             }
             return new TimeKeepingValidModel() { IsValid = true, Message = "Cập nhật thành công" };
         }
