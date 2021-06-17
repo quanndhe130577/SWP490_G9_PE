@@ -30,7 +30,7 @@ namespace TnR_SS.DataEFCore.Repositories
             }
             return owners;
              */
-            return _context.PondOwners.Where(x => x.TraderID == traderId).ToList();
+            return _context.PondOwners.Where(x => x.TraderID == traderId).OrderByDescending(pos => pos.CreatedAt).ToList();
 
         }
     }

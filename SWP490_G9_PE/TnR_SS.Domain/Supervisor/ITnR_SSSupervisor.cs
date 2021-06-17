@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TnR_SS.Domain.ApiModels.AccountModel.RequestModel;
@@ -69,8 +70,11 @@ namespace TnR_SS.Domain.Supervisor
         #endregion
 
         #region PondOwner
+        Task<PondOwner> GetPondOwner(Guid id);
         List<PondOwnerAPIModel> GetPondOwnerByTraderId(int traderId);
         Task<int> AddPondOwner(PondOwnerAPIModel pondOwnerModel);
+        Task<int> EditPondOwner(PondOwnerAPIModel pondOwnerModel);
+        Task<int> DeletePondOwner(PondOwner pondOwner);
         #endregion
 
         #region Truck
