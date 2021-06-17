@@ -10,12 +10,11 @@ using System.Threading.Tasks;
 namespace TnR_SS.Domain.Entities
 {
     [Table("PondOwner")]
-    [Keyless]
     public class PondOwner
     {
-        /*[Key]
+        [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
-        public int ID { get; set; }*/
+        public int ID { get; set; }
         [Required]
         public string Name { get; set; }
         public string Address { get; set; }
@@ -26,10 +25,10 @@ namespace TnR_SS.Domain.Entities
         [Required]
         public DateTime UpdatedAt { get; set; }
 
-        /*[Required]
+        [Required]
         public int TraderID { get; set; }
         public UserInfor Trader { get; set; }
 
-        public List<Purchase> Purchases { get; set; }*/
+        public List<Purchase> Purchases { get; set; }
     }
 }

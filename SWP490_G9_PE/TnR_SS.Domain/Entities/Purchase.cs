@@ -34,9 +34,9 @@ namespace TnR_SS.Domain.Entities
 
         public double PondBackMoney { get; set; }
 
-        /*[Required]
+        [Required]
         public int PondOwnerID { get; set; }
-        public PondOwner PondOwner { get; set; }*/
+        public PondOwner PondOwner { get; set; }
 
         [Required]
         public int TraderID { get; set; }
