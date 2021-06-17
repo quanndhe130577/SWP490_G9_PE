@@ -43,13 +43,55 @@ namespace TnR_SS.API.Controllers
 
         [HttpPost]
         [Route("create")]
-        public async Task<ResponseModel> AddNewPondOwner(PondOwnerAPIModel pondOwner)
+        public async Task<ResponseModel> Create(PondOwnerAPIModel pondOwner)
         {
             var valid = Valid(pondOwner);
             if (valid.IsValid)
             {
                 await _tnrssSupervisor.AddPondOwner(pondOwner);
                 return new ResponseBuilder<List<PondOwnerAPIModel>>().Success("Thêm thành công").ResponseModel;
+            }
+            else
+            {
+                return new ResponseBuilder<List<PondOwnerAPIModel>>().Error(valid.Message).ResponseModel;
+            }
+        }
+
+        [HttpPost]
+        [Route("delete/{id}")]
+        public async Task<ResponseModel> Delete(Guid id)
+        {
+            PondOwner pondOwner = await _tnrssSupervisor.GetPondOwner(id);
+            if (pondOwner == null)
+            {
+                return new ResponseBuilder<List<PondOwnerAPIModel>>().Error("Không tìm thấy chủ ao").ResponseModel;
+            }
+            int count = await _tnrssSupervisor.DeletePondOwner(pondOwner);
+            if (count > 0)
+            {
+                return new ResponseBuilder<List<PondOwnerAPIModel>>().Success("Xoá thành công").ResponseModel;
+            }
+            else
+            {
+                return new ResponseBuilder<List<PondOwnerAPIModel>>().Error("Xoá thất bại").ResponseModel;
+            }
+        }
+
+
+        [HttpPost]
+        [Route("update")]
+        public async Task<ResponseModel> Update(PondOwnerAPIModel pondOwner)
+        {
+            PondOwner po = await _tnrssSupervisor.GetPondOwner(pondOwner.ID);
+            if (po == null)
+            {
+                return new ResponseBuilder<List<PondOwnerAPIModel>>().Error("Không tìm thấy chủ ao").ResponseModel;
+            }
+            var valid = Valid(pondOwner);
+            if (valid.IsValid)
+            {
+                await _tnrssSupervisor.EditPondOwner(pondOwner);
+                return new ResponseBuilder<List<PondOwnerAPIModel>>().Success("Cập nhật thành công").ResponseModel;
             }
             else
             {
@@ -72,7 +114,7 @@ namespace TnR_SS.API.Controllers
             {
                 return new PondOwnerValidModel() { IsValid = false, Message = "Điện thoại không được để trống" };
             }
-            if(pondOwner.TraderID==0) 
+            if (pondOwner.TraderID == 0)
             {
                 return new PondOwnerValidModel() { IsValid = false, Message = "Người bán cá không được để trống" };
             }

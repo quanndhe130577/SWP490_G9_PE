@@ -10,6 +10,7 @@ using TnR_SS.Domain.ApiModels.PurchaseModal;
 using TnR_SS.Domain.ApiModels.RoleUserModel.RequestModel;
 using TnR_SS.Domain.ApiModels.RoleUserModel.ResponseModel;
 using TnR_SS.Domain.ApiModels.TruckModel;
+using TnR_SS.Domain.ApiModels.TimeKeepingModel;
 using TnR_SS.Domain.Entities;
 
 namespace TnR_SS.Domain.ApiModels
@@ -51,6 +52,10 @@ namespace TnR_SS.Domain.ApiModels
 
             #region PondOwner
             CreateMap<PondOwnerAPIModel, PondOwner>().ReverseMap();
+            #endregion
+
+            #region TimeKeeping
+            CreateMap<TimeKeepingApiModel, TimeKeeping>().ReverseMap();
             #endregion
 
             #region Employee

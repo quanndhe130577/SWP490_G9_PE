@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TnR_SS.Domain.ApiModels.AccountModel.RequestModel;
@@ -10,6 +11,7 @@ using TnR_SS.Domain.ApiModels.PondOwnerModel;
 using TnR_SS.Domain.ApiModels.PurchaseModal;
 using TnR_SS.Domain.ApiModels.RoleUserModel.RequestModel;
 using TnR_SS.Domain.ApiModels.TruckModel;
+using TnR_SS.Domain.ApiModels.TimeKeepingModel;
 using TnR_SS.Domain.Entities;
 
 namespace TnR_SS.Domain.Supervisor
@@ -70,6 +72,7 @@ namespace TnR_SS.Domain.Supervisor
         #endregion
 
         #region PondOwner
+        Task<PondOwner> GetPondOwner(Guid id);
         List<PondOwnerAPIModel> GetPondOwnerByTraderId(int traderId);
         Task<int> AddPondOwner(PondOwnerAPIModel pondOwnerModel);
         #endregion
@@ -83,6 +86,16 @@ namespace TnR_SS.Domain.Supervisor
         List<DrumApiModel> GetAllDrumByTruckId(int truckId);
         List<DrumApiModel> GetAllDrumByTraderId(int traderId);
         Task<int> CreateDrumAsync(DrumApiModel drumModel);
+        #endregion
+        
+        #region TimeKeeping
+        List<TimeKeepingApiModel> GetListTimeKeepingByTraderId(int id);
+        List<TimeKeepingApiModel> GetListTimeKeepingByEmployeeId(int id);
+        Task<TimeKeeping> GetTimeKeeping(int id);
+        List<TimeKeepingApiModel> GetListTimeKeeping();
+        Task<int> AddTimeKeeping(TimeKeepingApiModel timeKeeping);
+        Task<int> EditTimeKeeping(TimeKeepingApiModel timeKeeping);
+        Task<int> DeleteTimeKeeping(TimeKeeping timeKeeping);
         #endregion
     }
 }

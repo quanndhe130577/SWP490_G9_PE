@@ -22,6 +22,7 @@ namespace TnR_SS.DataEFCore.UnitOfWorks
             PurchaseDetails = new PurchaseDetailRepository(_context);
             Purchases = new PurchaseRepository(_context);
             FishTypes = new FishTypeRepository(_context);
+            TimeKeeping = new TimeKeepingRepository(_context);
             Trucks = new TruckRepository(_context);
             Drums = new DrumRepository(_context);
         }
@@ -43,6 +44,7 @@ namespace TnR_SS.DataEFCore.UnitOfWorks
         public IFishTypeRepository FishTypes { get; private set; }
 
         public ITruckRepository Trucks { get; private set; }
+        public ITimeKeepingRepository TimeKeeping { get; private set; }
 
         public IDrumRepository Drums { get; private set; }
 
