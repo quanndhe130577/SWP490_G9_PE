@@ -13,6 +13,7 @@ using TnR_SS.Domain.ApiModels.RoleUserModel.RequestModel;
 using TnR_SS.Domain.ApiModels.TruckModel;
 using TnR_SS.Domain.ApiModels.TimeKeepingModel;
 using TnR_SS.Domain.Entities;
+using TnR_SS.Domain.ApiModels.EmployeeModel;
 
 namespace TnR_SS.Domain.Supervisor
 {
@@ -96,7 +97,7 @@ namespace TnR_SS.Domain.Supervisor
         Task UpdateEmployeeAsync(EmployeeApiModel employee, int traderId);
         Task DeleteEmployeeAsync(int empId, int traderId);
         EmployeeApiModel GetDetailEmployee(int traderId, int empId);
-........#endregion
+        #endregion
         
         #region TimeKeeping
         List<TimeKeepingApiModel> GetListTimeKeepingByTraderId(int id);

@@ -9,6 +9,7 @@ namespace TnR_SS.Domain.Repositories
 {
     public interface ITimeKeepingRepository : IRepositoryBase<TimeKeeping>
     {
-
+        List<TimeKeeping> GetAllByTraderId(int id);
+        public List<TimeKeeping> GetAllByEmployeeId(int id);
     }
 }

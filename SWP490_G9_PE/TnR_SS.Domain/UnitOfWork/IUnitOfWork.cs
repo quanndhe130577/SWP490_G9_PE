@@ -21,8 +21,6 @@ namespace TnR_SS.Domain.UnitOfWork
         IEmployeeRepository Employees { get; }
         ITimeKeepingRepository TimeKeeping { get; }
         IDrumRepository Drums { get; }
-
-        IEmployeeRepository Employees { get; }
         Task<int> SaveChangeAsync();
     }
 }
