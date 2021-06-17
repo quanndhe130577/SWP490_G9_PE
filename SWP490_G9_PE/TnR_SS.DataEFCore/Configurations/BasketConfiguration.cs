@@ -28,6 +28,12 @@ namespace TnR_SS.DataEFCore.Configurations
                 .IsRequired()
                 .HasColumnType("datetime");
 
+            entity.Property(e => e.TraderID)
+                .IsRequired();
+            entity.HasOne(p => p.Trader)
+                .WithMany(b => b.Baskets)
+                .OnDelete(DeleteBehavior.ClientNoAction)
+                .HasConstraintName("FK_Basket_UserInfor");
 
         }
     }
