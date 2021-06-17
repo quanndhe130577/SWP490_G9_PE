@@ -25,11 +25,11 @@ namespace TnR_SS.DataEFCore.Configurations
 
             /*entity.Property(e => e.PondOwnerID)
                 .IsRequired();*/
-            entity.HasOne(p => p.PondOwner)
+            /*entity.HasOne(p => p.PondOwner)
                 .WithMany(b => b.Purchases)
                 .HasForeignKey(p => p.PondOwnerID)
                 .OnDelete(DeleteBehavior.ClientNoAction)
-                .HasConstraintName("FK_Purchase_PondOwner");
+                .HasConstraintName("FK_Purchase_PondOwner");*/
 
             entity.Property(e => e.TotalAmount)
                 .IsRequired();

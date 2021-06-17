@@ -16,7 +16,8 @@ namespace TnR_SS.DataEFCore.Configurations
 
             entity.ToTable("PondOwner");
 
-            entity.Property(e => e.ID).HasColumnName("ID");
+            entity.HasNoKey();
+            //entity.Property(e => e.ID).HasColumnName("ID");
 
             entity.Property(e => e.Name)
                 .IsRequired()
@@ -30,11 +31,11 @@ namespace TnR_SS.DataEFCore.Configurations
             entity.Property(e => e.Address)
                 .IsRequired();
 
-            entity.HasOne(p => p.Trader)
+            /*entity.HasOne(p => p.Trader)
                .WithMany(b => b.PondOwners)
                .HasForeignKey(p => p.TraderID)
                .OnDelete(DeleteBehavior.ClientNoAction)
-               .HasConstraintName("FK_PondOwner_UserInfor");
+               .HasConstraintName("FK_PondOwner_UserInfor");*/
         }
     }
 }

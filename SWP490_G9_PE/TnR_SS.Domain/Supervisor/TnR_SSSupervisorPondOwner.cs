@@ -29,7 +29,6 @@ namespace TnR_SS.Domain.Supervisor
         public async Task<int> AddPondOwner(PondOwnerAPIModel pondOwnerModel)
         {
             PondOwner pondOwner = _mapper.Map<PondOwnerAPIModel, PondOwner>(pondOwnerModel);
-            pondOwner.ID = Guid.NewGuid();
             await _unitOfWork.PondOwners.CreateAsync(pondOwner);
             return await _unitOfWork.SaveChangeAsync();
         }

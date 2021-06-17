@@ -32,5 +32,7 @@ namespace TnR_SS.Domain.Entities
         [Required]
         public int EmpId { get; set; }
         public Employee Employee { get; set; }
+
+        
     }
 }

@@ -33,6 +33,7 @@ namespace TnR_SS.Domain.Supervisor
         {
             return await _unitOfWork.UserInfors.AddToRoleAsync(user, role);
         }
+
         public async Task<IdentityResult> DeleteUserAsync(UserInfor user)
         {
             return await _unitOfWork.UserInfors.DeleteIdentityAsync(user);
