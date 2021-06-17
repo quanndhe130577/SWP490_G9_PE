@@ -108,7 +108,7 @@ namespace TnR_SS.API.Controller
         #endregion
 
         #region update user
-        [HttpPut("user/update/{id}")]
+        [HttpPost("user/update/{id}")]
         //[Route("update")]
         public async Task<ResponseModel> UpdateUserInfor(int id, UpdateUserReqModel userData)
         {
@@ -133,7 +133,7 @@ namespace TnR_SS.API.Controller
         #endregion
 
         #region change password
-        [HttpPut("user/change-password/{id}")]
+        [HttpPost("user/change-password/{id}")]
         //[Route("change-password")]
         public async Task<ResponseModel> ChangePassword(int id, [FromBody] ChangePasswordReqModel changePasswordModel)
         {
