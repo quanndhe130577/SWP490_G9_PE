@@ -60,7 +60,7 @@ namespace TnR_SS.Domain.ApiModels
 
             #region Employee
             CreateMap<Employee, EmployeeApiModel>();
-            CreateMap<EmployeeApiModel, FishType>();
+            CreateMap<EmployeeApiModel, Employee>();
             #endregion
 
             #region Truck

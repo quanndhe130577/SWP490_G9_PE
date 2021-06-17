@@ -25,6 +25,7 @@ namespace TnR_SS.DataEFCore.UnitOfWorks
             TimeKeeping = new TimeKeepingRepository(_context);
             Trucks = new TruckRepository(_context);
             Drums = new DrumRepository(_context);
+            Employees = new EmployeeRepository(_context);
         }
 
         public IOTPRepository OTPs { get; private set; }
@@ -45,6 +46,8 @@ namespace TnR_SS.DataEFCore.UnitOfWorks
 
         public ITruckRepository Trucks { get; private set; }
         public ITimeKeepingRepository TimeKeeping { get; private set; }
+        public IEmployeeRepository Employees { get; private set; }
+
 
         public IDrumRepository Drums { get; private set; }
 

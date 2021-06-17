@@ -56,7 +56,7 @@ namespace TnR_SS.Domain.Supervisor
 
         #region Fishtype
         List<FishTypeApiModel> GetAllLastFishTypeByTraderId(int traderId);
-        Task CreateFishTypesAsync(List<FishTypeApiModel> listType);
+        Task CreateFishTypeAsync(List<FishTypeApiModel> listType, int traderId);
         Task UpdateFishTypeAsync(FishTypeApiModel fishTypeModel);
         #endregion
 
@@ -89,6 +89,14 @@ namespace TnR_SS.Domain.Supervisor
         List<DrumApiModel> GetAllDrumByTraderId(int traderId);
         Task<int> CreateDrumAsync(DrumApiModel drumModel);
         #endregion
+        
+        #region Employee
+        List<EmployeeApiModel> GetAllEmployeeByTraderId(int traderId);
+        Task CreateEmployeesAsync(EmployeeApiModel employee, int traderId);
+        Task UpdateEmployeeAsync(EmployeeApiModel employee, int traderId);
+        Task DeleteEmployeeAsync(int empId, int traderId);
+        EmployeeApiModel GetDetailEmployee(int traderId, int empId);
+........#endregion
         
         #region TimeKeeping
         List<TimeKeepingApiModel> GetListTimeKeepingByTraderId(int id);
