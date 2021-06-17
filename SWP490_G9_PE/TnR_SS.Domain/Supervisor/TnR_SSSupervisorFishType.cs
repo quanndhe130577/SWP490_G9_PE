@@ -22,11 +22,12 @@ namespace TnR_SS.Domain.Supervisor
 
         }
 
-        public async Task CreateFishTypesAsync(List<FishTypeApiModel> listType)
+        public async Task CreateFishTypeAsync(List<FishTypeApiModel> listType, int traderId)
         {
             foreach (var obj in listType)
             {
                 var fishType = _mapper.Map<FishTypeApiModel, FishType>(obj);
+                fishType.TraderID = traderId;
                 await _unitOfWork.FishTypes.CreateAsync(fishType);
             }
             await _unitOfWork.SaveChangeAsync();

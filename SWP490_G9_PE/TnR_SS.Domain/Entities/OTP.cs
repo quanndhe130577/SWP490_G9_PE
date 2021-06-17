@@ -10,15 +10,19 @@ namespace TnR_SS.Domain.Entities
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
+
         [Required]
         public DateTime ExpiredDate { get; set; }
+
         [Required]
         [StringLength(6)]
         public string Code { get; set; }
+
         [Required]
         [MaxLength(12)]
         [MinLength(10)]
         public string PhoneNumber { get; set; }
+
         [Required]
         public string Status { get; set; }
     }

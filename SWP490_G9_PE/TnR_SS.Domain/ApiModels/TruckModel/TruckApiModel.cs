@@ -8,7 +8,7 @@ namespace TnR_SS.Domain.ApiModels.TruckModel
 {
     public class TruckApiModel
     {
-        public int TraderId { get; set; }
+        public int Id { get; set; }
         public string LicensePlate { get; set; }
     }
 }

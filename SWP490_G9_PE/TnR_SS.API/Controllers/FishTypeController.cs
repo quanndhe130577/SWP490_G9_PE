@@ -21,14 +21,14 @@ namespace TnR_SS.API.Controllers
         {
             _tnrssSupervisor = tnrssSupervisor;
         }
-        /*
-                [HttpPost("create")]
-                [AllowAnonymous]
-                public async Task<ResponseModel> CreateFishTypePriceAsync(ListTypeModel listType)
-                {
-                    await _tnrssSupervisor.CreateFishTypePricesAsync(listType.ListFishType);
-                    return new ResponseBuilder().Success("Create Fish Type Success").ResponseModel;
-                }*/
+
+        [HttpPost("create/{traderId}")]
+        [AllowAnonymous]
+        public async Task<ResponseModel> CreateFishTypeAsync(ListFishTypeModel listType, int traderId)
+        {
+            await _tnrssSupervisor.CreateFishTypeAsync(listType.ListFishType, traderId);
+            return new ResponseBuilder().Success("Create Fish Type Success").ResponseModel;
+        }
 
         [HttpGet("getlastall/{traderId}")]
         public ResponseModel GetAllFishType(int traderId)

@@ -80,7 +80,6 @@ namespace TnR_SS.API.Controller
         [AllowAnonymous]
         public async Task<ResponseModel> Login([FromBody] LoginReqModel userData)
         {
-            _tnrssSupervisor.Test();
             if (ModelState.IsValid)
             {
                 var user = _tnrssSupervisor.GetUserByPhoneNumber(userData.PhoneNumber);

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TnR_SS.DataEFCore;
 
 namespace TnR_SS.DataEFCore.Migrations
 {
     [DbContext(typeof(TnR_SSContext))]
-    partial class TnR_SSContextModelSnapshot : ModelSnapshot
+    [Migration("20210617165839_removeIdPondAndFKPurchase")]
+    partial class removeIdPondAndFKPurchase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -343,12 +345,6 @@ namespace TnR_SS.DataEFCore.Migrations
 
             modelBuilder.Entity("TnR_SS.Domain.Entities.PondOwner", b =>
                 {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("ID")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
                     b.Property<string>("Address")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -367,15 +363,8 @@ namespace TnR_SS.DataEFCore.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(12)");
 
-                    b.Property<int>("TraderID")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("TraderID");
 
                     b.ToTable("PondOwner");
                 });
@@ -402,9 +391,6 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.Property<double>("PondBackMoney")
                         .HasColumnType("float");
 
-                    b.Property<int>("PondOwnerID")
-                        .HasColumnType("int");
-
                     b.Property<double>("TotalAmount")
                         .HasColumnType("float");
 
@@ -421,8 +407,6 @@ namespace TnR_SS.DataEFCore.Migrations
                         .HasColumnType("bit");
 
                     b.HasKey("ID");
-
-                    b.HasIndex("PondOwnerID");
 
                     b.HasIndex("TraderID");
 
@@ -507,7 +491,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "31724f3c-413e-46ca-8cf4-21a7ccf2f284",
+                            ConcurrencyStamp = "8dd88f93-6a3f-4986-b6a1-3ebc2e3c3027",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Admin",
                             Name = "Admin",
@@ -517,7 +501,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "c2ebc497-2266-4316-b903-2cded5655070",
+                            ConcurrencyStamp = "44627eef-f021-4fc8-aa52-b91ee3e64042",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Thương lái",
                             Name = "Trader",
@@ -527,7 +511,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "076637eb-deb2-4f39-8301-e349521a4ffe",
+                            ConcurrencyStamp = "bf895ea5-0303-42ae-9b43-90671acedaf9",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Chủ bến",
                             Name = "Weight Recorder",
@@ -830,34 +814,14 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.Navigation("PurchaseDetail");
                 });
 
-            modelBuilder.Entity("TnR_SS.Domain.Entities.PondOwner", b =>
-                {
-                    b.HasOne("TnR_SS.Domain.Entities.UserInfor", "Trader")
-                        .WithMany("PondOwners")
-                        .HasForeignKey("TraderID")
-                        .HasConstraintName("FK_PondOwner_UserInfor")
-                        .OnDelete(DeleteBehavior.ClientNoAction)
-                        .IsRequired();
-
-                    b.Navigation("Trader");
-                });
-
             modelBuilder.Entity("TnR_SS.Domain.Entities.Purchase", b =>
                 {
-                    b.HasOne("TnR_SS.Domain.Entities.PondOwner", "PondOwner")
-                        .WithMany("Purchases")
-                        .HasForeignKey("PondOwnerID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("TnR_SS.Domain.Entities.UserInfor", "UserInfor")
                         .WithMany("Purchases")
                         .HasForeignKey("TraderID")
                         .HasConstraintName("FK_Purchase_UserInfor")
                         .OnDelete(DeleteBehavior.ClientNoAction)
                         .IsRequired();
-
-                    b.Navigation("PondOwner");
 
                     b.Navigation("UserInfor");
                 });
@@ -936,11 +900,6 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.Navigation("PurchaseDetails");
                 });
 
-            modelBuilder.Entity("TnR_SS.Domain.Entities.PondOwner", b =>
-                {
-                    b.Navigation("Purchases");
-                });
-
             modelBuilder.Entity("TnR_SS.Domain.Entities.Purchase", b =>
                 {
                     b.Navigation("PurchaseDetails");
@@ -963,8 +922,6 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.Navigation("Employees");
 
                     b.Navigation("FishTypes");
-
-                    b.Navigation("PondOwners");
 
                     b.Navigation("Purchases");
 

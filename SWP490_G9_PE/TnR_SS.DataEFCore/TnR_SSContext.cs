@@ -38,9 +38,8 @@ namespace TnR_SS.DataEFCore
     => options.UseSqlServer("Server=localhost;Database=TnR_SS;Trusted_Connection=True;");*/
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
-            // if (options.IsConfigured)
             // {
-            options.UseSqlServer("Server = localhost; Database = TnR_SS; Trusted_Connection = True;", builder => builder.EnableRetryOnFailure());
+            //options.UseSqlServer("Server = localhost; Database = TnR_SS; Trusted_Connection = True;", builder => builder.EnableRetryOnFailure());
             // }
         }
 

@@ -20,7 +20,7 @@ namespace TnR_SS.API.Middleware.ErrorHandle
         {
             try
             {
-                if (!String.IsNullOrEmpty(context.Request.Query["id"]))
+                if (!String.IsNullOrEmpty(context.Request.Query["id"]))// parameter
                 {
                     int id = int.Parse(context.Request.Query["id"]);
 

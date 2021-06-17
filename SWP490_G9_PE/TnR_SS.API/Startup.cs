@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Linq;
 using System.Text;
 using TnR_SS.API.Common.Response;
@@ -88,9 +89,11 @@ namespace TnR_SS
                         ValidateIssuer = true,
                         ValidIssuer = Configuration["Jwt:Issuer"],
                         ValidateAudience = true,
+                        ValidateLifetime = true,
                         ValidAudience = Configuration["Jwt:Audience"],
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"])),
-                        RequireExpirationTime = true
+                        RequireExpirationTime = true,
+                        ClockSkew = TimeSpan.Zero,// default is TimeSpan.FromSeconds(300
                     };
                 });
 

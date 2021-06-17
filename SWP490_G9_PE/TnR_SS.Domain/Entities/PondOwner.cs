@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -12,8 +13,8 @@ namespace TnR_SS.Domain.Entities
     public class PondOwner
     {
         [Key]
-        [Required]
-        public Guid ID { get; set; }
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
+        public int ID { get; set; }
         [Required]
         public string Name { get; set; }
         public string Address { get; set; }
@@ -27,11 +28,6 @@ namespace TnR_SS.Domain.Entities
         [Required]
         public int TraderID { get; set; }
         public UserInfor Trader { get; set; }
-
-        public PondOwner()
-        {
-            this.ID = Guid.NewGuid();
-        }
 
         public List<Purchase> Purchases { get; set; }
     }

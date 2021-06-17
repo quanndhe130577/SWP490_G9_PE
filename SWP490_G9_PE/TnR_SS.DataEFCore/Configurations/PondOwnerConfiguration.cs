@@ -16,6 +16,7 @@ namespace TnR_SS.DataEFCore.Configurations
 
             entity.ToTable("PondOwner");
 
+            /*entity.HasNoKey();*/
             entity.Property(e => e.ID).HasColumnName("ID");
 
             entity.Property(e => e.Name)
