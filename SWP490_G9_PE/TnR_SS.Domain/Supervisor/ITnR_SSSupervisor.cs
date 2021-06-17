@@ -9,6 +9,7 @@ using TnR_SS.Domain.ApiModels.FishTypeModel;
 using TnR_SS.Domain.ApiModels.PondOwnerModel;
 using TnR_SS.Domain.ApiModels.PurchaseModal;
 using TnR_SS.Domain.ApiModels.RoleUserModel.RequestModel;
+using TnR_SS.Domain.ApiModels.TimeKeepingModel;
 using TnR_SS.Domain.Entities;
 
 namespace TnR_SS.Domain.Supervisor
@@ -74,6 +75,14 @@ namespace TnR_SS.Domain.Supervisor
         Task<int> AddPondOwner(PondOwnerAPIModel pondOwnerModel);
         Task<int> EditPondOwner(PondOwnerAPIModel pondOwnerModel);
         Task<int> DeletePondOwner(PondOwner pondOwner);
+        #endregion
+
+        #region TimeKeeping
+        Task<TimeKeeping> GetTimeKeeping(int id);
+        List<TimeKeepingApiModel> GetListTimeKeeping();
+        Task<int> AddTimeKeeping(TimeKeepingApiModel timeKeeping);
+        Task<int> EditTimeKeeping(TimeKeepingApiModel timeKeeping);
+        Task<int> DeleteTimeKeeping(TimeKeeping timeKeeping);
         #endregion
     }
 }

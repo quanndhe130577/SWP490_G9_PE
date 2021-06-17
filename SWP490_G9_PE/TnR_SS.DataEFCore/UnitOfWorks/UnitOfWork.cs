@@ -22,6 +22,7 @@ namespace TnR_SS.DataEFCore.UnitOfWorks
             PurchaseDetails = new PurchaseDetailRepository(_context);
             Purchases = new PurchaseRepository(_context);
             FishTypes = new FishTypeRepository(_context);
+            TimeKeeping = new TimeKeepingRepository(_context);
         }
 
         public IOTPRepository OTPs { get; private set; }
@@ -39,6 +40,7 @@ namespace TnR_SS.DataEFCore.UnitOfWorks
         public IPurchaseRepository Purchases { get; private set; }
 
         public IFishTypeRepository FishTypes { get; private set; }
+        public ITimeKeepingRepository TimeKeeping { get; private set; }
 
         public Task<int> SaveChangeAsync()
         {
