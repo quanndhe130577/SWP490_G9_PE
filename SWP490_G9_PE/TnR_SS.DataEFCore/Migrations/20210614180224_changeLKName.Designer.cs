@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TnR_SS.DataEFCore;
 
 namespace TnR_SS.DataEFCore.Migrations
 {
     [DbContext(typeof(TnR_SSContext))]
-    partial class TnR_SSContextModelSnapshot : ModelSnapshot
+    [Migration("20210614180224_changeLKName")]
+    partial class changeLKName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -236,9 +238,6 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime");
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -257,9 +256,6 @@ namespace TnR_SS.DataEFCore.Migrations
                         .HasMaxLength(12)
                         .HasColumnType("real");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
-
                     b.Property<int>("TraderID")
                         .HasColumnType("int");
 
@@ -271,6 +267,36 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.HasIndex("TraderID");
 
                     b.ToTable("FishType");
+                });
+
+            modelBuilder.Entity("TnR_SS.Domain.Entities.FishTypePrice", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("ID")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime");
+
+                    b.Property<int>("FishTypeID")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("FishTypeID");
+
+                    b.ToTable("FishTypePrice");
                 });
 
             modelBuilder.Entity("TnR_SS.Domain.Entities.LK_PurchaseDeatil_Drum", b =>
@@ -439,7 +465,7 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("FishTypeID")
+                    b.Property<int>("FishTypePriceID")
                         .HasColumnType("int");
 
                     b.Property<int>("PurchaseId")
@@ -452,7 +478,7 @@ namespace TnR_SS.DataEFCore.Migrations
 
                     b.HasIndex("BasketId");
 
-                    b.HasIndex("FishTypeID");
+                    b.HasIndex("FishTypePriceID");
 
                     b.HasIndex("PurchaseId");
 
@@ -501,7 +527,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "8fa78a6e-db42-468a-8173-8b952d46656b",
+                            ConcurrencyStamp = "7a6d1943-292c-47dc-810d-452a54a47941",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Admin",
                             Name = "Admin",
@@ -511,7 +537,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "0d372e2b-20f1-4421-b6a4-9c0bba0b73fe",
+                            ConcurrencyStamp = "1d8e56fc-02ea-4254-9ee1-d36f151a8876",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Thương lái",
                             Name = "Trader",
@@ -521,7 +547,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "3558fd9e-e470-411d-9cca-aebb88596492",
+                            ConcurrencyStamp = "d3ed689a-1a22-46b0-860a-dc1600a615a1",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Chủ bến",
                             Name = "Weight Recorder",
@@ -791,6 +817,18 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.Navigation("Trader");
                 });
 
+            modelBuilder.Entity("TnR_SS.Domain.Entities.FishTypePrice", b =>
+                {
+                    b.HasOne("TnR_SS.Domain.Entities.FishType", "FishType")
+                        .WithMany("FishTypePrices")
+                        .HasForeignKey("FishTypeID")
+                        .HasConstraintName("FK_FishTypePrice_FishType")
+                        .OnDelete(DeleteBehavior.ClientNoAction)
+                        .IsRequired();
+
+                    b.Navigation("FishType");
+                });
+
             modelBuilder.Entity("TnR_SS.Domain.Entities.LK_PurchaseDeatil_Drum", b =>
                 {
                     b.HasOne("TnR_SS.Domain.Entities.Drum", "Drum")
@@ -854,10 +892,10 @@ namespace TnR_SS.DataEFCore.Migrations
                         .OnDelete(DeleteBehavior.ClientNoAction)
                         .IsRequired();
 
-                    b.HasOne("TnR_SS.Domain.Entities.FishType", "FishType")
+                    b.HasOne("TnR_SS.Domain.Entities.FishTypePrice", "FishTypePrice")
                         .WithMany("PurchaseDetails")
-                        .HasForeignKey("FishTypeID")
-                        .HasConstraintName("FK_PurchaseDetail_FishType")
+                        .HasForeignKey("FishTypePriceID")
+                        .HasConstraintName("FK_PurchaseDetail_FishTypePrice")
                         .OnDelete(DeleteBehavior.ClientNoAction)
                         .IsRequired();
 
@@ -870,7 +908,7 @@ namespace TnR_SS.DataEFCore.Migrations
 
                     b.Navigation("Basket");
 
-                    b.Navigation("FishType");
+                    b.Navigation("FishTypePrice");
 
                     b.Navigation("Purchase");
                 });
@@ -915,6 +953,11 @@ namespace TnR_SS.DataEFCore.Migrations
                 });
 
             modelBuilder.Entity("TnR_SS.Domain.Entities.FishType", b =>
+                {
+                    b.Navigation("FishTypePrices");
+                });
+
+            modelBuilder.Entity("TnR_SS.Domain.Entities.FishTypePrice", b =>
                 {
                     b.Navigation("PurchaseDetails");
                 });

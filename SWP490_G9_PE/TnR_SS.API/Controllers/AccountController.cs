@@ -27,12 +27,10 @@ namespace TnR_SS.API.Controller
     public class AccountController : ControllerBase
     {
         private readonly ITnR_SSSupervisor _tnrssSupervisor;
-        private readonly IMapper _mapper;
 
-        public AccountController(ITnR_SSSupervisor tnrssSupervisor, IMapper mapper)
+        public AccountController(ITnR_SSSupervisor tnrssSupervisor)
         {
             _tnrssSupervisor = tnrssSupervisor;
-            _mapper = mapper;
         }
 
         #region Register      
@@ -153,12 +151,12 @@ namespace TnR_SS.API.Controller
                     return new ResponseBuilder().Error("Invalid information").ResponseModel;
                 }
 
-                var result = await _tnrssSupervisor.ChangeUserPasswordAsync(userInfor, changePasswordModel.CurrentPassword, changePasswordModel.NewPassword);
+                var result = await _tnrssSupervisor.ChangeUserPasswordAsync(userInfor.UserID, changePasswordModel.CurrentPassword, changePasswordModel.NewPassword);
 
                 if (result.Succeeded)
                 {
                     //await _signInManager.RefreshSignInAsync(userInfor);
-                    var token = TokenManagement.GetTokenUser(userInfor.Id);
+                    var token = TokenManagement.GetTokenUser(userInfor.UserID);
                     LoginResModel rlm = new LoginResModel()
                     {
                         Token = token,
@@ -254,7 +252,7 @@ namespace TnR_SS.API.Controller
         public ResponseModel GetUserInfo(int id)
         {
             var user = _tnrssSupervisor.GetUserById(id);
-            return new ResponseBuilder<UserResModel>().Success("Login success").WithData(_mapper.Map<UserInfor, UserResModel>(user)).ResponseModel;
+            return new ResponseBuilder<UserResModel>().Success("Login success").WithData(user).ResponseModel;
         }
         #endregion
 
@@ -263,7 +261,7 @@ namespace TnR_SS.API.Controller
         [AllowAnonymous]
         public void Test()
         {
-            //_tnrssSupervisor.CreateOTPTest();
+            _tnrssSupervisor.Test();
         }
         #endregion
     }

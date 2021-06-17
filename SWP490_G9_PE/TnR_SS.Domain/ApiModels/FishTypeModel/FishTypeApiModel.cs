@@ -12,8 +12,6 @@ namespace TnR_SS.Domain.ApiModels.FishTypeModel
         [Required]
         public int ID { get; set; }
         [Required]
-        public int TraderID { get; set; }
-        [Required]
         public string FishName { get; set; }
         public string Description { get; set; }
         [Required]

@@ -68,9 +68,10 @@ namespace TnR_SS.Domain.Supervisor
             await _unitOfWork.UserInfors.SignInAsync(user);
         }
 
-        public UserInfor GetUserById(int id)
+        public UserResModel GetUserById(int id)
         {
-            return _unitOfWork.UserInfors.GetUserById(id);
+            var user = _unitOfWork.UserInfors.GetUserById(id);
+            return _mapper.Map<UserInfor, UserResModel>(user);
         }
 
         public async Task<IdentityResult> UpdateUserAsync(UpdateUserReqModel user, int id, string avatarLink)
@@ -89,9 +90,10 @@ namespace TnR_SS.Domain.Supervisor
             return userResModel;
         }
 
-        public async Task<IdentityResult> ChangeUserPasswordAsync(UserInfor user, string currentPassword, string newPassword)
+        public async Task<IdentityResult> ChangeUserPasswordAsync(int userId, string currentPassword, string newPassword)
         {
-            return await _unitOfWork.UserInfors.ChangePasswordAsync(user, currentPassword, newPassword);
+            var userInfor = await _unitOfWork.UserInfors.FindAsync(userId);
+            return await _unitOfWork.UserInfors.ChangePasswordAsync(userInfor, currentPassword, newPassword);
         }
 
         public async Task<IdentityResult> ResetUserPasswordAsync(UserInfor user, string token, string newPassword)
@@ -114,9 +116,10 @@ namespace TnR_SS.Domain.Supervisor
             return await _unitOfWork.UserInfors.GeneratePasswordResetTokenAsync(user);
         }
 
-        public async Task<bool> CheckUserPassword(UserInfor user, string password)
+        public async Task<bool> CheckUserPassword(int userId, string password)
         {
-            var rs = await _unitOfWork.UserInfors.CheckPasswordAsync(user, password);
+            var userInfor = await _unitOfWork.UserInfors.FindAsync(userId);
+            var rs = await _unitOfWork.UserInfors.CheckPasswordAsync(userInfor, password);
             return rs;
         }
 

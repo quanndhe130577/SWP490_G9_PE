@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ namespace TnR_SS.API.Controllers
 {
     [Route("api/purchase")]
     [ApiController]
+    [Authorize]
     public class PurchaseController : ControllerBase
     {
 
@@ -26,16 +28,16 @@ namespace TnR_SS.API.Controllers
         #region create purchase
         [HttpPost("create")]
         //[Route("update")]
-        public async Task<ResponseModel> CreatePurchase(PurchaseApiModel purchaseData)
+        public async Task<ResponseModel> CreatePurchase(PurchaseReqModel purchaseData)
         {
             if (!TokenManagement.CheckUserIdFromToken(HttpContext, purchaseData.TraderID))
             {
                 return new ResponseBuilder().Error("Access denied").ResponseModel;
             }
 
-            var puchaseId = await _tnrssSupervisor.CreatePurchaseAsync(purchaseData);
+            var newData = await _tnrssSupervisor.CreatePurchaseAsync(purchaseData);
 
-            return new ResponseBuilder<object>().Success("Create purchase success").WithData(new { purchaseId = puchaseId }).ResponseModel;
+            return new ResponseBuilder<object>().Success("Create purchase success").WithData(newData).ResponseModel;
         }
         #endregion
     }

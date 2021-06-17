@@ -32,5 +32,6 @@ namespace TnR_SS.Domain.Entities
         [Required]
         public int PurchaseId { get; set; }
         public Purchase Purchase { get; set; }
+        public List<LK_PurchaseDeatil_Drum> LK_PurchaseDeatil_Drums { get; set; }
     }
 }

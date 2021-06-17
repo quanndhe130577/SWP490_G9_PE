@@ -10,6 +10,7 @@ using TnR_SS.Domain.ApiModels.PondOwnerModel;
 using TnR_SS.Domain.ApiModels.PurchaseModal;
 using TnR_SS.Domain.ApiModels.RoleUserModel.RequestModel;
 using TnR_SS.Domain.ApiModels.TimeKeepingModel;
+using TnR_SS.Domain.ApiModels.TruckModel;
 using TnR_SS.Domain.Entities;
 
 namespace TnR_SS.Domain.Supervisor
@@ -40,21 +41,21 @@ namespace TnR_SS.Domain.Supervisor
         Task SignOutAsync();
         Task<UserResModel> SignInWithPasswordAsync(UserInfor user, string password);
         Task SignInAsync(UserInfor user);
-        UserInfor GetUserById(int id);
+        UserResModel GetUserById(int id);
         Task<IdentityResult> UpdateUserAsync(UpdateUserReqModel user, int id, string avatarLink);
         Task<IdentityResult> UpdatePhoneNumberAsync(int id, string newPhone);
-        Task<IdentityResult> ChangeUserPasswordAsync(UserInfor user, string currentPassword, string newPassword);
+        Task<IdentityResult> ChangeUserPasswordAsync(int userId, string currentPassword, string newPassword);
         Task<IdentityResult> ResetUserPasswordAsync(UserInfor user, string token, string newPassword);
         Task<IList<string>> GetUserRolesAsync(UserInfor user);
         bool CheckUserPhoneExists(string phoneNumber);
         Task<string> GetPasswordResetTokenAsync(UserInfor user);
-        Task<bool> CheckUserPassword(UserInfor user, string password);
+        Task<bool> CheckUserPassword(int userId, string password);
         Task<UserResModel> GetUserResModelByIdAsync(int id);
         #endregion
 
         #region Fishtype
-        List<FishTypeApiModel> GetAllFishType(int id);
-        Task CreateFishTypeAsync(List<FishTypeApiModel> listType);
+        List<FishTypeApiModel> GetAllLastFishTypeByTraderId(int traderId);
+        Task CreateFishTypesAsync(List<FishTypeApiModel> listType);
         Task UpdateFishTypeAsync(FishTypeApiModel fishTypeModel);
         #endregion
 
@@ -66,7 +67,7 @@ namespace TnR_SS.Domain.Supervisor
         #endregion
 
         #region Purchase
-        Task<int> CreatePurchaseAsync(PurchaseApiModel purchaseModel);
+        Task<PurchaseResModel> CreatePurchaseAsync(PurchaseReqModel purchaseModel);
         #endregion
 
         #region PondOwner
@@ -85,6 +86,11 @@ namespace TnR_SS.Domain.Supervisor
         Task<int> AddTimeKeeping(TimeKeepingApiModel timeKeeping);
         Task<int> EditTimeKeeping(TimeKeepingApiModel timeKeeping);
         Task<int> DeleteTimeKeeping(TimeKeeping timeKeeping);
+        #endregion
+
+        #region Truck
+        List<TruckApiModel> GetAllTruckByTraderId(int traderId);
+        Task<int> CreateTruckAsync(TruckApiModel truckModel);
         #endregion
     }
 }
