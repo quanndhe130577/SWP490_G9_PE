@@ -78,6 +78,7 @@ namespace TnR_SS.Domain.Supervisor
         {
             var userInfor = _unitOfWork.UserInfors.GetUserById(id);
             userInfor = _mapper.Map<UpdateUserReqModel, UserInfor>(user, userInfor);
+            userInfor.Avatar = avatarLink;
             return await _unitOfWork.UserInfors.UpdateIdentityAsync(userInfor);
         }
 
