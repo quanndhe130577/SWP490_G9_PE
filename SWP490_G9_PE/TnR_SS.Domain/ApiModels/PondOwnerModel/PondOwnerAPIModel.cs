@@ -8,6 +8,7 @@ namespace TnR_SS.Domain.ApiModels.PondOwnerModel
         public string Name { get; set; }
         public string Address { get; set; }
         public string PhoneNumber { get; set; }
-        public int TraderID { get; set; }
+
+        public int TraderID{ get; set; }
     }
 }
