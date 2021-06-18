@@ -57,8 +57,10 @@ namespace TnR_SS.Domain.Supervisor
 
         #region Fishtype
         List<FishTypeApiModel> GetAllLastFishTypeByTraderId(int traderId);
-        Task CreateFishTypeAsync(List<FishTypeApiModel> listType, int traderId);
-        Task UpdateFishTypeAsync(FishTypeApiModel fishTypeModel);
+        Task CreateListFishTypeAsync(List<FishTypeApiModel> listType, int traderId);
+        Task CreateFishTypeAsync(FishTypeApiModel listType, int traderId);
+        Task UpdateFishTypeAsync(FishTypeApiModel fishTypeModel, int traderId);
+        Task DeleteFishTypeAsync(int empId, int traderId);
         #endregion
 
         #region Basket
