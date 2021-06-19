@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TnR_SS.API.Common.Response;
+using TnR_SS.API.Common.Token;
 using TnR_SS.Domain.ApiModels.BasketModel.ResponseModel;
 using TnR_SS.Domain.Entities;
 using TnR_SS.Domain.Supervisor;
@@ -23,18 +24,18 @@ namespace TnR_SS.API.Controllers
         }
 
         [HttpPost("create")]
-        [AllowAnonymous]
         public async Task<ResponseModel> CreateNewBasketAsync(BasketApiModel basketApi)
         {
-            await _tnrssSupervisor.CreateBasketAsync(basketApi);
-            return new ResponseBuilder<BasketApiModel>().Success("Create Basket Success").WithData(basketApi).ResponseModel;
+            var traderId = TokenManagement.GetUserIdInToken(HttpContext);
+            await _tnrssSupervisor.CreateBasketAsync(basketApi, traderId);
+            return new ResponseBuilder().Success("Create Basket Success").ResponseModel;
         }
 
-        [HttpPost("getallbasket")]
-        [AllowAnonymous]
+        [HttpGet("getall")]
         public ResponseModel GetAllBasket()
         {
-            List<BasketApiModel> list = _tnrssSupervisor.GetAllBasket();
+            var traderId = TokenManagement.GetUserIdInToken(HttpContext);
+            List<BasketApiModel> list = _tnrssSupervisor.GetAllBasket(traderId);
             return new ResponseBuilder<List<BasketApiModel>>().Success("Get all basket").WithData(list).ResponseModel;
         }
     }

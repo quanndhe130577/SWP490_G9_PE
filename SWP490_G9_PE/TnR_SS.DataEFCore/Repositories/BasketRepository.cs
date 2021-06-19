@@ -29,5 +29,10 @@ namespace TnR_SS.DataEFCore.Repositories
             _context.Baskets.Update(basket);
         }
 
+        public List<Basket> GetAllBasketByTraderId(int traderId)
+        {
+            var rs = _context.Baskets.AsEnumerable().Where(x => x.TraderID == traderId).ToList();
+            return rs;
+        }
     }
 }

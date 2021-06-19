@@ -24,7 +24,6 @@ namespace TnR_SS.API.Controllers
         }
 
         [HttpPost("createlist")]
-        [AllowAnonymous]
         public async Task<ResponseModel> CreateFishTypeAsync(ListFishTypeModel listType)
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
@@ -33,7 +32,6 @@ namespace TnR_SS.API.Controllers
         }
 
         [HttpPost("create")]
-        [AllowAnonymous]
         public async Task<ResponseModel> CreateFishTypeAsync(FishTypeApiModel fishType)
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
