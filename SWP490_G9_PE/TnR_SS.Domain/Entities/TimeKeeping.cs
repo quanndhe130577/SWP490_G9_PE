@@ -16,7 +16,6 @@ namespace TnR_SS.Domain.Entities
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
 
-        [Required]
         public DateTime WorkDay { get; set; }
 
         [Required]
@@ -32,6 +31,6 @@ namespace TnR_SS.Domain.Entities
         public int EmpId { get; set; }
         public Employee Employee { get; set; }
 
-        
+
     }
 }

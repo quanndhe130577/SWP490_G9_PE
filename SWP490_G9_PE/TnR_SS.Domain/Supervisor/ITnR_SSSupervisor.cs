@@ -82,6 +82,11 @@ namespace TnR_SS.Domain.Supervisor
         Task<int> DeletePondOwner(PondOwner pondOwner);
         #endregion
 
+        #region Truck
+        List<TruckApiModel> GetAllTruckByTraderId(int traderId);
+        Task<int> CreateTruckAsync(TruckApiModel truckModel, int traderId);
+        #endregion
+
         #region Drum
         List<DrumApiModel> GetAllDrumByTruckId(int truckId);
         List<DrumApiModel> GetAllDrumByTraderId(int traderId);
@@ -104,11 +109,6 @@ namespace TnR_SS.Domain.Supervisor
         Task<int> AddTimeKeeping(TimeKeepingApiModel timeKeeping);
         Task<int> EditTimeKeeping(TimeKeepingApiModel timeKeeping);
         Task<int> DeleteTimeKeeping(TimeKeeping timeKeeping);
-        #endregion
-
-        #region Truck
-        List<TruckApiModel> GetAllTruckByTraderId(int traderId);
-        Task<int> CreateTruckAsync(TruckApiModel truckModel);
         #endregion
     }
 }
