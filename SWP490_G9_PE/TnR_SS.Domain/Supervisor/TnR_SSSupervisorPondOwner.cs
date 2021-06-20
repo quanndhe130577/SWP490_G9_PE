@@ -10,7 +10,7 @@ namespace TnR_SS.Domain.Supervisor
 {
     public partial class TnR_SSSupervisor
     {
-        public async Task<PondOwner> GetPondOwner(Guid id)
+        public async Task<PondOwner> GetPondOwner(int id)
         {
             PondOwner pondOwner = await _unitOfWork.PondOwners.FindAsync(id);
             return pondOwner;
