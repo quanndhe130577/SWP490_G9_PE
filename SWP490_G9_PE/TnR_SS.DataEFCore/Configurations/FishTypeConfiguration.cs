@@ -23,7 +23,6 @@ namespace TnR_SS.DataEFCore.Configurations
                 .HasMaxLength(50);
 
             entity.Property(e => e.Description)
-                .IsRequired()
                 .HasMaxLength(50);
 
             entity.Property(e => e.MinWeight)
@@ -42,12 +41,10 @@ namespace TnR_SS.DataEFCore.Configurations
                 .IsRequired();
 
             entity.Property(e => e.CreatedAt)
-                .HasColumnType("datetime")
-                .IsRequired();
+                .HasColumnType("datetime");
 
             entity.Property(e => e.UpdatedAt)
-                .HasColumnType("datetime")
-                .IsRequired();
+                .HasColumnType("datetime");
 
             entity.HasOne(p => p.Trader)
                .WithMany(b => b.FishTypes)
