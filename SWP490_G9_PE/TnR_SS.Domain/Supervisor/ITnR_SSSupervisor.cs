@@ -76,7 +76,7 @@ namespace TnR_SS.Domain.Supervisor
         #endregion
 
         #region PondOwner
-        Task<PondOwner> GetPondOwner(Guid id);
+        Task<PondOwner> GetPondOwner(int id);
         List<PondOwnerAPIModel> GetPondOwnerByTraderId(int traderId);
         Task<int> AddPondOwner(PondOwnerAPIModel pondOwnerModel);
         Task<int> EditPondOwner(PondOwnerAPIModel pondOwnerModel);
