@@ -59,7 +59,7 @@ namespace TnR_SS.API.Controllers
 
         [HttpPost]
         [Route("delete/{id}")]
-        public async Task<ResponseModel> Delete(Guid id)
+        public async Task<ResponseModel> Delete(int id)
         {
             PondOwner pondOwner = await _tnrssSupervisor.GetPondOwner(id);
             if (pondOwner == null)
