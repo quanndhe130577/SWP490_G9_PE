@@ -38,5 +38,21 @@ namespace TnR_SS.API.Controllers
             List<BasketApiModel> list = _tnrssSupervisor.GetAllBasket(traderId);
             return new ResponseBuilder<List<BasketApiModel>>().Success("Get all basket").WithData(list).ResponseModel;
         }
+
+        [HttpPost("update")]
+        public async Task<ResponseModel> UpdateBasketAsync(BasketApiModel basketApi)
+        {
+            var traderId = TokenManagement.GetUserIdInToken(HttpContext);
+            await _tnrssSupervisor.UpdateBasketAsync(basketApi, traderId);
+            return new ResponseBuilder().Success("Update Basket Success").ResponseModel;
+        }
+
+        [HttpPost("delete/{basketId}")]
+        public async Task<ResponseModel> DeleteBasketAsync(int basketId)
+        {
+            var traderId = TokenManagement.GetUserIdInToken(HttpContext);
+            await _tnrssSupervisor.DeleteBasketAsync(basketId, traderId);
+            return new ResponseBuilder().Success("Delete Basket Success").ResponseModel;
+        }
     }
 }

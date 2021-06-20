@@ -58,10 +58,10 @@ namespace TnR_SS.Domain.Supervisor
 
         public async Task DeleteFishTypeAsync(int fishTypeId, int traderId)
         {
-            var empEdit = await _unitOfWork.FishTypes.FindAsync(fishTypeId);
-            if (empEdit.TraderID == traderId)
+            var fishtypeEdit = await _unitOfWork.FishTypes.FindAsync(fishTypeId);
+            if (fishtypeEdit.TraderID == traderId)
             {
-                _unitOfWork.FishTypes.Delete(empEdit);
+                _unitOfWork.FishTypes.Delete(fishtypeEdit);
                 await _unitOfWork.SaveChangeAsync();
             }
             else

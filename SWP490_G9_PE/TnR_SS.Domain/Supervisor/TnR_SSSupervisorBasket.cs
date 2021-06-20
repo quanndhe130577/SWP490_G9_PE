@@ -29,12 +29,33 @@ namespace TnR_SS.Domain.Supervisor
             await _unitOfWork.SaveChangeAsync();
         }
 
-        public async Task UpdateBasketAsync(BasketApiModel basketRes)
+        public async Task UpdateBasketAsync(BasketApiModel basketModel, int traderId)
         {
-            var basket = await _unitOfWork.Baskets.FindAsync(basketRes.ID);
-            basket = _mapper.Map<BasketApiModel, Basket>(basketRes, basket);
-            _unitOfWork.Baskets.Update(basket);
-            await _unitOfWork.SaveChangeAsync();
+            var basketEdit = await _unitOfWork.Baskets.FindAsync(basketModel.ID);
+            basketEdit = _mapper.Map<BasketApiModel, Basket>(basketModel, basketEdit);
+            if (basketEdit.TraderID == traderId)
+            {
+                _unitOfWork.Baskets.Update(basketEdit);
+                await _unitOfWork.SaveChangeAsync();
+            }
+            else
+            {
+                throw new Exception("Update fail");
+            }
+        }
+
+        public async Task DeleteBasketAsync(int basketId, int traderId)
+        {
+            var basketEdit = await _unitOfWork.Baskets.FindAsync(basketId);
+            if (basketEdit.TraderID == traderId)
+            {
+                _unitOfWork.Baskets.Delete(basketEdit);
+                await _unitOfWork.SaveChangeAsync();
+            }
+            else
+            {
+                throw new Exception("Delete fail");
+            }
         }
     }
 }

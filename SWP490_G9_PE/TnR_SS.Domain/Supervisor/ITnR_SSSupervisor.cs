@@ -66,7 +66,8 @@ namespace TnR_SS.Domain.Supervisor
         #region Basket
         List<BasketApiModel> GetAllBasket(int traderId);
         Task CreateBasketAsync(BasketApiModel basketRes, int traderId);
-        Task UpdateBasketAsync(BasketApiModel basketRes);
+        Task UpdateBasketAsync(BasketApiModel basketModel, int traderId);
+        Task DeleteBasketAsync(int basketId, int traderId);
 
         #endregion
 

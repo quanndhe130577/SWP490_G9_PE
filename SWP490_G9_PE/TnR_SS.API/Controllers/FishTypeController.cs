@@ -48,15 +48,15 @@ namespace TnR_SS.API.Controllers
         }
 
         [HttpPost("update")]
-        public async Task<ResponseModel> UpdateEmployeeAsync(FishTypeApiModel fishType)
+        public async Task<ResponseModel> UpdateFishTypeAsync(FishTypeApiModel fishType)
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
             await _tnrssSupervisor.UpdateFishTypeAsync(fishType, traderId);
-            return new ResponseBuilder().Success("Update Employee Success").ResponseModel;
+            return new ResponseBuilder().Success("Update Fish Type Success").ResponseModel;
         }
 
-        [HttpPost("delete/{empId}")]
-        public async Task<ResponseModel> DeleteEmployeeAsync(int fishTypeId)
+        [HttpPost("delete/{fishTypeId}")]
+        public async Task<ResponseModel> DeleteFishTypeAsync(int fishTypeId)
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
             await _tnrssSupervisor.DeleteFishTypeAsync(fishTypeId, traderId);
