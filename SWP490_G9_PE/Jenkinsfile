@@ -1,0 +1,74 @@
+pipeline {
+    agent any
+    environment {
+        dotnet = 'path\\to\\dotnet.exe'
+        registryCredential = credentials('quanndhe130577-dockerhub')
+        dockerImage = 'tnrssviettel'
+        registry = "quanndhe130577/tnrss"
+    }
+    stages {
+    	stage('Restore Packages') {
+            steps {
+                bat "dotnet restore"
+            }
+    	}
+        stage('Clean') {
+            steps {
+            bat "dotnet clean"
+            }
+        }
+        stage('Build') {
+            steps {
+                bat 'dotnet build'
+            }
+        }
+        stage('Test') {
+            steps {
+                bat 'dotnet test'
+            }
+        }
+        // stage('Stop current container'){
+        //     steps {
+        //             bat 'docker ps -f name=tnrss -q | xargs --no-run-if-empty docker container stop'
+        //         }
+        // }
+        // stage('Remove current container'){
+        //     steps {
+        //             bat 'docker container ls -a -fname=tnrss -q | xargs -r docker container rm'
+        //         }
+        // }
+        // stage('Remove current image'){
+        //     steps {
+        //             bat 'docker rmi tnrssviettel'
+        //         }
+        // }
+        stage('Docker login'){
+            steps {
+                bat "docker login -u $registryCredential --password-stdin"
+            }
+        }
+        stage('Build new image'){
+            steps {
+                bat "docker build -f TnR_SS.API/Dockerfile -t $dockerImage:$BUILD_NUMBER ."
+            }
+        }
+        stage('Deploy our image') { 
+            steps { 
+                script { 
+                    bat "docker push $dockerImage:$BUILD_NUMBER"
+                } 
+            }
+        }
+        stage('Build container'){
+            steps {
+                bat "docker run -d -p 1911:80 --name tnrss $dockerImage:$BUILD_NUMBER"
+            }
+        }
+        stage('Remove Unused docker image') {
+            steps{
+                sh "docker rmi $dockerImage:$BUILD_NUMBER"
+                sh "docker rmi $dockerImage:latest"
+            }
+        }
+    }
+}
