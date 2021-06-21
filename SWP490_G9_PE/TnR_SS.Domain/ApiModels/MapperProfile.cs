@@ -9,8 +9,8 @@ using TnR_SS.Domain.ApiModels.PondOwnerModel;
 using TnR_SS.Domain.ApiModels.PurchaseModal;
 using TnR_SS.Domain.ApiModels.RoleUserModel.RequestModel;
 using TnR_SS.Domain.ApiModels.RoleUserModel.ResponseModel;
-using TnR_SS.Domain.ApiModels.TruckModel;
 using TnR_SS.Domain.ApiModels.TimeKeepingModel;
+using TnR_SS.Domain.ApiModels.TruckModel;
 using TnR_SS.Domain.Entities;
 
 namespace TnR_SS.Domain.ApiModels

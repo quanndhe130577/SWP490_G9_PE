@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TnR_SS.DataEFCore;
 
 namespace TnR_SS.DataEFCore.Migrations
 {
     [DbContext(typeof(TnR_SSContext))]
-    partial class TnR_SSContextModelSnapshot : ModelSnapshot
+    [Migration("20210619094457_DeleteEntryInTimeKeepingEntity")]
+    partial class DeleteEntryInTimeKeepingEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -245,6 +247,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
@@ -506,7 +509,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "b303b0d5-8e35-4822-9616-4bb43cf52c40",
+                            ConcurrencyStamp = "c4c03a9c-de30-4dd1-aefd-aa951b398fa6",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Admin",
                             Name = "Admin",
@@ -516,7 +519,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "6fd57172-9dc0-4735-951a-e3f325be092f",
+                            ConcurrencyStamp = "0edd2432-1a48-47e5-9af6-33dc8d4d1ee3",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Thương lái",
                             Name = "Trader",
@@ -526,7 +529,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "0ff65984-3cb0-40e5-b573-e6f78b589248",
+                            ConcurrencyStamp = "16bdcc65-9a27-4a0e-92e6-08f132d26f8f",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Chủ bến",
                             Name = "Weight Recorder",
@@ -552,19 +555,12 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.Property<double>("Money")
                         .HasColumnType("float");
 
-                    b.Property<int>("Note")
-                        .HasMaxLength(50)
-                        .HasColumnType("int");
-
                     b.Property<double>("Status")
                         .HasMaxLength(50)
                         .HasColumnType("float");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime");
-
-                    b.Property<DateTime>("WorkDay")
-                        .HasColumnType("datetime2");
 
                     b.HasKey("ID");
 

@@ -4,19 +4,17 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TnR_SS.Domain.Entities;
 
 namespace TnR_SS.Domain.ApiModels.TimeKeepingModel
 {
     public class TimeKeepingApiModel
     {
         public int ID { get; set; }
-        [Required]
-        public int WorkDay { get; set; }
-        [Required]
-        public string Status { get; set; }
+        public DateTime WorkDay { get; set; }
+        public int Status { get; set; }
         public double Money { get; set; }
-        public string Note { get; set; }
-        [Required]
+        public TimeKeepingNote Note { get; set; }
         public int EmpId { get; set; }
     }
 }
