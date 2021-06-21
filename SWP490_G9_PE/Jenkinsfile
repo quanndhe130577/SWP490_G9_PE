@@ -52,10 +52,22 @@ pipeline {
                 bat "docker build -f TnR_SS.API/Dockerfile -t $dockerImage:$BUILD_NUMBER ."
             }
         }
-        stage('Deploy our image') { 
+        stage('Tag new image'){
+            steps {
+                bat "docker tag $dockerImage $registry"
+            }
+        }
+        /*stage('Deploy our image') { 
             steps { 
                 script { 
                     bat "docker push $dockerImage:$BUILD_NUMBER"
+                } 
+            }
+        }*/
+        stage('Deploy our image') { 
+            steps { 
+                script { 
+                    bat "docker push $registry"
                 } 
             }
         }
