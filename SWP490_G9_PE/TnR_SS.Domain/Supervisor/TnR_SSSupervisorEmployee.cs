@@ -54,7 +54,7 @@ namespace TnR_SS.Domain.Supervisor
             }
             else
             {
-                throw new Exception("Update fail");
+                throw new Exception("Delete fail");
             }
         }
 

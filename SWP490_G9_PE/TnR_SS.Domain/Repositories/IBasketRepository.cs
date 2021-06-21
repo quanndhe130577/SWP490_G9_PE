@@ -12,5 +12,6 @@ namespace TnR_SS.Domain.Repositories
         void UpdateBasket(Basket basket, string type, int weight);
         Task DeleteBasketByIdAsync(int basketID);
         List<Basket> ListAllBasket();
+        List<Basket> GetAllBasketByTraderId(int traderId);
     }
 }

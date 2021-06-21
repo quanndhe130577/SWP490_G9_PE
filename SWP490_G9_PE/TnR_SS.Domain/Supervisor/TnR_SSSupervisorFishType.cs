@@ -22,7 +22,7 @@ namespace TnR_SS.Domain.Supervisor
 
         }
 
-        public async Task CreateFishTypeAsync(List<FishTypeApiModel> listType, int traderId)
+        public async Task CreateListFishTypeAsync(List<FishTypeApiModel> listType, int traderId)
         {
             foreach (var obj in listType)
             {
@@ -33,12 +33,41 @@ namespace TnR_SS.Domain.Supervisor
             await _unitOfWork.SaveChangeAsync();
         }
 
-        public async Task UpdateFishTypeAsync(FishTypeApiModel fishTypeModel)
+        public async Task CreateFishTypeAsync(FishTypeApiModel fishType, int traderId)
         {
-            var fishType = await _unitOfWork.FishTypes.FindAsync(fishTypeModel.ID);
-            fishType = _mapper.Map<FishTypeApiModel, FishType>(fishTypeModel, fishType);
-            _unitOfWork.FishTypes.Update(fishType);
+            var map = _mapper.Map<FishTypeApiModel, FishType>(fishType);
+            map.TraderID = traderId;
+            await _unitOfWork.FishTypes.CreateAsync(map);
             await _unitOfWork.SaveChangeAsync();
+        }
+
+        public async Task UpdateFishTypeAsync(FishTypeApiModel fishType, int traderId)
+        {
+            var fishTypeEdit = await _unitOfWork.FishTypes.FindAsync(fishType.ID);
+            fishTypeEdit = _mapper.Map<FishTypeApiModel, FishType>(fishType, fishTypeEdit);
+            if (fishTypeEdit.TraderID == traderId)
+            {
+                _unitOfWork.FishTypes.Update(fishTypeEdit);
+                await _unitOfWork.SaveChangeAsync();
+            }
+            else
+            {
+                throw new Exception("Update fail");
+            }
+        }
+
+        public async Task DeleteFishTypeAsync(int fishTypeId, int traderId)
+        {
+            var fishtypeEdit = await _unitOfWork.FishTypes.FindAsync(fishTypeId);
+            if (fishtypeEdit.TraderID == traderId)
+            {
+                _unitOfWork.FishTypes.Delete(fishtypeEdit);
+                await _unitOfWork.SaveChangeAsync();
+            }
+            else
+            {
+                throw new Exception("Delete fail");
+            }
         }
     }
 }
