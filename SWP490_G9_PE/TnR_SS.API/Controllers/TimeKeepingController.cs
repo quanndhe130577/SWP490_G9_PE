@@ -6,6 +6,7 @@ using TnR_SS.Domain.Supervisor;
 using TnR_SS.Domain.Entities;
 using TnR_SS.Domain.ApiModels.TimeKeepingModel;
 using System.Collections.Generic;
+using System;
 
 namespace TnR_SS.API.Controller
 {
@@ -104,11 +105,11 @@ namespace TnR_SS.API.Controller
 
         public static TimeKeepingValidModel Valid(TimeKeepingApiModel timeKeeping)
         {
-            if (timeKeeping.WorkDay == 0)
+            if (timeKeeping.WorkDay == DateTime.MinValue)
             {
                 return new TimeKeepingValidModel() { IsValid = false, Message = "Ngày làm việc được để trống" };
             }
-            if (string.IsNullOrEmpty(timeKeeping.Status))
+            if (timeKeeping.Status == 0)
             {
                 return new TimeKeepingValidModel() { IsValid = false, Message = "Trạng thái không được để trống" };
 

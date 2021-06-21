@@ -10,8 +10,8 @@ using TnR_SS.Domain.ApiModels.FishTypeModel;
 using TnR_SS.Domain.ApiModels.PondOwnerModel;
 using TnR_SS.Domain.ApiModels.PurchaseModal;
 using TnR_SS.Domain.ApiModels.RoleUserModel.RequestModel;
-using TnR_SS.Domain.ApiModels.TruckModel;
 using TnR_SS.Domain.ApiModels.TimeKeepingModel;
+using TnR_SS.Domain.ApiModels.TruckModel;
 using TnR_SS.Domain.Entities;
 using TnR_SS.Domain.ApiModels.EmployeeModel;
 
@@ -93,7 +93,7 @@ namespace TnR_SS.Domain.Supervisor
         List<DrumApiModel> GetAllDrumByTraderId(int traderId);
         Task<int> CreateDrumAsync(DrumApiModel drumModel);
         #endregion
-        
+
         #region Employee
         List<EmployeeApiModel> GetAllEmployeeByTraderId(int traderId);
         Task CreateEmployeesAsync(EmployeeApiModel employee, int traderId);
@@ -101,7 +101,7 @@ namespace TnR_SS.Domain.Supervisor
         Task DeleteEmployeeAsync(int empId, int traderId);
         EmployeeApiModel GetDetailEmployee(int traderId, int empId);
         #endregion
-        
+
         #region TimeKeeping
         List<TimeKeepingApiModel> GetListTimeKeepingByTraderId(int id);
         List<TimeKeepingApiModel> GetListTimeKeepingByEmployeeId(int id);
