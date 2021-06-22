@@ -45,5 +45,21 @@ namespace TnR_SS.API.Controllers
             var rs = _tnrssSupervisor.GetAllDrumByTraderId(userId);
             return new ResponseBuilder<object>().Success("Get drum success").WithData(new { listDrum = rs }).ResponseModel;
         }
+
+        [HttpPost("update")]
+        public async Task<ResponseModel> UpdateDrumAsync(DrumApiModel drum)
+        {
+            var userId = TokenManagement.GetUserIdInToken(HttpContext);
+            await _tnrssSupervisor.UpdateDrumAsync(drum, userId);
+            return new ResponseBuilder().Success("Update Drum Success").ResponseModel;
+        }
+
+        [HttpPost("delete/{drumId}")]
+        public async Task<ResponseModel> DeleteFishTypeAsync(int drumId)
+        {
+            var userId = TokenManagement.GetUserIdInToken(HttpContext);
+            await _tnrssSupervisor.DeleteDrumAsync(drumId, userId);
+            return new ResponseBuilder().Success("Delete Drum Success").ResponseModel;
+        }
     }
 }

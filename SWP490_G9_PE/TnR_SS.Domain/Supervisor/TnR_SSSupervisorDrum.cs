@@ -27,5 +27,47 @@ namespace TnR_SS.Domain.Supervisor
         {
             return _unitOfWork.Drums.GetAllByTraderkId(traderId).Select(x => _mapper.Map<Drum, DrumApiModel>(x)).ToList();
         }
+
+        public async Task UpdateDrumAsync(DrumApiModel drum, int traderId)
+        {
+            var drumEdit = await _unitOfWork.Drums.FindAsync(drum.ID);
+            drumEdit = _mapper.Map<DrumApiModel, Drum>(drum, drumEdit);
+            if (drumEdit.TruckID == traderId)
+            {
+                _unitOfWork.Drums.Update(drumEdit);
+                await _unitOfWork.SaveChangeAsync();
+            }
+            else
+            {
+                throw new Exception("Update fail");
+            }
+        }
+
+        public async Task DeleteDrumAsync(int drumId, int truckId)
+        {
+            var drum = await _unitOfWork.Drums.FindAsync(drumId);
+            if (drum.TruckID == truckId)
+            {
+                _unitOfWork.Drums.Delete(drum);
+                await _unitOfWork.SaveChangeAsync();
+            }
+            else
+            {
+                throw new Exception("Delete fail");
+            }
+        }
+
+        public DrumApiModel GetDetailDrum(int drumId, int truckId)
+        {
+            var listEmp = GetAllDrumByTruckId(truckId);
+            foreach (var obj in listEmp)
+            {
+                if (obj.TruckID == truckId)
+                {
+                    return obj;
+                }
+            }
+            return null;
+        }
     }
 }
