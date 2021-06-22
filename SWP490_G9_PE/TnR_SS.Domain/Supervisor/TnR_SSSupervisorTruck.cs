@@ -10,6 +10,11 @@ namespace TnR_SS.Domain.Supervisor
 {
     public partial class TnR_SSSupervisor
     {
+
+        public Task<Truck> GetTruck(int id)
+        {
+            return _unitOfWork.Trucks.FindAsync(id);
+        }
         public List<TruckApiModel> GetAllTruckByTraderId(int traderId)
         {
             var listTruck = _unitOfWork.Trucks.GetAllByTraderId(traderId);
@@ -23,6 +28,20 @@ namespace TnR_SS.Domain.Supervisor
             await _unitOfWork.Trucks.CreateAsync(truck);
             await _unitOfWork.SaveChangeAsync();
             return truck.ID;
+        }
+
+        public async Task<int> UpdateTruckAsync(TruckApiModel truckModel)
+        {
+            Truck truck = await _unitOfWork.Trucks.FindAsync(truckModel.Id);
+            truck.LicensePlate = truckModel.LicensePlate;
+            _unitOfWork.Trucks.Update(truck);
+            return await _unitOfWork.SaveChangeAsync();
+        }
+
+        public async Task<int> DeleteTruck(Truck truck)
+        {
+            _unitOfWork.Trucks.Delete(truck);
+            return await _unitOfWork.SaveChangeAsync();
         }
     }
 }
