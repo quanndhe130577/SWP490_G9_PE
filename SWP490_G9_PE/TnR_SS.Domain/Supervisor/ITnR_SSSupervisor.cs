@@ -14,6 +14,7 @@ using TnR_SS.Domain.ApiModels.TimeKeepingModel;
 using TnR_SS.Domain.ApiModels.TruckModel;
 using TnR_SS.Domain.Entities;
 using TnR_SS.Domain.ApiModels.EmployeeModel;
+using TnR_SS.Domain.ApiModels.PurchaseDetailModel;
 
 namespace TnR_SS.Domain.Supervisor
 {
@@ -110,6 +111,13 @@ namespace TnR_SS.Domain.Supervisor
         Task<int> AddTimeKeeping(TimeKeepingApiModel timeKeeping);
         Task<int> EditTimeKeeping(TimeKeepingApiModel timeKeeping);
         Task<int> DeleteTimeKeeping(TimeKeeping timeKeeping);
+        #endregion
+
+        #region PurchaseDetail
+        Task<List<PurchaseDetailResModel>> GetAllPurchaseDetailAsync(int purchaseId);
+        Task<int> CreatePurchaseDetailAsync(PurchaseDetailReqModel data);
+       /* Task UpdateFishTypeAsync(FishTypeApiModel fishTypeModel, int traderId);
+        Task DeleteFishTypeAsync(int empId, int traderId);*/
         #endregion
     }
 }

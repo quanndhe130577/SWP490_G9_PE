@@ -20,8 +20,7 @@ namespace TnR_SS.DataEFCore.Configurations
             entity.Property(e => e.ID).HasColumnName("ID");
 
             entity.Property(e => e.Name)
-                .IsRequired()
-                .IsUnicode(false);
+                .IsRequired();
 
             entity.Property(e => e.PhoneNumber)
                 .HasMaxLength(12)
