@@ -357,7 +357,8 @@ namespace TnR_SS.DataEFCore.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(max)");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
@@ -505,7 +506,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "70d19cd2-2c37-4daf-97c7-ec2934b55b87",
+                            ConcurrencyStamp = "59731b52-b1fa-4a07-85bb-e135f0978a9a",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Admin",
                             Name = "Admin",
@@ -515,7 +516,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "1dd276dd-e417-4df9-aa16-6629ce4d45cb",
+                            ConcurrencyStamp = "fcc1fe0d-4803-42cc-9955-6ea0fc4ad248",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Thương lái",
                             Name = "Trader",
@@ -525,7 +526,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "80c08953-2397-4ce7-b48e-91a9338adb5d",
+                            ConcurrencyStamp = "381e47a5-618e-42ba-a4cf-797ffb42bd55",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Chủ bến",
                             Name = "Weight Recorder",
@@ -587,9 +588,6 @@ namespace TnR_SS.DataEFCore.Migrations
                         .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("TraderID")
                         .HasColumnType("int");
