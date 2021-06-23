@@ -30,7 +30,7 @@ namespace TnR_SS.API.Controllers
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
             var listTruck = _tnrssSupervisor.GetAllTruckByTraderId(traderId);
-            return new ResponseBuilder<object>().Success("Get all type").WithData(new { listTruck = listTruck }).ResponseModel;
+            return new ResponseBuilder<object>().Success("Get all type").WithData(listTruck).ResponseModel;
         }
 
         [HttpPost("create")]
