@@ -9,6 +9,7 @@ using TnR_SS.API.Common.Response;
 using TnR_SS.Domain.ApiModels.PondOwnerModel;
 using TnR_SS.Domain.Entities;
 using TnR_SS.Domain.Supervisor;
+using System.Text.RegularExpressions;
 
 namespace TnR_SS.API.Controllers
 {
@@ -101,6 +102,7 @@ namespace TnR_SS.API.Controllers
 
         public static PondOwnerValidModel Valid(PondOwnerAPIModel pondOwner)
         {
+            Regex phoneNumberRegex = new Regex(@"^(84|0[3|5|7|8|9])+([0-9]{8})$");
             if (pondOwner.Name == null)
             {
                 return new PondOwnerValidModel() { IsValid = false, Message = "Tên không được để trống" };
@@ -113,6 +115,10 @@ namespace TnR_SS.API.Controllers
             if (pondOwner.PhoneNumber == null)
             {
                 return new PondOwnerValidModel() { IsValid = false, Message = "Điện thoại không được để trống" };
+            }
+            if (!phoneNumberRegex.IsMatch(pondOwner.PhoneNumber))
+            {
+                return new PondOwnerValidModel() { IsValid = false, Message = "Điện thoại không đúng định dạng" };
             }
             if (pondOwner.TraderID == 0)
             {

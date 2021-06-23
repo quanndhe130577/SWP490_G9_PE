@@ -506,7 +506,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "b303b0d5-8e35-4822-9616-4bb43cf52c40",
+                            ConcurrencyStamp = "59731b52-b1fa-4a07-85bb-e135f0978a9a",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Admin",
                             Name = "Admin",
@@ -516,7 +516,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "6fd57172-9dc0-4735-951a-e3f325be092f",
+                            ConcurrencyStamp = "fcc1fe0d-4803-42cc-9955-6ea0fc4ad248",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Thương lái",
                             Name = "Trader",
@@ -526,7 +526,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "0ff65984-3cb0-40e5-b573-e6f78b589248",
+                            ConcurrencyStamp = "381e47a5-618e-42ba-a4cf-797ffb42bd55",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Chủ bến",
                             Name = "Weight Recorder",
