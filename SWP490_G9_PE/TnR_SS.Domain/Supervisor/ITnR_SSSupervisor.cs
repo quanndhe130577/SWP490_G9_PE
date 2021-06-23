@@ -85,8 +85,11 @@ namespace TnR_SS.Domain.Supervisor
         #endregion
 
         #region Truck
+        Task<Truck> GetTruck(int id);
         List<TruckApiModel> GetAllTruckByTraderId(int traderId);
+        Task<int> UpdateTruckAsync(TruckApiModel truckModel);
         Task<int> CreateTruckAsync(TruckApiModel truckModel, int traderId);
+        Task<int> DeleteTruck(Truck truck);
         #endregion
 
         #region Drum
