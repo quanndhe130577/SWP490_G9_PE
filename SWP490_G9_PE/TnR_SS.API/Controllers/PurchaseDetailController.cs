@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TnR_SS.API.Common.Response;
+using TnR_SS.API.Common.Token;
 using TnR_SS.Domain.ApiModels.PurchaseDetailModel;
 using TnR_SS.Domain.Supervisor;
 
@@ -35,15 +36,15 @@ namespace TnR_SS.API.Controllers
             return new ResponseBuilder<List<PurchaseDetailResModel>>().Success("Get all type").WithData(list).ResponseModel;
         }
 
-        /*[HttpPost("update")]
-        public async Task<ResponseModel> UpdateFishTypeAsync(FishTypeApiModel fishType)
+        [HttpPost("update")]
+        public async Task<ResponseModel> Update(PurchaseDetailReqModel fishType)
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
             await _tnrssSupervisor.UpdateFishTypeAsync(fishType, traderId);
             return new ResponseBuilder().Success("Update Fish Type Success").ResponseModel;
         }
 
-        [HttpPost("delete/{fishTypeId}")]
+        /*[HttpPost("delete/{fishTypeId}")]
         public async Task<ResponseModel> DeleteFishTypeAsync(int fishTypeId)
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
