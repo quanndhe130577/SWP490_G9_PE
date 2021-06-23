@@ -15,12 +15,21 @@ namespace TnR_SS.Domain.Supervisor
             return _unitOfWork.Drums.GetAll(x => x.TruckID == truckId).Select(x => _mapper.Map<Drum, DrumApiModel>(x)).ToList();
         }
 
-        public async Task<int> CreateDrumAsync(DrumApiModel drumModel)
+        public async Task<int> CreateDrumAsync(DrumApiModel drumModel, int traderId)
         {
+            var truck = _unitOfWork.Trucks.GetAll(x => x.TraderID == traderId).Select(x => x.ID);
             var drum = _mapper.Map<DrumApiModel, Drum>(drumModel);
-            await _unitOfWork.Drums.CreateAsync(drum);
-            await _unitOfWork.SaveChangeAsync();
-            return drum.ID;
+            if (truck.Contains(drum.TruckID))
+            {
+                await _unitOfWork.Drums.CreateAsync(drum);
+                await _unitOfWork.SaveChangeAsync();
+                return drum.ID;
+            }
+            else
+            {
+                throw new Exception("TruckID does not contain in this trader");
+            }
+
         }
 
         public List<DrumApiModel> GetAllDrumByTraderId(int traderId)
@@ -28,11 +37,12 @@ namespace TnR_SS.Domain.Supervisor
             return _unitOfWork.Drums.GetAllByTraderkId(traderId).Select(x => _mapper.Map<Drum, DrumApiModel>(x)).ToList();
         }
 
-        public async Task UpdateDrumAsync(DrumApiModel drum, int traderId)
+        public async Task UpdateDrumAsync(DrumApiModel drum, int userId)
         {
             var drumEdit = await _unitOfWork.Drums.FindAsync(drum.ID);
             drumEdit = _mapper.Map<DrumApiModel, Drum>(drum, drumEdit);
-            if (drumEdit.TruckID == traderId)
+            var truck = _unitOfWork.Trucks.GetAll(x => x.TraderID == userId).Select(x => x.ID);
+            if (truck.Contains(drumEdit.TruckID))
             {
                 _unitOfWork.Drums.Update(drumEdit);
                 await _unitOfWork.SaveChangeAsync();
@@ -43,10 +53,11 @@ namespace TnR_SS.Domain.Supervisor
             }
         }
 
-        public async Task DeleteDrumAsync(int drumId, int truckId)
+        public async Task DeleteDrumAsync(int drumId, int userId)
         {
             var drum = await _unitOfWork.Drums.FindAsync(drumId);
-            if (drum.TruckID == truckId)
+            var truck = _unitOfWork.Trucks.GetAll(x => x.TraderID == userId).Select(x => x.ID);
+            if (truck.Contains(drum.TruckID))
             {
                 _unitOfWork.Drums.Delete(drum);
                 await _unitOfWork.SaveChangeAsync();

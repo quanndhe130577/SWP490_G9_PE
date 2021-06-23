@@ -28,14 +28,15 @@ namespace TnR_SS.API.Controllers
         public ResponseModel GetAllByTruckId(int truckId)
         {
             var rs = _tnrssSupervisor.GetAllDrumByTruckId(truckId);
-            return new ResponseBuilder<object>().Success("Get drum success").WithData(new { listDrum = rs }).ResponseModel;
+            return new ResponseBuilder<object>().Success("Get drum success").WithData(rs).ResponseModel;
         }
 
         [HttpPost("create")]
         public async Task<ResponseModel> CreateAsync(DrumApiModel drumModel)
         {
-            var drumId = await _tnrssSupervisor.CreateDrumAsync(drumModel);
-            return new ResponseBuilder<object>().Success("Get drum success").WithData(new { drumId = drumId }).ResponseModel;
+            var userId = TokenManagement.GetUserIdInToken(HttpContext);
+            var drumId = await _tnrssSupervisor.CreateDrumAsync(drumModel, userId);
+            return new ResponseBuilder<object>().Success("Create drum success").WithData(new { drumId = drumId }).ResponseModel;
         }
 
         [HttpGet("getall")]
@@ -43,7 +44,7 @@ namespace TnR_SS.API.Controllers
         {
             var userId = TokenManagement.GetUserIdInToken(HttpContext);
             var rs = _tnrssSupervisor.GetAllDrumByTraderId(userId);
-            return new ResponseBuilder<object>().Success("Get drum success").WithData(new { listDrum = rs }).ResponseModel;
+            return new ResponseBuilder<object>().Success("Get drum success").WithData(rs).ResponseModel;
         }
 
         [HttpPost("update")]

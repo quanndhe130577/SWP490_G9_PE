@@ -91,7 +91,7 @@ namespace TnR_SS.Domain.Supervisor
         #region Drum
         List<DrumApiModel> GetAllDrumByTruckId(int truckId);
         List<DrumApiModel> GetAllDrumByTraderId(int traderId);
-        Task<int> CreateDrumAsync(DrumApiModel drumModel);
+        Task<int> CreateDrumAsync(DrumApiModel drumModel, int traderId);
         Task UpdateDrumAsync(DrumApiModel drumModel, int traderId);
         Task DeleteDrumAsync(int drumId, int traderId);
         DrumApiModel GetDetailDrum(int traderId, int drumId);
