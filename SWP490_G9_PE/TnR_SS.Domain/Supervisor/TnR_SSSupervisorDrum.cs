@@ -68,14 +68,19 @@ namespace TnR_SS.Domain.Supervisor
             }
         }
 
-        public DrumApiModel GetDetailDrum(int drumId, int truckId)
+        public DrumApiModel GetDetailDrum(int userId, int drumId)
         {
-            var listEmp = GetAllDrumByTruckId(truckId);
-            foreach (var obj in listEmp)
+            var listEmp = GetAllDrumByTraderId(userId);
+            var drumDetail = listEmp.Where(x => x.ID == drumId);
+            foreach (var obj in listEmp) 
             {
-                if (obj.TruckID == truckId)
+                if (obj.ID == drumId)
                 {
                     return obj;
+                }
+                else
+                {
+                    throw new Exception("Drum does not exist in this trader");
                 }
             }
             return null;

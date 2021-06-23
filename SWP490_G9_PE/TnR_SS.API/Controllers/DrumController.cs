@@ -62,5 +62,13 @@ namespace TnR_SS.API.Controllers
             await _tnrssSupervisor.DeleteDrumAsync(drumId, userId);
             return new ResponseBuilder().Success("Delete Drum Success").ResponseModel;
         }
+
+        [HttpGet("detail/{drumId}")]
+        public ResponseModel DetailEmployee(int drumId)
+        {
+            var userId = TokenManagement.GetUserIdInToken(HttpContext);
+            var detail = _tnrssSupervisor.GetDetailDrum(userId, drumId);
+            return new ResponseBuilder<DrumApiModel>().Success("Get Detail Drum Success").WithData(detail).ResponseModel;
+        }
     }
 }
