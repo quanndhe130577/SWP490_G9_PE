@@ -11,9 +11,9 @@ namespace TnR_SS.Domain.Supervisor
     public partial class TnR_SSSupervisor
     {
 
-        public Task<Truck> GetTruck(int id)
+        public async Task<Truck> GetTruck(int id)
         {
-            return _unitOfWork.Trucks.FindAsync(id);
+            return await _unitOfWork.Trucks.FindAsync(id);
         }
         public List<TruckApiModel> GetAllTruckByTraderId(int traderId)
         {

@@ -10,6 +10,7 @@ using TnR_SS.Domain.ApiModels.PondOwnerModel;
 using TnR_SS.Domain.Entities;
 using TnR_SS.Domain.Supervisor;
 using System.Text.RegularExpressions;
+using TnR_SS.API.Common.Token;
 
 namespace TnR_SS.API.Controllers
 {
@@ -91,8 +92,9 @@ namespace TnR_SS.API.Controllers
             var valid = Valid(pondOwner);
             if (valid.IsValid)
             {
+                var traderId = TokenManagement.GetUserIdInToken(HttpContext);
                 await _tnrssSupervisor.EditPondOwner(pondOwner);
-                return new ResponseBuilder<List<PondOwnerAPIModel>>().Success("Cập nhật thành công").ResponseModel;
+                return new ResponseBuilder<List<PondOwnerAPIModel>>().Success("Cập nhật thành công").WithData(_tnrssSupervisor.GetPondOwnerByTraderId(traderId)).ResponseModel;
             }
             else
             {
