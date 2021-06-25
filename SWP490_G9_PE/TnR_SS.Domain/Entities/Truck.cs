@@ -17,6 +17,8 @@ namespace TnR_SS.Domain.Entities
         [Required]
         public string LicensePlate { get; set; }
 
+        public string Name { get; set; }
+
         [Required]
         public DateTime CreatedAt { get; set; }
         [Required]

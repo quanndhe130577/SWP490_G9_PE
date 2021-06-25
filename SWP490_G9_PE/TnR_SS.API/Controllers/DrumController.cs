@@ -28,14 +28,15 @@ namespace TnR_SS.API.Controllers
         public ResponseModel GetAllByTruckId(int truckId)
         {
             var rs = _tnrssSupervisor.GetAllDrumByTruckId(truckId);
-            return new ResponseBuilder<object>().Success("Get drum success").WithData(new { listDrum = rs }).ResponseModel;
+            return new ResponseBuilder<object>().Success("Get drum success").WithData(rs).ResponseModel;
         }
 
         [HttpPost("create")]
         public async Task<ResponseModel> CreateAsync(DrumApiModel drumModel)
         {
-            var drumId = await _tnrssSupervisor.CreateDrumAsync(drumModel);
-            return new ResponseBuilder<object>().Success("Get drum success").WithData(new { drumId = drumId }).ResponseModel;
+            var userId = TokenManagement.GetUserIdInToken(HttpContext);
+            var drumId = await _tnrssSupervisor.CreateDrumAsync(drumModel, userId);
+            return new ResponseBuilder<object>().Success("Create drum success").WithData(new { drumId = drumId }).ResponseModel;
         }
 
         [HttpGet("getall")]
@@ -43,7 +44,31 @@ namespace TnR_SS.API.Controllers
         {
             var userId = TokenManagement.GetUserIdInToken(HttpContext);
             var rs = _tnrssSupervisor.GetAllDrumByTraderId(userId);
-            return new ResponseBuilder<object>().Success("Get drum success").WithData(new { listDrum = rs }).ResponseModel;
+            return new ResponseBuilder<object>().Success("Get drum success").WithData(rs).ResponseModel;
+        }
+
+        [HttpPost("update")]
+        public async Task<ResponseModel> UpdateDrumAsync(DrumApiModel drum)
+        {
+            var userId = TokenManagement.GetUserIdInToken(HttpContext);
+            await _tnrssSupervisor.UpdateDrumAsync(drum, userId);
+            return new ResponseBuilder().Success("Update Drum Success").ResponseModel;
+        }
+
+        [HttpPost("delete/{drumId}")]
+        public async Task<ResponseModel> DeleteFishTypeAsync(int drumId)
+        {
+            var userId = TokenManagement.GetUserIdInToken(HttpContext);
+            await _tnrssSupervisor.DeleteDrumAsync(drumId, userId);
+            return new ResponseBuilder().Success("Delete Drum Success").ResponseModel;
+        }
+
+        [HttpGet("detail/{drumId}")]
+        public ResponseModel DetailEmployee(int drumId)
+        {
+            var userId = TokenManagement.GetUserIdInToken(HttpContext);
+            var detail = _tnrssSupervisor.GetDetailDrum(userId, drumId);
+            return new ResponseBuilder<DrumApiModel>().Success("Get Detail Drum Success").WithData(detail).ResponseModel;
         }
     }
 }

@@ -28,7 +28,18 @@ namespace TnR_SS.Domain.Supervisor
             {
                 var fishType = _mapper.Map<FishTypeApiModel, FishType>(obj);
                 fishType.TraderID = traderId;
-                await _unitOfWork.FishTypes.CreateAsync(fishType);
+                if (fishType.MinWeight <= 0 || fishType.MaxWeight <= 0)
+                {
+                    throw new Exception("Must more than 0");
+                }
+                else if (fishType.MaxWeight - fishType.MinWeight < 0)
+                {
+                    throw new Exception("Min Weight can not bigger than Max Weight");
+                }
+                else
+                {
+                    await _unitOfWork.FishTypes.CreateAsync(fishType);
+                }
             }
             await _unitOfWork.SaveChangeAsync();
         }
@@ -37,8 +48,19 @@ namespace TnR_SS.Domain.Supervisor
         {
             var map = _mapper.Map<FishTypeApiModel, FishType>(fishType);
             map.TraderID = traderId;
-            await _unitOfWork.FishTypes.CreateAsync(map);
-            await _unitOfWork.SaveChangeAsync();
+            if(map.MinWeight <= 0 || map.MaxWeight <= 0)
+            {
+                throw new Exception("Must more than 0");
+            }
+            else if (map.MaxWeight - map.MinWeight < 0)
+            {
+                throw new Exception("Min Weight can not bigger than Max Weight");
+            }
+            else
+            {
+                await _unitOfWork.FishTypes.CreateAsync(map);
+                await _unitOfWork.SaveChangeAsync();
+            }
         }
 
         public async Task UpdateFishTypeAsync(FishTypeApiModel fishType, int traderId)
@@ -47,8 +69,19 @@ namespace TnR_SS.Domain.Supervisor
             fishTypeEdit = _mapper.Map<FishTypeApiModel, FishType>(fishType, fishTypeEdit);
             if (fishTypeEdit.TraderID == traderId)
             {
-                _unitOfWork.FishTypes.Update(fishTypeEdit);
-                await _unitOfWork.SaveChangeAsync();
+                if (fishTypeEdit.MinWeight <= 0 || fishTypeEdit.MaxWeight <= 0)
+                {
+                    throw new Exception("Must more than 0");
+                }
+                else if (fishTypeEdit.MaxWeight - fishTypeEdit.MinWeight < 0)
+                {
+                    throw new Exception("Min Weight can not bigger than Max Weight");
+                }
+                else
+                {
+                    _unitOfWork.FishTypes.Update(fishTypeEdit);
+                    await _unitOfWork.SaveChangeAsync();
+                }
             }
             else
             {
