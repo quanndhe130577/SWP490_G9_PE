@@ -43,8 +43,9 @@ namespace TnR_SS.API.Controllers
         public async Task<ResponseModel> UpdateBasketAsync(BasketApiModel basketApi)
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
+            List<BasketApiModel> list = _tnrssSupervisor.GetAllBasket(traderId);
             await _tnrssSupervisor.UpdateBasketAsync(basketApi, traderId);
-            return new ResponseBuilder().Success("Update Basket Success").ResponseModel;
+            return new ResponseBuilder<List<BasketApiModel> >().Success("Update Basket Success").WithData(list).ResponseModel;
         }
 
         [HttpPost("delete/{basketId}")]

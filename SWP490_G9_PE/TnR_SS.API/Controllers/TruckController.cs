@@ -36,6 +36,10 @@ namespace TnR_SS.API.Controllers
         [HttpPost("create")]
         public async Task<ResponseModel> CreateTruck(TruckApiModel truckModel)
         {
+            if (string.IsNullOrEmpty(truckModel.LicensePlate))
+            {
+                return new ResponseBuilder<List<TruckApiModel>>().Error("Thông tin bị để trống").ResponseModel;
+            }
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
             var truckId = await _tnrssSupervisor.CreateTruckAsync(truckModel, traderId);
             return new ResponseBuilder<object>().Success("Create truck success").WithData(new { truckId = truckId }).ResponseModel;
@@ -44,6 +48,15 @@ namespace TnR_SS.API.Controllers
         [HttpPost("update")]
         public async Task<ResponseModel> UpdateTruck(TruckApiModel truckModel)
         {
+            if (string.IsNullOrEmpty(truckModel.LicensePlate))
+            {
+                return new ResponseBuilder<List<TruckApiModel>>().Error("Thông tin bị để trống").ResponseModel;
+            }
+            Truck truck = await _tnrssSupervisor.GetTruck(truckModel.Id);
+            if (truck == null)
+            {
+                return new ResponseBuilder<List<TruckApiModel>>().Error("Không tìm thấy truck").ResponseModel;
+            }
             var truckId = await _tnrssSupervisor.UpdateTruckAsync(truckModel);
             return new ResponseBuilder<object>().Success("Update truck success").ResponseModel;
         }
