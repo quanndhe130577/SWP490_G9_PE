@@ -32,6 +32,7 @@ namespace TnR_SS.Domain.Supervisor
         public async Task<int> UpdateTruckAsync(TruckApiModel truckModel)
         {
             Truck truck = await _unitOfWork.Trucks.FindAsync(truckModel.Id);
+            truck.Name = truckModel.Name;
             truck.LicensePlate = truckModel.LicensePlate;
             _unitOfWork.Trucks.Update(truck);
             return await _unitOfWork.SaveChangeAsync();
