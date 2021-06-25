@@ -36,7 +36,11 @@ namespace TnR_SS.API.Controllers
         [HttpPost("create")]
         public async Task<ResponseModel> CreateTruck(TruckApiModel truckModel)
         {
-            if (string.IsNullOrEmpty(truckModel.LicensePlate))
+            if (string.IsNullOrEmpty(truckModel.Name))
+            {
+                return new ResponseBuilder<List<TruckApiModel>>().Error("Tên bị để trống").ResponseModel;
+            }
+             if (string.IsNullOrEmpty(truckModel.LicensePlate))
             {
                 return new ResponseBuilder<List<TruckApiModel>>().Error("Thông tin bị để trống").ResponseModel;
             }
@@ -48,6 +52,10 @@ namespace TnR_SS.API.Controllers
         [HttpPost("update")]
         public async Task<ResponseModel> UpdateTruck(TruckApiModel truckModel)
         {
+            if (string.IsNullOrEmpty(truckModel.Name))
+            {
+                return new ResponseBuilder<List<TruckApiModel>>().Error("Tên bị để trống").ResponseModel;
+            }
             if (string.IsNullOrEmpty(truckModel.LicensePlate))
             {
                 return new ResponseBuilder<List<TruckApiModel>>().Error("Thông tin bị để trống").ResponseModel;
