@@ -17,11 +17,11 @@ namespace TnR_SS.Domain.Supervisor
             var pondOwner = await _unitOfWork.PondOwners.FindAsync(purchaseModel.PondOwnerID);
             newPurchase.PondOwnerName = pondOwner.Name;
 
-            var allFT = _unitOfWork.FishTypes.GetAllLastByTraderId(purchaseModel.TraderID);
+            /*var allFT = _unitOfWork.FishTypes.GetAllLastByTraderId(purchaseModel.TraderID);
             foreach (var r in allFT)
             {
                 newPurchase.ListFishTypeWithPrice.Add(_mapper.Map<FishType, FishTypeApiModel>(r));
-            }
+            }*/
 
             return newPurchase;
         }

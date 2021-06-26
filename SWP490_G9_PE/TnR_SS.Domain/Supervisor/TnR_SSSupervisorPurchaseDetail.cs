@@ -20,6 +20,7 @@ namespace TnR_SS.Domain.Supervisor
             double totalFishWeight = data.ListDrum.Sum(x => x.Weight) - basket.Weight;
             purchaseDetail.BuyPrice = fishType.Price * totalFishWeight;
             await _unitOfWork.PurchaseDetails.CreateAsync(purchaseDetail);
+            await _unitOfWork.SaveChangeAsync();
             return purchaseDetail.ID;
         }
 

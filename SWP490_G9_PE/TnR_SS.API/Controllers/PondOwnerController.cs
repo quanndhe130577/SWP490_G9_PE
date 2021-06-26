@@ -50,7 +50,7 @@ namespace TnR_SS.API.Controllers
             var valid = Valid(pondOwner);
             if (valid.IsValid)
             {
-                await _tnrssSupervisor.AddPondOwner(pondOwner);
+                await _tnrssSupervisor.AddPondOwnerAsync(pondOwner);
                 return new ResponseBuilder<List<PondOwnerAPIModel>>().Success("Thêm thành công").ResponseModel;
             }
             else
