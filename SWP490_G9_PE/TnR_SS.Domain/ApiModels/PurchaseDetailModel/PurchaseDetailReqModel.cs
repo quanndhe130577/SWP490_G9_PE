@@ -10,7 +10,7 @@ namespace TnR_SS.Domain.ApiModels.PurchaseDetailModel
 {
     public class PurchaseDetailReqModel
     {
-
+        public int Id { get; set; }
         [Required]
         public int FishTypeID { get; set; }
 

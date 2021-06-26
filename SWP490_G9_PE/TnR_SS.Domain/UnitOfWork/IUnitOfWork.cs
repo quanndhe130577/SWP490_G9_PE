@@ -23,5 +23,10 @@ namespace TnR_SS.Domain.UnitOfWork
         IDrumRepository Drums { get; }
         ILK_PurchaseDeatil_DrumRepository LK_PurchaseDeatil_Drums { get; }
         Task<int> SaveChangeAsync();
+        Task<int> SaveChangeWithoutCommitAsync();
+        Task CommitAsync();
+        Task RollbackAsync();
+
     }
+
 }

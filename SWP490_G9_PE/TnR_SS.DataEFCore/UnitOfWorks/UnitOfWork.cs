@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Storage;
+using System;
 using System.Threading.Tasks;
 using TnR_SS.DataEFCore.Repositories;
 using TnR_SS.Domain.Entities;
@@ -10,7 +12,7 @@ namespace TnR_SS.DataEFCore.UnitOfWorks
     public class UnitOfWork : IUnitOfWork
     {
         private readonly TnR_SSContext _context;
-
+        private readonly IDbContextTransaction Transaction;
         public UnitOfWork(TnR_SSContext context, UserManager<UserInfor> _userManager, SignInManager<UserInfor> _signInManager, RoleManager<RoleUser> _roleManager)
         {
             _context = context;
@@ -27,6 +29,7 @@ namespace TnR_SS.DataEFCore.UnitOfWorks
             Drums = new DrumRepository(_context);
             Employees = new EmployeeRepository(_context);
             LK_PurchaseDeatil_Drums = new LK_PurchaseDeatil_DrumRepository(_context);
+            Transaction = _context.Database.BeginTransaction();
         }
 
         public IOTPRepository OTPs { get; private set; }
@@ -52,9 +55,46 @@ namespace TnR_SS.DataEFCore.UnitOfWorks
 
         public IDrumRepository Drums { get; private set; }
 
-        public Task<int> SaveChangeAsync()
+        public async Task<int> SaveChangeAsync()
         {
-            return _context.SaveChangesAsync();
+            try
+            {
+                var rs = await _context.SaveChangesAsync();
+                await CommitAsync();
+                return rs;
+            }
+            catch
+            {
+                await RollbackAsync();
+                throw;
+            }
+
+        }
+
+        public async Task<int> SaveChangeWithoutCommitAsync()
+        {
+            return await _context.SaveChangesAsync();
+        }
+
+        public async Task CommitAsync()
+        {
+            await Transaction.CommitAsync();
+        }
+
+        public async Task RollbackAsync()
+        {
+            await Transaction.RollbackAsync();
+        }
+
+        public async Task CreateSavePoint(string name)
+        {
+            await Transaction.CreateSavepointAsync(name);
+
+        }
+
+        public async Task RollbackToSavePoint(string name)
+        {
+            await Transaction.RollbackToSavepointAsync(name);
         }
 
         public void Dispose()
