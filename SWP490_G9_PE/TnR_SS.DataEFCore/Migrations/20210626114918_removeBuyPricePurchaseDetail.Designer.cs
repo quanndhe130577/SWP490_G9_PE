@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TnR_SS.DataEFCore;
 
 namespace TnR_SS.DataEFCore.Migrations
 {
     [DbContext(typeof(TnR_SSContext))]
-    partial class TnR_SSContextModelSnapshot : ModelSnapshot
+    [Migration("20210626114918_removeBuyPricePurchaseDetail")]
+    partial class removeBuyPricePurchaseDetail
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -403,6 +405,12 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.Property<int>("PondOwnerID")
                         .HasColumnType("int");
 
+                    b.Property<double>("TotalAmount")
+                        .HasColumnType("float");
+
+                    b.Property<double>("TotalWeight")
+                        .HasColumnType("float");
+
                     b.Property<int>("TraderID")
                         .HasColumnType("int");
 
@@ -496,7 +504,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "1f8134d1-1db9-41e2-a361-148aa0cd6d86",
+                            ConcurrencyStamp = "336596af-a610-4513-8dab-01f4cb34f0cb",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Admin",
                             Name = "Admin",
@@ -506,7 +514,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "3c317a17-cdf3-4a50-a887-54c26eeef3ad",
+                            ConcurrencyStamp = "9d098fba-1cb4-48f5-ae85-4067cb936be1",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Thương lái",
                             Name = "Trader",
@@ -516,7 +524,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "9b5f6d35-4a86-4b50-a5f3-24b1df58f36f",
+                            ConcurrencyStamp = "ef7f5606-629a-40b1-bd15-f235221946fe",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Chủ bến",
                             Name = "Weight Recorder",
@@ -838,8 +846,7 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.HasOne("TnR_SS.Domain.Entities.PondOwner", "PondOwner")
                         .WithMany("Purchases")
                         .HasForeignKey("PondOwnerID")
-                        .HasConstraintName("FK_Purchase_PondOwner")
-                        .OnDelete(DeleteBehavior.ClientNoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("TnR_SS.Domain.Entities.UserInfor", "UserInfor")

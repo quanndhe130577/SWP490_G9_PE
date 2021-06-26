@@ -36,13 +36,13 @@ namespace TnR_SS.API.Controllers
             return new ResponseBuilder<List<PurchaseDetailResModel>>().Success("Get all purchase detail").WithData(list).ResponseModel;
         }
 
-        /*[HttpPost("update")]
-        public async Task<ResponseModel> Update(PurchaseDetailReqModel fishType)
+        [HttpPost("update")]
+        public async Task<ResponseModel> Update(PurchaseDetailReqModel data)
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
-            await _tnrssSupervisor.UpdateFishTypeAsync(fishType, traderId);
-            return new ResponseBuilder().Success("Update Fish Type Success").ResponseModel;
-        }*/
+            await _tnrssSupervisor.UpdatePurchaseDetailAsync(data);
+            return new ResponseBuilder().Success("Update Purchase Detail Success").ResponseModel;
+        }
 
         /*[HttpPost("delete/{fishTypeId}")]
         public async Task<ResponseModel> DeleteFishTypeAsync(int fishTypeId)

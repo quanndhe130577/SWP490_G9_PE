@@ -14,7 +14,7 @@ namespace TnR_SS.Domain.ApiModels.PurchaseDetailModel
         public int ID { get; set; }
         public BasketApiModel Basket { get; set; }
         public FishTypeApiModel FishType { get; set; }
-        public double BuyPrice { get; set; }
+        public double Price { get; set; }
         public double Weight { get; set; }
     }
 }

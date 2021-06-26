@@ -27,7 +27,6 @@ namespace TnR_SS.API.Controllers
 
         #region create purchase
         [HttpPost("create")]
-        //[Route("update")]
         public async Task<ResponseModel> CreatePurchase(PurchaseReqModel purchaseData)
         {
             if (!TokenManagement.CheckUserIdFromToken(HttpContext, purchaseData.TraderID))
@@ -36,6 +35,18 @@ namespace TnR_SS.API.Controllers
             }
 
             var newData = await _tnrssSupervisor.CreatePurchaseAsync(purchaseData);
+
+            return new ResponseBuilder<object>().Success("Create purchase success").WithData(newData).ResponseModel;
+        }
+        #endregion
+
+        #region Get all purchase
+        [HttpGet("getall")]
+        public async Task<ResponseModel> GetAll()
+        {
+            var traderId = TokenManagement.GetUserIdInToken(HttpContext);
+
+            var newData = await _tnrssSupervisor.GetAllPurchaseAsync(traderId);
 
             return new ResponseBuilder<object>().Success("Create purchase success").WithData(newData).ResponseModel;
         }

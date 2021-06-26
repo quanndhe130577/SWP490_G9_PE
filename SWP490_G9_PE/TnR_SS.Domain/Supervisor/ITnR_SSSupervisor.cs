@@ -74,6 +74,7 @@ namespace TnR_SS.Domain.Supervisor
 
         #region Purchase
         Task<PurchaseResModel> CreatePurchaseAsync(PurchaseReqModel purchaseModel);
+        Task<List<PurchaseResModel>> GetAllPurchaseAsync(int traderId);
         #endregion
 
         #region PondOwner
@@ -122,8 +123,7 @@ namespace TnR_SS.Domain.Supervisor
         #region PurchaseDetail
         Task<List<PurchaseDetailResModel>> GetAllPurchaseDetailAsync(int purchaseId);
         Task<int> CreatePurchaseDetailAsync(PurchaseDetailReqModel data);
-       /* Task UpdateFishTypeAsync(FishTypeApiModel fishTypeModel, int traderId);
-        Task DeleteFishTypeAsync(int empId, int traderId);*/
+        Task UpdatePurchaseDetailAsync(PurchaseDetailReqModel data);
         #endregion
     }
 }

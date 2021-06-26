@@ -14,12 +14,14 @@ namespace TnR_SS.Domain.ApiModels.PurchaseModal
         [Required]
         public string PondOwnerName { get; set; }
 
+        public double TotalWeight { get; set; }
 
-       /* public List<FishTypeApiModel> ListFishTypeWithPrice { get; set; }
+        public double TotalAmount { get; set; }
+        /* public List<FishTypeApiModel> ListFishTypeWithPrice { get; set; }
 
-        public PurchaseResModel()
-        {
-            this.ListFishTypeWithPrice = new List<FishTypeApiModel>();
-        }*/
+         public PurchaseResModel()
+         {
+             this.ListFishTypeWithPrice = new List<FishTypeApiModel>();
+         }*/
     }
 }
