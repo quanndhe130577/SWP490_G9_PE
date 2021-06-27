@@ -7,6 +7,7 @@ using TnR_SS.Domain.Entities;
 using TnR_SS.Domain.ApiModels.TimeKeepingModel;
 using System.Collections.Generic;
 using System;
+using TnR_SS.API.Common.Token;
 
 namespace TnR_SS.API.Controller
 {
@@ -24,10 +25,11 @@ namespace TnR_SS.API.Controller
         }
 
         [HttpGet]
-        [Route("getByTrader/{id}")]
-        public ResponseModel GetByTraderId(int id)
+        [Route("getByTrader")]
+        public async Task <ResponseModel> GetByTraderId()
         {
-            var rs = _tnrssSupervisor.GetListTimeKeepingByTraderId(id);
+            var traderId = TokenManagement.GetUserIdInToken(HttpContext);
+            var rs = await _tnrssSupervisor.GetListTimeKeepingByTraderId(traderId);
             return new ResponseBuilder<List<TimeKeepingApiModel>>().Success("Get Info Success").WithData(rs).ResponseModel;
         }
 

@@ -15,6 +15,7 @@ namespace TnR_SS.Domain.ApiModels.TimeKeepingModel
         public int Status { get; set; }
         public double Money { get; set; }
         public TimeKeepingNote Note { get; set; }
+        public string EmpName { get; set; }
         public int EmpId { get; set; }
     }
 }
