@@ -12,8 +12,8 @@ namespace TnR_SS.Domain.ApiModels.EmployeeModel
         [Required]
         public int ID { get; set; }
         [Required]
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public string Name { get; set; }
+        //public string LastName { get; set; }
         public DateTime DOB { get; set; }
         [Required]
         public string PhoneNumber { get; set; }
