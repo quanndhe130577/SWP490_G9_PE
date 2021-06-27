@@ -18,6 +18,6 @@ namespace TnR_SS.Domain.ApiModels.PurchaseDetailModel
         public FishTypeApiModel FishType { get; set; }
         public double Price { get; set; }
         public double Weight { get; set; }
-        public List<LK_Drum_TruckApiModel> ListDrum { get; set; }
+        public List<LK_Drum_TruckApiModel> ListDrum { get; set; } = new List<LK_Drum_TruckApiModel>();
     }
 }

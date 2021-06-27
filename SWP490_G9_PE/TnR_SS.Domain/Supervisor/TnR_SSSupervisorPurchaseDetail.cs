@@ -27,6 +27,22 @@ namespace TnR_SS.Domain.Supervisor
             await _unitOfWork.SaveChangeAsync();
         }
 
+        private async Task CreateLK(List<int> listDrumId, int purchaseDetailId)
+        {
+            foreach (var item in listDrumId)
+            {
+                LK_PurchaseDeatil_Drum lk = new LK_PurchaseDeatil_Drum()
+                {
+                    DrumID = item,
+                    PurchaseDetailID = purchaseDetailId,
+                };
+                /*var lk = _mapper.Map<LK_PurchaseDetail_DrumApiModel, LK_PurchaseDeatil_Drum>(item);
+                lk.PurchaseDetailID = purchaseDetailId;*/
+                await _unitOfWork.LK_PurchaseDeatil_Drums.CreateAsync(lk);
+            }
+            await _unitOfWork.SaveChangeAsync();
+        }
+
         private async Task<double> GetPurchaseDetailPriceAsync(int purchaseDetailId)
         {
             var purchaseDetail = await _unitOfWork.PurchaseDetails.FindAsync(purchaseDetailId);
@@ -96,7 +112,7 @@ namespace TnR_SS.Domain.Supervisor
                         await _unitOfWork.PurchaseDetails.CreateAsync(purchaseDetail);
                         await _unitOfWork.SaveChangeAsync();
                         //create lk
-                        await CreateLK(data.ListDrum, purchaseDetail.ID);
+                        await CreateLK(data.ListDrumId, purchaseDetail.ID);
                         await transaction.CommitAsync();
                         return purchaseDetail.ID;
                     }
@@ -147,7 +163,7 @@ namespace TnR_SS.Domain.Supervisor
                         _unitOfWork.LK_PurchaseDeatil_Drums.DeleteMany(x => x.PurchaseDetailID == data.Id);
 
                         // create new LK
-                        await CreateLK(data.ListDrum, data.Id);
+                        await CreateLK(data.ListDrumId, data.Id);
 
                         await _unitOfWork.SaveChangeAsync();
 

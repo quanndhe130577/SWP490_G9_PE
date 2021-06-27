@@ -23,6 +23,7 @@ namespace TnR_SS.Domain.ApiModels.PurchaseDetailModel
         public double Weight { get; set; }
 
         //[Required]
-        public List<LK_PurchaseDetail_DrumApiModel> ListDrum { get; set; } = new List<LK_PurchaseDetail_DrumApiModel>();
+        //public List<LK_PurchaseDetail_DrumApiModel> ListDrum { get; set; } = new List<LK_PurchaseDetail_DrumApiModel>();
+        public List<int> ListDrumId { get; set; } = new List<int>();
     }
 }
