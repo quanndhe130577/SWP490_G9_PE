@@ -11,6 +11,6 @@ namespace TnR_SS.Domain.Repositories
     public interface IDrumRepository : IRepositoryBase<Drum>
     {
         List<Drum> GetAllByTraderkId(int traderId);
-        List<LK_Drum_Truck> GetLKPurchaseApiModel(PurchaseDetail data);
+        List<Drum> GetListDrumByPurchaseDetail(PurchaseDetail data);
     }
 }

@@ -10,6 +10,18 @@ namespace TnR_SS.Domain.Supervisor
 {
     public partial class TnR_SSSupervisor
     {
+        private List<DrumApiModel> GetListDrumByPurchaseDetail(PurchaseDetail purchaseDetail)
+        {
+            var listDrum = _unitOfWork.Drums.GetListDrumByPurchaseDetail(purchaseDetail);
+            List<DrumApiModel> list = new List<DrumApiModel>();
+            foreach (var item in listDrum)
+            {
+                list.Add(_mapper.Map<Drum, DrumApiModel>(item));
+            }
+
+            return list;
+        }
+
         public List<DrumApiModel> GetAllDrumByTruckId(int truckId)
         {
             return _unitOfWork.Drums.GetAll(x => x.TruckID == truckId).Select(x => _mapper.Map<Drum, DrumApiModel>(x)).ToList();
@@ -72,7 +84,7 @@ namespace TnR_SS.Domain.Supervisor
         {
             var listEmp = GetAllDrumByTraderId(userId);
             var drumDetail = listEmp.Where(x => x.ID == drumId);
-            foreach (var obj in listEmp) 
+            foreach (var obj in listEmp)
             {
                 if (obj.ID == drumId)
                 {
