@@ -19,8 +19,10 @@ namespace TnR_SS.Domain.ApiModels.PurchaseDetailModel
 
         [Required]
         public int PurchaseId { get; set; }
-
         [Required]
+        public double Weight { get; set; }
+
+        //[Required]
         public List<LK_PurchaseDetail_DrumApiModel> ListDrum { get; set; }
     }
 }

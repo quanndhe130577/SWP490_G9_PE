@@ -11,8 +11,9 @@ namespace TnR_SS.Domain.ApiModels.LK_PurchaseDetail_DrumModel
     {
         [Required]
         public int DrumID { get; set; }
-        [Required]
-        public double Weight { get; set; }
+        public int TruckID { get; set; }
+        /*[Required]
+        public double Weight { get; set; }*/
 
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using TnR_SS.Domain.ApiModels.FishTypeModel;
 using TnR_SS.Domain.ApiModels.PurchaseModal;
@@ -17,20 +18,14 @@ namespace TnR_SS.Domain.Supervisor
             PurchaseResModel newPurchase = _mapper.Map<Purchase, PurchaseResModel>(purchase);
             var pondOwner = await _unitOfWork.PondOwners.FindAsync(purchaseModel.PondOwnerID);
             newPurchase.PondOwnerName = pondOwner.Name;
+            newPurchase.PondOwnerId = pondOwner.ID;
 
             return newPurchase;
         }
 
         private double GetTotalWeightPurchase(int purchaseId)
         {
-            var totalWeight = 0.0;
-            var listPD = _unitOfWork.PurchaseDetails.GetAll(x => x.PurchaseId == purchaseId);
-            foreach (var item in listPD)
-            {
-                totalWeight += GetPurchaseDetailWeight(item.ID);
-            }
-
-            return totalWeight;
+            return _unitOfWork.PurchaseDetails.GetAll(x => x.PurchaseId == purchaseId).Sum(x => x.Weight);
         }
 
         private async Task<double> GetTotalAmountPurchaseAsync(int purchaseId)
@@ -39,7 +34,7 @@ namespace TnR_SS.Domain.Supervisor
             var listPD = _unitOfWork.PurchaseDetails.GetAll(x => x.PurchaseId == purchaseId);
             foreach (var item in listPD)
             {
-                totalAmount += await GetPurchaseDetailPriceAsync(item.ID);
+                totalAmount += await GetPurchaseDetailPriceAsync(item);
             }
 
             return totalAmount;

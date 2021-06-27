@@ -5,9 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TnR_SS.Domain.ApiModels.BasketModel.ResponseModel;
+using TnR_SS.Domain.ApiModels.DrumModel;
 using TnR_SS.Domain.ApiModels.FishTypeModel;
 using TnR_SS.Domain.ApiModels.LK_PurchaseDetail_DrumModel;
 using TnR_SS.Domain.ApiModels.PurchaseDetailModel;
+using TnR_SS.Domain.ApiModels.TruckModel;
 using TnR_SS.Domain.Entities;
 
 namespace TnR_SS.Domain.Supervisor
@@ -25,25 +27,55 @@ namespace TnR_SS.Domain.Supervisor
             await _unitOfWork.SaveChangeAsync();
         }
 
-        private async Task<double> GetPurchaseDetailPriceAsync(int purchaseId)
+        private async Task<double> GetPurchaseDetailPriceAsync(int purchaseDetailId)
         {
-            var purchase = await _unitOfWork.PurchaseDetails.FindAsync(purchaseId);
-            var fishType = await _unitOfWork.FishTypes.FindAsync(purchase.FishTypeID);
-            var basket = await _unitOfWork.Baskets.FindAsync(purchase.BasketId);
-            var listDrum = _unitOfWork.LK_PurchaseDeatil_Drums.GetAll(x => x.PurchaseDetailID == purchaseId);
-            double totalFishWeight = listDrum.Sum(x => x.Weight) - basket.Weight;
+            var purchaseDetail = await _unitOfWork.PurchaseDetails.FindAsync(purchaseDetailId);
+            var fishType = await _unitOfWork.FishTypes.FindAsync(purchaseDetail.FishTypeID);
+            var basket = await _unitOfWork.Baskets.FindAsync(purchaseDetail.BasketId);
+            //var listDrum = _unitOfWork.LK_PurchaseDeatil_Drums.GetAll(x => x.PurchaseDetailID == purchaseDetailId);
+            double totalFishWeight = purchaseDetail.Weight - basket.Weight;
             return totalFishWeight > 0 ? fishType.Price * totalFishWeight : 0;
         }
+
+        private async Task<double> GetPurchaseDetailPriceAsync(PurchaseDetail purchaseDetail)
+        {
+            var fishType = await _unitOfWork.FishTypes.FindAsync(purchaseDetail.FishTypeID);
+            var basket = await _unitOfWork.Baskets.FindAsync(purchaseDetail.BasketId);
+            //var listDrum = _unitOfWork.LK_PurchaseDeatil_Drums.GetAll(x => x.PurchaseDetailID == purchaseDetailId);
+            double totalFishWeight = purchaseDetail.Weight - basket.Weight;
+            return totalFishWeight > 0 ? fishType.Price * totalFishWeight : 0;
+        }
+
         private double GetPurchaseDetailPrice(double fishTypePrice, double basketWeight, double totalWeight)
         {
             double totalFishWeight = totalWeight - basketWeight;
             return totalFishWeight > 0 ? fishTypePrice * totalFishWeight : 0;
         }
 
-        private double GetPurchaseDetailWeight(int purchaseDetailId)
+        private List<LK_Drum_TruckApiModel> GetListDrumAndTruckByPurchaseDetail(PurchaseDetail purchaseDetail)
         {
-            return _unitOfWork.LK_PurchaseDeatil_Drums.GetAll(x => x.PurchaseDetailID == purchaseDetailId).Sum(x => x.Weight);
+            var listLK = _unitOfWork.Drums.GetLKPurchaseApiModel(purchaseDetail);
+            List<LK_Drum_TruckApiModel> list = new List<LK_Drum_TruckApiModel>();
+            foreach (var item in listLK)
+            {
+                LK_Drum_TruckApiModel lk = new LK_Drum_TruckApiModel()
+                {
+                    Drum = _mapper.Map<Drum, DrumApiModel>(item.Drum),
+                    Truck = _mapper.Map<Truck, TruckApiModel>(item.Truck),
+
+                };
+
+                list.Add(lk);
+            }
+
+            return list;
         }
+
+        /* private double GetPurchaseDetailWeight(int purchaseDetailId)
+         {
+             //return _unitOfWork.LK_PurchaseDeatil_Drums.GetAll(x => x.PurchaseDetailID == purchaseDetailId).Sum(x => x.Weight);
+             return _unitOfWork.PurchaseDetails.FindAsync(purchaseDetailId).Result.Weight;
+         }*/
 
         public async Task<int> CreatePurchaseDetailAsync(PurchaseDetailReqModel data)
         {
@@ -60,7 +92,7 @@ namespace TnR_SS.Domain.Supervisor
                         var purchaseDetail = _mapper.Map<PurchaseDetailReqModel, PurchaseDetail>(data);
                         //double totalFishWeight = data.ListDrum.Sum(x => x.Weight) - basket.Weight;
                         //purchaseDetail.BuyPrice = fishType.Price * totalFishWeight;
-                        //purchaseDetail.BuyPrice = GetBuyPrice(data.ListDrum, fishType, basket);
+                        purchaseDetail.Weight = data.Weight;
                         await _unitOfWork.PurchaseDetails.CreateAsync(purchaseDetail);
                         await _unitOfWork.SaveChangeAsync();
                         //create lk
@@ -85,11 +117,13 @@ namespace TnR_SS.Domain.Supervisor
             List<PurchaseDetailResModel> list = new List<PurchaseDetailResModel>();
             foreach (var item in listPurchaseDetail)
             {
-                PurchaseDetailResModel data = new PurchaseDetailResModel();
+                PurchaseDetailResModel data = _mapper.Map<PurchaseDetail, PurchaseDetailResModel>(item);
                 data.Basket = _mapper.Map<Basket, BasketApiModel>(await _unitOfWork.Baskets.FindAsync(item.BasketId));
                 data.FishType = _mapper.Map<FishType, FishTypeApiModel>(await _unitOfWork.FishTypes.FindAsync(item.FishTypeID));
-                data.Weight = GetPurchaseDetailWeight(item.ID);
+                //data.Weight = GetPurchaseDetailWeight(item.ID);
+                //data.Weight = item.Weight;
                 data.Price = GetPurchaseDetailPrice(data.FishType.Price, data.Basket.Weight, data.Weight);
+                data.ListDrum = GetListDrumAndTruckByPurchaseDetail(item);
                 list.Add(data);
             }
 

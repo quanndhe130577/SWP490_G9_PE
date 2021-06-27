@@ -13,6 +13,7 @@ namespace TnR_SS.Domain.ApiModels.PurchaseModal
 
         [Required]
         public string PondOwnerName { get; set; }
+        public int PondOwnerId { get; set; }
 
         public double TotalWeight { get; set; }
 
