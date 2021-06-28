@@ -75,6 +75,7 @@ namespace TnR_SS.Domain.Supervisor
         #region Purchase
         Task<PurchaseResModel> CreatePurchaseAsync(PurchaseReqModel purchaseModel);
         Task<List<PurchaseResModel>> GetAllPurchaseAsync(int traderId);
+        Task UpdatePurchaseAsync(PurchaseApiModel models, int traderId);
         #endregion
 
         #region PondOwner

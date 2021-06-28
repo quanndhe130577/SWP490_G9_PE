@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TnR_SS.Domain.ApiModels.FishTypeModel;
@@ -56,6 +57,21 @@ namespace TnR_SS.Domain.Supervisor
             }
 
             return list;
+        }
+
+        public async Task UpdatePurchaseAsync(PurchaseApiModel model, int traderId)
+        {
+            var purchase = await _unitOfWork.Purchases.FindAsync(model.ID);
+            if (purchase.TraderID != traderId)
+            {
+                throw new Exception("Purchase không tồn tại");
+            }
+
+            purchase = _mapper.Map<PurchaseApiModel, Purchase>(model, purchase);
+
+            _unitOfWork.Purchases.Update(purchase);
+
+            await _unitOfWork.SaveChangeAsync();
         }
     }
 }

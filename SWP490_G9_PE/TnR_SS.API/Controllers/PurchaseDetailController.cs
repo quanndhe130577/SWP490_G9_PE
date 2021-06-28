@@ -22,20 +22,25 @@ namespace TnR_SS.API.Controllers
             _tnrssSupervisor = tnrssSupervisor;
         }
 
+        #region Create Purchase Detail
         [HttpPost("create")]
         public async Task<ResponseModel> CreateAsync(PurchaseDetailReqModel data)
         {
             var purchaseDetailId = await _tnrssSupervisor.CreatePurchaseDetailAsync(data);
             return new ResponseBuilder<object>().Success("Create Purchase Detail Success").WithData(new { purchaseDetailId = purchaseDetailId }).ResponseModel;
         }
+        #endregion
 
+        #region Get all Purchase Detail
         [HttpGet("getall/{purchaseId}")]
         public async Task<ResponseModel> All(int purchaseId)
         {
             var list = await _tnrssSupervisor.GetAllPurchaseDetailAsync(purchaseId);
             return new ResponseBuilder<List<PurchaseDetailResModel>>().Success("Get all purchase detail").WithData(list).ResponseModel;
         }
+        #endregion
 
+        #region Update Purchase Detail
         [HttpPost("update")]
         public async Task<ResponseModel> Update(PurchaseDetailReqModel data)
         {
@@ -43,13 +48,6 @@ namespace TnR_SS.API.Controllers
             await _tnrssSupervisor.UpdatePurchaseDetailAsync(data);
             return new ResponseBuilder().Success("Update Purchase Detail Success").ResponseModel;
         }
-
-        /*[HttpPost("delete/{fishTypeId}")]
-        public async Task<ResponseModel> DeleteFishTypeAsync(int fishTypeId)
-        {
-            var traderId = TokenManagement.GetUserIdInToken(HttpContext);
-            await _tnrssSupervisor.DeleteFishTypeAsync(fishTypeId, traderId);
-            return new ResponseBuilder().Success("Delete Fish Type Success").ResponseModel;
-        }*/
+        #endregion
     }
 }

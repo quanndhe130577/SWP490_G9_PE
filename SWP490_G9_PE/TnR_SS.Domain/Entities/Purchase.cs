@@ -23,10 +23,10 @@ namespace TnR_SS.Domain.Entities
         [Required]
         public double PayForPondOwner { get; set; }
 
-        public DateTime CreatedAt { get; set; }
+        [Required]
         public DateTime Date { get; set; }
-
-        public double Commission { get; set; }
+        public double Commission { get; set; } // tiền trả cho môi giới
+        public DateTime CreatedAt { get; set; }    
         public DateTime UpdatedAt { get; set; }
 
         [Required]
