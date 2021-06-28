@@ -33,7 +33,7 @@ namespace TnR_SS.API.Controllers
         }
 
         [HttpPost("create")]
-        public async Task<ResponseModel> CreateEmployeeAsynce(EmployeeApiModel employee)
+        public async Task<ResponseModel> CreateEmployeeAsync(EmployeeApiModel employee)
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
             await _tnrssSupervisor.CreateEmployeesAsync(employee, traderId);

@@ -18,17 +18,15 @@ namespace TnR_SS.Domain.Entities
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
-        
+
+        [DataType(DataType.Date)]
         public DateTime DOB { get; set; }
 
         [Required]
         public string PhoneNumber { get; set; }
 
-        [Required]
         public string Address { get; set; }
-        [Required]
         public DateTime CreatedAt { get; set; }
-        [Required]
         public DateTime UpdatedAt { get; set; }
 
         [Required]

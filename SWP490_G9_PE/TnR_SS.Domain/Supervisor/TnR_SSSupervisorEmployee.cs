@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TnR_SS.Domain.ApiModels.EmployeeModel;
 using TnR_SS.Domain.Entities;
@@ -10,6 +11,7 @@ namespace TnR_SS.Domain.Supervisor
 {
     public partial class TnR_SSSupervisor
     {
+        readonly Regex regexPhonenumber = new(@"(84|0[3|5|7|8|9])+([0-9]{8})\b");
         public List<EmployeeApiModel> GetAllEmployeeByTraderId(int traderId)
         {
             var listEmp = _unitOfWork.Employees.GetAllEmployeeByTraderId(traderId);
@@ -25,8 +27,23 @@ namespace TnR_SS.Domain.Supervisor
         {
             var obj = _mapper.Map<EmployeeApiModel, Employee>(employee);
             obj.TraderId = traderId;
-            await _unitOfWork.Employees.CreateAsync(obj);
-            await _unitOfWork.SaveChangeAsync();
+            if (obj.PhoneNumber.Length > 10)
+            {
+                throw new Exception("Phone Number out of range");
+            }
+            else if (!regexPhonenumber.IsMatch(obj.PhoneNumber))
+            {
+                throw new Exception("Phone Number invalid");
+            }
+            else if(!CheckEmployeeExist(traderId, employee))
+            {
+                throw new Exception("Employee is existed");
+            }
+            else
+            {
+                await _unitOfWork.Employees.CreateAsync(obj);
+                await _unitOfWork.SaveChangeAsync();
+            }
         }
 
         public async Task UpdateEmployeeAsync(EmployeeApiModel employee, int traderId)
@@ -35,8 +52,23 @@ namespace TnR_SS.Domain.Supervisor
             empEdit = _mapper.Map<EmployeeApiModel, Employee>(employee, empEdit);
             if (empEdit.TraderId == traderId)
             {
-                _unitOfWork.Employees.Update(empEdit);
-                await _unitOfWork.SaveChangeAsync();
+                if (empEdit.PhoneNumber.Length > 10)
+                {
+                    throw new Exception("Phone Number out of range");
+                }
+                else if (!regexPhonenumber.IsMatch(empEdit.PhoneNumber))
+                {
+                    throw new Exception("Phone Number invalid");
+                }
+                else if(!CheckEmployeeExist(traderId, employee))
+                {
+                    throw new Exception("Employee is existed");
+                }
+                else
+                {
+                    _unitOfWork.Employees.Update(empEdit);
+                    await _unitOfWork.SaveChangeAsync();
+                }
             }
             else
             {
@@ -69,6 +101,17 @@ namespace TnR_SS.Domain.Supervisor
                 }
             }
             return null;
+        }
+
+        public bool CheckEmployeeExist(int traderId, EmployeeApiModel employee)
+        {
+            var listEmp = _unitOfWork.Employees.GetAllEmployeeByTraderId(traderId);
+            var flag = listEmp.Where(x => x.PhoneNumber == employee.PhoneNumber && x.DOB == employee.DOB).Count() == 0;
+            if (flag)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }
