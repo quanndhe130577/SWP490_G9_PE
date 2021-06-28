@@ -34,6 +34,6 @@ namespace TnR_SS.Domain.Repositories
         void DeleteById(int id);
 
         void Delete(T entity);
-
+        void DeleteMany(Expression<Func<T, bool>> filter = null);
     }
 }

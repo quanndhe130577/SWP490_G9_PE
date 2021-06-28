@@ -37,7 +37,7 @@ namespace TnR_SS.DataEFCore.Configurations
             entity.Property(e => e.ID)
                 .IsRequired();
 
-            entity.Property(e => e.BuyPrice)
+            entity.Property(e => e.Weight)
                 .IsRequired();
 
             entity.Property(e => e.CreatedAt)

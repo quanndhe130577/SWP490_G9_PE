@@ -23,19 +23,19 @@ namespace TnR_SS.DataEFCore.Configurations
                .OnDelete(DeleteBehavior.ClientNoAction)
                .HasConstraintName("FK_Purchase_UserInfor");
 
-            /*entity.Property(e => e.PondOwnerID)
-                .IsRequired();*/
-            /*entity.HasOne(p => p.PondOwner)
+            entity.Property(e => e.PondOwnerID)
+                .IsRequired();
+            entity.HasOne(p => p.PondOwner)
                 .WithMany(b => b.Purchases)
                 .HasForeignKey(p => p.PondOwnerID)
                 .OnDelete(DeleteBehavior.ClientNoAction)
-                .HasConstraintName("FK_Purchase_PondOwner");*/
+                .HasConstraintName("FK_Purchase_PondOwner");
 
-            entity.Property(e => e.TotalAmount)
-                .IsRequired();
+            /*entity.Property(e => e.TotalAmount)
+                .IsRequired();*/
 
-            entity.Property(e => e.TotalWeight)
-                .IsRequired();
+            /*entity.Property(e => e.TotalWeight)
+                .IsRequired();*/
 
             entity.Property(e => e.PayForPondOwner)
                 .IsRequired();
@@ -44,9 +44,6 @@ namespace TnR_SS.DataEFCore.Configurations
                 .IsRequired();
 
             entity.Property(e => e.UpdatedAt)
-                .IsRequired();
-
-            entity.Property(e => e.TotalAmount)
                 .IsRequired();
 
         }

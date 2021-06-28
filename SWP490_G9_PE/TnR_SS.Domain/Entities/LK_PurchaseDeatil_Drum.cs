@@ -19,8 +19,8 @@ namespace TnR_SS.Domain.Entities
         [Required]
         public int DrumID { get; set; }
         public Drum Drum { get; set; }
-        [Required]
-        public double Weight { get; set; }
+        /*[Required]
+        public double Weight { get; set; }*/
 
         [Required]
         public DateTime CreatedAt { get; set; }

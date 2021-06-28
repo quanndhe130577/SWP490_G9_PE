@@ -15,11 +15,10 @@ namespace TnR_SS.Domain.Entities
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
         [Required]
-        public string FirstName { get; set; }
+        public string Name { get; set; }
 
-        public string LastName { get; set; }
-
-        [DataType(DataType.Date)]
+        //public string LastName { get; set; }
+        
         public DateTime DOB { get; set; }
 
         [Required]

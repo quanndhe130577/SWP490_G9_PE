@@ -10,7 +10,7 @@ namespace TnR_SS.Domain.ApiModels.DrumModel
     {
         public int ID { get; set; }
 
-        public int TruckID { get; set; }
+        public int TruckId { get; set; }
 
         public string Number { get; set; }
 

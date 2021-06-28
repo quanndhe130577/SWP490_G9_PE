@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TnR_SS.Domain.ApiModels.DrumModel;
 using TnR_SS.Domain.Entities;
 using TnR_SS.Domain.Repositories;
 
@@ -25,6 +26,17 @@ namespace TnR_SS.DataEFCore.Repositories
                     }).Where(x => x.trucks.TraderID == traderId).Select(x => x.drums);
 
             return rs.ToList();
+        }
+        public List<Drum> GetListDrumByPurchaseDetail(PurchaseDetail data)
+        {
+            return _context.LK_PurchaseDeatil_Drums.Where(x => x.PurchaseDetailID == data.ID)
+                .Join(
+                    _context.Drums,
+                    lk => lk.DrumID,
+                    dr => dr.ID,
+                    (lk, dr) => dr
+                ).ToList();
+
         }
     }
 }

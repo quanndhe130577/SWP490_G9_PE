@@ -18,8 +18,10 @@ namespace TnR_SS.Domain.Entities
         public int FishTypeID { get; set; }
         public FishType FishType { get; set; }
 
+        /*[Required]
+        public double BuyPrice { get; set; }*/
         [Required]
-        public double BuyPrice { get; set; }
+        public double Weight { get; set; }
         [Required]
         public DateTime CreatedAt { get; set; }
         [Required]

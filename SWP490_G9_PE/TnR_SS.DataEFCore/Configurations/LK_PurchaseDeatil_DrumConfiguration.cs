@@ -16,8 +16,8 @@ namespace TnR_SS.DataEFCore.Configurations
 
             entity.ToTable("LK_PurchaseDeatil_Drum");
 
-            entity.Property(e => e.Weight)
-                .IsRequired();
+            /*entity.Property(e => e.Weight)
+                .IsRequired();*/
 
             entity.Property(e => e.CreatedAt)
                 .IsRequired();

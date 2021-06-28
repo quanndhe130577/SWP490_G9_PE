@@ -16,5 +16,6 @@ namespace TnR_SS.DataEFCore.Repositories
         {
             return _context.Trucks.Where(x => x.TraderID == traderId).ToList();
         }
+
     }
 }

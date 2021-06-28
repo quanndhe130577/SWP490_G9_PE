@@ -4,7 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TnR_SS.Domain.ApiModels.BasketModel.ResponseModel;
+using TnR_SS.Domain.ApiModels.DrumModel;
 using TnR_SS.Domain.ApiModels.FishTypeModel;
+using TnR_SS.Domain.ApiModels.LK_PurchaseDetail_DrumModel;
+using TnR_SS.Domain.ApiModels.TruckModel;
 using TnR_SS.Domain.Entities;
 
 namespace TnR_SS.Domain.ApiModels.PurchaseDetailModel
@@ -14,7 +17,9 @@ namespace TnR_SS.Domain.ApiModels.PurchaseDetailModel
         public int ID { get; set; }
         public BasketApiModel Basket { get; set; }
         public FishTypeApiModel FishType { get; set; }
-        public double BuyPrice { get; set; }
+        public double Price { get; set; }
         public double Weight { get; set; }
+        public TruckApiModel Truck { get; set; }
+        public List<DrumApiModel> ListDrum { get; set; } = new List<DrumApiModel>();
     }
 }
