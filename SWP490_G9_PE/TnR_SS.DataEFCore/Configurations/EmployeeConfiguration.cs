@@ -17,12 +17,12 @@ namespace TnR_SS.DataEFCore.Configurations
 
             entity.Property(e => e.ID).HasColumnName("ID");
 
-            entity.Property(e => e.FirstName)
+            entity.Property(e => e.Name)
                 .IsRequired()
                 .HasMaxLength(50);
 
-            entity.Property(e => e.LastName)
-                .HasMaxLength(50);
+            /*entity.Property(e => e.LastName)
+                .HasMaxLength(50);*/
 
             entity.Property(e => e.DOB)
                 .HasColumnType("datetime");

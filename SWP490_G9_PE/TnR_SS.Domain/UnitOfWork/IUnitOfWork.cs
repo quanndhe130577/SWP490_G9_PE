@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,5 +24,8 @@ namespace TnR_SS.Domain.UnitOfWork
         IDrumRepository Drums { get; }
         ILK_PurchaseDeatil_DrumRepository LK_PurchaseDeatil_Drums { get; }
         Task<int> SaveChangeAsync();
+        IDbContextTransaction BeginTransaction();
+        IExecutionStrategy CreateExecutionStrategy();
     }
+
 }

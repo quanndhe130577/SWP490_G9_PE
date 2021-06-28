@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Storage;
+using System;
 using System.Threading.Tasks;
 using TnR_SS.DataEFCore.Repositories;
 using TnR_SS.Domain.Entities;
@@ -10,7 +12,6 @@ namespace TnR_SS.DataEFCore.UnitOfWorks
     public class UnitOfWork : IUnitOfWork
     {
         private readonly TnR_SSContext _context;
-
         public UnitOfWork(TnR_SSContext context, UserManager<UserInfor> _userManager, SignInManager<UserInfor> _signInManager, RoleManager<RoleUser> _roleManager)
         {
             _context = context;
@@ -52,9 +53,19 @@ namespace TnR_SS.DataEFCore.UnitOfWorks
 
         public IDrumRepository Drums { get; private set; }
 
-        public Task<int> SaveChangeAsync()
+        public async Task<int> SaveChangeAsync()
         {
-            return _context.SaveChangesAsync();
+            return await _context.SaveChangesAsync();
+        }
+
+        public IDbContextTransaction BeginTransaction()
+        {
+            return _context.Database.BeginTransaction();
+        }
+
+        public IExecutionStrategy CreateExecutionStrategy()
+        {
+            return _context.Database.CreateExecutionStrategy();
         }
 
         public void Dispose()

@@ -11,7 +11,7 @@ namespace TnR_SS.Domain.ApiModels.PurchaseModal
         public DateTime Date { get; set; }
 
         [Required]
-        public Guid PondOwnerID { get; set; }
+        public int PondOwnerID { get; set; }
 
         [Required]
         public int TraderID { get; set; }

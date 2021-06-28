@@ -124,6 +124,15 @@ namespace TnR_SS.DataEFCore.Repositories
             dbSet.Remove(entity);
         }
 
+        public virtual void DeleteMany(Expression<Func<T, bool>> filter = null)
+        {
+            if (filter != null)
+            {
+                var list = GetAll(filter);
+                dbSet.RemoveRange(list);
+            }
+        }
+
         public virtual void Update(T entity)
         {
             Type t = entity.GetType();

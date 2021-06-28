@@ -14,11 +14,11 @@ namespace TnR_SS.Domain.Entities
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
 
-        [Required]
+        /*[Required]
         public double TotalAmount { get; set; }
 
         [Required]
-        public double TotalWeight { get; set; }
+        public double TotalWeight { get; set; }*/
 
         [Required]
         public double PayForPondOwner { get; set; }
@@ -30,7 +30,7 @@ namespace TnR_SS.Domain.Entities
         public DateTime UpdatedAt { get; set; }
 
         [Required]
-        public bool isPaid { get; set; }
+        public bool isPaid { get; set; } = false;
 
         public double PondBackMoney { get; set; }
 

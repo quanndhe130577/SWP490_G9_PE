@@ -15,8 +15,8 @@ namespace TnR_SS.DataEFCore.Repositories
         public List<Employee> GetAllEmployeeByTraderId(int traderId)
         {
             var rs = _context.Employees.AsEnumerable().Where(x => x.TraderId == traderId)
-                .OrderByDescending(x => x.FirstName)
-                .GroupBy(x => x.FirstName)
+                .OrderByDescending(x => x.Name)
+                .GroupBy(x => x.Name)
                 .Select(x => x.First()).ToList();
             return rs;
         }

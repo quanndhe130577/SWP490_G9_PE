@@ -5,6 +5,7 @@ using TnR_SS.Domain.ApiModels.BasketModel.ResponseModel;
 using TnR_SS.Domain.ApiModels.DrumModel;
 using TnR_SS.Domain.ApiModels.EmployeeModel;
 using TnR_SS.Domain.ApiModels.FishTypeModel;
+using TnR_SS.Domain.ApiModels.LK_PurchaseDetail_DrumModel;
 using TnR_SS.Domain.ApiModels.PondOwnerModel;
 using TnR_SS.Domain.ApiModels.PurchaseDetailModel;
 using TnR_SS.Domain.ApiModels.PurchaseModal;
@@ -74,6 +75,11 @@ namespace TnR_SS.Domain.ApiModels
 
             #region PurchaseDetail
             CreateMap<PurchaseDetail, PurchaseDetailReqModel>().ReverseMap();
+            CreateMap<PurchaseDetail, PurchaseDetailResModel>().ReverseMap();
+            #endregion
+
+            #region LK_PurchaseDeatil_Drum
+            CreateMap<LK_PurchaseDeatil_Drum, LK_PurchaseDetail_DrumApiModel>().ReverseMap();
             #endregion
         }
 

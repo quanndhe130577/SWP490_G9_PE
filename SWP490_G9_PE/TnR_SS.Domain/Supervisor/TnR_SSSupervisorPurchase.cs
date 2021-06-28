@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using TnR_SS.Domain.ApiModels.FishTypeModel;
 using TnR_SS.Domain.ApiModels.PurchaseModal;
 using TnR_SS.Domain.Entities;
@@ -16,14 +18,44 @@ namespace TnR_SS.Domain.Supervisor
             PurchaseResModel newPurchase = _mapper.Map<Purchase, PurchaseResModel>(purchase);
             var pondOwner = await _unitOfWork.PondOwners.FindAsync(purchaseModel.PondOwnerID);
             newPurchase.PondOwnerName = pondOwner.Name;
-
-            var allFT = _unitOfWork.FishTypes.GetAllLastByTraderId(purchaseModel.TraderID);
-            foreach (var r in allFT)
-            {
-                newPurchase.ListFishTypeWithPrice.Add(_mapper.Map<FishType, FishTypeApiModel>(r));
-            }
+            newPurchase.PondOwnerId = pondOwner.ID;
 
             return newPurchase;
+        }
+
+        private double GetTotalWeightPurchase(int purchaseId)
+        {
+            return _unitOfWork.PurchaseDetails.GetAll(x => x.PurchaseId == purchaseId).Sum(x => x.Weight);
+        }
+
+        private async Task<double> GetTotalAmountPurchaseAsync(int purchaseId)
+        {
+            var totalAmount = 0.0;
+            var listPD = _unitOfWork.PurchaseDetails.GetAll(x => x.PurchaseId == purchaseId);
+            foreach (var item in listPD)
+            {
+                totalAmount += await GetPurchaseDetailPriceAsync(item);
+            }
+
+            return totalAmount;
+        }
+
+        public async Task<List<PurchaseResModel>> GetAllPurchaseAsync(int traderId)
+        {
+            var listPurchase = _unitOfWork.Purchases.GetAll(x => x.TraderID == traderId);
+            List<PurchaseResModel> list = new List<PurchaseResModel>();
+            foreach (var purchase in listPurchase)
+            {
+                PurchaseResModel newPurchase = _mapper.Map<Purchase, PurchaseResModel>(purchase);
+                var pondOwner = await _unitOfWork.PondOwners.FindAsync(purchase.PondOwnerID);
+                newPurchase.PondOwnerName = pondOwner.Name;
+                newPurchase.TotalWeight = GetTotalWeightPurchase(purchase.ID);
+                newPurchase.TotalAmount = await GetTotalAmountPurchaseAsync(purchase.ID);
+
+                list.Add(newPurchase);
+            }
+
+            return list;
         }
     }
 }
