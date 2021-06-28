@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TnR_SS.Domain.ApiModels.TimeKeepingModel;
 using TnR_SS.Domain.Entities;
 using TnR_SS.Domain.Repositories;
 
@@ -12,12 +13,21 @@ namespace TnR_SS.DataEFCore.Repositories
     {
         public TimeKeepingRepository(TnR_SSContext context) : base(context) { }
 
-        public List<TimeKeeping> GetAllByTraderId(int id)
+        public List<TimeKeepingApiModel> GetAllByTraderId(int id)
         {
             var rs = from timeKeeping in _context.TimeKeepings
                      join employee in _context.Employees on timeKeeping.EmpId equals employee.ID
                      where employee.TraderId == id
-                     select timeKeeping;
+                     select new TimeKeepingApiModel()
+                     {
+                         ID = timeKeeping.ID,
+                         EmpId = timeKeeping.EmpId,
+                         EmpName = employee.FirstName + employee.LastName,
+                         Status = timeKeeping.Status,
+                         Money = timeKeeping.Money,
+                         Note = timeKeeping.Note,
+                         WorkDay = timeKeeping.WorkDay,
+                     };
             return rs.ToList();
         }
         public List<TimeKeeping> GetAllByEmployeeId(int id)
