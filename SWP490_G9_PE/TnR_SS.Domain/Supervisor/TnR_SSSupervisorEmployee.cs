@@ -11,7 +11,6 @@ namespace TnR_SS.Domain.Supervisor
 {
     public partial class TnR_SSSupervisor
     {
-        readonly Regex regexPhonenumber = new(@"(84|0[3|5|7|8|9])+([0-9]{8})\b");
         public List<EmployeeApiModel> GetAllEmployeeByTraderId(int traderId)
         {
             var listEmp = _unitOfWork.Employees.GetAllEmployeeByTraderId(traderId);
@@ -27,17 +26,13 @@ namespace TnR_SS.Domain.Supervisor
         {
             var obj = _mapper.Map<EmployeeApiModel, Employee>(employee);
             obj.TraderId = traderId;
-            if (obj.PhoneNumber.Length > 10)
-            {
-                throw new Exception("Phone Number out of range");
-            }
-            else if (!regexPhonenumber.IsMatch(obj.PhoneNumber))
-            {
-                throw new Exception("Phone Number invalid");
-            }
-            else if(!CheckEmployeeExist(traderId, employee))
+            if (!CheckEmployeeExist(traderId, employee))
             {
                 throw new Exception("Employee is existed");
+            }
+            else if (obj.DOB > DateTime.Now)
+            {
+                throw new Exception("DOB out of range");
             }
             else
             {
@@ -52,17 +47,13 @@ namespace TnR_SS.Domain.Supervisor
             empEdit = _mapper.Map<EmployeeApiModel, Employee>(employee, empEdit);
             if (empEdit.TraderId == traderId)
             {
-                if (empEdit.PhoneNumber.Length > 10)
-                {
-                    throw new Exception("Phone Number out of range");
-                }
-                else if (!regexPhonenumber.IsMatch(empEdit.PhoneNumber))
-                {
-                    throw new Exception("Phone Number invalid");
-                }
-                else if(!CheckEmployeeExist(traderId, employee))
+                if (!CheckEmployeeExist(traderId, employee))
                 {
                     throw new Exception("Employee is existed");
+                }
+                else if (empEdit.DOB > DateTime.Now)
+                {
+                    throw new Exception("DOB out of range");
                 }
                 else
                 {
