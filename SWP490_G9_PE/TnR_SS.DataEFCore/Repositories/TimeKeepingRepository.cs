@@ -13,16 +13,16 @@ namespace TnR_SS.DataEFCore.Repositories
     {
         public TimeKeepingRepository(TnR_SSContext context) : base(context) { }
 
-        public List<TimeKeepingApiModel> GetAllByTraderId(int id)
+        public List<TimeKeepingApiModel> GetAllByTraderId(int id, DateTime date)
         {
             var rs = from timeKeeping in _context.TimeKeepings
                      join employee in _context.Employees on timeKeeping.EmpId equals employee.ID
-                     where employee.TraderId == id
+                     where employee.TraderId == id && timeKeeping.WorkDay.Month == date.Month && timeKeeping.WorkDay.Year == date.Year
                      select new TimeKeepingApiModel()
                      {
                          ID = timeKeeping.ID,
                          EmpId = timeKeeping.EmpId,
-                         EmpName = employee.FirstName + employee.LastName,
+                         EmpName = employee.Name,
                          Status = timeKeeping.Status,
                          Money = timeKeeping.Money,
                          Note = timeKeeping.Note,
