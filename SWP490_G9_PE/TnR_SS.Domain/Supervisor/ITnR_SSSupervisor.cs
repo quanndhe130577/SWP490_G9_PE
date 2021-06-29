@@ -132,7 +132,7 @@ namespace TnR_SS.Domain.Supervisor
         Task CreateCostIncurredAsync(CostIncurredApiModel incurred, int traderId);
         Task UpdateCostIncurredAsync(CostIncurredApiModel incurred, int traderId);
         Task DeleteCostIncurredAsync(int incurredId, int traderId);
-        EmployeeApiModel GetDetailCostIncurred(int traderId, int incurredId);
+        CostIncurredApiModel GetDetailCostIncurred(int traderId, int incurredId);
         #endregion
     }
 }

@@ -45,12 +45,12 @@ namespace TnR_SS.Domain.Supervisor
             }
         }
 
-        public async Task DeleteCostIncurredAsync(int empId, int traderId)
+        public async Task DeleteCostIncurredAsync(int incurredId, int userId)
         {
-            var empEdit = await _unitOfWork.Employees.FindAsync(empId);
-            if (empEdit.TraderId == traderId)
+            var incurredEdit = await _unitOfWork.CostIncurreds.FindAsync(incurredId);
+            if (incurredEdit.TraderId == userId)
             {
-                _unitOfWork.Employees.Delete(empEdit);
+                _unitOfWork.Employees.Delete(incurredEdit);
                 await _unitOfWork.SaveChangeAsync();
             }
             else
@@ -59,12 +59,12 @@ namespace TnR_SS.Domain.Supervisor
             }
         }
 
-        public CostIncurredApiModel GetDetailCostIncurred(int traderId, int empId)
+        public CostIncurredApiModel GetDetailCostIncurred(int traderId, int incurredId)
         {
             var listEmp = _unitOfWork.CostIncurreds.GetAllCostIncurredByTraderId(traderId);
             foreach (var obj in listEmp)
             {
-                if (obj.ID == empId)
+                if (obj.ID == incurredId)
                 {
                     return _mapper.Map<CostIncurred, CostIncurredApiModel>(obj);
                 }
