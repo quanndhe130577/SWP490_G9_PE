@@ -47,7 +47,7 @@ namespace TnR_SS.Domain.Supervisor
             empEdit = _mapper.Map<EmployeeApiModel, Employee>(employee, empEdit);
             if (empEdit.TraderId == traderId)
             {
-                if (!CheckEmployeeExist(traderId, employee))
+                if (CheckEmployeeExist(traderId, employee))
                 {
                     throw new Exception("Employee is existed");
                 }
