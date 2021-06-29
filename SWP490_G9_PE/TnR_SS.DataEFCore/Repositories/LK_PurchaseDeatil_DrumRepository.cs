@@ -14,6 +14,10 @@ namespace TnR_SS.DataEFCore.Repositories
     {
         public LK_PurchaseDeatil_DrumRepository(TnR_SSContext context) : base(context) { }
 
-        
+        public void RemoveLKByPurchaseDetailId(int purchaseDetailId)
+        {
+            var list = _context.LK_PurchaseDeatil_Drums.Where(x => x.PurchaseDetailID == purchaseDetailId);
+            _context.LK_PurchaseDeatil_Drums.RemoveRange(list);
+        }
     }
 }

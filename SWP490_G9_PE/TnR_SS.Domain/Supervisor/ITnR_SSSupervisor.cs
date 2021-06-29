@@ -126,6 +126,7 @@ namespace TnR_SS.Domain.Supervisor
         Task<List<PurchaseDetailResModel>> GetAllPurchaseDetailAsync(int purchaseId);
         Task<int> CreatePurchaseDetailAsync(PurchaseDetailReqModel data);
         Task UpdatePurchaseDetailAsync(PurchaseDetailReqModel data);
+        Task DeletePurchaseDetailAsync(int traderId, int purchaseDetailId);
         #endregion
 
         #region CostIncurred

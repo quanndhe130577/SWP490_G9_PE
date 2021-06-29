@@ -162,7 +162,41 @@ namespace TnR_SS.Domain.Supervisor
                     }
                 }
             });
+        }
 
+        public async Task DeletePurchaseDetailAsync(int traderId, int purchaseDetailId)
+        {
+            var purchaseDetail = await _unitOfWork.PurchaseDetails.FindAsync(purchaseDetailId);
+            if (purchaseDetail == null)
+            {
+                throw new Exception("Purchase Detail không tồn tại !!!");
+            }
+            var purchase = await _unitOfWork.Purchases.FindAsync(purchaseDetail.PurchaseId);
+            if (purchase.TraderID == traderId)
+            {
+                var strategy = _unitOfWork.CreateExecutionStrategy();
+
+                await strategy.ExecuteAsync(async () =>
+                {
+                    using (var transaction = _unitOfWork.BeginTransaction())
+                    {
+                        try
+                        {
+                            _unitOfWork.LK_PurchaseDeatil_Drums.RemoveLKByPurchaseDetailId(purchaseDetailId);
+                            _unitOfWork.PurchaseDetails.DeleteById(purchaseDetailId);
+                            await _unitOfWork.SaveChangeAsync();
+
+                            await transaction.CommitAsync();
+                        }
+                        catch
+                        {
+                            await transaction.RollbackAsync();
+                            throw;
+                        }
+                    }
+                });
+
+            }
         }
     }
 }

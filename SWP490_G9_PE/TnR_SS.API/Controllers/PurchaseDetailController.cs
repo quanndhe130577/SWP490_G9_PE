@@ -49,5 +49,20 @@ namespace TnR_SS.API.Controllers
             return new ResponseBuilder().Success("Update Purchase Detail Success").ResponseModel;
         }
         #endregion
+
+        #region Delete Purchase Detail
+        [HttpPost("delete")]
+        public async Task<ResponseModel> Delete(IdModel data)
+        {
+            var traderId = TokenManagement.GetUserIdInToken(HttpContext);
+            await _tnrssSupervisor.DeletePurchaseDetailAsync(traderId, data.PurchaseDetailId);
+            return new ResponseBuilder().Success("Delete Purchase Detail Success").ResponseModel;
+        }
+        #endregion
+    }
+
+    public class IdModel
+    {
+        public int PurchaseDetailId { get; set; }
     }
 }
