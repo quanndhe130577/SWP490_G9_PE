@@ -16,8 +16,7 @@ namespace TnR_SS.DataEFCore.Repositories
         {
             var rs = _context.Employees.AsEnumerable().Where(x => x.TraderId == traderId)
                 .OrderByDescending(x => x.Name)
-                .GroupBy(x => x.Name)
-                .Select(x => x.First()).ToList();
+                .Select(x => x).ToList();
             return rs;
         }
     }
