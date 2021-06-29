@@ -76,6 +76,7 @@ namespace TnR_SS.Domain.ApiModels
 
             #region PurchaseDetail
             CreateMap<PurchaseDetail, PurchaseDetailReqModel>().ReverseMap();
+            CreateMap<PurchaseDetail, PurchaseDetailResModel>().ReverseMap();
             #endregion
 
             #region LK_PurchaseDeatil_Drum
