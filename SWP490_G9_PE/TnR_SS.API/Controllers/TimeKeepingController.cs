@@ -25,11 +25,11 @@ namespace TnR_SS.API.Controller
         }
 
         [HttpGet]
-        [Route("getByTrader")]
-        public async Task <ResponseModel> GetByTraderId()
+        [Route("getByTrader/{date}")]
+        public ResponseModel GetByTraderId(DateTime date)
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
-            var rs = await _tnrssSupervisor.GetListTimeKeepingByTraderId(traderId);
+            var rs = _tnrssSupervisor.GetListTimeKeepingByTraderId(traderId, date);
             return new ResponseBuilder<List<TimeKeepingApiModel>>().Success("Get Info Success").WithData(rs).ResponseModel;
         }
 
