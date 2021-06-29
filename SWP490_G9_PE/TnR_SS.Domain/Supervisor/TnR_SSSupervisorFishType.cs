@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TnR_SS.Domain.ApiModels.FishTypeModel;
 using TnR_SS.Domain.Entities;
@@ -10,6 +11,7 @@ namespace TnR_SS.Domain.Supervisor
 {
     public partial class TnR_SSSupervisor
     {
+        readonly Regex regexPrice = new(@"/^\d+$/");
         public List<FishTypeApiModel> GetAllLastFishTypeByTraderId(int traderId)
         {
             var listType = _unitOfWork.FishTypes.GetAllLastByTraderId(traderId);

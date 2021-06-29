@@ -25,10 +25,9 @@ namespace TnR_SS.DataEFCore.Configurations
                 .HasMaxLength(50);*/
 
             entity.Property(e => e.DOB)
-                .HasColumnType("datetime");
+                .HasColumnType("date");
 
             entity.Property(e => e.Address)
-                .IsRequired()
                 .HasMaxLength(50);
 
             entity.Property(e => e.PhoneNumber)
@@ -44,11 +43,9 @@ namespace TnR_SS.DataEFCore.Configurations
                 .HasConstraintName("FK_Employee_UserInfor");
 
             entity.Property(e => e.CreatedAt)
-                .IsRequired()
                 .HasColumnType("datetime");
 
             entity.Property(e => e.UpdatedAt)
-                .IsRequired()
                 .HasColumnType("datetime");
         }
     }
