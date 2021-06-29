@@ -22,6 +22,7 @@ namespace TnR_SS.Domain.UnitOfWork
         ITruckRepository Trucks { get; }
         IEmployeeRepository Employees { get; }
         IDrumRepository Drums { get; }
+        ICostIncurredRepository CostIncurreds { get; }
         ILK_PurchaseDeatil_DrumRepository LK_PurchaseDeatil_Drums { get; }
         Task<int> SaveChangeAsync();
         IDbContextTransaction BeginTransaction();

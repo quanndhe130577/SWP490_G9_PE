@@ -32,6 +32,7 @@ namespace TnR_SS.DataEFCore
         public virtual DbSet<TimeKeeping> TimeKeepings { get; set; }
         public virtual DbSet<Truck> Trucks { get; set; }
         public virtual DbSet<Drum> Drums { get; set; }
+        public virtual DbSet<CostIncurred> CostIncurreds { get; set; }
         public virtual DbSet<LK_PurchaseDeatil_Drum> LK_PurchaseDeatil_Drums { get; set; }
 
         /*protected override void OnConfiguring(DbContextOptionsBuilder options)
@@ -62,6 +63,7 @@ namespace TnR_SS.DataEFCore
             new LK_PurchaseDeatil_DrumConfiguration(modelBuilder.Entity<LK_PurchaseDeatil_Drum>());
             new TruckConfiguration(modelBuilder.Entity<Truck>());
             new DrumConfiguration(modelBuilder.Entity<Drum>());
+            new CostIncurredConfiguration(modelBuilder.Entity<CostIncurred>());
 
             OnModelCreatingPartial(modelBuilder);
         }

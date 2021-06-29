@@ -9,11 +9,11 @@ namespace TnR_SS.Domain.ApiModels.BasketModel.ResponseModel
 {
     public class BasketApiModel
     {
-        [Required]
         public int ID { get; set; }
         [Required]
         public string Type { get; set; }
         [Required]
+        [RegularExpression(@"^[1-9]\d*(\.\d+)?$", ErrorMessage = "Weight invalid")]
         public double Weight { get; set; }
     }
 }
