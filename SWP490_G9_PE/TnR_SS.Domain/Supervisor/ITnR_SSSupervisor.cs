@@ -15,6 +15,7 @@ using TnR_SS.Domain.ApiModels.TruckModel;
 using TnR_SS.Domain.Entities;
 using TnR_SS.Domain.ApiModels.EmployeeModel;
 using TnR_SS.Domain.ApiModels.PurchaseDetailModel;
+using TnR_SS.Domain.ApiModels.CostIncurredModel;
 
 namespace TnR_SS.Domain.Supervisor
 {
@@ -112,7 +113,7 @@ namespace TnR_SS.Domain.Supervisor
         #endregion
 
         #region TimeKeeping
-        List<TimeKeepingApiModel> GetListTimeKeepingByTraderId(int id, DateTime date);
+        Task<List<TimeKeepingApiModel>> GetListTimeKeepingByTraderId(int id, DateTime date);
         List<TimeKeepingApiModel> GetListTimeKeepingByEmployeeId(int id);
         Task<TimeKeeping> GetTimeKeeping(int id);
         List<TimeKeepingApiModel> GetListTimeKeeping();
@@ -125,6 +126,14 @@ namespace TnR_SS.Domain.Supervisor
         Task<List<PurchaseDetailResModel>> GetAllPurchaseDetailAsync(int purchaseId);
         Task<int> CreatePurchaseDetailAsync(PurchaseDetailReqModel data);
         Task UpdatePurchaseDetailAsync(PurchaseDetailReqModel data);
+        #endregion
+
+        #region CostIncurred
+        List<CostIncurredApiModel> GetAllCostIncurredTraderId(int traderId);
+        Task CreateCostIncurredAsync(CostIncurredApiModel incurred, int traderId);
+        Task UpdateCostIncurredAsync(CostIncurredApiModel incurred, int traderId);
+        Task DeleteCostIncurredAsync(int incurredId, int traderId);
+        CostIncurredApiModel GetDetailCostIncurred(int traderId, int incurredId);
         #endregion
     }
 }

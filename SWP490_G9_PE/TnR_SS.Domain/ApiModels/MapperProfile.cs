@@ -2,6 +2,7 @@
 using TnR_SS.Domain.ApiModels.AccountModel.RequestModel;
 using TnR_SS.Domain.ApiModels.AccountModel.ResponseModel;
 using TnR_SS.Domain.ApiModels.BasketModel.ResponseModel;
+using TnR_SS.Domain.ApiModels.CostIncurredModel;
 using TnR_SS.Domain.ApiModels.DrumModel;
 using TnR_SS.Domain.ApiModels.EmployeeModel;
 using TnR_SS.Domain.ApiModels.FishTypeModel;
@@ -62,8 +63,7 @@ namespace TnR_SS.Domain.ApiModels
             #endregion
 
             #region Employee
-            CreateMap<Employee, EmployeeApiModel>();
-            CreateMap<EmployeeApiModel, Employee>();
+            CreateMap<Employee, EmployeeApiModel>().ReverseMap();
             #endregion
 
             #region Truck
@@ -76,11 +76,14 @@ namespace TnR_SS.Domain.ApiModels
 
             #region PurchaseDetail
             CreateMap<PurchaseDetail, PurchaseDetailReqModel>().ReverseMap();
-            CreateMap<PurchaseDetail, PurchaseDetailResModel>().ReverseMap();
             #endregion
 
             #region LK_PurchaseDeatil_Drum
             CreateMap<LK_PurchaseDeatil_Drum, LK_PurchaseDetail_DrumApiModel>().ReverseMap();
+            #endregion
+
+            #region CostIncurred
+            CreateMap<CostIncurred, CostIncurredApiModel>().ReverseMap();
             #endregion
         }
 

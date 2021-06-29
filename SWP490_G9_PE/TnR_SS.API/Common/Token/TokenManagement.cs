@@ -28,7 +28,7 @@ namespace TnR_SS.API.Common.Token
 
             var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            var token = new JwtSecurityToken(Startup.StaticConfig["Jwt:Issuer"], Startup.StaticConfig["Jwt:Audience"], claims, expires: now.AddHours(1), signingCredentials: signIn);
+            var token = new JwtSecurityToken(Startup.StaticConfig["Jwt:Issuer"], Startup.StaticConfig["Jwt:Audience"], claims, expires: now.AddDays(10), signingCredentials: signIn);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
 

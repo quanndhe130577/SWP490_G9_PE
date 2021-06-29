@@ -24,11 +24,8 @@ namespace TnR_SS.Domain.Entities
         [Required]
         public string PhoneNumber { get; set; }
 
-        [Required]
         public string Address { get; set; }
-        [Required]
         public DateTime CreatedAt { get; set; }
-        [Required]
         public DateTime UpdatedAt { get; set; }
 
         [Required]

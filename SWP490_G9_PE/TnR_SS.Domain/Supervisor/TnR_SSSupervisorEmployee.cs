@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TnR_SS.Domain.ApiModels.EmployeeModel;
 using TnR_SS.Domain.Entities;
@@ -25,8 +26,19 @@ namespace TnR_SS.Domain.Supervisor
         {
             var obj = _mapper.Map<EmployeeApiModel, Employee>(employee);
             obj.TraderId = traderId;
-            await _unitOfWork.Employees.CreateAsync(obj);
-            await _unitOfWork.SaveChangeAsync();
+            if (!CheckEmployeeExist(traderId, employee))
+            {
+                throw new Exception("Employee is existed");
+            }
+            else if (obj.DOB > DateTime.Now)
+            {
+                throw new Exception("DOB out of range");
+            }
+            else
+            {
+                await _unitOfWork.Employees.CreateAsync(obj);
+                await _unitOfWork.SaveChangeAsync();
+            }
         }
 
         public async Task UpdateEmployeeAsync(EmployeeApiModel employee, int traderId)
@@ -35,8 +47,19 @@ namespace TnR_SS.Domain.Supervisor
             empEdit = _mapper.Map<EmployeeApiModel, Employee>(employee, empEdit);
             if (empEdit.TraderId == traderId)
             {
-                _unitOfWork.Employees.Update(empEdit);
-                await _unitOfWork.SaveChangeAsync();
+                if (CheckEmployeeExist(traderId, employee))
+                {
+                    throw new Exception("Employee is existed");
+                }
+                else if (empEdit.DOB > DateTime.Now)
+                {
+                    throw new Exception("DOB out of range");
+                }
+                else
+                {
+                    _unitOfWork.Employees.Update(empEdit);
+                    await _unitOfWork.SaveChangeAsync();
+                }
             }
             else
             {
@@ -69,6 +92,17 @@ namespace TnR_SS.Domain.Supervisor
                 }
             }
             return null;
+        }
+
+        public bool CheckEmployeeExist(int traderId, EmployeeApiModel employee)
+        {
+            var listEmp = _unitOfWork.Employees.GetAllEmployeeByTraderId(traderId);
+            var flag = listEmp.Where(x => x.PhoneNumber == employee.PhoneNumber && x.DOB == employee.DOB).Count() == 0;
+            if (flag)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }
