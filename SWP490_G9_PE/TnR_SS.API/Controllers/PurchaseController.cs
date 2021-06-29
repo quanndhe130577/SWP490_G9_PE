@@ -51,6 +51,16 @@ namespace TnR_SS.API.Controllers
             return new ResponseBuilder<object>().Success("Create purchase success").WithData(newData).ResponseModel;
         }
         #endregion
+
+        #region Update Purchase
+        [HttpPost("update")]
+        public async Task<ResponseModel> Update(PurchaseApiModel data)
+        {
+            var traderId = TokenManagement.GetUserIdInToken(HttpContext);
+            await _tnrssSupervisor.UpdatePurchaseAsync(data, traderId);
+            return new ResponseBuilder().Success("Update Purchase Success").ResponseModel;
+        }
+        #endregion
     }
 }
 

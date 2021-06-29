@@ -2,10 +2,11 @@
 
 namespace TnR_SS.Domain.ApiModels.AccountModel.RequestModel
 {
-    public class CheckChangePhoneNumberOTPReqModel
+    public class ChangePhoneNumberOTPReqModel
     {
         [Required]
         [MinLength(10)]
+        [MaxLength(11)]
         public string NewPhoneNumber { get; set; }
         [Required]
         public int OTPID { get; set; }

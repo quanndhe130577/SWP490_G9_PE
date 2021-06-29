@@ -134,7 +134,6 @@ namespace TnR_SS.API.Controller
 
         #region change password
         [HttpPost("user/change-password/{id}")]
-        //[Route("change-password")]
         public async Task<ResponseModel> ChangePassword(int id, [FromBody] ChangePasswordReqModel changePasswordModel)
         {
             if (ModelState.IsValid)
@@ -208,7 +207,7 @@ namespace TnR_SS.API.Controller
         #region change PhoneNumber 
 
         [HttpPost("user/change-phone-number/{id}")]
-        public async Task<ResponseModel> CheckChangePhoneNumberOTP(int id, CheckChangePhoneNumberOTPReqModel modelData)
+        public async Task<ResponseModel> ChangePhoneNumberOTP(int id, ChangePhoneNumberOTPReqModel modelData)
         {
             if (!TokenManagement.CheckUserIdFromToken(HttpContext, id))
             {

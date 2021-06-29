@@ -68,24 +68,7 @@ namespace TnR_SS.Domain.Supervisor
             return totalFishWeight > 0 ? fishTypePrice * totalFishWeight : 0;
         }
 
-        private List<LK_Drum_TruckApiModel> GetListDrumAndTruckByPurchaseDetail(PurchaseDetail purchaseDetail)
-        {
-            var listLK = _unitOfWork.Drums.GetLKPurchaseApiModel(purchaseDetail);
-            List<LK_Drum_TruckApiModel> list = new List<LK_Drum_TruckApiModel>();
-            foreach (var item in listLK)
-            {
-                LK_Drum_TruckApiModel lk = new LK_Drum_TruckApiModel()
-                {
-                    Drum = _mapper.Map<Drum, DrumApiModel>(item.Drum),
-                    Truck = _mapper.Map<Truck, TruckApiModel>(item.Truck),
 
-                };
-
-                list.Add(lk);
-            }
-
-            return list;
-        }
 
         /* private double GetPurchaseDetailWeight(int purchaseDetailId)
          {
@@ -136,10 +119,13 @@ namespace TnR_SS.Domain.Supervisor
                 PurchaseDetailResModel data = _mapper.Map<PurchaseDetail, PurchaseDetailResModel>(item);
                 data.Basket = _mapper.Map<Basket, BasketApiModel>(await _unitOfWork.Baskets.FindAsync(item.BasketId));
                 data.FishType = _mapper.Map<FishType, FishTypeApiModel>(await _unitOfWork.FishTypes.FindAsync(item.FishTypeID));
-                //data.Weight = GetPurchaseDetailWeight(item.ID);
-                //data.Weight = item.Weight;
                 data.Price = GetPurchaseDetailPrice(data.FishType.Price, data.Basket.Weight, data.Weight);
-                data.ListDrum = GetListDrumAndTruckByPurchaseDetail(item);
+                data.ListDrum = GetListDrumByPurchaseDetail(item);
+                if (data.ListDrum.Count > 0)
+                {
+                    data.Truck = _mapper.Map<Truck, TruckApiModel>(await _unitOfWork.Trucks.FindAsync(data.ListDrum.FirstOrDefault().TruckId));
+                }
+
                 list.Add(data);
             }
 

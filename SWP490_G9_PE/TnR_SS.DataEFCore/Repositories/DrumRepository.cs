@@ -27,27 +27,15 @@ namespace TnR_SS.DataEFCore.Repositories
 
             return rs.ToList();
         }
-        public List<LK_Drum_Truck> GetLKPurchaseApiModel(PurchaseDetail data)
+        public List<Drum> GetListDrumByPurchaseDetail(PurchaseDetail data)
         {
             return _context.LK_PurchaseDeatil_Drums.Where(x => x.PurchaseDetailID == data.ID)
                 .Join(
                     _context.Drums,
                     lk => lk.DrumID,
                     dr => dr.ID,
-                    (lk, dr) => new
-                    {
-                        Drum = dr,
-                        TruckID = dr.TruckID
-                    }
-                ).Join(
-                    _context.Trucks,
-                    o => o.TruckID,
-                    tr => tr.ID,
-                    (o, tr) => new LK_Drum_Truck
-                    {
-                        Drum = o.Drum,
-                        Truck = tr
-                    }).ToList();
+                    (lk, dr) => dr
+                ).ToList();
 
         }
     }

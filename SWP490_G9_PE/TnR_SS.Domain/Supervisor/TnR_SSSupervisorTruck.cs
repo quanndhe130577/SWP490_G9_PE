@@ -10,7 +10,6 @@ namespace TnR_SS.Domain.Supervisor
 {
     public partial class TnR_SSSupervisor
     {
-
         public async Task<Truck> GetTruck(int id)
         {
             return await _unitOfWork.Trucks.FindAsync(id);
