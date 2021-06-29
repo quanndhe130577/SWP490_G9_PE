@@ -12,9 +12,6 @@ namespace TnR_SS.Domain.ApiModels.CostIncurredModel
         public int ID { get; set; }
 
         [Required]
-        public int UserId { get; set; }
-
-        [Required]
         public string Name { get; set; }
 
         [Required]

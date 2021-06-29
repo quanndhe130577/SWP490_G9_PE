@@ -48,9 +48,9 @@ namespace TnR_SS.Domain.Supervisor
         public async Task DeleteCostIncurredAsync(int incurredId, int userId)
         {
             var incurredEdit = await _unitOfWork.CostIncurreds.FindAsync(incurredId);
-            if (incurredEdit.TraderId == userId)
+            if (incurredEdit.UserId == userId)
             {
-                _unitOfWork.Employees.Delete(incurredEdit);
+                _unitOfWork.CostIncurreds.Delete(incurredEdit);
                 await _unitOfWork.SaveChangeAsync();
             }
             else

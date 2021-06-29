@@ -37,6 +37,7 @@ namespace TnR_SS.DataEFCore.Configurations
                 .IsRequired();
             entity.HasOne(p => p.User)
                 .WithMany(b => b.CostIncurreds)
+                .HasForeignKey(p => p.UserId)
                 .OnDelete(DeleteBehavior.ClientNoAction)
                 .HasConstraintName("FK_CostIncurred_UserInfor");
         }
