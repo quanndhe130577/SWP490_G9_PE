@@ -28,7 +28,7 @@ namespace TnR_SS.API.Controllers
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
             var list = _tnrssSupervisor.GetAllEmployeeByTraderId(traderId);
-            return new ResponseBuilder<object>().Success("Get all employee").WithData(list).ResponseModel;
+            return new ResponseBuilder<List<EmployeeApiModel>>().Success("Get all employee").WithData(list).ResponseModel;
         }
 
         [HttpPost("create")]

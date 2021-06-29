@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TnR_SS.Domain.ApiModels.EmployeeModel
 {
-    public class EmployeeApiModel : ValidationAttribute
+    public class EmployeeApiModel
     {
         public int ID { get; set; }
         [Required]
@@ -23,10 +23,10 @@ namespace TnR_SS.Domain.ApiModels.EmployeeModel
         public string PhoneNumber { get; set; }
         public string Address { get; set; }
 
-        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        /*protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             
             return base.IsValid(value, validationContext);
-        }
+        }*/
     }
 }
