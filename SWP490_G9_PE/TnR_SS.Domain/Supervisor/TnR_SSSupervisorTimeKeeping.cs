@@ -48,7 +48,7 @@ namespace TnR_SS.Domain.Supervisor
             List<TimeKeepingApiModel> timeKeepings = _unitOfWork.TimeKeeping.GetAllAsync().Select(tk => _mapper.Map<TimeKeepingApiModel>(tk)).ToList();
             return timeKeepings;
         }
-        public List<TimeKeepingApiModel> GetListTimeKeepingByTraderId(int id, DateTime date)
+        public async Task<List<TimeKeepingApiModel>> GetListTimeKeepingByTraderId(int id, DateTime date)
         {
             List<TimeKeepingApiModel> timeKeepings = _unitOfWork.TimeKeeping.GetAllByTraderId(id, date).ToList();
             foreach (var tk in timeKeepings)
