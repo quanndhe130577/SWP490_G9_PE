@@ -10,7 +10,9 @@ namespace TnR_SS.Domain.Repositories
 {
     public interface ITimeKeepingRepository : IRepositoryBase<TimeKeeping>
     {
-        List<TimeKeepingApiModel> GetAllByTraderId(int id, DateTime date);
-        public List<TimeKeeping> GetAllByEmployeeId(int id);
+        List<TimeKeepingApiModel> GetAllWithTraderIdPerDay(int id, DateTime date);
+        List<TimeKeepingApiModel> GetAllWithTraderIdPerMonth(int id, DateTime date);
+        List<TimeKeepingApiModel> GetStatisticsByTraderIdByMonth(int id, DateTime date);
+        List<TimeKeeping> GetAllByEmployeeId(int id);
     }
 }
