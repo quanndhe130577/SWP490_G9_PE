@@ -10,8 +10,8 @@ using TnR_SS.DataEFCore;
 namespace TnR_SS.DataEFCore.Migrations
 {
     [DbContext(typeof(TnR_SSContext))]
-    [Migration("20210629151010_AlterFKTableCostIncurred")]
-    partial class AlterFKTableCostIncurred
+    [Migration("20210630095904_createTableCostIncurred")]
+    partial class createTableCostIncurred
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -167,6 +167,9 @@ namespace TnR_SS.DataEFCore.Migrations
                         .HasColumnType("float");
 
                     b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime");
+
+                    b.Property<DateTime>("Date")
                         .HasColumnType("datetime");
 
                     b.Property<string>("Name")
@@ -529,7 +532,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "b7046f43-2749-455e-8af7-1654a00e9eb9",
+                            ConcurrencyStamp = "dc3a595e-efd6-47bd-b810-37cb9308da3c",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Admin",
                             Name = "Admin",
@@ -539,7 +542,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "552a7454-3762-4225-bf5b-4fe5aabc76f7",
+                            ConcurrencyStamp = "a4e03a39-f266-4bfb-b0a5-2559b509b6fd",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Thương lái",
                             Name = "Trader",
@@ -549,7 +552,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "c4387928-33b1-4f70-b241-82434da2200a",
+                            ConcurrencyStamp = "857a84f2-13b2-40c4-b6d6-42cb24bd9b04",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Chủ bến",
                             Name = "Weight Recorder",

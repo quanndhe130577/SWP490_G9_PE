@@ -168,7 +168,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("date");
+                        .HasColumnType("datetime");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -178,9 +178,6 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.Property<string>("Note")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
-
-                    b.Property<DateTime>("TimeCreate")
-                        .HasColumnType("datetime");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime");
@@ -533,7 +530,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "2d1555bc-a0c4-4ce0-9171-53c53c099230",
+                            ConcurrencyStamp = "dc3a595e-efd6-47bd-b810-37cb9308da3c",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Admin",
                             Name = "Admin",
@@ -543,7 +540,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "8d655b7a-ef34-4f8c-8d1c-002c72227b65",
+                            ConcurrencyStamp = "a4e03a39-f266-4bfb-b0a5-2559b509b6fd",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Thương lái",
                             Name = "Trader",
@@ -553,7 +550,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "b2c831a5-343d-4485-9705-2ed2a548d3d9",
+                            ConcurrencyStamp = "857a84f2-13b2-40c4-b6d6-42cb24bd9b04",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Chủ bến",
                             Name = "Weight Recorder",

@@ -3,27 +3,37 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TnR_SS.DataEFCore.Migrations
 {
-    public partial class AddTableCostIncurred : Migration
+    public partial class createTableCostIncurred : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DOB",
-                table: "Employee",
-                type: "date",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "datetime");
 
-            migrationBuilder.AlterColumn<string>(
-                name: "Address",
+
+            migrationBuilder.DropColumn(
+                name: "TotalAmount",
+                table: "Purchase");
+
+            migrationBuilder.DropColumn(
+                name: "TotalWeight",
+                table: "Purchase");
+
+            migrationBuilder.DropColumn(
+                name: "Weight",
+                table: "LK_PurchaseDeatil_Drum");
+
+            migrationBuilder.DropColumn(
+                name: "LastName",
+                table: "Employee");
+
+            migrationBuilder.RenameColumn(
+                name: "BuyPrice",
+                table: "PurchaseDetail",
+                newName: "Weight");
+
+            migrationBuilder.RenameColumn(
+                name: "FirstName",
                 table: "Employee",
-                type: "nvarchar(50)",
-                maxLength: 50,
-                nullable: true,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(50)",
-                oldMaxLength: 50);
+                newName: "Name");
 
             migrationBuilder.CreateTable(
                 name: "CostIncurred",
@@ -35,6 +45,7 @@ namespace TnR_SS.DataEFCore.Migrations
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Cost = table.Column<double>(type: "float", nullable: false),
                     Note = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Date = table.Column<DateTime>(type: "datetime", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime", nullable: false)
                 },
@@ -53,73 +64,108 @@ namespace TnR_SS.DataEFCore.Migrations
                 keyColumn: "Id",
                 keyValue: 1,
                 column: "ConcurrencyStamp",
-                value: "6f3cdfad-d836-46d4-a238-00ec331cffd2");
+                value: "dc3a595e-efd6-47bd-b810-37cb9308da3c");
 
             migrationBuilder.UpdateData(
                 table: "RoleUser",
                 keyColumn: "Id",
                 keyValue: 2,
                 column: "ConcurrencyStamp",
-                value: "42f975cc-3377-44c4-9b1b-a3c0d568ed93");
+                value: "a4e03a39-f266-4bfb-b0a5-2559b509b6fd");
 
             migrationBuilder.UpdateData(
                 table: "RoleUser",
                 keyColumn: "Id",
                 keyValue: 3,
                 column: "ConcurrencyStamp",
-                value: "e04c7bd0-def0-4354-af6f-6a67bd1c8124");
+                value: "857a84f2-13b2-40c4-b6d6-42cb24bd9b04");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CostIncurred_UserId",
                 table: "CostIncurred",
                 column: "UserId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Purchase_PondOwner",
+                table: "Purchase",
+                column: "PondOwnerID",
+                principalTable: "PondOwner",
+                principalColumn: "ID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+
+
             migrationBuilder.DropTable(
                 name: "CostIncurred");
 
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "DOB",
-                table: "Employee",
-                type: "datetime",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "date");
+            migrationBuilder.RenameColumn(
+                name: "Weight",
+                table: "PurchaseDetail",
+                newName: "BuyPrice");
 
-            migrationBuilder.AlterColumn<string>(
-                name: "Address",
+            migrationBuilder.RenameColumn(
+                name: "Name",
+                table: "Employee",
+                newName: "FirstName");
+
+            migrationBuilder.AddColumn<double>(
+                name: "TotalAmount",
+                table: "Purchase",
+                type: "float",
+                nullable: false,
+                defaultValue: 0.0);
+
+            migrationBuilder.AddColumn<double>(
+                name: "TotalWeight",
+                table: "Purchase",
+                type: "float",
+                nullable: false,
+                defaultValue: 0.0);
+
+            migrationBuilder.AddColumn<double>(
+                name: "Weight",
+                table: "LK_PurchaseDeatil_Drum",
+                type: "float",
+                nullable: false,
+                defaultValue: 0.0);
+
+            migrationBuilder.AddColumn<string>(
+                name: "LastName",
                 table: "Employee",
                 type: "nvarchar(50)",
                 maxLength: 50,
-                nullable: false,
-                defaultValue: "",
-                oldClrType: typeof(string),
-                oldType: "nvarchar(50)",
-                oldMaxLength: 50,
-                oldNullable: true);
+                nullable: true);
 
             migrationBuilder.UpdateData(
                 table: "RoleUser",
                 keyColumn: "Id",
                 keyValue: 1,
                 column: "ConcurrencyStamp",
-                value: "ac546bdc-4c64-4290-8cd0-3bd25d50870f");
+                value: "ecc2d8e9-e21d-4b6d-bdec-d271db99dff1");
 
             migrationBuilder.UpdateData(
                 table: "RoleUser",
                 keyColumn: "Id",
                 keyValue: 2,
                 column: "ConcurrencyStamp",
-                value: "1b0f12bb-48b5-470c-bcab-4552e67f870a");
+                value: "46290eeb-c3f8-4efd-874b-ec751b8070a7");
 
             migrationBuilder.UpdateData(
                 table: "RoleUser",
                 keyColumn: "Id",
                 keyValue: 3,
                 column: "ConcurrencyStamp",
-                value: "3c28512d-49e9-46c2-a9cc-52c13271fbfe");
+                value: "5b615327-0e95-43cb-bc66-79f012ae1de0");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Purchase_PondOwner_PondOwnerID",
+                table: "Purchase",
+                column: "PondOwnerID",
+                principalTable: "PondOwner",
+                principalColumn: "ID",
+                onDelete: ReferentialAction.Cascade);
         }
     }
 }
