@@ -18,6 +18,10 @@ namespace TnR_SS.Domain.Supervisor
         public async Task<string> GetRoleDisplayNameAsync(UserInfor user)
         {
             var userRoles = await _unitOfWork.UserInfors.GetRolesAsync(user);
+            if (userRoles.Count == 0 || userRoles == null)
+            {
+                throw new Exception("Account invalid");
+            }
             return _unitOfWork.RoleUsers.FindByNameAsync(userRoles[0]).Result.DisplayName;
         }
         public List<AllRoleResModel> GetAllResRoles()
