@@ -24,6 +24,10 @@ namespace TnR_SS.DataEFCore.Configurations
                 .IsRequired()
                 .HasMaxLength(50);
 
+            entity.Property(e => e.TimeCreate)
+                .IsRequired()
+                .HasColumnType("datetime");
+
             entity.Property(e => e.Note)
                 .HasMaxLength(50);
             entity.Property(e => e.Date)
@@ -34,7 +38,7 @@ namespace TnR_SS.DataEFCore.Configurations
                .HasColumnType("datetime");
 
             entity.Property(e => e.UpdatedAt)
-                .HasColumnType("datetime");
+               .HasColumnType("datetime");
 
             entity.Property(e => e.UserId)
                 .IsRequired();
@@ -43,6 +47,8 @@ namespace TnR_SS.DataEFCore.Configurations
                 .HasForeignKey(p => p.UserId)
                 .OnDelete(DeleteBehavior.ClientNoAction)
                 .HasConstraintName("FK_CostIncurred_UserInfor");
+
+            
         }
     }
 }
