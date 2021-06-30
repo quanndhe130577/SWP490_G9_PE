@@ -25,6 +25,9 @@ namespace TnR_SS.Domain.Entities
 
         public string Note { get; set; }
 
+        [Required]
+        public DateTime Date { get; set; }
+
         public DateTime CreatedAt { get; set; }
 
         public DateTime UpdatedAt { get; set; }

@@ -18,5 +18,8 @@ namespace TnR_SS.Domain.ApiModels.CostIncurredModel
         public double Cost { get; set; }
 
         public string Note { get; set; }
+
+        [Required]
+        public DateTime Date { get; set; }
     }
 }
