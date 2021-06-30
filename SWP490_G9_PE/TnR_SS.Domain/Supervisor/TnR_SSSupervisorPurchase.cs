@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -67,11 +68,64 @@ namespace TnR_SS.Domain.Supervisor
                 throw new Exception("Purchase không tồn tại");
             }
 
+            var pondOwner = await _unitOfWork.PondOwners.FindAsync(model.PondOwnerID);
+            if (pondOwner == null || pondOwner.TraderID != traderId)
+            {
+                throw new Exception("PondOwner không hợp lệ");
+            }
+
             purchase = _mapper.Map<PurchaseApiModel, Purchase>(model, purchase);
 
             _unitOfWork.Purchases.Update(purchase);
 
             await _unitOfWork.SaveChangeAsync();
+        }
+
+        public async Task DeletePurchaseAsync(int purchaseId, int traderId)
+        {
+            var purchase = await _unitOfWork.Purchases.FindAsync(purchaseId);
+            if (purchase == null)
+            {
+                throw new Exception("Purchase không tồn tại !!!");
+            }
+            if (purchase.TraderID == traderId)
+            {
+                var strategy = _unitOfWork.CreateExecutionStrategy();
+
+                await strategy.ExecuteAsync(async () =>
+                {
+                    using (var transaction = _unitOfWork.BeginTransaction())
+                    {
+                        try
+                        {
+                            var purchaseDetail = _unitOfWork.PurchaseDetails.GetAll(x => x.PurchaseId == purchaseId);
+                            if (purchaseDetail != null && purchaseDetail.Count() > 0)
+                            {
+                                foreach (var item in purchaseDetail)
+                                {
+                                    _unitOfWork.LK_PurchaseDeatil_Drums.RemoveLKByPurchaseDetailId(item.ID);
+                                    _unitOfWork.PurchaseDetails.Delete(item);
+                                }
+                            }
+
+                            _unitOfWork.Purchases.DeleteById(purchaseId);
+                            await _unitOfWork.SaveChangeAsync();
+
+                            await transaction.CommitAsync();
+                        }
+                        catch
+                        {
+                            await transaction.RollbackAsync();
+                            throw;
+                        }
+                    }
+                });
+
+            }
+            else
+            {
+                throw new Exception("Purchase không hợp lệ !!!");
+            }
         }
     }
 }

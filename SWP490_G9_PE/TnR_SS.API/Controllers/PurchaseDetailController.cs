@@ -64,5 +64,6 @@ namespace TnR_SS.API.Controllers
     public class IdModel
     {
         public int PurchaseDetailId { get; set; }
+        public int PurchaseId { get; set; }
     }
 }

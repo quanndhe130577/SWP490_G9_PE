@@ -197,6 +197,10 @@ namespace TnR_SS.Domain.Supervisor
                 });
 
             }
+            else
+            {
+                throw new Exception("Purchase detail không hợp lệ !!!");
+            }
         }
     }
 }

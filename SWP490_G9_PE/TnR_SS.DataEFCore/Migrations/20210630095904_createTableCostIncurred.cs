@@ -8,33 +8,6 @@ namespace TnR_SS.DataEFCore.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
 
-
-            migrationBuilder.DropColumn(
-                name: "TotalAmount",
-                table: "Purchase");
-
-            migrationBuilder.DropColumn(
-                name: "TotalWeight",
-                table: "Purchase");
-
-            migrationBuilder.DropColumn(
-                name: "Weight",
-                table: "LK_PurchaseDeatil_Drum");
-
-            migrationBuilder.DropColumn(
-                name: "LastName",
-                table: "Employee");
-
-            migrationBuilder.RenameColumn(
-                name: "BuyPrice",
-                table: "PurchaseDetail",
-                newName: "Weight");
-
-            migrationBuilder.RenameColumn(
-                name: "FirstName",
-                table: "Employee",
-                newName: "Name");
-
             migrationBuilder.CreateTable(
                 name: "CostIncurred",
                 columns: table => new
@@ -84,13 +57,6 @@ namespace TnR_SS.DataEFCore.Migrations
                 name: "IX_CostIncurred_UserId",
                 table: "CostIncurred",
                 column: "UserId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Purchase_PondOwner",
-                table: "Purchase",
-                column: "PondOwnerID",
-                principalTable: "PondOwner",
-                principalColumn: "ID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -99,44 +65,6 @@ namespace TnR_SS.DataEFCore.Migrations
 
             migrationBuilder.DropTable(
                 name: "CostIncurred");
-
-            migrationBuilder.RenameColumn(
-                name: "Weight",
-                table: "PurchaseDetail",
-                newName: "BuyPrice");
-
-            migrationBuilder.RenameColumn(
-                name: "Name",
-                table: "Employee",
-                newName: "FirstName");
-
-            migrationBuilder.AddColumn<double>(
-                name: "TotalAmount",
-                table: "Purchase",
-                type: "float",
-                nullable: false,
-                defaultValue: 0.0);
-
-            migrationBuilder.AddColumn<double>(
-                name: "TotalWeight",
-                table: "Purchase",
-                type: "float",
-                nullable: false,
-                defaultValue: 0.0);
-
-            migrationBuilder.AddColumn<double>(
-                name: "Weight",
-                table: "LK_PurchaseDeatil_Drum",
-                type: "float",
-                nullable: false,
-                defaultValue: 0.0);
-
-            migrationBuilder.AddColumn<string>(
-                name: "LastName",
-                table: "Employee",
-                type: "nvarchar(50)",
-                maxLength: 50,
-                nullable: true);
 
             migrationBuilder.UpdateData(
                 table: "RoleUser",
@@ -158,14 +86,6 @@ namespace TnR_SS.DataEFCore.Migrations
                 keyValue: 3,
                 column: "ConcurrencyStamp",
                 value: "5b615327-0e95-43cb-bc66-79f012ae1de0");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Purchase_PondOwner_PondOwnerID",
-                table: "Purchase",
-                column: "PondOwnerID",
-                principalTable: "PondOwner",
-                principalColumn: "ID",
-                onDelete: ReferentialAction.Cascade);
         }
     }
 }

@@ -8,16 +8,6 @@ namespace TnR_SS.DataEFCore.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
 
-
-            migrationBuilder.AlterColumn<string>(
-                name: "Name",
-                table: "PondOwner",
-                type: "nvarchar(max)",
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "varchar(max)",
-                oldUnicode: false);
-
             migrationBuilder.AlterColumn<DateTime>(
                 name: "DOB",
                 table: "Employee",
@@ -60,8 +50,6 @@ namespace TnR_SS.DataEFCore.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-
-
             migrationBuilder.AlterColumn<string>(
                 name: "Name",
                 table: "PondOwner",
