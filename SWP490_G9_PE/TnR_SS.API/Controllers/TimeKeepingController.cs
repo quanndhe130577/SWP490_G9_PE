@@ -23,13 +23,20 @@ namespace TnR_SS.API.Controller
             _tnrssSupervisor = tnrssSupervisor;
             _mapper = mapper;
         }
-
         [HttpGet]
-        [Route("getByTrader/{date}")]
-        public async Task<ResponseModel> GetByTraderId(DateTime date)
+        [Route("getByTrader/date/{date}")]
+        public ResponseModel GetByTraderIdWithDate(DateTime date)
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
-            var rs = await _tnrssSupervisor.GetListTimeKeepingByTraderId(traderId, date);
+            var rs = _tnrssSupervisor.GetListTimeKeepingByTraderIdWithDate(traderId, date);
+            return new ResponseBuilder<List<TimeKeepingApiModel>>().Success("Get Info Success").WithData(rs).ResponseModel;
+        }
+        [HttpGet]
+        [Route("getByTrader/month/{date}")]
+        public ResponseModel GetByTraderIdWithMoth(DateTime date)
+        {
+            var traderId = TokenManagement.GetUserIdInToken(HttpContext);
+            var rs = _tnrssSupervisor.GetListTimeKeepingByTraderIdWithMonth(traderId, date);
             return new ResponseBuilder<List<TimeKeepingApiModel>>().Success("Get Info Success").WithData(rs).ResponseModel;
         }
 
