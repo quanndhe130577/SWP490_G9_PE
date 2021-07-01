@@ -14,6 +14,7 @@ namespace TnR_SS.Domain.ApiModels.CostIncurredModel
         [Required]
         public string Name { get; set; }
 
+        [RegularExpression(@"^[1-9]\d*(\.\d+)?$", ErrorMessage = "Cost invalid")]
         [Required]
         public double Cost { get; set; }
 

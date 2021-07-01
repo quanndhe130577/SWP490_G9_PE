@@ -21,9 +21,9 @@ namespace TnR_SS.Domain.Supervisor
             return list;
         }
 
-        public async Task CreateCostIncurredAsync(CostIncurredApiModel employee, int traderId)
+        public async Task CreateCostIncurredAsync(CostIncurredApiModel incurred, int traderId)
         {
-            var obj = _mapper.Map<CostIncurredApiModel, CostIncurred>(employee);
+            var obj = _mapper.Map<CostIncurredApiModel, CostIncurred>(incurred);
             obj.UserId = traderId;
             await _unitOfWork.CostIncurreds.CreateAsync(obj);
             await _unitOfWork.SaveChangeAsync();
