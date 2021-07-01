@@ -21,9 +21,6 @@ namespace TnR_SS.DataEFCore.Configurations
             entity.Property(e => e.Name)
                 .IsRequired();
 
-            entity.Property(e => e.Address)
-                .IsRequired();
-
             entity.Property(e => e.CreatedAt)
                 .IsRequired()
                 .HasColumnType("datetime");
