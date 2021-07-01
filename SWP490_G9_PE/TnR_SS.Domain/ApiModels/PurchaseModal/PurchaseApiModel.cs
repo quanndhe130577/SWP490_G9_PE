@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TnR_SS.Domain.Entities;
 
 namespace TnR_SS.Domain.ApiModels.PurchaseModal
 {
@@ -19,6 +20,8 @@ namespace TnR_SS.Domain.ApiModels.PurchaseModal
 
         [Required]
         public bool isPaid { get; set; } = false;
+
+        public string Status { get; set; } = PurchaseStatus.Pending.ToString();
 
         public double PondBackMoney { get; set; }
 

@@ -63,6 +63,11 @@ namespace TnR_SS.Domain.Supervisor
         public async Task UpdatePurchaseAsync(PurchaseApiModel model, int traderId)
         {
             var purchase = await _unitOfWork.Purchases.FindAsync(model.ID);
+            if (purchase.isCompleted == PurchaseStatus.Completed)
+            {
+                throw new Exception("You can't edit this purchase anymore !!");
+            }
+
             if (purchase.TraderID != traderId)
             {
                 throw new Exception("Purchase không tồn tại");
@@ -75,6 +80,10 @@ namespace TnR_SS.Domain.Supervisor
             }
 
             purchase = _mapper.Map<PurchaseApiModel, Purchase>(model, purchase);
+            if (model.Status.Equals(PurchaseStatus.Completed.ToString(), StringComparison.InvariantCultureIgnoreCase))
+            {
+                purchase.isCompleted = PurchaseStatus.Completed;
+            }
 
             _unitOfWork.Purchases.Update(purchase);
 

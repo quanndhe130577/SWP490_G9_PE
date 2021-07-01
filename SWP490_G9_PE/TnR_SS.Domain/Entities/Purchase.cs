@@ -26,13 +26,15 @@ namespace TnR_SS.Domain.Entities
         [Required]
         public DateTime Date { get; set; }
         public double Commission { get; set; } // tiền trả cho môi giới
-        public DateTime CreatedAt { get; set; }    
+        public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 
         [Required]
         public bool isPaid { get; set; } = false;
 
         public double PondBackMoney { get; set; }
+
+        public PurchaseStatus isCompleted { get; set; } = PurchaseStatus.Pending;
 
         [Required]
         public int PondOwnerID { get; set; }
@@ -42,6 +44,12 @@ namespace TnR_SS.Domain.Entities
         public int TraderID { get; set; }
         public UserInfor UserInfor { get; set; }
 
-        public List<PurchaseDetail> PurchaseDetails { get; set; }
+        public List<PurchaseDetail> PurchaseDetails { get; set; } = new List<PurchaseDetail>();
+    }
+
+    public enum PurchaseStatus
+    {
+        Pending,
+        Completed
     }
 }
