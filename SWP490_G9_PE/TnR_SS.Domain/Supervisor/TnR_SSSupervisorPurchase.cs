@@ -53,6 +53,7 @@ namespace TnR_SS.Domain.Supervisor
                 newPurchase.PondOwnerName = pondOwner.Name;
                 newPurchase.TotalWeight = GetTotalWeightPurchase(purchase.ID);
                 newPurchase.TotalAmount = await GetTotalAmountPurchaseAsync(purchase.ID);
+                newPurchase.Status = purchase.isCompleted.ToString();
 
                 list.Add(newPurchase);
             }

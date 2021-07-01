@@ -13,5 +13,13 @@ namespace TnR_SS.Domain.Entities
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
+        public string Name { get; set; }
+        public string Address { get; set; }
+
+        [MaxLength(11)]
+        [MinLength(10)]
+        public string PhoneNumber { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
     }
 }

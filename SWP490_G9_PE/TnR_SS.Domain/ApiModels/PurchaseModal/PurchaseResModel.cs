@@ -18,6 +18,8 @@ namespace TnR_SS.Domain.ApiModels.PurchaseModal
         public double TotalWeight { get; set; }
 
         public double TotalAmount { get; set; }
+
+        public string Status { get; set; }
         /* public List<FishTypeApiModel> ListFishTypeWithPrice { get; set; }
 
          public PurchaseResModel()
