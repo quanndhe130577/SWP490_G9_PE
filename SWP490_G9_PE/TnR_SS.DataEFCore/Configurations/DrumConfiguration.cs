@@ -30,12 +30,10 @@ namespace TnR_SS.DataEFCore.Configurations
                 .IsRequired();
 
             entity.Property(e => e.CreatedAt)
-                .HasColumnType("datetime")
-                .IsRequired();
+                .HasColumnType("datetime");
 
             entity.Property(e => e.UpdatedAt)
-                .HasColumnType("datetime")
-                .IsRequired();
+                .HasColumnType("datetime");
 
             entity.HasOne(p => p.Truck)
                .WithMany(b => b.Drums)

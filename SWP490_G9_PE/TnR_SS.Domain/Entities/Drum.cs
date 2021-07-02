@@ -27,10 +27,8 @@ namespace TnR_SS.Domain.Entities
 
         public string Type { get; set; }
 
-        [Required]
         public DateTime CreatedAt { get; set; }
 
-        [Required]
         public DateTime UpdatedAt { get; set; }
 
         public List<LK_PurchaseDeatil_Drum> LK_PurchaseDeatil_Drums { get; set; }
