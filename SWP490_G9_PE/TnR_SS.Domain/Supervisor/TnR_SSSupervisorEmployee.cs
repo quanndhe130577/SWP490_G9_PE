@@ -40,6 +40,8 @@ namespace TnR_SS.Domain.Supervisor
             }*/
             else
             {
+                obj.StartDate = DateTime.Now;
+                obj.EndDate = DateTime.Now.AddDays(5);
                 await _unitOfWork.Employees.CreateAsync(obj);
                 await _unitOfWork.SaveChangeAsync();
             }
