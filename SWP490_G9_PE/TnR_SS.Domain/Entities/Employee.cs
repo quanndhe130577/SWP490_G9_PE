@@ -25,6 +25,13 @@ namespace TnR_SS.Domain.Entities
         public string PhoneNumber { get; set; }
 
         public string Address { get; set; }
+
+        [Required]
+        public DateTime StartDate { get; set; }
+
+        [Required]
+        public DateTime EndDate { get; set; }
+
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 

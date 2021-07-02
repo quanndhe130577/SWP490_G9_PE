@@ -21,6 +21,14 @@ namespace TnR_SS.DataEFCore.Configurations
             entity.Property(e => e.Type)
                 .HasMaxLength(50);
 
+            entity.Property(e => e.Number)
+                .HasMaxLength(20)
+                .IsRequired();
+
+            entity.Property(e => e.MaxWeight)
+                .HasMaxLength(20)
+                .IsRequired();
+
             entity.Property(e => e.CreatedAt)
                 .HasColumnType("datetime")
                 .IsRequired();

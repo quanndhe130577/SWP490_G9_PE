@@ -2,6 +2,7 @@
 using TnR_SS.Domain.ApiModels.AccountModel.RequestModel;
 using TnR_SS.Domain.ApiModels.AccountModel.ResponseModel;
 using TnR_SS.Domain.ApiModels.BasketModel.ResponseModel;
+using TnR_SS.Domain.ApiModels.BuyerModel;
 using TnR_SS.Domain.ApiModels.CostIncurredModel;
 using TnR_SS.Domain.ApiModels.DrumModel;
 using TnR_SS.Domain.ApiModels.EmployeeModel;
@@ -85,6 +86,10 @@ namespace TnR_SS.Domain.ApiModels
 
             #region CostIncurred
             CreateMap<CostIncurred, CostIncurredApiModel>().ReverseMap();
+            #endregion
+
+            #region Buyer
+            CreateMap<Buyer, BuyerApiModel>().ReverseMap();
             #endregion
         }
 

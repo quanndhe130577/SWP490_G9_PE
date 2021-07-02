@@ -16,12 +16,20 @@ namespace TnR_SS.Domain.Entities
 
         [Required]
         public int TruckID { get; set; }
+
         public Truck Truck { get; set; }
+
+        [Required]
         public string Number { get; set; }
 
+        [Required]
+        public int MaxWeight { get; set; }
+
         public string Type { get; set; }
+
         [Required]
         public DateTime CreatedAt { get; set; }
+
         [Required]
         public DateTime UpdatedAt { get; set; }
 
