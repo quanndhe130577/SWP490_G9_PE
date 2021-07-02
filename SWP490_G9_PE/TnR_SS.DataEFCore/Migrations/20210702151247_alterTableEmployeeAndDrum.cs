@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TnR_SS.DataEFCore.Migrations
 {
-    public partial class addStartDateAndEndDateTableEmployee : Migration
+    public partial class alterTableEmployeeAndDrum : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -45,21 +45,21 @@ namespace TnR_SS.DataEFCore.Migrations
                 keyColumn: "Id",
                 keyValue: 1,
                 column: "ConcurrencyStamp",
-                value: "dedaf995-1c40-4e68-833a-f66dbb4d435c");
+                value: "a15d2650-3dd5-4cc2-b4b5-1fc77a6f8966");
 
             migrationBuilder.UpdateData(
                 table: "RoleUser",
                 keyColumn: "Id",
                 keyValue: 2,
                 column: "ConcurrencyStamp",
-                value: "5b2efd49-3e45-4b02-8d4a-f01ea2ecf320");
+                value: "f6fb0431-ff25-4e8b-90a2-479a674f1179");
 
             migrationBuilder.UpdateData(
                 table: "RoleUser",
                 keyColumn: "Id",
                 keyValue: 3,
                 column: "ConcurrencyStamp",
-                value: "d6b80a41-755b-4df5-84d3-6419da4e594f");
+                value: "fbce5aa6-35a6-4de6-b9b9-8bc45351197f");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

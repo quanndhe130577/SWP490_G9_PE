@@ -10,8 +10,8 @@ using TnR_SS.DataEFCore;
 namespace TnR_SS.DataEFCore.Migrations
 {
     [DbContext(typeof(TnR_SSContext))]
-    [Migration("20210702102514_addStartDateAndEndDateTableEmployee")]
-    partial class addStartDateAndEndDateTableEmployee
+    [Migration("20210702151247_alterTableEmployeeAndDrum")]
+    partial class alterTableEmployeeAndDrum
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -578,7 +578,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "dedaf995-1c40-4e68-833a-f66dbb4d435c",
+                            ConcurrencyStamp = "a15d2650-3dd5-4cc2-b4b5-1fc77a6f8966",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Admin",
                             Name = "Admin",
@@ -588,7 +588,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "5b2efd49-3e45-4b02-8d4a-f01ea2ecf320",
+                            ConcurrencyStamp = "f6fb0431-ff25-4e8b-90a2-479a674f1179",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Thương lái",
                             Name = "Trader",
@@ -598,7 +598,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "d6b80a41-755b-4df5-84d3-6419da4e594f",
+                            ConcurrencyStamp = "fbce5aa6-35a6-4de6-b9b9-8bc45351197f",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Chủ bến",
                             Name = "Weight Recorder",
