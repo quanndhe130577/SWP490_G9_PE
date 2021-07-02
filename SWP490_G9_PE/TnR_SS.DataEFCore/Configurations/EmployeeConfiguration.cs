@@ -37,6 +37,14 @@ namespace TnR_SS.DataEFCore.Configurations
             entity.Property(e => e.TraderId)
                 .IsRequired();
 
+            entity.Property(e => e.StartDate)
+                .IsRequired()
+                .HasColumnType("datetime");
+
+            entity.Property(e => e.EndDate)
+                .IsRequired()
+                .HasColumnType("datetime");
+
             entity.HasOne(p => p.UserInfor)
                 .WithMany(b => b.Employees)
                 .HasForeignKey(p => p.TraderId)

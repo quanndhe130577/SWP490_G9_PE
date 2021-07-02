@@ -29,30 +29,24 @@ namespace TnR_SS.DataEFCore.UnitOfWorks
             Employees = new EmployeeRepository(_context);
             CostIncurreds = new CostIncurredRepository(_context);
             LK_PurchaseDeatil_Drums = new LK_PurchaseDeatil_DrumRepository(_context);
+            Buyers = new BuyerRepository(_context);
         }
 
         public IOTPRepository OTPs { get; private set; }
-
         public IUserInforRepository UserInfors { get; private set; }
-
         public IRoleUserRepository RoleUsers { get; private set; }
-
         public IBasketRepository Baskets { get; private set; }
-
         public IPondOwnerRepository PondOwners { get; private set; }
-
         public IPurchaseDetailRepository PurchaseDetails { get; private set; }
-
         public IPurchaseRepository Purchases { get; private set; }
-
         public IFishTypeRepository FishTypes { get; private set; }
-
         public ITruckRepository Trucks { get; private set; }
         public ITimeKeepingRepository TimeKeeping { get; private set; }
         public IEmployeeRepository Employees { get; private set; }
         public ILK_PurchaseDeatil_DrumRepository LK_PurchaseDeatil_Drums { get; }
         public IDrumRepository Drums { get; private set; }
         public ICostIncurredRepository CostIncurreds { get; private set; }
+        public IBuyerRepository Buyers { get; private set; }
 
         public async Task<int> SaveChangeAsync()
         {

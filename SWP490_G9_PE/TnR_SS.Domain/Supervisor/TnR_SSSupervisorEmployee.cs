@@ -34,8 +34,14 @@ namespace TnR_SS.Domain.Supervisor
             {
                 throw new Exception("DOB out of range");
             }
+            /*else if (obj.StartDate >= obj.EndDate)
+            {
+                throw new Exception("Start Date can not sooner than End Date");
+            }*/
             else
             {
+                obj.StartDate = DateTime.Now;
+                obj.EndDate = DateTime.Now.AddDays(5);
                 await _unitOfWork.Employees.CreateAsync(obj);
                 await _unitOfWork.SaveChangeAsync();
             }
@@ -55,8 +61,14 @@ namespace TnR_SS.Domain.Supervisor
                 {
                     throw new Exception("DOB out of range");
                 }
+                /*else if (empEdit.StartDate >= empEdit.EndDate)
+                {
+                    throw new Exception("Start Date can not sooner than End Date");
+                }*/
                 else
                 {
+                    empEdit.StartDate = DateTime.Now;
+                    empEdit.EndDate = DateTime.Now.AddDays(5);
                     _unitOfWork.Employees.Update(empEdit);
                     await _unitOfWork.SaveChangeAsync();
                 }

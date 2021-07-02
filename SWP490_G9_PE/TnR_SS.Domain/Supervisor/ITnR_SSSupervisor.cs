@@ -16,6 +16,7 @@ using TnR_SS.Domain.Entities;
 using TnR_SS.Domain.ApiModels.EmployeeModel;
 using TnR_SS.Domain.ApiModels.PurchaseDetailModel;
 using TnR_SS.Domain.ApiModels.CostIncurredModel;
+using TnR_SS.Domain.ApiModels.BuyerModel;
 
 namespace TnR_SS.Domain.Supervisor
 {
@@ -137,6 +138,14 @@ namespace TnR_SS.Domain.Supervisor
         Task UpdateCostIncurredAsync(CostIncurredApiModel incurred, int traderId);
         Task DeleteCostIncurredAsync(int incurredId, int traderId);
         CostIncurredApiModel GetDetailCostIncurred(int traderId, int incurredId);
+        #endregion
+
+        #region Buyer
+        List<BuyerApiModel> GetAllBuyer();
+        Task CreateBuyerAsync(BuyerApiModel buyerModel);
+        Task UpdateBuyerAsync(BuyerApiModel buyerModel);
+        Task DeleteBuyerAsync(int buyerId);
+        Task<BuyerApiModel> GetDetailBuyerAsync(int buyerId);
         #endregion
     }
 }
