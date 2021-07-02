@@ -67,6 +67,8 @@ namespace TnR_SS.Domain.Supervisor
                 }*/
                 else
                 {
+                    empEdit.StartDate = DateTime.Now;
+                    empEdit.EndDate = DateTime.Now.AddDays(5);
                     _unitOfWork.Employees.Update(empEdit);
                     await _unitOfWork.SaveChangeAsync();
                 }
