@@ -155,7 +155,7 @@ namespace TnR_SS
             //HSTS
 
             //HttpsRedirection
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             //static file
 

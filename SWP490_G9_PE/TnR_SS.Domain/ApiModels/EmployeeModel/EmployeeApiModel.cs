@@ -13,7 +13,7 @@ namespace TnR_SS.Domain.ApiModels.EmployeeModel
         [Required]
         public string Name { get; set; }
         //public string LastName { get; set; }
-        
+
         public DateTime DOB { get; set; }
 
         [RegularExpression(@"(84|0[3|5|7|8|9])+([0-9]{8})\b", ErrorMessage = "Phone Number invalid")]
@@ -25,9 +25,8 @@ namespace TnR_SS.Domain.ApiModels.EmployeeModel
         public string Address { get; set; }
 
         [Required]
-        public DateTime StartDate { get; set; }
+        public DateTime StartDate { get; set; } = DateTime.Now;
 
-        [Required]
         public DateTime? EndDate { get; set; }
 
         /*protected override ValidationResult IsValid(object value, ValidationContext validationContext)
