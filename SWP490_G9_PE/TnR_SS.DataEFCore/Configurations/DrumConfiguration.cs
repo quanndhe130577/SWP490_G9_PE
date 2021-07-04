@@ -26,7 +26,6 @@ namespace TnR_SS.DataEFCore.Configurations
                 .IsRequired();
 
             entity.Property(e => e.MaxWeight)
-                .HasMaxLength(20)
                 .IsRequired();
 
             entity.Property(e => e.CreatedAt)

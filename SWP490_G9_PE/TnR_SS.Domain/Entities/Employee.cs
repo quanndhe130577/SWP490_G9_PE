@@ -18,7 +18,7 @@ namespace TnR_SS.Domain.Entities
         public string Name { get; set; }
 
         //public string LastName { get; set; }
-        
+
         public DateTime DOB { get; set; }
 
         [Required]
@@ -28,8 +28,6 @@ namespace TnR_SS.Domain.Entities
 
         [Required]
         public DateTime StartDate { get; set; }
-
-        [Required]
         public DateTime EndDate { get; set; }
 
         public DateTime CreatedAt { get; set; }

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TnR_SS.DataEFCore.Migrations
 {
-    public partial class alterTableEmployeeAndDrum : Migration
+    public partial class alterEmployeeAndDrumV1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,15 +11,15 @@ namespace TnR_SS.DataEFCore.Migrations
                 name: "EndDate",
                 table: "Employee",
                 type: "datetime",
-                nullable: false,
-                defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
+                nullable: true,
+                defaultValue: new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc));
 
             migrationBuilder.AddColumn<DateTime>(
                 name: "StartDate",
                 table: "Employee",
                 type: "datetime",
                 nullable: false,
-                defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
+                defaultValue: new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc));
 
             migrationBuilder.AlterColumn<string>(
                 name: "Number",
@@ -32,34 +32,33 @@ namespace TnR_SS.DataEFCore.Migrations
                 oldType: "nvarchar(max)",
                 oldNullable: true);
 
-            migrationBuilder.AddColumn<int>(
+            migrationBuilder.AddColumn<double>(
                 name: "MaxWeight",
                 table: "Drum",
-                type: "int",
-                maxLength: 20,
+                type: "float",
                 nullable: false,
-                defaultValue: 0);
+                defaultValue: 0.0);
 
             migrationBuilder.UpdateData(
                 table: "RoleUser",
                 keyColumn: "Id",
                 keyValue: 1,
                 column: "ConcurrencyStamp",
-                value: "a15d2650-3dd5-4cc2-b4b5-1fc77a6f8966");
+                value: "e7d2116c-d47f-45f1-bd6a-54583e531121");
 
             migrationBuilder.UpdateData(
                 table: "RoleUser",
                 keyColumn: "Id",
                 keyValue: 2,
                 column: "ConcurrencyStamp",
-                value: "f6fb0431-ff25-4e8b-90a2-479a674f1179");
+                value: "2f542a44-3694-4e2e-afe2-66e23c05c23c");
 
             migrationBuilder.UpdateData(
                 table: "RoleUser",
                 keyColumn: "Id",
                 keyValue: 3,
                 column: "ConcurrencyStamp",
-                value: "fbce5aa6-35a6-4de6-b9b9-8bc45351197f");
+                value: "04ea901e-396c-43ca-9ca9-5675c2272c2a");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

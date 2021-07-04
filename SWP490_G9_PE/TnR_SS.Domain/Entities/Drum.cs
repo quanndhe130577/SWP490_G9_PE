@@ -23,7 +23,7 @@ namespace TnR_SS.Domain.Entities
         public string Number { get; set; }
 
         [Required]
-        public int MaxWeight { get; set; }
+        public double MaxWeight { get; set; }
 
         public string Type { get; set; }
 

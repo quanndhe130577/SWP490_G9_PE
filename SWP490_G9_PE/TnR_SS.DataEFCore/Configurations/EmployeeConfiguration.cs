@@ -42,7 +42,6 @@ namespace TnR_SS.DataEFCore.Configurations
                 .HasColumnType("datetime");
 
             entity.Property(e => e.EndDate)
-                .IsRequired()
                 .HasColumnType("datetime");
 
             entity.HasOne(p => p.UserInfor)

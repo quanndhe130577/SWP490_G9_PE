@@ -234,9 +234,8 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime");
 
-                    b.Property<int>("MaxWeight")
-                        .HasMaxLength(20)
-                        .HasColumnType("int");
+                    b.Property<double>("MaxWeight")
+                        .HasColumnType("float");
 
                     b.Property<string>("Number")
                         .IsRequired()
@@ -576,7 +575,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "a15d2650-3dd5-4cc2-b4b5-1fc77a6f8966",
+                            ConcurrencyStamp = "e7d2116c-d47f-45f1-bd6a-54583e531121",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Admin",
                             Name = "Admin",
@@ -586,7 +585,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "f6fb0431-ff25-4e8b-90a2-479a674f1179",
+                            ConcurrencyStamp = "2f542a44-3694-4e2e-afe2-66e23c05c23c",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Thương lái",
                             Name = "Trader",
@@ -596,7 +595,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "fbce5aa6-35a6-4de6-b9b9-8bc45351197f",
+                            ConcurrencyStamp = "04ea901e-396c-43ca-9ca9-5675c2272c2a",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Chủ bến",
                             Name = "Weight Recorder",
