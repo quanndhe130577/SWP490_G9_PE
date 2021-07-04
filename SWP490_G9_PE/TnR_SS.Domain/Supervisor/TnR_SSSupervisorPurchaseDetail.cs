@@ -112,7 +112,7 @@ namespace TnR_SS.Domain.Supervisor
         public async Task<List<PurchaseDetailResModel>> GetAllPurchaseDetailAsync(int purchaseId)
         {
             var listPurchaseDetail = _unitOfWork.PurchaseDetails.GetAll(x => x.PurchaseId == purchaseId)
-                .OrderByDescending(x => x.CreatedAt);
+                .OrderByDescending(x => x.ID);
 
             List<PurchaseDetailResModel> list = new List<PurchaseDetailResModel>();
             foreach (var item in listPurchaseDetail)
