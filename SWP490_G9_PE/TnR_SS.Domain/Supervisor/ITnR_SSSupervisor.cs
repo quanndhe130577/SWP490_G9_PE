@@ -148,5 +148,7 @@ namespace TnR_SS.Domain.Supervisor
         Task DeleteBuyerAsync(int buyerId);
         Task<BuyerApiModel> GetDetailBuyerAsync(int buyerId);
         #endregion
+
+        public List<TruckApiModel> GetAllTruckByDateAsync(int trader);
     }
 }
