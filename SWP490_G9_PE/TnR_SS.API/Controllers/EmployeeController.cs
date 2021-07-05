@@ -23,11 +23,19 @@ namespace TnR_SS.API.Controllers
             _tnrssSupervisor = tnrssSupervisor;
         }
 
-        [HttpGet("getallemp")]
+        [HttpGet("getall")]
         public ResponseModel GetAllEmployeeByTraderId()
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
             var list = _tnrssSupervisor.GetAllEmployeeByTraderId(traderId);
+            return new ResponseBuilder<List<EmployeeApiModel>>().Success("Get all employee").WithData(list).ResponseModel;
+        }
+
+        [HttpGet("getall/{status}")]
+        public ResponseModel GetAllEmployeeByStatus(string status)
+        {
+            var traderId = TokenManagement.GetUserIdInToken(HttpContext);
+            var list = _tnrssSupervisor.GetAllEmployeeByStatus(status, traderId);
             return new ResponseBuilder<List<EmployeeApiModel>>().Success("Get all employee").WithData(list).ResponseModel;
         }
 

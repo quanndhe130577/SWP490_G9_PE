@@ -25,6 +25,7 @@
   <ItemGroup>
     <Folder Include="ApiModels\BasketModel\RequestModel\" />
     <Folder Include="ApiModels\BasketModel\ResponseModel\" />
+    <Folder Include="ApiModels\EmployeeModel\RequestModel\" />
     <Folder Include="ApiModels\PondOwnerModel\" />
   </ItemGroup>
 

@@ -11,6 +11,23 @@ namespace TnR_SS.Domain.Supervisor
 {
     public partial class TnR_SSSupervisor
     {
+        public List<EmployeeApiModel> GetAllEmployeeByStatus(string status, int traderId)
+        {
+            var listEmpApi = AddStatusToEmployee(traderId);
+            if (status.ToLower() == "available" || status.ToLower() == "unavailable")
+            {
+                return listEmpApi.Where(x => x.Status == status.ToLower()).ToList();
+            }
+            else if(status.ToLower() == "all")
+            {
+                return listEmpApi;
+            }
+            else
+            {
+                throw new Exception("Status invalid");
+            }
+        }
+
         public List<EmployeeApiModel> GetAllEmployeeByTraderId(int traderId)
         {
             var listEmp = _unitOfWork.Employees.GetAllEmployeeByTraderId(traderId);
@@ -40,8 +57,6 @@ namespace TnR_SS.Domain.Supervisor
             }*/
             else
             {
-                obj.StartDate = employee.StartDate;
-                obj.EndDate = employee.EndDate;
                 await _unitOfWork.Employees.CreateAsync(obj);
                 await _unitOfWork.SaveChangeAsync();
             }
@@ -67,8 +82,6 @@ namespace TnR_SS.Domain.Supervisor
                 }*/
                 else
                 {
-                    empEdit.StartDate = DateTime.Now;
-                    empEdit.EndDate = DateTime.Now.AddDays(5);
                     _unitOfWork.Employees.Update(empEdit);
                     await _unitOfWork.SaveChangeAsync();
                 }
@@ -115,6 +128,26 @@ namespace TnR_SS.Domain.Supervisor
                 return true;
             }
             return false;
+        }
+
+        public List<EmployeeApiModel> AddStatusToEmployee(int traderId)
+        {
+            var list = _unitOfWork.Employees.GetAllEmployeeByTraderId(traderId);
+            List<EmployeeApiModel> listEmpApi = new();
+            foreach (var emp in list)
+            {
+                var empMap = _mapper.Map<Employee, EmployeeApiModel>(emp);
+                if (empMap.EndDate != null && empMap.EndDate <= DateTime.Now)
+                {
+                    empMap.Status = "unavailable";
+                }
+                else
+                {
+                    empMap.Status = "available";
+                }
+                listEmpApi.Add(empMap);
+            }
+            return listEmpApi;
         }
     }
 }

@@ -29,10 +29,6 @@ namespace TnR_SS.Domain.ApiModels.EmployeeModel
 
         public DateTime? EndDate { get; set; }
 
-        /*protected override ValidationResult IsValid(object value, ValidationContext validationContext)
-        {
-            
-            return base.IsValid(value, validationContext);
-        }*/
+        public string Status { get; set; } = "Available";
     }
 }
