@@ -16,6 +16,6 @@ namespace TnR_SS.Domain.ApiModels.DrumModel
 
         public string Type { get; set; }
 
-        public int MaxWeight { get; set; }
+        public double MaxWeight { get; set; }
     }
 }
