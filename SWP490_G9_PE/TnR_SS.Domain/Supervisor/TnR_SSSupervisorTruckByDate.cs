@@ -9,12 +9,14 @@ namespace TnR_SS.Domain.Supervisor
 {
     public partial class TnR_SSSupervisor
     {
-        public async Task<List<TruckDateModel>> GetAllTruckByDateAsync(int traderId, DateTime date)
+        public List<TruckDateModel> GetAllTruckByDate(int traderId, DateTime date)
         {
-           /* var query = _unitOfWork.Purchases.
-                Join(_unitOfWork.PurchaseDetails, a => a.ID, b => b.ID,
-                (a,b) => new { Purchases = a, PurchaseDetails = b})
-                .Where(x => x.Date == date).Select(x => x.ID).ToList();*/
+            var listPurchase = _unitOfWork.Purchases.GetAll(x => x.TraderID == traderId)
+                .Where(x => x.Date == date);
+            var listPurchaseDetail = _unitOfWork.PurchaseDetails.GetAll();
+            var listLK_Drum_PurchaseDetail = _unitOfWork.LK_PurchaseDeatil_Drums.GetAll();
+            var join1 = listPurchase.Join(listPurchaseDetail, a => a.ID, b => b.PurchaseId,
+             (a, b) => new { ID = b.ID, Date = a.Date, TotalWeight = b.Weight}).ToList();
 
             return null;
         }
