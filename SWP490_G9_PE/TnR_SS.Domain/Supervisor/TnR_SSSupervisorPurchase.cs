@@ -21,6 +21,7 @@ namespace TnR_SS.Domain.Supervisor
             var pondOwner = await _unitOfWork.PondOwners.FindAsync(purchaseModel.PondOwnerID);
             newPurchase.PondOwnerName = pondOwner.Name;
             newPurchase.PondOwnerId = pondOwner.ID;
+            newPurchase.Status = PurchaseStatus.Pending.ToString();
 
             return newPurchase;
         }
