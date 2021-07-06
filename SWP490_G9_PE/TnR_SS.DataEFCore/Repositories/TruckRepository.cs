@@ -14,7 +14,7 @@ namespace TnR_SS.DataEFCore.Repositories
 
         public List<Truck> GetAllByTraderId(int traderId)
         {
-            return _context.Trucks.Where(x => x.TraderID == traderId).ToList();
+            return _context.Trucks.Where(x => x.TraderID == traderId).OrderByDescending(t=>t.CreatedAt).ToList();
         }
 
     }

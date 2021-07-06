@@ -17,6 +17,7 @@ namespace TnR_SS.DataEFCore.Repositories
             var rs = from timeKeeping in _context.TimeKeepings
                      join employee in _context.Employees on timeKeeping.EmpId equals employee.ID
                      where employee.TraderId == id && timeKeeping.WorkDay.Month == date.Month && timeKeeping.WorkDay.Year == date.Year
+                     orderby employee.CreatedAt descending
                      select new TimeKeepingApiModel()
                      {
                          ID = timeKeeping.ID,
@@ -35,6 +36,7 @@ namespace TnR_SS.DataEFCore.Repositories
                      join employee in _context.Employees on timeKeeping.EmpId equals employee.ID
                      where employee.TraderId == id && timeKeeping.WorkDay.Day == date.Day &&
                       timeKeeping.WorkDay.Month == date.Month && timeKeeping.WorkDay.Year == date.Year
+                    orderby employee.CreatedAt descending
                      select new TimeKeepingApiModel()
                      {
                          ID = timeKeeping.ID,
