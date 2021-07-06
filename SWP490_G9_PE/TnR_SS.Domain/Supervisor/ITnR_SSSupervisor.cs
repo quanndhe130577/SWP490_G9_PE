@@ -78,7 +78,7 @@ namespace TnR_SS.Domain.Supervisor
         Task<PurchaseResModel> CreatePurchaseAsync(PurchaseReqModel purchaseModel);
         Task<List<PurchaseResModel>> GetAllPurchaseAsync(int traderId);
         Task UpdatePurchaseAsync(PurchaseApiModel models, int traderId);
-        Task DeletePurchaseAsync(int purchaseId, int traderId );
+        Task DeletePurchaseAsync(int purchaseId, int traderId);
         #endregion
 
         #region PondOwner
@@ -95,6 +95,7 @@ namespace TnR_SS.Domain.Supervisor
         Task<int> UpdateTruckAsync(TruckApiModel truckModel);
         Task<int> CreateTruckAsync(TruckApiModel truckModel, int traderId);
         Task<int> DeleteTruck(Truck truck);
+        Task<List<TruckDateModel>> GetDetailTrucksByDate(int trader, DateTime date);
         #endregion
 
         #region Drum
@@ -149,7 +150,7 @@ namespace TnR_SS.Domain.Supervisor
         Task<BuyerApiModel> GetDetailBuyerAsync(int buyerId);
         #endregion
 
-        public List<TruckDateModel> GetAllTruckByDate(int trader, DateTime date);
+
 
     }
 }

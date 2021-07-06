@@ -69,10 +69,12 @@ namespace TnR_SS.Domain.ApiModels
 
             #region Truck
             CreateMap<Truck, TruckApiModel>().ReverseMap();
+            CreateMap<Truck, TruckDateModel>().ReverseMap();
             #endregion
 
             #region Drum
             CreateMap<Drum, DrumApiModel>().ReverseMap();
+            CreateMap<Drum, DrumWeightModel>().ReverseMap();
             #endregion
 
             #region PurchaseDetail

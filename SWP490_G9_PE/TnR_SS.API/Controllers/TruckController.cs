@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using TnR_SS.API.Common.Response;
@@ -40,7 +41,7 @@ namespace TnR_SS.API.Controllers
             {
                 return new ResponseBuilder<List<TruckApiModel>>().Error("Tên bị để trống").ResponseModel;
             }
-             if (string.IsNullOrEmpty(truckModel.LicensePlate))
+            if (string.IsNullOrEmpty(truckModel.LicensePlate))
             {
                 return new ResponseBuilder<List<TruckApiModel>>().Error("Thông tin bị để trống").ResponseModel;
             }
@@ -79,6 +80,24 @@ namespace TnR_SS.API.Controllers
             }
             await _tnrssSupervisor.DeleteTruck(truck);
             return new ResponseBuilder<object>().Success("Delete truck success").ResponseModel;
+        }
+
+        [HttpGet("getall/{date_str}")]
+        public async Task<ResponseModel> GetDetailTrucksByDate(string date_str)
+        {
+            DateTime date = DateTime.Now;
+            CultureInfo enUS = new CultureInfo("en-US");
+            if (DateTime.TryParseExact(date_str, "ddMMyyyy", enUS, DateTimeStyles.None, out date))
+            {
+                var traderId = TokenManagement.GetUserIdInToken(HttpContext);
+                var rs = await _tnrssSupervisor.GetDetailTrucksByDate(traderId, date);
+                return new ResponseBuilder<List<TruckDateModel>>().Success("Get truck detail success").WithData(rs).ResponseModel;
+            }
+            else
+            {
+                return new ResponseBuilder().Error("Lỗi format date !!!").ResponseModel;
+            }
+
         }
     }
 }

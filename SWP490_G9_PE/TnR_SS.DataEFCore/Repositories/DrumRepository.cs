@@ -13,7 +13,7 @@ namespace TnR_SS.DataEFCore.Repositories
     {
         public DrumRepository(TnR_SSContext context) : base(context) { }
 
-        public List<Drum> GetAllByTraderkId(int traderId)
+        public List<Drum> GetAllByTraderId(int traderId)
         {
             var rs = _context.Drums.Join(
                     _context.Trucks,
@@ -27,7 +27,7 @@ namespace TnR_SS.DataEFCore.Repositories
 
             return rs.ToList();
         }
-        public List<Drum> GetListDrumByPurchaseDetail(PurchaseDetail data)
+        public List<Drum> GetDrumsByPurchaseDetail(PurchaseDetail data)
         {
             return _context.LK_PurchaseDeatil_Drums.Where(x => x.PurchaseDetailID == data.ID)
                 .Join(
@@ -39,7 +39,7 @@ namespace TnR_SS.DataEFCore.Repositories
 
         }
 
-        public List<Drum> GetDrums(List<PurchaseDetail> purchaseDetails)
+        public List<Drum> GetDrumsByPurchaseDetails(List<PurchaseDetail> purchaseDetails)
         {
             var listDrumId = purchaseDetails.Join(_context.LK_PurchaseDeatil_Drums,
                 x => x.ID, y => y.PurchaseDetailID,

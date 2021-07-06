@@ -12,7 +12,7 @@ namespace TnR_SS.Domain.Supervisor
     {
         private List<DrumApiModel> GetListDrumByPurchaseDetail(PurchaseDetail purchaseDetail)
         {
-            var listDrum = _unitOfWork.Drums.GetListDrumByPurchaseDetail(purchaseDetail);
+            var listDrum = _unitOfWork.Drums.GetDrumsByPurchaseDetail(purchaseDetail);
             List<DrumApiModel> list = new List<DrumApiModel>();
             foreach (var item in listDrum)
             {
@@ -46,7 +46,7 @@ namespace TnR_SS.Domain.Supervisor
 
         public List<DrumApiModel> GetAllDrumByTraderId(int traderId)
         {
-            return _unitOfWork.Drums.GetAllByTraderkId(traderId).Select(x => _mapper.Map<Drum, DrumApiModel>(x)).ToList();
+            return _unitOfWork.Drums.GetAllByTraderId(traderId).Select(x => _mapper.Map<Drum, DrumApiModel>(x)).ToList();
         }
 
         public async Task UpdateDrumAsync(DrumApiModel drum, int userId)

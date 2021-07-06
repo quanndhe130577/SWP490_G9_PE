@@ -10,8 +10,8 @@ namespace TnR_SS.Domain.Repositories
 {
     public interface IDrumRepository : IRepositoryBase<Drum>
     {
-        List<Drum> GetAllByTraderkId(int traderId);
-        List<Drum> GetListDrumByPurchaseDetail(PurchaseDetail data);
-        List<Drum> GetDrums(List<PurchaseDetail> purchaseDetails);
+        List<Drum> GetAllByTraderId(int traderId);
+        List<Drum> GetDrumsByPurchaseDetail(PurchaseDetail data);
+        List<Drum> GetDrumsByPurchaseDetails(List<PurchaseDetail> purchaseDetails);
     }
 }

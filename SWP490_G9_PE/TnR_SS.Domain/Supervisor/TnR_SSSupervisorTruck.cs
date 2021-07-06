@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TnR_SS.Domain.ApiModels.DrumModel;
 using TnR_SS.Domain.ApiModels.TruckModel;
 using TnR_SS.Domain.Entities;
 
@@ -44,19 +45,49 @@ namespace TnR_SS.Domain.Supervisor
             return await _unitOfWork.SaveChangeAsync();
         }
 
-        public List<TruckDateModel> GetAllTruckByDate(int traderId, DateTime date)
+        public async Task<List<TruckDateModel>> GetDetailTrucksByDate(int traderId, DateTime date)
         {
-            var listPurchaseDetailByDate = _unitOfWork.PurchaseDetails.GetPurchaseDetailByDate(traderId, date);
-            var listDrums = _unitOfWork.Drums.GetDrums(listPurchaseDetailByDate);
+            var listPurchaseDetail = _unitOfWork.PurchaseDetails.GetPurchaseDetailByDate(traderId, date);
+            Dictionary<int, DrumWeightModel> dicDrumWeight = new Dictionary<int, DrumWeightModel>();
+            foreach (var purchaseDetail in listPurchaseDetail)
+            {
+                // list Drum của purchase detail đó
+                var listDrum = _unitOfWork.Drums.GetDrumsByPurchaseDetail(purchaseDetail);
+                foreach (var drum in listDrum)
+                {
+                    if (!dicDrumWeight.ContainsKey(drum.ID))
+                    {
+                        DrumWeightModel drumW = _mapper.Map<Drum, DrumWeightModel>(drum);
+                        Basket basket = await _unitOfWork.Baskets.FindAsync(purchaseDetail.BasketId);
+                        // trừ đi cân nặng basket rồi chia đều weight cho các drum
+                        drumW.TotalWeight = (purchaseDetail.Weight - basket.Weight) / listDrum.Count;
+                        dicDrumWeight.Add(drum.ID, drumW);
+                    }
+                    else
+                    {
+                        dicDrumWeight[drum.ID].TotalWeight += purchaseDetail.Weight / listDrum.Count;
+                    }
+                }
+            }
 
-            return null;
+            Dictionary<int, TruckDateModel> dicTruckDate = new Dictionary<int, TruckDateModel>();
+            foreach (var drumW in dicDrumWeight.Values)
+            {
+                if (dicTruckDate.ContainsKey(drumW.TruckId))
+                {
+                    dicTruckDate[drumW.TruckId].ListDrumWeight.Add(drumW);
+                }
+                else
+                {
+                    Truck truck = await _unitOfWork.Trucks.FindAsync(drumW.TruckId);
+                    TruckDateModel truckDateModel = _mapper.Map<Truck, TruckDateModel>(truck);
+                    truckDateModel.ListDrumWeight.Add(drumW);
+                    dicTruckDate.Add(drumW.TruckId, truckDateModel);
+                }
+            }
+
+            return dicTruckDate.Values.ToList();
         }
 
-        private List<TruckDateModel> GetTrucksByDrums(List<Drum> list)
-        {
-            var listTruck = _unitOfWork.Trucks.GetAll().Select(x => new TruckDateModel() { Id = x.ID});
-
-            return null;
-        }
     }
 }
