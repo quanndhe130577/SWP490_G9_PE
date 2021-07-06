@@ -30,5 +30,13 @@ namespace TnR_SS.Domain.ApiModels.EmployeeModel
         public DateTime? EndDate { get; set; }
 
         public string Status { get; set; } = "Available";
+
+    }
+
+    public enum EmployeeStatus
+    {
+        all,
+        available,
+        unavailable
     }
 }

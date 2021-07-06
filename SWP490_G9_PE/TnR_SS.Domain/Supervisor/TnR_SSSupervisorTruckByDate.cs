@@ -18,6 +18,8 @@ namespace TnR_SS.Domain.Supervisor
             var join1 = listPurchase.Join(listPurchaseDetail, a => a.ID, b => b.PurchaseId,
              (a, b) => new { ID = b.ID, Date = a.Date, TotalWeight = b.Weight}).ToList();
 
+
+
             return null;
         }
 
