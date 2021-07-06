@@ -9,5 +9,6 @@ namespace TnR_SS.Domain.Repositories
 {
     public interface IPurchaseDetailRepository : IRepositoryBase<PurchaseDetail>
     {
+        List<PurchaseDetail> GetPurchaseDetailByDate(int traderId, DateTime date);
     }
 }

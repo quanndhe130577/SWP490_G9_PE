@@ -150,5 +150,6 @@ namespace TnR_SS.Domain.Supervisor
         #endregion
 
         public List<TruckDateModel> GetAllTruckByDate(int trader, DateTime date);
+
     }
 }

@@ -38,5 +38,14 @@ namespace TnR_SS.DataEFCore.Repositories
                 ).ToList();
 
         }
+
+        public List<Drum> GetDrums(List<PurchaseDetail> purchaseDetails)
+        {
+            var listDrumId = purchaseDetails.Join(_context.LK_PurchaseDeatil_Drums,
+                x => x.ID, y => y.PurchaseDetailID,
+                (x, y) => (y.DrumID)).Distinct();
+
+            return listDrumId.Join(_context.Drums, x => x, y => y.ID, (x, y) => y).ToList();
+        }
     }
 }

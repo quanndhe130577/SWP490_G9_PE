@@ -43,5 +43,20 @@ namespace TnR_SS.Domain.Supervisor
             _unitOfWork.Trucks.Delete(truck);
             return await _unitOfWork.SaveChangeAsync();
         }
+
+        public List<TruckDateModel> GetAllTruckByDate(int traderId, DateTime date)
+        {
+            var listPurchaseDetailByDate = _unitOfWork.PurchaseDetails.GetPurchaseDetailByDate(traderId, date);
+            var listDrums = _unitOfWork.Drums.GetDrums(listPurchaseDetailByDate);
+
+            return null;
+        }
+
+        private List<TruckDateModel> GetTrucksByDrums(List<Drum> list)
+        {
+            var listTruck = _unitOfWork.Trucks.GetAll().Select(x => new TruckDateModel() { Id = x.ID});
+
+            return null;
+        }
     }
 }
