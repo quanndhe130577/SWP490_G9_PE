@@ -14,11 +14,12 @@ namespace TnR_SS.Domain.Supervisor
         public List<EmployeeApiModel> GetAllEmployeeByStatus(string status, int traderId)
         {
             var listEmpApi = AddStatusToEmployee(traderId);
-            if (status.ToLower() == "available" || status.ToLower() == "unavailable")
+            if (status.ToLower() == EmployeeStatus.available.ToString() 
+                || status.ToLower() == EmployeeStatus.unavailable.ToString())
             {
                 return listEmpApi.Where(x => x.Status == status.ToLower()).ToList();
             }
-            else if(status.ToLower() == "all")
+            else if(status.ToLower() == EmployeeStatus.all.ToString())
             {
                 return listEmpApi;
             }
