@@ -31,4 +31,5 @@ namespace TnR_SS.Domain.ApiModels.EmployeeModel
 
         public string Status { get; set; } = "Available";
     }
+
 }

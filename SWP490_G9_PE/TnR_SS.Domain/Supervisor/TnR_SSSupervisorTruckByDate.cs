@@ -14,7 +14,7 @@ namespace TnR_SS.Domain.Supervisor
             var listPurchase = _unitOfWork.Purchases.GetAll(x => x.TraderID == traderId)
                 .Where(x => x.Date == date);
             var listPurchaseDetail = _unitOfWork.PurchaseDetails.GetAll();
-            var listLK_Drum_PurchaseDetail = _unitOfWork.LK_PurchaseDeatil_Drums.GetAll();
+            var listLK_Drum_PurchaseDetail = _unitOfWork.LK_PurchaseDetail_Drums.GetAll();
             var join1 = listPurchase.Join(listPurchaseDetail, a => a.ID, b => b.PurchaseId,
              (a, b) => new { ID = b.ID, Date = a.Date, TotalWeight = b.Weight}).ToList();
 

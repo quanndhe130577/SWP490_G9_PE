@@ -18,12 +18,12 @@ namespace TnR_SS.Domain.UnitOfWork
         IPurchaseDetailRepository PurchaseDetails { get; }
         IPurchaseRepository Purchases { get; }
         IFishTypeRepository FishTypes { get; }
-        ITimeKeepingRepository TimeKeeping { get; }
+        ITimeKeepingRepository TimeKeepings { get; }
         ITruckRepository Trucks { get; }
         IEmployeeRepository Employees { get; }
         IDrumRepository Drums { get; }
         ICostIncurredRepository CostIncurreds { get; }
-        ILK_PurchaseDeatil_DrumRepository LK_PurchaseDeatil_Drums { get; }
+        ILK_PurchaseDeatil_DrumRepository LK_PurchaseDetail_Drums { get; }
         IBuyerRepository Buyers { get; }
         Task<int> SaveChangeAsync();
         IDbContextTransaction BeginTransaction();

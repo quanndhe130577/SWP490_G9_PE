@@ -22,7 +22,7 @@ namespace TnR_SS.Domain.Supervisor
             {
                 var lk = _mapper.Map<LK_PurchaseDetail_DrumApiModel, LK_PurchaseDeatil_Drum>(item);
                 lk.PurchaseDetailID = purchaseDetailId;
-                await _unitOfWork.LK_PurchaseDeatil_Drums.CreateAsync(lk);
+                await _unitOfWork.LK_PurchaseDetail_Drums.CreateAsync(lk);
             }
             await _unitOfWork.SaveChangeAsync();
         }
@@ -38,7 +38,7 @@ namespace TnR_SS.Domain.Supervisor
                 };
                 /*var lk = _mapper.Map<LK_PurchaseDetail_DrumApiModel, LK_PurchaseDeatil_Drum>(item);
                 lk.PurchaseDetailID = purchaseDetailId;*/
-                await _unitOfWork.LK_PurchaseDeatil_Drums.CreateAsync(lk);
+                await _unitOfWork.LK_PurchaseDetail_Drums.CreateAsync(lk);
             }
             await _unitOfWork.SaveChangeAsync();
         }
@@ -147,7 +147,7 @@ namespace TnR_SS.Domain.Supervisor
                         purchaseDetail = _mapper.Map<PurchaseDetailReqModel, PurchaseDetail>(data, purchaseDetail);
 
                         // delete current LK
-                        _unitOfWork.LK_PurchaseDeatil_Drums.DeleteMany(x => x.PurchaseDetailID == data.Id);
+                        _unitOfWork.LK_PurchaseDetail_Drums.DeleteMany(x => x.PurchaseDetailID == data.Id);
 
                         // create new LK
                         await CreateLK(data.ListDrumId, data.Id);
@@ -183,7 +183,7 @@ namespace TnR_SS.Domain.Supervisor
                     {
                         try
                         {
-                            _unitOfWork.LK_PurchaseDeatil_Drums.RemoveLKByPurchaseDetailId(purchaseDetailId);
+                            _unitOfWork.LK_PurchaseDetail_Drums.RemoveLKByPurchaseDetailId(purchaseDetailId);
                             _unitOfWork.PurchaseDetails.DeleteById(purchaseDetailId);
                             await _unitOfWork.SaveChangeAsync();
 

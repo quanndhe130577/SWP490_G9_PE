@@ -115,7 +115,7 @@ namespace TnR_SS.Domain.Supervisor
                             {
                                 foreach (var item in purchaseDetail)
                                 {
-                                    _unitOfWork.LK_PurchaseDeatil_Drums.RemoveLKByPurchaseDetailId(item.ID);
+                                    _unitOfWork.LK_PurchaseDetail_Drums.RemoveLKByPurchaseDetailId(item.ID);
                                     _unitOfWork.PurchaseDetails.Delete(item);
                                 }
                             }

@@ -23,12 +23,12 @@ namespace TnR_SS.DataEFCore.UnitOfWorks
             PurchaseDetails = new PurchaseDetailRepository(_context);
             Purchases = new PurchaseRepository(_context);
             FishTypes = new FishTypeRepository(_context);
-            TimeKeeping = new TimeKeepingRepository(_context);
+            TimeKeepings = new TimeKeepingRepository(_context);
             Trucks = new TruckRepository(_context);
             Drums = new DrumRepository(_context);
             Employees = new EmployeeRepository(_context);
             CostIncurreds = new CostIncurredRepository(_context);
-            LK_PurchaseDeatil_Drums = new LK_PurchaseDeatil_DrumRepository(_context);
+            LK_PurchaseDetail_Drums = new LK_PurchaseDeatil_DrumRepository(_context);
             Buyers = new BuyerRepository(_context);
         }
 
@@ -41,9 +41,9 @@ namespace TnR_SS.DataEFCore.UnitOfWorks
         public IPurchaseRepository Purchases { get; private set; }
         public IFishTypeRepository FishTypes { get; private set; }
         public ITruckRepository Trucks { get; private set; }
-        public ITimeKeepingRepository TimeKeeping { get; private set; }
+        public ITimeKeepingRepository TimeKeepings { get; private set; }
         public IEmployeeRepository Employees { get; private set; }
-        public ILK_PurchaseDeatil_DrumRepository LK_PurchaseDeatil_Drums { get; }
+        public ILK_PurchaseDeatil_DrumRepository LK_PurchaseDetail_Drums { get; }
         public IDrumRepository Drums { get; private set; }
         public ICostIncurredRepository CostIncurreds { get; private set; }
         public IBuyerRepository Buyers { get; private set; }
