@@ -20,5 +20,7 @@ namespace TnR_SS.Domain.ApiModels.BuyerModel
         [MaxLength(11)]
         [MinLength(10)]
         public string PhoneNumber { get; set; }
+
+        //public int WeightRecoredId { get; set; }
     }
 }

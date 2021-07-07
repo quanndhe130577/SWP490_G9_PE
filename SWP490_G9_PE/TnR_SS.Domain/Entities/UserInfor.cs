@@ -34,5 +34,6 @@ namespace TnR_SS.Domain.Entities
         public List<FishType> FishTypes { get; set; }
         public List<Truck> Trucks { get; set; }
         public List<CostIncurred> CostIncurreds { get; set; }
+        public List<Buyer> Buyers { get; set; }
     }
 }

@@ -11,59 +11,63 @@ namespace TnR_SS.Domain.Supervisor
 {
     public partial class TnR_SSSupervisor
     {
-        public List<BuyerApiModel> GetAllBuyer()
+        public List<BuyerApiModel> GetAllBuyerByWCId(int wcId)
         {
-            var listBuyer = _unitOfWork.Buyers.GetAllBuyer();
-            List<BuyerApiModel> buyers = new();
-            foreach(var item in listBuyer)
+            return _unitOfWork.Buyers.GetAll(x => x.WeightRecorderId == wcId).Select(x => _mapper.Map<Buyer, BuyerApiModel>(x)).ToList();
+            /*List<BuyerApiModel> buyers = new();
+            foreach (var item in listBuyer)
             {
                 buyers.Add(_mapper.Map<Buyer, BuyerApiModel>(item));
             }
-            return buyers;
+            return buyers;*/
         }
 
-        public async Task CreateBuyerAsync(BuyerApiModel model)
+        public async Task CreateBuyerAsync(BuyerApiModel model, int wcId)
         {
-            var mapper = _mapper.Map<BuyerApiModel, Buyer>(model);
-            await _unitOfWork.Buyers.CreateAsync(mapper);
+            var buyer = _mapper.Map<BuyerApiModel, Buyer>(model);
+            buyer.WeightRecorderId = wcId;
+            await _unitOfWork.Buyers.CreateAsync(buyer);
             await _unitOfWork.SaveChangeAsync();
         }
 
-        public async Task UpdateBuyerAsync(BuyerApiModel model)
+        public async Task UpdateBuyerAsync(BuyerApiModel model, int wcId)
         {
-            var buyerUpdate = await _unitOfWork.Buyers.FindAsync(model.ID);
-            buyerUpdate = _mapper.Map<BuyerApiModel, Buyer>(model, buyerUpdate);
-            _unitOfWork.Buyers.Update(buyerUpdate);
-            await _unitOfWork.SaveChangeAsync();
-        }
-
-        public async Task DeleteBuyerAsync(int buyerId)
-        {
-            if (buyerId <= 0 )
+            var buyer = await _unitOfWork.Buyers.FindAsync(model.ID);
+            if (buyer.WeightRecorderId != wcId)
             {
-                throw new Exception("BuyerId invalid");
+                throw new Exception("Thông tin người mua không tồn tại !!!");
             }
-            else
+
+            buyer = _mapper.Map<BuyerApiModel, Buyer>(model, buyer);
+            _unitOfWork.Buyers.Update(buyer);
+            await _unitOfWork.SaveChangeAsync();
+        }
+
+        public async Task DeleteBuyerAsync(int buyerId, int wcId)
+        {
+            var buyer = await _unitOfWork.Buyers.FindAsync(buyerId);
+            if (buyer != null && buyer.WeightRecorderId == wcId)
             {
                 _unitOfWork.Buyers.DeleteById(buyerId);
                 await _unitOfWork.SaveChangeAsync();
             }
-        }
-
-        public async Task<BuyerApiModel> GetDetailBuyerAsync(int buyerId)
-        {
-            if(buyerId <= 0 )
-            {
-                throw new Exception("BuyerId invalid");
-            }
             else
             {
-                var buyerDetail = await _unitOfWork.Buyers.FindAsync(buyerId);
-                BuyerApiModel buyerApi = new();
-                buyerApi = _mapper.Map<Buyer, BuyerApiModel>(buyerDetail);
-                return buyerApi;
+                throw new Exception("Thông tin người mua không tồn tại !!!");
             }
-            
+
+        }
+
+        public async Task<BuyerApiModel> GetDetailBuyerAsync(int buyerId, int wcId)
+        {
+            var buyerDetail = await _unitOfWork.Buyers.FindAsync(buyerId);
+            if (buyerDetail.WeightRecorderId != wcId)
+            {
+                throw new Exception("Thông tin người mua không tồn tại !!!");
+            }
+            BuyerApiModel buyerApi = _mapper.Map<Buyer, BuyerApiModel>(buyerDetail);
+            return buyerApi;
+
         }
     }
 }

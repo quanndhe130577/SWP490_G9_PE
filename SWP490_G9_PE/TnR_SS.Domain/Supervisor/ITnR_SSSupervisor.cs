@@ -143,11 +143,11 @@ namespace TnR_SS.Domain.Supervisor
         #endregion
 
         #region Buyer
-        List<BuyerApiModel> GetAllBuyer();
-        Task CreateBuyerAsync(BuyerApiModel buyerModel);
-        Task UpdateBuyerAsync(BuyerApiModel buyerModel);
-        Task DeleteBuyerAsync(int buyerId);
-        Task<BuyerApiModel> GetDetailBuyerAsync(int buyerId);
+        List<BuyerApiModel> GetAllBuyerByWCId(int wcId);
+        Task CreateBuyerAsync(BuyerApiModel buyerModel, int wcId);
+        Task UpdateBuyerAsync(BuyerApiModel buyerModel, int wcId);
+        Task DeleteBuyerAsync(int buyerId, int wcId);
+        Task<BuyerApiModel> GetDetailBuyerAsync(int buyerId, int wcId);
         #endregion
 
 
