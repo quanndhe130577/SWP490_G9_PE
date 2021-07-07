@@ -68,7 +68,7 @@ namespace TnR_SS.API.Controllers
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
             await _tnrssSupervisor.ChotSoAsync(data, traderId);
-            return new ResponseBuilder().Success("Chốt số Đơn mua thành công").ResponseModel;
+            return new ResponseBuilder().Success("Chốt sổ Đơn mua thành công").ResponseModel;
         }
         #endregion
 
