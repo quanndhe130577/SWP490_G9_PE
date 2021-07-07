@@ -34,7 +34,7 @@ namespace TnR_SS.Domain.Supervisor
         private async Task<double> GetTotalAmountPurchaseAsync(int purchaseId)
         {
             var totalAmount = 0.0;
-            var listPD = _unitOfWork.PurchaseDetails.GetAll(x => x.PurchaseId == purchaseId);
+            var listPD = _unitOfWork.PurchaseDetails.GetAll(x => x.PurchaseId == purchaseId).ToList();
             foreach (var item in listPD)
             {
                 totalAmount += await GetPurchaseDetailPriceAsync(item);
@@ -66,14 +66,15 @@ namespace TnR_SS.Domain.Supervisor
         public async Task UpdatePurchaseAsync(PurchaseApiModel model, int traderId)
         {
             var purchase = await _unitOfWork.Purchases.FindAsync(model.ID);
-            if (purchase.isCompleted == PurchaseStatus.Completed)
-            {
-                throw new Exception("You can't edit this purchase anymore !!");
-            }
 
             if (purchase.TraderID != traderId)
             {
                 throw new Exception("Purchase không tồn tại");
+            }
+
+            if (purchase.isCompleted == PurchaseStatus.Completed)
+            {
+                throw new Exception("You can't edit this purchase anymore !!");
             }
 
             var pondOwner = await _unitOfWork.PondOwners.FindAsync(model.PondOwnerID);
@@ -83,13 +84,31 @@ namespace TnR_SS.Domain.Supervisor
             }
 
             purchase = _mapper.Map<PurchaseApiModel, Purchase>(model, purchase);
-            if (model.Status.Equals(PurchaseStatus.Completed.ToString(), StringComparison.InvariantCultureIgnoreCase))
+            /*if (model.Status.Equals(PurchaseStatus.Completed.ToString(), StringComparison.InvariantCultureIgnoreCase))
             {
                 purchase.isCompleted = PurchaseStatus.Completed;
-            }
+            }*/
 
             _unitOfWork.Purchases.Update(purchase);
 
+            await _unitOfWork.SaveChangeAsync();
+        }
+
+        public async Task ChotSoAsync(ChotSoApiModel data, int traderId)
+        {
+            var purchase = await _unitOfWork.Purchases.FindAsync(data.ID);
+
+            if (purchase.TraderID != traderId)
+            {
+                throw new Exception("Purchase không tồn tại");
+            }
+
+            var totalAmount = await GetTotalAmountPurchaseAsync(data.ID);
+            purchase.Commission = totalAmount * data.CommissionPercent / 100;
+            purchase.PayForPondOwner = totalAmount - purchase.Commission;
+            purchase.isCompleted = PurchaseStatus.Completed;
+
+            _unitOfWork.Purchases.Update(purchase);
             await _unitOfWork.SaveChangeAsync();
         }
 

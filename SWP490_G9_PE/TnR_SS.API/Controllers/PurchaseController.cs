@@ -62,6 +62,16 @@ namespace TnR_SS.API.Controllers
         }
         #endregion
 
+        #region Chốt sổ Purchase
+        [HttpPost("chot-so")]
+        public async Task<ResponseModel> ChotSo(ChotSoApiModel data)
+        {
+            var traderId = TokenManagement.GetUserIdInToken(HttpContext);
+            await _tnrssSupervisor.ChotSoAsync(data, traderId);
+            return new ResponseBuilder().Success("Chốt số Đơn mua thành công").ResponseModel;
+        }
+        #endregion
+
         #region Delete Purchase
         [HttpPost("delete")]
         public async Task<ResponseModel> Delete(IdModel data)

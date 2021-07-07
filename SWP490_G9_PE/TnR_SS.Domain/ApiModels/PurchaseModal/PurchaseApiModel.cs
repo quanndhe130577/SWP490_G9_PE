@@ -19,9 +19,9 @@ namespace TnR_SS.Domain.ApiModels.PurchaseModal
         public double Commission { get; set; } // tiền trả cho môi giới
 
         [Required]
-        public bool isPaid { get; set; } = false;
+        public bool IsPaid { get; set; } = false;
 
-        public string Status { get; set; } = PurchaseStatus.Pending.ToString();
+        //public string Status { get; set; } = PurchaseStatus.Pending.ToString();
 
         public double PondBackMoney { get; set; }
 
