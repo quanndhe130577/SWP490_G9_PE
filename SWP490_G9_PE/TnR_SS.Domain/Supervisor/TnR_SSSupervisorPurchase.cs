@@ -43,6 +43,18 @@ namespace TnR_SS.Domain.Supervisor
             return totalAmount;
         }
 
+        private async Task<PurchaseResModel> MapPurchaseResModel(Purchase purchase)
+        {
+            PurchaseResModel newPurchase = _mapper.Map<Purchase, PurchaseResModel>(purchase);
+            var pondOwner = await _unitOfWork.PondOwners.FindAsync(purchase.PondOwnerID);
+            newPurchase.PondOwnerName = pondOwner.Name;
+            newPurchase.TotalWeight = GetTotalWeightPurchase(purchase.ID);
+            newPurchase.TotalAmount = await GetTotalAmountPurchaseAsync(purchase.ID);
+            newPurchase.Status = purchase.isCompleted.ToString();
+
+            return newPurchase;
+        }
+
         public async Task<List<PurchaseResModel>> GetAllPurchaseAsync(int traderId)
         {
             var listPurchase = _unitOfWork.Purchases.GetAll(x => x.TraderID == traderId)
@@ -50,14 +62,7 @@ namespace TnR_SS.Domain.Supervisor
             List<PurchaseResModel> list = new List<PurchaseResModel>();
             foreach (var purchase in listPurchase)
             {
-                PurchaseResModel newPurchase = _mapper.Map<Purchase, PurchaseResModel>(purchase);
-                var pondOwner = await _unitOfWork.PondOwners.FindAsync(purchase.PondOwnerID);
-                newPurchase.PondOwnerName = pondOwner.Name;
-                newPurchase.TotalWeight = GetTotalWeightPurchase(purchase.ID);
-                newPurchase.TotalAmount = await GetTotalAmountPurchaseAsync(purchase.ID);
-                newPurchase.Status = purchase.isCompleted.ToString();
-
-                list.Add(newPurchase);
+                list.Add(await MapPurchaseResModel(purchase));
             }
 
             return list;
@@ -94,13 +99,21 @@ namespace TnR_SS.Domain.Supervisor
             await _unitOfWork.SaveChangeAsync();
         }
 
-        public async Task ChotSoAsync(ChotSoApiModel data, int traderId)
+        public async Task<PurchaseResModel> ChotSoAsync(ChotSoApiModel data, int traderId)
         {
             var purchase = await _unitOfWork.Purchases.FindAsync(data.ID);
 
             if (purchase.TraderID != traderId)
             {
                 throw new Exception("Purchase không tồn tại");
+            }
+
+            if (purchase.isCompleted.Equals(PurchaseStatus.Completed))
+            {
+                if (purchase.isCompleted == PurchaseStatus.Completed)
+                {
+                    throw new Exception("You can't chốt sổ this purchase anymore !!");
+                }
             }
 
             var totalAmount = await GetTotalAmountPurchaseAsync(data.ID);
@@ -110,6 +123,8 @@ namespace TnR_SS.Domain.Supervisor
 
             _unitOfWork.Purchases.Update(purchase);
             await _unitOfWork.SaveChangeAsync();
+
+            return await MapPurchaseResModel(purchase);
         }
 
         public async Task DeletePurchaseAsync(int purchaseId, int traderId)

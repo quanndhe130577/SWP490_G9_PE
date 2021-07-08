@@ -18,8 +18,8 @@ namespace TnR_SS.Domain.ApiModels.PurchaseModal
         public DateTime Date { get; set; }
         public double Commission { get; set; } // tiền trả cho môi giới
 
-        [Required]
-        public bool IsPaid { get; set; } = false;
+       /* [Required]
+        public bool IsPaid { get; set; } = false;*/
 
         //public string Status { get; set; } = PurchaseStatus.Pending.ToString();
 

@@ -67,8 +67,8 @@ namespace TnR_SS.API.Controllers
         public async Task<ResponseModel> ChotSo(ChotSoApiModel data)
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
-            await _tnrssSupervisor.ChotSoAsync(data, traderId);
-            return new ResponseBuilder().Success("Chốt sổ Đơn mua thành công").ResponseModel;
+            var purchaseRes = await _tnrssSupervisor.ChotSoAsync(data, traderId);
+            return new ResponseBuilder<PurchaseResModel>().Success("Chốt sổ Đơn mua thành công").WithData(purchaseRes).ResponseModel;
         }
         #endregion
 
