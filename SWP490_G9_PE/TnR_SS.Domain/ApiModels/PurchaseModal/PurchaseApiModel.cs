@@ -12,10 +12,12 @@ namespace TnR_SS.Domain.ApiModels.PurchaseModal
     {
         public int ID { get; set; }
 
-        public double PayForPondOwner { get; set; }
+        //public double PayForPondOwner { get; set; }
 
         [Required]
         public DateTime Date { get; set; }
+
+        [Range(0.0, Double.MaxValue, ErrorMessage = "Thuộc tính {0} phải lớn hơn {1}.")]
         public double Commission { get; set; } // tiền trả cho môi giới
 
        /* [Required]
@@ -23,7 +25,7 @@ namespace TnR_SS.Domain.ApiModels.PurchaseModal
 
         //public string Status { get; set; } = PurchaseStatus.Pending.ToString();
 
-        public double PondBackMoney { get; set; }
+        //public double PondBackMoney { get; set; }
 
         [Required]
         public int PondOwnerID { get; set; }

@@ -36,7 +36,7 @@ namespace TnR_SS.API.Controllers
 
             var newData = await _tnrssSupervisor.CreatePurchaseAsync(purchaseData);
 
-            return new ResponseBuilder<object>().Success("Create purchase success").WithData(newData).ResponseModel;
+            return new ResponseBuilder<PurchaseResModel>().Success("Create purchase success").WithData(newData).ResponseModel;
         }
         #endregion
 
@@ -48,7 +48,7 @@ namespace TnR_SS.API.Controllers
 
             var newData = await _tnrssSupervisor.GetAllPurchaseAsync(traderId);
 
-            return new ResponseBuilder<object>().Success("Getall purchase success").WithData(newData).ResponseModel;
+            return new ResponseBuilder<List<PurchaseResModel>>().Success("Getall purchase success").WithData(newData).ResponseModel;
         }
         #endregion
 

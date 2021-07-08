@@ -11,21 +11,7 @@ namespace TnR_SS.Domain.Supervisor
 {
     public partial class TnR_SSSupervisor
     {
-        public async Task<PurchaseResModel> CreatePurchaseAsync(PurchaseReqModel purchaseModel)
-        {
-            var purchase = _mapper.Map<PurchaseReqModel, Purchase>(purchaseModel);
-            await _unitOfWork.Purchases.CreateAsync(purchase);
-            await _unitOfWork.SaveChangeAsync();
-
-            PurchaseResModel newPurchase = _mapper.Map<Purchase, PurchaseResModel>(purchase);
-            var pondOwner = await _unitOfWork.PondOwners.FindAsync(purchaseModel.PondOwnerID);
-            newPurchase.PondOwnerName = pondOwner.Name;
-            newPurchase.PondOwnerId = pondOwner.ID;
-            newPurchase.Status = PurchaseStatus.Pending.ToString();
-
-            return newPurchase;
-        }
-
+        #region Private function
         private double GetTotalWeightPurchase(int purchaseId)
         {
             return _unitOfWork.PurchaseDetails.GetAll(x => x.PurchaseId == purchaseId).Sum(x => x.Weight);
@@ -68,27 +54,51 @@ namespace TnR_SS.Domain.Supervisor
             return list;
         }
 
+        private async Task<double> CalculatePayForPondOwnerAsync(int purchaseId, double commission)
+        {
+            return await GetTotalAmountPurchaseAsync(purchaseId) - commission;
+        }
+        #endregion
+
+
+
+        public async Task<PurchaseResModel> CreatePurchaseAsync(PurchaseReqModel purchaseModel)
+        {
+            var purchase = _mapper.Map<PurchaseReqModel, Purchase>(purchaseModel);
+            await _unitOfWork.Purchases.CreateAsync(purchase);
+            await _unitOfWork.SaveChangeAsync();
+
+            PurchaseResModel newPurchase = _mapper.Map<Purchase, PurchaseResModel>(purchase);
+            var pondOwner = await _unitOfWork.PondOwners.FindAsync(purchaseModel.PondOwnerID);
+            newPurchase.PondOwnerName = pondOwner.Name;
+            newPurchase.PondOwnerId = pondOwner.ID;
+            newPurchase.Status = PurchaseStatus.Pending.ToString();
+
+            return newPurchase;
+        }
+
         public async Task UpdatePurchaseAsync(PurchaseApiModel model, int traderId)
         {
             var purchase = await _unitOfWork.Purchases.FindAsync(model.ID);
 
             if (purchase.TraderID != traderId)
             {
-                throw new Exception("Purchase không tồn tại");
+                throw new Exception("Đơn mua không tồn tại");
             }
 
             if (purchase.isCompleted == PurchaseStatus.Completed)
             {
-                throw new Exception("You can't edit this purchase anymore !!");
+                throw new Exception("Đơn mua này đã được chốt sổ. Bạn không thể chỉnh sửa thêm nữa !!!");
             }
 
             var pondOwner = await _unitOfWork.PondOwners.FindAsync(model.PondOwnerID);
             if (pondOwner == null || pondOwner.TraderID != traderId)
             {
-                throw new Exception("PondOwner không hợp lệ");
+                throw new Exception("Chủ ao không hợp lệ");
             }
 
             purchase = _mapper.Map<PurchaseApiModel, Purchase>(model, purchase);
+            purchase.PayForPondOwner = await CalculatePayForPondOwnerAsync(purchase.ID, purchase.Commission);
             /*if (model.Status.Equals(PurchaseStatus.Completed.ToString(), StringComparison.InvariantCultureIgnoreCase))
             {
                 purchase.isCompleted = PurchaseStatus.Completed;
@@ -105,14 +115,14 @@ namespace TnR_SS.Domain.Supervisor
 
             if (purchase.TraderID != traderId)
             {
-                throw new Exception("Purchase không tồn tại");
+                throw new Exception("Đơn mua không tồn tại !!!");
             }
 
             if (purchase.isCompleted.Equals(PurchaseStatus.Completed))
             {
                 if (purchase.isCompleted == PurchaseStatus.Completed)
                 {
-                    throw new Exception("You can't chốt sổ this purchase anymore !!");
+                    throw new Exception("Đơn mua này đã được chốt !!");
                 }
             }
 
@@ -132,7 +142,7 @@ namespace TnR_SS.Domain.Supervisor
             var purchase = await _unitOfWork.Purchases.FindAsync(purchaseId);
             if (purchase == null)
             {
-                throw new Exception("Purchase không tồn tại !!!");
+                throw new Exception("Đơn mua không tồn tại !!!");
             }
             if (purchase.TraderID == traderId)
             {
@@ -170,7 +180,7 @@ namespace TnR_SS.Domain.Supervisor
             }
             else
             {
-                throw new Exception("Purchase không hợp lệ !!!");
+                throw new Exception("Đơn mua không hợp lệ !!!");
             }
         }
     }

@@ -19,7 +19,7 @@ namespace TnR_SS.Domain.ApiModels.PurchaseModal
 
         public double TotalAmount { get; set; }
 
-        public string Status { get; set; }
+        public string Status { get; set; } // đã chốt sổ hay chưa Completed/Pending
         /* public List<FishTypeApiModel> ListFishTypeWithPrice { get; set; }
 
          public PurchaseResModel()

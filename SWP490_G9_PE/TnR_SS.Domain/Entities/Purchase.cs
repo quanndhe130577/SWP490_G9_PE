@@ -34,7 +34,7 @@ namespace TnR_SS.Domain.Entities
 
         public double PondBackMoney { get; set; }
 
-        public PurchaseStatus isCompleted { get; set; } = PurchaseStatus.Pending;
+        public PurchaseStatus isCompleted { get; set; } = PurchaseStatus.Pending; // dùng cho chốt sổ
 
         [Required]
         public int PondOwnerID { get; set; }

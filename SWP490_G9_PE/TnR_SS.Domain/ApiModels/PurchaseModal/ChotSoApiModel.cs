@@ -10,6 +10,8 @@ namespace TnR_SS.Domain.ApiModels.PurchaseModal
     public class ChotSoApiModel
     {
         public int ID { get; set; }
+
+        [Range(0.0, 100.0, ErrorMessage = "Thuộc tính {0} phải thuộc khoảng [{1} - {2}]")]
         public double CommissionPercent { get; set; }
 
         [Required]
