@@ -29,7 +29,7 @@ namespace TnR_SS.Domain.Supervisor
             return totalAmount;
         }
 
-        private async Task<PurchaseResModel> MapPurchaseResModel(Purchase purchase)
+        private async Task<PurchaseResModel> MapPurchaseResModelAsync(Purchase purchase)
         {
             PurchaseResModel newPurchase = _mapper.Map<Purchase, PurchaseResModel>(purchase);
             var pondOwner = await _unitOfWork.PondOwners.FindAsync(purchase.PondOwnerID);
@@ -41,6 +41,23 @@ namespace TnR_SS.Domain.Supervisor
             return newPurchase;
         }
 
+        private async Task<double> CalculatePayForPondOwnerAsync(int purchaseId, double commission)
+        {
+            return await GetTotalAmountPurchaseAsync(purchaseId) - commission;
+        }
+
+        private async Task UpdatePayForPondOwnerAsync(int purchaseId)
+        {
+            var purchase = await _unitOfWork.Purchases.FindAsync(purchaseId);
+            if (purchase != null)
+            {
+                purchase.PayForPondOwner = await CalculatePayForPondOwnerAsync(purchaseId, purchase.Commission);
+                _unitOfWork.Purchases.Update(purchase);
+                await _unitOfWork.SaveChangeAsync();
+            }
+        }
+        #endregion
+
         public async Task<List<PurchaseResModel>> GetAllPurchaseAsync(int traderId)
         {
             var listPurchase = _unitOfWork.Purchases.GetAll(x => x.TraderID == traderId)
@@ -48,19 +65,22 @@ namespace TnR_SS.Domain.Supervisor
             List<PurchaseResModel> list = new List<PurchaseResModel>();
             foreach (var purchase in listPurchase)
             {
-                list.Add(await MapPurchaseResModel(purchase));
+                list.Add(await MapPurchaseResModelAsync(purchase));
             }
 
             return list;
         }
 
-        private async Task<double> CalculatePayForPondOwnerAsync(int purchaseId, double commission)
+        public async Task<PurchaseResModel> GetPurchaseByIdAsync(int purchaseId, int traderId)
         {
-            return await GetTotalAmountPurchaseAsync(purchaseId) - commission;
+            var purchase = await _unitOfWork.Purchases.FindAsync(purchaseId);
+            if(purchase.TraderID != traderId)
+            {
+                throw new Exception("Đơn mua không tồn tại");
+            }
+
+            return await MapPurchaseResModelAsync(purchase);
         }
-        #endregion
-
-
 
         public async Task<PurchaseResModel> CreatePurchaseAsync(PurchaseReqModel purchaseModel)
         {
@@ -86,10 +106,10 @@ namespace TnR_SS.Domain.Supervisor
                 throw new Exception("Đơn mua không tồn tại");
             }
 
-            if (purchase.isCompleted == PurchaseStatus.Completed)
+            /*if (purchase.isCompleted == PurchaseStatus.Completed)
             {
                 throw new Exception("Đơn mua này đã được chốt sổ. Bạn không thể chỉnh sửa thêm nữa !!!");
-            }
+            }*/
 
             var pondOwner = await _unitOfWork.PondOwners.FindAsync(model.PondOwnerID);
             if (pondOwner == null || pondOwner.TraderID != traderId)
@@ -134,7 +154,7 @@ namespace TnR_SS.Domain.Supervisor
             _unitOfWork.Purchases.Update(purchase);
             await _unitOfWork.SaveChangeAsync();
 
-            return await MapPurchaseResModel(purchase);
+            return await MapPurchaseResModelAsync(purchase);
         }
 
         public async Task DeletePurchaseAsync(int purchaseId, int traderId)

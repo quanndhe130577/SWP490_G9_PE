@@ -144,6 +144,12 @@ namespace TnR_SS.Domain.Supervisor
                     try
                     {
                         var purchaseDetail = await _unitOfWork.PurchaseDetails.FindAsync(data.Id);
+                        var purchase = await _unitOfWork.Purchases.FindAsync(purchaseDetail.PurchaseId);
+                        if (purchase.isCompleted.Equals(PurchaseStatus.Completed))
+                        {
+                            throw new Exception("Đơn mua đã được chốt, không thế thay đổi !!!");
+                        }
+
                         purchaseDetail = _mapper.Map<PurchaseDetailReqModel, PurchaseDetail>(data, purchaseDetail);
 
                         // delete current LK
@@ -153,6 +159,8 @@ namespace TnR_SS.Domain.Supervisor
                         await CreateLK(data.ListDrumId, data.Id);
 
                         await _unitOfWork.SaveChangeAsync();
+
+                        await UpdatePayForPondOwnerAsync(purchaseDetail.PurchaseId);
 
                         await transaction.CommitAsync();
                     }

@@ -20,6 +20,12 @@ namespace TnR_SS.Domain.ApiModels.PurchaseModal
         public double TotalAmount { get; set; }
 
         public string Status { get; set; } // đã chốt sổ hay chưa Completed/Pending
+
+        public double PayForPondOwner { get; set; }
+
+        public double Commission { get; set; }
+        public bool isPaid { get; set; } = false;
+        public double PondBackMoney { get; set; }
         /* public List<FishTypeApiModel> ListFishTypeWithPrice { get; set; }
 
          public PurchaseResModel()

@@ -52,6 +52,18 @@ namespace TnR_SS.API.Controllers
         }
         #endregion
 
+        #region Get all purchase
+        [HttpGet("getone/{purchaseId}")]
+        public async Task<ResponseModel> Get(int purchaseId)
+        {
+            var traderId = TokenManagement.GetUserIdInToken(HttpContext);
+
+            var newData = await _tnrssSupervisor.GetPurchaseByIdAsync(purchaseId, traderId);
+
+            return new ResponseBuilder<PurchaseResModel>().Success("Getall purchase success").WithData(newData).ResponseModel;
+        }
+        #endregion
+
         #region Update Purchase
         [HttpPost("update")]
         public async Task<ResponseModel> Update(PurchaseApiModel data)
