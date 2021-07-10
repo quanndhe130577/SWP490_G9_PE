@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TnR_SS.DataEFCore;
 
 namespace TnR_SS.DataEFCore.Migrations
 {
     [DbContext(typeof(TnR_SSContext))]
-    partial class TnR_SSContextModelSnapshot : ModelSnapshot
+    [Migration("20210710184622_addFishTypePriceEntity")]
+    partial class addFishTypePriceEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -363,16 +365,16 @@ namespace TnR_SS.DataEFCore.Migrations
                         .HasColumnName("ID")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<double>("BuyPrice")
+                        .HasColumnType("float");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime");
 
                     b.Property<int>("FishTypeId")
                         .HasColumnType("int");
 
-                    b.Property<double>("PurchasePrice")
-                        .HasColumnType("float");
-
-                    b.Property<double>("TransactionPrice")
+                    b.Property<double>("SellPrice")
                         .HasColumnType("float");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -607,7 +609,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "cad3ca25-0c53-4ffb-b503-dd84c9780d87",
+                            ConcurrencyStamp = "a8c07617-f9f9-4441-8910-8607f1043667",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Admin",
                             Name = "Admin",
@@ -617,7 +619,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "21e2405e-de08-43ac-81e3-110cf03eef27",
+                            ConcurrencyStamp = "1680d301-4b7e-40a7-8512-a09234b822a3",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Thương lái",
                             Name = "Trader",
@@ -627,7 +629,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "c574ffc7-12e6-4d9f-8eec-1218084caa4b",
+                            ConcurrencyStamp = "3e5c1924-18f7-4ffe-acb7-fbb7f2d7da7e",
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Chủ bến",
                             Name = "WeightRecorder",

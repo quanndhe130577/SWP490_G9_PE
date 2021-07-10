@@ -27,6 +27,7 @@ namespace TnR_SS.DataEFCore
         public virtual DbSet<Purchase> Purchases { get; set; }
         public virtual DbSet<Basket> Baskets { get; set; }
         public virtual DbSet<FishType> FishTypes { get; set; }
+        public virtual DbSet<FishTypePrice> FishTypePrices { get; set; }
         public virtual DbSet<PurchaseDetail> PurchaseDetails { get; set; }
         public virtual DbSet<Employee> Employees { get; set; }
         public virtual DbSet<TimeKeeping> TimeKeepings { get; set; }
@@ -58,6 +59,7 @@ namespace TnR_SS.DataEFCore
             new PurchaseConfiguration(modelBuilder.Entity<Purchase>());
             new BasketConfiguration(modelBuilder.Entity<Basket>());
             new FishTypeConfiguration(modelBuilder.Entity<FishType>());
+            new FishTypePriceConfiguration(modelBuilder.Entity<FishTypePrice>());
             new PurchaseDetailConfiguration(modelBuilder.Entity<PurchaseDetail>());
             new EmployeeConfiguration(modelBuilder.Entity<Employee>());
             new TimeKeepingConfiguration(modelBuilder.Entity<TimeKeeping>());

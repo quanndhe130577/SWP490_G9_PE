@@ -43,7 +43,15 @@ namespace TnR_SS.API.Controllers
         public ResponseModel GetAllFishType()
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
-            var fishTypes= _tnrssSupervisor.GetAllLastFishTypeByTraderId(traderId);
+            var fishTypes = _tnrssSupervisor.GetAllLastFishTypeByTraderId(traderId);
+            return new ResponseBuilder<List<FishTypeApiModel>>().Success("Get all type").WithData(fishTypes).ResponseModel;
+        }
+
+        [HttpGet("getbydate")]
+        public ResponseModel GetByDate()
+        {
+            var traderId = TokenManagement.GetUserIdInToken(HttpContext);
+            var fishTypes = _tnrssSupervisor.GetAllLastFishTypeByTraderId(traderId);
             return new ResponseBuilder<List<FishTypeApiModel>>().Success("Get all type").WithData(fishTypes).ResponseModel;
         }
 

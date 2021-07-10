@@ -28,7 +28,7 @@ namespace TnR_SS.Domain.Entities
         public DateTime UpdatedAt { get; set; }
 
         public DateTime Date { get; set; }
-        public double Price { get; set; }
+        //public double Price { get; set; }
 
         [Required]
         public int TraderID { get; set; }
@@ -36,5 +36,6 @@ namespace TnR_SS.Domain.Entities
 
 
         public List<PurchaseDetail> PurchaseDetails { get; set; }
+        public List<FishTypePrice> FishTypePrices { get; set; }
     }
 }
