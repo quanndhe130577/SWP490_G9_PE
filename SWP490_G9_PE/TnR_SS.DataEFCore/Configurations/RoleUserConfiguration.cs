@@ -17,9 +17,9 @@ namespace TnR_SS.DataEFCore.Configurations
 
             var listRole = new RoleUser[]
              {
-                new RoleUser(){ Id = 1, Name = "Admin", DisplayName = "Admin", NormalizedName = "ADMIN"},
-                new RoleUser(){ Id = 2, Name = "Trader", DisplayName = "Thương lái", NormalizedName = "TRADER"},
-                new RoleUser(){ Id = 3, Name = "Weight Recorder", DisplayName = "Chủ bến", NormalizedName = "WEIGHT RECORDER"},
+                new RoleUser(){ Id = 1, Name = RoleName.Admin, DisplayName = "Admin", NormalizedName = "ADMIN"},
+                new RoleUser(){ Id = 2, Name = RoleName.Trader, DisplayName = "Thương lái", NormalizedName = "TRADER"},
+                new RoleUser(){ Id = 3, Name = RoleName.WeightRecorder, DisplayName = "Chủ bến", NormalizedName = "WEIGHT RECORDER"},
              };
 
 

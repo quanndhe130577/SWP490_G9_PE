@@ -208,7 +208,6 @@ namespace TnR_SS.Domain.Supervisor
                         }
                     }
                 });
-
             }
             else
             {

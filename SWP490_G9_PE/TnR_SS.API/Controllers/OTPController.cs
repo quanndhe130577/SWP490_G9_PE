@@ -110,7 +110,7 @@ namespace TnR_SS.API.Controller
                 return new ResponseBuilder().Error("Access denied").ResponseModel;
             }
 
-            var user = _tnrssSupervisor.GetUserById(id);
+            var user = await _tnrssSupervisor.GetUserByIdAsync(id);
             if (!await _tnrssSupervisor.CheckUserPassword(user.UserID, dataModel.CurrentPassword))
             {
                 return new ResponseBuilder().Error("Invalid password").ResponseModel;

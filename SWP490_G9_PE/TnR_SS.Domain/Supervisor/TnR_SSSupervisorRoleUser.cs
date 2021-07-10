@@ -15,15 +15,29 @@ namespace TnR_SS.Domain.Supervisor
         {
             return await _unitOfWork.RoleUsers.RoleExistsAsync(roleName);
         }
-        public async Task<string> GetRoleDisplayNameAsync(UserInfor user)
+
+        private async Task<string> GetRoleDisplayNameAsync(UserInfor user)
         {
             var userRoles = await _unitOfWork.UserInfors.GetRolesAsync(user);
             if (userRoles.Count == 0 || userRoles == null)
             {
                 throw new Exception("Account invalid");
             }
+
             return _unitOfWork.RoleUsers.FindByNameAsync(userRoles[0]).Result.DisplayName;
         }
+
+        private async Task<string> GetRoleNameAsync(UserInfor user)
+        {
+            var userRoles = await _unitOfWork.UserInfors.GetRolesAsync(user);
+            if (userRoles.Count == 0 || userRoles == null)
+            {
+                throw new Exception("Account invalid");
+            }
+
+            return _unitOfWork.RoleUsers.FindByNameAsync(userRoles[0]).Result.Name;
+        }
+
         public List<AllRoleResModel> GetAllResRoles()
         {
             var userRoles = _unitOfWork.RoleUsers.AllRoleUser();

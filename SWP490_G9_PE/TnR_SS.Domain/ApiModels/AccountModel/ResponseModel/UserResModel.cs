@@ -15,5 +15,6 @@ namespace TnR_SS.Domain.ApiModels.AccountModel.ResponseModel
         public string PhoneNumber { get; set; }
         public string Avatar { get; set; }
         public string RoleDisplayName { get; set; }
+        public string RoleName { get; set; }
     }
 }

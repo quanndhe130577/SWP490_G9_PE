@@ -16,7 +16,7 @@ namespace TnR_SS.API.Controllers
 {
     [Route("api/truck")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = RoleName.Trader)]
     public class TruckController : ControllerBase
     {
         private readonly ITnR_SSSupervisor _tnrssSupervisor;
@@ -31,6 +31,9 @@ namespace TnR_SS.API.Controllers
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
             var listTruck = _tnrssSupervisor.GetAllTruckByTraderId(traderId);
+
+            var rs = "haha chau len ba".Normalize();
+
             return new ResponseBuilder<object>().Success("Get all type").WithData(listTruck).ResponseModel;
         }
 
@@ -41,10 +44,12 @@ namespace TnR_SS.API.Controllers
             {
                 return new ResponseBuilder<List<TruckApiModel>>().Error("Tên bị để trống").ResponseModel;
             }
+
             if (string.IsNullOrEmpty(truckModel.LicensePlate))
             {
                 return new ResponseBuilder<List<TruckApiModel>>().Error("Thông tin bị để trống").ResponseModel;
             }
+
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
             var truckId = await _tnrssSupervisor.CreateTruckAsync(truckModel, traderId);
             return new ResponseBuilder<object>().Success("Create truck success").WithData(new { truckId = truckId }).ResponseModel;

@@ -10,8 +10,7 @@ namespace TnR_SS.API.Common.Token
 {
     public static class TokenManagement
     {
-
-        public static string GetTokenUser(int id)
+        public static string GetTokenUser(int id, string roleName)
         {
             //create claims details based on the user information
 
@@ -22,6 +21,7 @@ namespace TnR_SS.API.Common.Token
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                     new Claim(JwtRegisteredClaimNames.Iat, now.ToString()),
                     new Claim("ID", id.ToString()),
+                    new Claim(ClaimTypes.Role, roleName)
                    };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Startup.StaticConfig["Jwt:Key"]));

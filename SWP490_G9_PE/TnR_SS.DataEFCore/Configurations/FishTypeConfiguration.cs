@@ -34,7 +34,7 @@ namespace TnR_SS.DataEFCore.Configurations
                 .IsRequired();
 
             entity.Property(e => e.Date)
-                .HasColumnType("datetime")
+                .HasColumnType("date")
                 .IsRequired();
 
             entity.Property(e => e.Price)

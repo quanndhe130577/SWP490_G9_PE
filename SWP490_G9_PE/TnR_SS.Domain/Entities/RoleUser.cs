@@ -26,4 +26,11 @@ namespace TnR_SS.Domain.Entities
         {
         }
     }
+
+    public static class RoleName
+    {
+        public const string Trader = "Trader";
+        public const string Admin = "Admin";
+        public const string WeightRecorder = "WeightRecorder";
+    }
 }

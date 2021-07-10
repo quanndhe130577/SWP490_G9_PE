@@ -43,5 +43,6 @@ namespace TnR_SS.DataEFCore.Repositories
         {
             return await _roleManager.RoleExistsAsync(roleName);
         }
+
     }
 }

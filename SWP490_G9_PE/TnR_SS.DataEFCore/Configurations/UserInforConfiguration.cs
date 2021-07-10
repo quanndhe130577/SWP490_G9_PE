@@ -31,7 +31,7 @@ namespace TnR_SS.DataEFCore.Configurations
                 .HasColumnType("datetime");
 
             entity.Property(e => e.Dob)
-                .HasColumnType("datetime")
+                .HasColumnType("date")
                 .HasColumnName("DOB");
 
             entity.Property(e => e.FirstName)

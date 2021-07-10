@@ -58,6 +58,7 @@ namespace TnR_SS.Domain.Supervisor
                 await _unitOfWork.UserInfors.SignInAsync(user);
                 var userResModel = _mapper.Map<UserInfor, UserResModel>(user);
                 userResModel.RoleDisplayName = await GetRoleDisplayNameAsync(user);
+                userResModel.RoleName = await GetRoleNameAsync(user);
                 return userResModel;
             }
 
@@ -69,10 +70,12 @@ namespace TnR_SS.Domain.Supervisor
             await _unitOfWork.UserInfors.SignInAsync(user);
         }
 
-        public UserResModel GetUserById(int id)
+        public async Task<UserResModel> GetUserByIdAsync(int id)
         {
             var user = _unitOfWork.UserInfors.GetUserById(id);
-            return _mapper.Map<UserInfor, UserResModel>(user);
+            var userRes = _mapper.Map<UserInfor, UserResModel>(user);
+            userRes.RoleName = await GetRoleNameAsync(user);
+            return userRes;
         }
 
         public async Task<IdentityResult> UpdateUserAsync(UpdateUserReqModel user, int id, string avatarLink)

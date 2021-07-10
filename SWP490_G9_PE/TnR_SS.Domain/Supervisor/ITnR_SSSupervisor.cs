@@ -33,7 +33,7 @@ namespace TnR_SS.Domain.Supervisor
 
         #region Role
         Task<bool> RoleExistsAsync(string roleName);
-        Task<string> GetRoleDisplayNameAsync(UserInfor user);
+        //Task<string> GetRoleNameAsync(UserInfor user);
         List<AllRoleResModel> GetAllResRoles();
         Task<IdentityResult> AddRoleUserAsync(RoleUser role);
         #endregion
@@ -46,7 +46,7 @@ namespace TnR_SS.Domain.Supervisor
         Task SignOutAsync();
         Task<UserResModel> SignInWithPasswordAsync(UserInfor user, string password);
         Task SignInAsync(UserInfor user);
-        UserResModel GetUserById(int id);
+        Task<UserResModel> GetUserByIdAsync(int id);
         Task<IdentityResult> UpdateUserAsync(UpdateUserReqModel user, int id, string avatarLink);
         Task<IdentityResult> UpdatePhoneNumberAsync(int id, string newPhone);
         Task<IdentityResult> ChangeUserPasswordAsync(int userId, string currentPassword, string newPassword);

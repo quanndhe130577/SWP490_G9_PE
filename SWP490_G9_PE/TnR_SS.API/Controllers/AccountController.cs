@@ -91,7 +91,7 @@ namespace TnR_SS.API.Controller
                 var userResModel = await _tnrssSupervisor.SignInWithPasswordAsync(user, userData.Password);
                 if (userResModel != null)
                 {
-                    var token = TokenManagement.GetTokenUser(user.Id);
+                    var token = TokenManagement.GetTokenUser(user.Id, userResModel.RoleName);
                     LoginResModel rlm = new LoginResModel()
                     {
                         Token = token,
@@ -143,7 +143,7 @@ namespace TnR_SS.API.Controller
                     return new ResponseBuilder().Error("Access denied").ResponseModel;
                 }
 
-                var userInfor = _tnrssSupervisor.GetUserById(id);
+                var userInfor = await _tnrssSupervisor.GetUserByIdAsync(id);
                 if (userInfor is null)
                 {
                     return new ResponseBuilder().Error("Invalid information").ResponseModel;
@@ -154,7 +154,7 @@ namespace TnR_SS.API.Controller
                 if (result.Succeeded)
                 {
                     //await _signInManager.RefreshSignInAsync(userInfor);
-                    var token = TokenManagement.GetTokenUser(userInfor.UserID);
+                    var token = TokenManagement.GetTokenUser(userInfor.UserID, userInfor.RoleName);
                     LoginResModel rlm = new LoginResModel()
                     {
                         Token = token,
@@ -247,9 +247,9 @@ namespace TnR_SS.API.Controller
 
         #region Get User Info 
         [HttpGet("getUserInfo/{id}")]
-        public ResponseModel GetUserInfo(int id)
+        public async Task<ResponseModel> GetUserInfo(int id)
         {
-            var user = _tnrssSupervisor.GetUserById(id);
+            var user = await _tnrssSupervisor.GetUserByIdAsync(id);
             return new ResponseBuilder<UserResModel>().Success("Login success").WithData(user).ResponseModel;
         }
         #endregion
