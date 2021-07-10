@@ -24,6 +24,11 @@ namespace TnR_SS.Domain.Supervisor
 
         }
 
+        public List<FishTypeApiModel> GetFishTypesByTraderIdAndDate(int traderId, DateTime date)
+        {
+            return _unitOfWork.FishTypes.GetAll(x => x.Date.Date == date.Date && x.TraderID == traderId).Select(x => _mapper.Map<FishType, FishTypeApiModel>(x)).ToList();
+        }
+
         public async Task CreateListFishTypeAsync(List<FishTypeApiModel> listType, int traderId)
         {
             foreach (var obj in listType)
@@ -50,7 +55,7 @@ namespace TnR_SS.Domain.Supervisor
         {
             var map = _mapper.Map<FishTypeApiModel, FishType>(fishType);
             map.TraderID = traderId;
-            if(map.MinWeight <= 0 || map.MaxWeight <= 0)
+            if (map.MinWeight <= 0 || map.MaxWeight <= 0)
             {
                 throw new Exception("Must more than 0");
             }

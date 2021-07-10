@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TnR_SS.DataEFCore;
 
 namespace TnR_SS.DataEFCore.Migrations
 {
     [DbContext(typeof(TnR_SSContext))]
-    partial class TnR_SSContextModelSnapshot : ModelSnapshot
+    [Migration("20210710191351_removeFishTypePriceAndAddTransactionPriceToFishType")]
+    partial class removeFishTypePriceAndAddTransactionPriceToFishType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -582,33 +584,33 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 3,
-                            ConcurrencyStamp = "640c72b0-4e7a-42c8-b257-c95cb24ebd28",
-                            CreatedAt = new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DisplayName = "Chủ bến",
-                            Name = "WeightRecorder",
-                            NormalizedName = "WEIGHTRECORDER",
-                            UpdatedAt = new DateTime(2021, 7, 11, 3, 23, 28, 21, DateTimeKind.Local).AddTicks(2751)
-                        },
-                        new
-                        {
                             Id = 1,
-                            ConcurrencyStamp = "028af069-e57d-4e54-b113-c012526c0ea3",
-                            CreatedAt = new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DisplayName = "Thương lái",
-                            Name = "Trader",
-                            NormalizedName = "TRADER",
-                            UpdatedAt = new DateTime(2021, 7, 11, 3, 23, 28, 22, DateTimeKind.Local).AddTicks(5786)
+                            ConcurrencyStamp = "178e7222-2af1-46b0-bf54-57ae3887f082",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisplayName = "Admin",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "3f213f71-9eb1-40fb-9cb2-d8a056a363eb",
-                            CreatedAt = new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            DisplayName = "Admin",
-                            Name = "Admin",
-                            NormalizedName = "ADMIN",
-                            UpdatedAt = new DateTime(2021, 7, 11, 3, 23, 28, 22, DateTimeKind.Local).AddTicks(5825)
+                            ConcurrencyStamp = "2dfd4946-ce93-47f1-8ec8-1f1d80cdfb86",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisplayName = "Thương lái",
+                            Name = "Trader",
+                            NormalizedName = "TRADER",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ConcurrencyStamp = "d5491626-0928-437b-914a-f883974c5e4e",
+                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisplayName = "Chủ bến",
+                            Name = "WeightRecorder",
+                            NormalizedName = "WEIGHT RECORDER",
+                            UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
 

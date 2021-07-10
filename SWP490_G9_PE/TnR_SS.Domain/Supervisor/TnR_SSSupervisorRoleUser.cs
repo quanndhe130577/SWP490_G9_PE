@@ -24,7 +24,13 @@ namespace TnR_SS.Domain.Supervisor
                 throw new Exception("Account invalid");
             }
 
-            return _unitOfWork.RoleUsers.FindByNameAsync(userRoles[0]).Result.DisplayName;
+            var rs = await _unitOfWork.RoleUsers.FindByNameAsync(userRoles[0]);
+            if (rs == null)
+            {
+                throw new Exception("Tài khoản không có quyền !!!");
+            }
+
+            return rs.DisplayName;
         }
 
         private async Task<string> GetRoleNameAsync(UserInfor user)
@@ -35,7 +41,12 @@ namespace TnR_SS.Domain.Supervisor
                 throw new Exception("Account invalid");
             }
 
-            return _unitOfWork.RoleUsers.FindByNameAsync(userRoles[0]).Result.Name;
+            var rs = await _unitOfWork.RoleUsers.FindByNameAsync(userRoles[0]);
+            if (rs == null)
+            {
+                throw new Exception("Tài khoản không có quyền !!!");
+            }
+            return rs.Name;
         }
 
         public List<AllRoleResModel> GetAllResRoles()

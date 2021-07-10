@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using TnR_SS.API.Common.Response;
@@ -14,6 +15,7 @@ namespace TnR_SS.API.Controllers
 {
     [Route("api/fishtype")]
     [ApiController]
+    [Authorize]
     public class FishTypeController : ControllerBase
     {
         private readonly ITnR_SSSupervisor _tnrssSupervisor;
@@ -47,12 +49,22 @@ namespace TnR_SS.API.Controllers
             return new ResponseBuilder<List<FishTypeApiModel>>().Success("Get all type").WithData(fishTypes).ResponseModel;
         }
 
-        [HttpGet("getbydate")]
-        public ResponseModel GetByDate()
+        [HttpGet("getbydate/{date_str}")]
+        public ResponseModel GetByDate(string date_str)
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
-            var fishTypes = _tnrssSupervisor.GetAllLastFishTypeByTraderId(traderId);
-            return new ResponseBuilder<List<FishTypeApiModel>>().Success("Get all type").WithData(fishTypes).ResponseModel;
+            DateTime date = DateTime.Now;
+            CultureInfo enUS = new CultureInfo("en-US");
+            if (DateTime.TryParseExact(date_str, "ddMMyyyy", enUS, DateTimeStyles.None, out date))
+            {
+                var fishTypes = _tnrssSupervisor.GetFishTypesByTraderIdAndDate(traderId, date);
+                return new ResponseBuilder<List<FishTypeApiModel>>().Success("Lấy thông tin loại cá thành công").WithData(fishTypes).ResponseModel;
+            }
+            else
+            {
+                return new ResponseBuilder().Error("Lỗi format date !!!").ResponseModel;
+            }
+
         }
 
         [HttpPost("update")]

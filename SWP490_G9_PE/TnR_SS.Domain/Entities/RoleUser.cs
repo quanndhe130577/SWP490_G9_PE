@@ -18,15 +18,17 @@ namespace TnR_SS.Domain.Entities
             this.DisplayName = displayName;
         }
         [Required]
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = new DateTime(2021, 01, 01);
         [Required]
-        public DateTime UpdatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; } = DateTime.Now;
+
+        public override string NormalizedName { get => base.NormalizedName; }
+        public override string Name { get => base.Name; set { base.Name = value; base.NormalizedName = value.ToUpperInvariant(); } }
 
         public RoleUser() : base()
         {
         }
     }
-
     public static class RoleName
     {
         public const string Trader = "Trader";

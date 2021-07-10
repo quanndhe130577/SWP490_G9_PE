@@ -36,7 +36,7 @@ namespace TnR_SS.DataEFCore.Repositories
 
         public async Task<RoleUser> FindByNameAsync(string roleName)
         {
-            return await _roleManager.FindByNameAsync(roleName);
+            return await _roleManager.FindByNameAsync(roleName.ToUpperInvariant());
         }
 
         public async Task<bool> RoleExistsAsync(string roleName)
