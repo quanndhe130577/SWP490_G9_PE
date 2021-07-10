@@ -31,12 +31,12 @@ namespace TnR_SS.API.Controllers
         {
             if (!TokenManagement.CheckUserIdFromToken(HttpContext, purchaseData.TraderID))
             {
-                return new ResponseBuilder().Error("Access denied").ResponseModel;
+                return new ResponseBuilder().Error("Truy cập bị trừ chối").ResponseModel;
             }
 
             var newData = await _tnrssSupervisor.CreatePurchaseAsync(purchaseData);
 
-            return new ResponseBuilder<PurchaseResModel>().Success("Create purchase success").WithData(newData).ResponseModel;
+            return new ResponseBuilder<PurchaseResModel>().Success("Thêm đơn mua thành công").WithData(newData).ResponseModel;
         }
         #endregion
 
@@ -48,7 +48,7 @@ namespace TnR_SS.API.Controllers
 
             var newData = await _tnrssSupervisor.GetAllPurchaseAsync(traderId);
 
-            return new ResponseBuilder<List<PurchaseResModel>>().Success("Getall purchase success").WithData(newData).ResponseModel;
+            return new ResponseBuilder<List<PurchaseResModel>>().Success("Lấy thông tin tất cả đơn mua thành công").WithData(newData).ResponseModel;
         }
         #endregion
 
@@ -60,7 +60,7 @@ namespace TnR_SS.API.Controllers
 
             var newData = await _tnrssSupervisor.GetPurchaseByIdAsync(purchaseId, traderId);
 
-            return new ResponseBuilder<PurchaseResModel>().Success("Getall purchase success").WithData(newData).ResponseModel;
+            return new ResponseBuilder<PurchaseResModel>().Success("Lấy thông tin đơn mua thành công").WithData(newData).ResponseModel;
         }
         #endregion
 
@@ -70,7 +70,7 @@ namespace TnR_SS.API.Controllers
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
             await _tnrssSupervisor.UpdatePurchaseAsync(data, traderId);
-            return new ResponseBuilder().Success("Update Purchase Success").ResponseModel;
+            return new ResponseBuilder().Success("Cập nhật đơn mua thành công").ResponseModel;
         }
         #endregion
 
@@ -90,7 +90,7 @@ namespace TnR_SS.API.Controllers
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
             await _tnrssSupervisor.DeletePurchaseAsync(data.PurchaseId, traderId);
-            return new ResponseBuilder().Success("Delete Purchase Success").ResponseModel;
+            return new ResponseBuilder().Success("Xóa đơn mua thành công").ResponseModel;
         }
         #endregion
     }
