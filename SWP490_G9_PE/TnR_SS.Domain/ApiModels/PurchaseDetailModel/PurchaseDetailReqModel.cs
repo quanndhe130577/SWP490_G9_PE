@@ -21,6 +21,7 @@ namespace TnR_SS.Domain.ApiModels.PurchaseDetailModel
         public int PurchaseId { get; set; }
 
         [Required]
+        [Range(0.0, Double.MaxValue, ErrorMessage = "Số lượng cân phải lớn hơn {1}.")]
         public double Weight { get; set; }
 
         //[Required]

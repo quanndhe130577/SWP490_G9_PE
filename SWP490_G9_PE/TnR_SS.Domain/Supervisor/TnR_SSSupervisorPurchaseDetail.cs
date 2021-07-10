@@ -16,6 +16,7 @@ namespace TnR_SS.Domain.Supervisor
 {
     public partial class TnR_SSSupervisor
     {
+        #region private method
         private async Task CreateLK(List<LK_PurchaseDetail_DrumApiModel> listDrum, int purchaseDetailId)
         {
             foreach (var item in listDrum)
@@ -68,7 +69,7 @@ namespace TnR_SS.Domain.Supervisor
             return totalFishWeight > 0 ? fishTypePrice * totalFishWeight : 0;
         }
 
-
+        #endregion
 
         /* private double GetPurchaseDetailWeight(int purchaseDetailId)
          {
@@ -103,6 +104,7 @@ namespace TnR_SS.Domain.Supervisor
                     {
                         await transaction.RollbackAsync();
                         throw;
+                        //throw new Exception("Đã có lỗi xay ra, hãy thử lại sau");
                     }
                 }
             });
@@ -167,6 +169,7 @@ namespace TnR_SS.Domain.Supervisor
                     catch
                     {
                         await transaction.RollbackAsync();
+                        //throw new Exception("Đã có lỗi xay ra, hãy thử lại sau");
                         throw;
                     }
                 }
@@ -178,8 +181,9 @@ namespace TnR_SS.Domain.Supervisor
             var purchaseDetail = await _unitOfWork.PurchaseDetails.FindAsync(purchaseDetailId);
             if (purchaseDetail == null)
             {
-                throw new Exception("Purchase Detail không tồn tại !!!");
+                throw new Exception("Mã cân mua không tồn tại !!!");
             }
+
             var purchase = await _unitOfWork.Purchases.FindAsync(purchaseDetail.PurchaseId);
             if (purchase.TraderID == traderId)
             {
@@ -208,7 +212,7 @@ namespace TnR_SS.Domain.Supervisor
             }
             else
             {
-                throw new Exception("Purchase detail không hợp lệ !!!");
+                throw new Exception("Mã cân mua không hợp lệ !!!");
             }
         }
     }

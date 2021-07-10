@@ -27,7 +27,7 @@ namespace TnR_SS.API.Controllers
         public async Task<ResponseModel> CreateAsync(PurchaseDetailReqModel data)
         {
             var purchaseDetailId = await _tnrssSupervisor.CreatePurchaseDetailAsync(data);
-            return new ResponseBuilder<object>().Success("Create Purchase Detail Success").WithData(new { purchaseDetailId = purchaseDetailId }).ResponseModel;
+            return new ResponseBuilder<object>().Success("Tạo mã cân mua thành công").WithData(new { purchaseDetailId = purchaseDetailId }).ResponseModel;
         }
         #endregion
 
@@ -36,7 +36,7 @@ namespace TnR_SS.API.Controllers
         public async Task<ResponseModel> All(int purchaseId)
         {
             var list = await _tnrssSupervisor.GetAllPurchaseDetailAsync(purchaseId);
-            return new ResponseBuilder<List<PurchaseDetailResModel>>().Success("Get all purchase detail").WithData(list).ResponseModel;
+            return new ResponseBuilder<List<PurchaseDetailResModel>>().Success("Lấy thông tin tất cả mã cân mua").WithData(list).ResponseModel;
         }
         #endregion
 
@@ -46,7 +46,7 @@ namespace TnR_SS.API.Controllers
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
             await _tnrssSupervisor.UpdatePurchaseDetailAsync(data);
-            return new ResponseBuilder().Success("Update Purchase Detail Success").ResponseModel;
+            return new ResponseBuilder().Success("Cập nhật mã cân mua thành công").ResponseModel;
         }
         #endregion
 
@@ -56,7 +56,7 @@ namespace TnR_SS.API.Controllers
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
             await _tnrssSupervisor.DeletePurchaseDetailAsync(traderId, data.PurchaseDetailId);
-            return new ResponseBuilder().Success("Delete Purchase Detail Success").ResponseModel;
+            return new ResponseBuilder().Success("Xóa mã cân mua thành công").ResponseModel;
         }
         #endregion
     }
