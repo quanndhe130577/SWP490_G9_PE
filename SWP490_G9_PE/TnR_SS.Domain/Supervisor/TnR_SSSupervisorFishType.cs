@@ -24,6 +24,18 @@ namespace TnR_SS.Domain.Supervisor
 
         }
 
+        public List<FishTypeApiModel> GetAllFishTypeByTraderId(int traderId)
+        {
+            var listType = _unitOfWork.FishTypes.GetAllByTraderId(traderId);
+            List<FishTypeApiModel> list = new List<FishTypeApiModel>();
+            foreach (var type in listType)
+            {
+                list.Add(_mapper.Map<FishType, FishTypeApiModel>(type));
+            }
+            return list;
+
+        }
+
         public List<FishTypeApiModel> GetFishTypesByTraderIdAndDate(int traderId, DateTime date)
         {
             return _unitOfWork.FishTypes.GetAll(x => x.Date.Date == date.Date && x.TraderID == traderId).Select(x => _mapper.Map<FishType, FishTypeApiModel>(x)).ToList();
