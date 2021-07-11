@@ -41,11 +41,11 @@ namespace TnR_SS.API.Controllers
             return new ResponseBuilder().Success("Create Fish Type Success").ResponseModel;
         }
 
-        [HttpGet("getlastall/{pondOwnerId}")]
-        public ResponseModel GetLastAllFishType(int pondOwnerId)
+        [HttpGet("getlastall")]
+        public ResponseModel GetLastAllFishType()
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
-            var fishTypes = _tnrssSupervisor.GetAllLastFishTypeWithPondOwnerId(traderId, pondOwnerId);
+            var fishTypes = _tnrssSupervisor.GetAllLastFishTypeWithPondOwnerId(traderId);
             return new ResponseBuilder<List<FishTypeApiModel>>().Success("Get all type").WithData(fishTypes).ResponseModel;
         }
 

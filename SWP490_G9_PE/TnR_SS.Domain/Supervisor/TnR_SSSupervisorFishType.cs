@@ -14,9 +14,9 @@ namespace TnR_SS.Domain.Supervisor
     public partial class TnR_SSSupervisor
     {
         readonly Regex regexPrice = new(@"/^\d+$/");
-        public List<FishTypeApiModel> GetAllLastFishTypeWithPondOwnerId(int traderId, int pondOwnerId)
+        public List<FishTypeApiModel> GetAllLastFishTypeWithPondOwnerId(int traderId)
         {
-            var listType = _unitOfWork.FishTypes.GetAllLastByTraderIdAndPondOwnerId(traderId, pondOwnerId);
+            var listType = _unitOfWork.FishTypes.GetAllLastByTraderIdAndPondOwnerId(traderId);
             List<FishTypeApiModel> list = new List<FishTypeApiModel>();
             foreach (var type in listType)
             {
