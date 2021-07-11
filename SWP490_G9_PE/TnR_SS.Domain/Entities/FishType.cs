@@ -36,6 +36,9 @@ namespace TnR_SS.Domain.Entities
         public int TraderID { get; set; }
         public UserInfor Trader { get; set; }
 
+        [Required]
+        public int PondOwnerID { get; set; }
+        public PondOwner PondOwner { get; set; }
 
         public List<PurchaseDetail> PurchaseDetails { get; set; }
     }

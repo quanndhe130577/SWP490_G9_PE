@@ -9,6 +9,6 @@ namespace TnR_SS.Domain.Repositories
 {
     public interface IFishTypeRepository : IRepositoryBase<FishType>
     {
-        List<FishType> GetAllLastByTraderId(int traderId);
+        List<FishType> GetAllLastByTraderIdAndPondOwnerId(int traderId, int pondOwnerId);
     }
 }

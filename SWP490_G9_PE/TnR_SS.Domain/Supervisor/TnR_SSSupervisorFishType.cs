@@ -12,9 +12,9 @@ namespace TnR_SS.Domain.Supervisor
     public partial class TnR_SSSupervisor
     {
         readonly Regex regexPrice = new(@"/^\d+$/");
-        public List<FishTypeApiModel> GetAllLastFishTypeByTraderId(int traderId)
+        public List<FishTypeApiModel> GetAllLastFishTypeByPondOwnerId(int traderId, int pondOwnerId)
         {
-            var listType = _unitOfWork.FishTypes.GetAllLastByTraderId(traderId);
+            var listType = _unitOfWork.FishTypes.GetAllLastByTraderIdAndPondOwnerId(traderId, pondOwnerId);
             List<FishTypeApiModel> list = new List<FishTypeApiModel>();
             foreach (var type in listType)
             {
@@ -24,9 +24,9 @@ namespace TnR_SS.Domain.Supervisor
 
         }
 
-        public List<FishTypeApiModel> GetFishTypesByTraderIdAndDate(int traderId, DateTime date)
+        public List<FishTypeApiModel> GetFishTypesByPondOwnerIdAndDate(int traderId, int poId, DateTime date)
         {
-            return _unitOfWork.FishTypes.GetAll(x => x.Date.Date == date.Date && x.TraderID == traderId).Select(x => _mapper.Map<FishType, FishTypeApiModel>(x)).ToList();
+            return _unitOfWork.FishTypes.GetAll(x => x.Date.Date == date.Date && x.TraderID == traderId && x.PondOwnerID == poId).Select(x => _mapper.Map<FishType, FishTypeApiModel>(x)).ToList();
         }
 
         public async Task CreateListFishTypeAsync(List<FishTypeApiModel> listType, int traderId)

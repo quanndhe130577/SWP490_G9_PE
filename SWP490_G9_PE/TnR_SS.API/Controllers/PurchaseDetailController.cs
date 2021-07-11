@@ -26,7 +26,8 @@ namespace TnR_SS.API.Controllers
         [HttpPost("create")]
         public async Task<ResponseModel> CreateAsync(PurchaseDetailReqModel data)
         {
-            var purchaseDetailId = await _tnrssSupervisor.CreatePurchaseDetailAsync(data);
+            var traderId = TokenManagement.GetUserIdInToken(HttpContext);
+            var purchaseDetailId = await _tnrssSupervisor.CreatePurchaseDetailAsync(data, traderId);
             return new ResponseBuilder<object>().Success("Tạo mã cân mua thành công").WithData(new { purchaseDetailId = purchaseDetailId }).ResponseModel;
         }
         #endregion

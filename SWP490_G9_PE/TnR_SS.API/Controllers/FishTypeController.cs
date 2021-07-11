@@ -41,23 +41,23 @@ namespace TnR_SS.API.Controllers
             return new ResponseBuilder().Success("Create Fish Type Success").ResponseModel;
         }
 
-        [HttpGet("getlastall")]
-        public ResponseModel GetAllFishType()
+        [HttpGet("getlastall/{pondOwnerId}")]
+        public ResponseModel GetAllFishType(int pondOwnerId)
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
-            var fishTypes = _tnrssSupervisor.GetAllLastFishTypeByTraderId(traderId);
+            var fishTypes = _tnrssSupervisor.GetAllLastFishTypeByPondOwnerId(traderId, pondOwnerId);
             return new ResponseBuilder<List<FishTypeApiModel>>().Success("Get all type").WithData(fishTypes).ResponseModel;
         }
 
-        [HttpGet("getbydate/{date_str}")]
-        public ResponseModel GetByDate(string date_str)
+        [HttpGet("getone/{date_str}/{poId}")]
+        public ResponseModel GetByDate(string date_str, int poId)
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
             DateTime date = DateTime.Now;
             CultureInfo enUS = new CultureInfo("en-US");
             if (DateTime.TryParseExact(date_str, "ddMMyyyy", enUS, DateTimeStyles.None, out date))
             {
-                var fishTypes = _tnrssSupervisor.GetFishTypesByTraderIdAndDate(traderId, date);
+                var fishTypes = _tnrssSupervisor.GetFishTypesByPondOwnerIdAndDate(traderId, poId, date);
                 return new ResponseBuilder<List<FishTypeApiModel>>().Success("Lấy thông tin loại cá thành công").WithData(fishTypes).ResponseModel;
             }
             else

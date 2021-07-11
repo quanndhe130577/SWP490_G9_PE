@@ -254,13 +254,5 @@ namespace TnR_SS.API.Controller
         }
         #endregion
 
-        #region Test
-        [HttpGet("test")]
-        [AllowAnonymous]
-        public void Test()
-        {
-            _tnrssSupervisor.Test();
-        }
-        #endregion
     }
 }

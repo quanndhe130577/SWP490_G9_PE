@@ -32,5 +32,6 @@ namespace TnR_SS.Domain.Entities
         public UserInfor Trader { get; set; }
 
         public List<Purchase> Purchases { get; set; }
+        public List<FishType> FishTypes { get; set; }
     }
 }

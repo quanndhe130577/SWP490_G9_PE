@@ -22,7 +22,6 @@ namespace TnR_SS.Domain.Supervisor
 {
     public interface ITnR_SSSupervisor
     {
-        void Test();
 
         #region OTP
         Task<bool> CheckOTPDoneAsync(int otpId, string phoneNumber);
@@ -59,8 +58,8 @@ namespace TnR_SS.Domain.Supervisor
         #endregion
 
         #region Fishtype
-        List<FishTypeApiModel> GetAllLastFishTypeByTraderId(int traderId);
-        List<FishTypeApiModel> GetFishTypesByTraderIdAndDate(int traderId, DateTime date);
+        List<FishTypeApiModel> GetAllLastFishTypeByPondOwnerId(int traderId, int pondOwnerId);
+        List<FishTypeApiModel> GetFishTypesByPondOwnerIdAndDate(int traderId, int poId, DateTime date);
         Task CreateListFishTypeAsync(List<FishTypeApiModel> listType, int traderId);
         Task CreateFishTypeAsync(FishTypeApiModel listType, int traderId);
         Task UpdateFishTypeAsync(FishTypeApiModel fishTypeModel, int traderId);
@@ -132,7 +131,7 @@ namespace TnR_SS.Domain.Supervisor
 
         #region PurchaseDetail
         Task<List<PurchaseDetailResModel>> GetAllPurchaseDetailAsync(int purchaseId);
-        Task<int> CreatePurchaseDetailAsync(PurchaseDetailReqModel data);
+        Task<int> CreatePurchaseDetailAsync(PurchaseDetailReqModel data, int traderId);
         Task UpdatePurchaseDetailAsync(PurchaseDetailReqModel data);
         Task DeletePurchaseDetailAsync(int traderId, int purchaseDetailId);
         #endregion

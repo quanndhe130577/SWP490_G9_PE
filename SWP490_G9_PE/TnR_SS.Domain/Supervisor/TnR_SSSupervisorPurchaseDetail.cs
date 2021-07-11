@@ -79,7 +79,7 @@ namespace TnR_SS.Domain.Supervisor
              return _unitOfWork.PurchaseDetails.FindAsync(purchaseDetailId).Result.Weight;
          }*/
 
-        public async Task<int> CreatePurchaseDetailAsync(PurchaseDetailReqModel data)
+        public async Task<int> CreatePurchaseDetailAsync(PurchaseDetailReqModel data, int traderId)
         {
             var strategy = _unitOfWork.CreateExecutionStrategy();
 
@@ -89,12 +89,33 @@ namespace TnR_SS.Domain.Supervisor
                 {
                     try
                     {
+                        var purchase = await _unitOfWork.Purchases.FindAsync(data.PurchaseId);
+                        if (purchase == null || purchase.TraderID != traderId)
+                        {
+                            throw new Exception("Đơn mua không tồn tại !!!");
+                        }
+
+                        if (purchase.isCompleted.Equals(PurchaseStatus.Completed))
+                        {
+                            throw new Exception("Đơn mua đã được chốt sổ !!!");
+                        }
+
                         var fishType = await _unitOfWork.FishTypes.FindAsync(data.FishTypeID);
+                        if (fishType == null || fishType.PondOwnerID != purchase.PondOwnerID)
+                        {
+                            throw new Exception("Giá cá không tồn tại !!!");
+                        }
+
                         var basket = await _unitOfWork.Baskets.FindAsync(data.BasketId);
+                        if (basket == null)
+                        {
+                            throw new Exception("Loại rổ không tồn tại !!!");
+                        }
+
                         var purchaseDetail = _mapper.Map<PurchaseDetailReqModel, PurchaseDetail>(data);
                         //double totalFishWeight = data.ListDrum.Sum(x => x.Weight) - basket.Weight;
                         //purchaseDetail.BuyPrice = fishType.Price * totalFishWeight;
-                        purchaseDetail.Weight = data.Weight;
+                        //purchaseDetail.Weight = data.Weight;
                         await _unitOfWork.PurchaseDetails.CreateAsync(purchaseDetail);
                         await _unitOfWork.SaveChangeAsync();
                         //create lk
@@ -124,7 +145,7 @@ namespace TnR_SS.Domain.Supervisor
                 PurchaseDetailResModel data = _mapper.Map<PurchaseDetail, PurchaseDetailResModel>(item);
                 data.Basket = _mapper.Map<Basket, BasketApiModel>(await _unitOfWork.Baskets.FindAsync(item.BasketId));
                 data.FishType = _mapper.Map<FishType, FishTypeApiModel>(await _unitOfWork.FishTypes.FindAsync(item.FishTypeID));
-                data.Price = GetPurchaseDetailPrice(data.FishType.Price, data.Basket.Weight, data.Weight);
+                data.Price = GetPurchaseDetailPrice((double)data.FishType.Price, data.Basket.Weight, data.Weight);
                 data.ListDrum = GetListDrumByPurchaseDetail(item);
                 if (data.ListDrum.Count > 0)
                 {

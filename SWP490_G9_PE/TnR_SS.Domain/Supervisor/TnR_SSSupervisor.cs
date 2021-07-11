@@ -22,9 +22,5 @@ namespace TnR_SS.Domain.Supervisor
             _unitOfWork = unitOfWork;
         }
 
-        public void Test()
-        {
-            _unitOfWork.FishTypes.GetAllLastByTraderId(1);
-        }
     }
 }
