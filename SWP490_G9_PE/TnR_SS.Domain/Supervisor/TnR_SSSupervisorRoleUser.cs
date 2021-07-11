@@ -21,7 +21,7 @@ namespace TnR_SS.Domain.Supervisor
             var userRoles = await _unitOfWork.UserInfors.GetRolesAsync(user);
             if (userRoles.Count == 0 || userRoles == null)
             {
-                throw new Exception("Account invalid");
+                throw new Exception("Tài khoản bị lỗi");
             }
 
             var rs = await _unitOfWork.RoleUsers.FindByNameAsync(userRoles[0]);
@@ -38,7 +38,7 @@ namespace TnR_SS.Domain.Supervisor
             var userRoles = await _unitOfWork.UserInfors.GetRolesAsync(user);
             if (userRoles.Count == 0 || userRoles == null)
             {
-                throw new Exception("Account invalid");
+                throw new Exception("Tài khoản bị lỗi");
             }
 
             var rs = await _unitOfWork.RoleUsers.FindByNameAsync(userRoles[0]);

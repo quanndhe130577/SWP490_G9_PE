@@ -14,18 +14,18 @@ namespace TnR_SS.Domain.Supervisor
         public List<EmployeeApiModel> GetAllEmployeeByStatus(string status, int traderId)
         {
             var listEmpApi = AddStatusToEmployee(traderId);
-            if (status.ToLower() == EmployeeStatus.available.ToString() 
+            if (status.ToLower() == EmployeeStatus.available.ToString()
                 || status.ToLower() == EmployeeStatus.unavailable.ToString())
             {
                 return listEmpApi.Where(x => x.Status == status.ToLower()).ToList();
             }
-            else if(status.ToLower() == EmployeeStatus.all.ToString())
+            else if (status.ToLower() == EmployeeStatus.all.ToString())
             {
                 return listEmpApi;
             }
             else
             {
-                throw new Exception("Status invalid");
+                throw new Exception("Thông tin URL không hợp lệ");
             }
         }
 
@@ -46,11 +46,11 @@ namespace TnR_SS.Domain.Supervisor
             obj.TraderId = traderId;
             if (!CheckEmployeeExist(traderId, employee))
             {
-                throw new Exception("Employee is existed");
+                throw new Exception("Nhân viên đã tồn tại");
             }
             else if (obj.DOB > DateTime.Now)
             {
-                throw new Exception("DOB out of range");
+                throw new Exception("Thông tin ngày sinh không hợp lệ");
             }
             /*else if (obj.StartDate >= obj.EndDate)
             {
@@ -71,11 +71,11 @@ namespace TnR_SS.Domain.Supervisor
             {
                 if (CheckEmployeeExist(traderId, employee))
                 {
-                    throw new Exception("Employee is existed");
+                    throw new Exception("Nhân viên đã tồn tại");
                 }
                 else if (empEdit.DOB > DateTime.Now)
                 {
-                    throw new Exception("DOB out of range");
+                    throw new Exception("Thông tin ngày sinh không hợp lệ");
                 }
                 /*else if (empEdit.StartDate >= empEdit.EndDate)
                 {
@@ -89,7 +89,7 @@ namespace TnR_SS.Domain.Supervisor
             }
             else
             {
-                throw new Exception("Update fail");
+                throw new Exception("Thông tin nhân viên không chính xác");
             }
         }
 
@@ -103,7 +103,7 @@ namespace TnR_SS.Domain.Supervisor
             }
             else
             {
-                throw new Exception("Delete fail");
+                throw new Exception("Thông tin nhân viên không chính xác");
             }
         }
 
@@ -140,11 +140,11 @@ namespace TnR_SS.Domain.Supervisor
                 var empMap = _mapper.Map<Employee, EmployeeApiModel>(emp);
                 if (empMap.EndDate != null && empMap.EndDate <= DateTime.Now)
                 {
-                    empMap.Status = "unavailable";
+                    empMap.Status = EmployeeStatus.unavailable.ToString();
                 }
                 else
                 {
-                    empMap.Status = "available";
+                    empMap.Status = EmployeeStatus.available.ToString();
                 }
                 listEmpApi.Add(empMap);
             }

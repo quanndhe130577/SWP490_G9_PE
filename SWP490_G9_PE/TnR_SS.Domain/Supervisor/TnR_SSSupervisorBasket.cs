@@ -54,7 +54,7 @@ namespace TnR_SS.Domain.Supervisor
             }
             else
             {
-                throw new Exception("Delete fail");
+                throw new Exception("Thông tin rổ không đúng");
             }
         }
     }

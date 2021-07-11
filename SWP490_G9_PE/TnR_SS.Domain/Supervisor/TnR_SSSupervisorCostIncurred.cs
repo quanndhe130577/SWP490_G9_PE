@@ -41,7 +41,7 @@ namespace TnR_SS.Domain.Supervisor
             }
             else
             {
-                throw new Exception("Update fail");
+                throw new Exception("Thông tin chi phí không đúng");
             }
         }
 
@@ -55,7 +55,7 @@ namespace TnR_SS.Domain.Supervisor
             }
             else
             {
-                throw new Exception("Delete fail");
+                throw new Exception("Thông tin chi phí không đúng");
             }
         }
 

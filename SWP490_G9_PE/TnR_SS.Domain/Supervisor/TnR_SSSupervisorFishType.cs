@@ -53,11 +53,11 @@ namespace TnR_SS.Domain.Supervisor
                 fishType.TraderID = traderId;
                 if (fishType.MinWeight <= 0 || fishType.MaxWeight <= 0)
                 {
-                    throw new Exception("Must more than 0");
+                    throw new Exception("Cân nặng phải lớn hơn 0");
                 }
                 else if (fishType.MaxWeight - fishType.MinWeight < 0)
                 {
-                    throw new Exception("Min Weight can not bigger than Max Weight");
+                    throw new Exception("Cân nặng không hợp lệ");
                 }
                 else
                 {
@@ -73,11 +73,11 @@ namespace TnR_SS.Domain.Supervisor
             map.TraderID = traderId;
             if (map.MinWeight <= 0 || map.MaxWeight <= 0)
             {
-                throw new Exception("Must more than 0");
+                throw new Exception("Cân nặng phải lớn hơn 0");
             }
             else if (map.MaxWeight - map.MinWeight < 0)
             {
-                throw new Exception("Min Weight can not bigger than Max Weight");
+                throw new Exception("Cân nặng không hợp lệ");
             }
             else
             {
@@ -94,11 +94,11 @@ namespace TnR_SS.Domain.Supervisor
             {
                 if (fishTypeEdit.MinWeight <= 0 || fishTypeEdit.MaxWeight <= 0)
                 {
-                    throw new Exception("Must more than 0");
+                    throw new Exception("Cân nặng phải lớn hơn 0");
                 }
                 else if (fishTypeEdit.MaxWeight - fishTypeEdit.MinWeight < 0)
                 {
-                    throw new Exception("Min Weight can not bigger than Max Weight");
+                    throw new Exception("Cân nặng không hợp lệ");
                 }
                 else
                 {
@@ -108,7 +108,7 @@ namespace TnR_SS.Domain.Supervisor
             }
             else
             {
-                throw new Exception("Update fail");
+                throw new Exception("Thông tin giá cá không hợp lệ");
             }
         }
 
@@ -122,7 +122,7 @@ namespace TnR_SS.Domain.Supervisor
             }
             else
             {
-                throw new Exception("Delete fail");
+                throw new Exception("Thông tin giá cá không hợp lệ");
             }
         }
     }

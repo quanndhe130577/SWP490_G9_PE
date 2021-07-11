@@ -39,7 +39,7 @@ namespace TnR_SS.Domain.Supervisor
             }
             else
             {
-                throw new Exception("TruckID does not contain in this trader");
+                throw new Exception("Thông tin lồ không chính xác");
             }
 
         }
@@ -61,7 +61,7 @@ namespace TnR_SS.Domain.Supervisor
             }
             else
             {
-                throw new Exception("Update fail");
+                throw new Exception("Thông tin lồ không chính xác");
             }
         }
 
@@ -76,7 +76,7 @@ namespace TnR_SS.Domain.Supervisor
             }
             else
             {
-                throw new Exception("Delete fail");
+                throw new Exception("Thông tin lồ không chính xác");
             }
         }
 
@@ -92,7 +92,7 @@ namespace TnR_SS.Domain.Supervisor
                 }
                 else
                 {
-                    throw new Exception("Drum does not exist in this trader");
+                    throw new Exception("Thông tin lồ không chính xác");
                 }
             }
             return null;
