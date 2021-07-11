@@ -101,7 +101,7 @@ namespace TnR_SS.Domain.Supervisor
                         }
 
                         var fishType = await _unitOfWork.FishTypes.FindAsync(data.FishTypeID);
-                        if (fishType == null || fishType.PondOwnerID != purchase.PondOwnerID)
+                        if (fishType == null /*|| fishType.PondOwnerID != purchase.PondOwnerID*/)
                         {
                             throw new Exception("Giá cá không tồn tại !!!");
                         }
