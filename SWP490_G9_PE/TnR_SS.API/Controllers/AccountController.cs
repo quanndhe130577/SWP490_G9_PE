@@ -85,7 +85,7 @@ namespace TnR_SS.API.Controller
                 var user = _tnrssSupervisor.GetUserByPhoneNumber(userData.PhoneNumber);
                 if (user is null)
                 {
-                    return new ResponseBuilder().Error("User not found").ResponseModel;
+                    return new ResponseBuilder().Error("Không tìm thấy tài khoản").ResponseModel;
                 }
 
                 var userResModel = await _tnrssSupervisor.SignInWithPasswordAsync(user, userData.Password);
@@ -97,7 +97,7 @@ namespace TnR_SS.API.Controller
                         Token = token,
                         User = userResModel
                     };
-                    return new ResponseBuilder<LoginResModel>().Success("Login success").WithData(rlm).ResponseModel;
+                    return new ResponseBuilder<LoginResModel>().Success("Đăng nhập thành công").WithData(rlm).ResponseModel;
                 }
 
                 return new ResponseBuilder().Error("Invalid Phone number or password").ResponseModel;

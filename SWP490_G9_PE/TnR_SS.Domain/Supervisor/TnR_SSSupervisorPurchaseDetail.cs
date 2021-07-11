@@ -51,8 +51,8 @@ namespace TnR_SS.Domain.Supervisor
             var basket = await _unitOfWork.Baskets.FindAsync(purchaseDetail.BasketId);
             //var listDrum = _unitOfWork.LK_PurchaseDeatil_Drums.GetAll(x => x.PurchaseDetailID == purchaseDetailId);
             double totalFishWeight = purchaseDetail.Weight - basket.Weight;
-            //return totalFishWeight > 0 ? fishType.Price * totalFishWeight : 0;
-            return 0;
+            return totalFishWeight > 0 ? fishType.Price * totalFishWeight : 0;
+            //return 0;
         }
 
         private async Task<double> GetPurchaseDetailPriceAsync(PurchaseDetail purchaseDetail)
@@ -61,8 +61,8 @@ namespace TnR_SS.Domain.Supervisor
             var basket = await _unitOfWork.Baskets.FindAsync(purchaseDetail.BasketId);
             //var listDrum = _unitOfWork.LK_PurchaseDeatil_Drums.GetAll(x => x.PurchaseDetailID == purchaseDetailId);
             double totalFishWeight = purchaseDetail.Weight - basket.Weight;
-            //return totalFishWeight > 0 ? fishType.Price * totalFishWeight : 0;
-            return 0;
+            return totalFishWeight > 0 ? fishType.Price * totalFishWeight : 0;
+            //return 0;
         }
 
         private double GetPurchaseDetailPrice(double fishTypePrice, double basketWeight, double totalWeight)
