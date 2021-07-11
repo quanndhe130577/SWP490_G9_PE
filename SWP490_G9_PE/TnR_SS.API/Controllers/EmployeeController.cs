@@ -28,7 +28,7 @@ namespace TnR_SS.API.Controllers
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
             var list = _tnrssSupervisor.GetAllEmployeeByTraderId(traderId);
-            return new ResponseBuilder<List<EmployeeApiModel>>().Success("Get all employee").WithData(list).ResponseModel;
+            return new ResponseBuilder<List<EmployeeApiModel>>().Success("Lấy thông tin nhân viên thành công").WithData(list).ResponseModel;
         }
 
         [HttpGet("getall/{status}")]
@@ -36,7 +36,7 @@ namespace TnR_SS.API.Controllers
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
             var list = _tnrssSupervisor.GetAllEmployeeByStatus(status, traderId);
-            return new ResponseBuilder<List<EmployeeApiModel>>().Success("Get all employee").WithData(list).ResponseModel;
+            return new ResponseBuilder<List<EmployeeApiModel>>().Success("Lấy thông tin nhân viên thành công").WithData(list).ResponseModel;
         }
 
         [HttpPost("create")]
@@ -44,7 +44,7 @@ namespace TnR_SS.API.Controllers
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
             await _tnrssSupervisor.CreateEmployeesAsync(employee, traderId);
-            return new ResponseBuilder().Success("Create Employee Success").ResponseModel;
+            return new ResponseBuilder().Success("Tạo nhân viên thành công").ResponseModel;
         }
 
         [HttpPost("update")]
@@ -52,7 +52,7 @@ namespace TnR_SS.API.Controllers
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
             await _tnrssSupervisor.UpdateEmployeeAsync(employee, traderId);
-            return new ResponseBuilder().Success("Update Employee Success").ResponseModel;
+            return new ResponseBuilder().Success("Cập nhật thông tin nhân viên thành công").ResponseModel;
         }
 
         [HttpPost("delete/{empId}")]
@@ -60,7 +60,7 @@ namespace TnR_SS.API.Controllers
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
             await _tnrssSupervisor.DeleteEmployeeAsync(empId, traderId);
-            return new ResponseBuilder().Success("Delete Employee Success").ResponseModel;
+            return new ResponseBuilder().Success("Xóa thông tin nhân viên thành công").ResponseModel;
         }
 
         [HttpGet("detail/{empId}")]
@@ -68,7 +68,7 @@ namespace TnR_SS.API.Controllers
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
             var detail = _tnrssSupervisor.GetDetailEmployee(traderId, empId);
-            return new ResponseBuilder<EmployeeApiModel>().Success("Get Detail Employee Success").WithData(detail).ResponseModel;
+            return new ResponseBuilder<EmployeeApiModel>().Success("Lấy thông tin nhân viên thành công").WithData(detail).ResponseModel;
         }
     }
 }

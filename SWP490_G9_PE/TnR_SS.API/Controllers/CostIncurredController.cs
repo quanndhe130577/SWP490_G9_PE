@@ -26,7 +26,7 @@ namespace TnR_SS.API.Controllers
         {
             var userId = TokenManagement.GetUserIdInToken(HttpContext);
             var list = _tnrssSupervisor.GetAllCostIncurredTraderId(userId);
-            return new ResponseBuilder<object>().Success("Get All Cost Incurred Success").WithData(list).ResponseModel;
+            return new ResponseBuilder<object>().Success("Lấy thông tin chi phí thành công").WithData(list).ResponseModel;
         }
 
         [HttpPost("create")]
@@ -34,7 +34,7 @@ namespace TnR_SS.API.Controllers
         {
             var userId = TokenManagement.GetUserIdInToken(HttpContext);
             await _tnrssSupervisor.CreateCostIncurredAsync(incurred, userId);
-            return new ResponseBuilder().Success("Create Cost Incurred Success").ResponseModel;
+            return new ResponseBuilder().Success("Tạo chi phí mới thành công").ResponseModel;
         }
 
         [HttpPost("update")]
@@ -42,7 +42,7 @@ namespace TnR_SS.API.Controllers
         {
             var userId = TokenManagement.GetUserIdInToken(HttpContext);
             await _tnrssSupervisor.UpdateCostIncurredAsync(incurred, userId);
-            return new ResponseBuilder().Success("Update Cost Incurred Success").ResponseModel;
+            return new ResponseBuilder().Success("Cập nhật chi phí phát sinh thành công").ResponseModel;
         }
 
         [HttpPost("delete/{incurredId}")]
@@ -50,7 +50,7 @@ namespace TnR_SS.API.Controllers
         {
             var userId = TokenManagement.GetUserIdInToken(HttpContext);
             await _tnrssSupervisor.DeleteCostIncurredAsync(incurredId, userId);
-            return new ResponseBuilder().Success("Delete Cost Incurred Success").ResponseModel;
+            return new ResponseBuilder().Success("Xóa thông tin chi phí thành công").ResponseModel;
         }
 
         [HttpGet("detail/{incurredId}")]
@@ -58,7 +58,7 @@ namespace TnR_SS.API.Controllers
         {
             var userId = TokenManagement.GetUserIdInToken(HttpContext);
             var detail = _tnrssSupervisor.GetDetailCostIncurred(userId, incurredId);
-            return new ResponseBuilder<CostIncurredApiModel>().Success("Get Detail Cost Incurred Success").WithData(detail).ResponseModel;
+            return new ResponseBuilder<CostIncurredApiModel>().Success("Lấy thông tin chi phí thành công").WithData(detail).ResponseModel;
         }
     }
 }

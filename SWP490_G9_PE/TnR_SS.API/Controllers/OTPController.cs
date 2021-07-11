@@ -33,20 +33,20 @@ namespace TnR_SS.API.Controller
         {
             if (_tnrssSupervisor.CheckUserPhoneExists(phoneNumber))
             {
-                return new ResponseBuilder().Error("Phone Number existed").ResponseModel;
+                return new ResponseBuilder().Error("Số điện thoại đã tồn tại").ResponseModel;
             }
 
             var checkOTPExsits = _tnrssSupervisor.CheckPhoneOTPExists(phoneNumber);
             if (checkOTPExsits)
             {
-                return new ResponseBuilder().Error("Wait a minute then resend OTP").ResponseModel;
+                return new ResponseBuilder().Error("Mã OTP không đúng").ResponseModel;
             }
 
             //var otpId = await _tnrssSupervisor.SendOTPByStringee(token, phoneNumber);
             var otpCode = TwilioAPI.SendOtpRequest(phoneNumber);
             if (otpCode is null)
             {
-                return new ResponseBuilder().Error("Wait a minute then resend OTP").ResponseModel;
+                return new ResponseBuilder().Error("Nếu không nhận được OTP, hãy nhận lại sau 60s").ResponseModel;
             }
 
             var otpId = await _tnrssSupervisor.AddOTPAsync(otpCode, phoneNumber);
@@ -60,10 +60,10 @@ namespace TnR_SS.API.Controller
         {
             if (await _tnrssSupervisor.CheckOTPRightAsync(modelData.OTPID, modelData.Code, modelData.PhoneNumber))
             {
-                return new ResponseBuilder().Success("OTP Success").ResponseModel;
+                return new ResponseBuilder().Success("OTP thành công").ResponseModel;
             }
 
-            return new ResponseBuilder().Success("OTP Success").ResponseModel;
+            return new ResponseBuilder().Success("OTP Thành công").ResponseModel;
             //return new ResponseBuilder().Error("Invalid OTP").ResponseModel;
         }
         #endregion
@@ -107,36 +107,36 @@ namespace TnR_SS.API.Controller
         {
             if (!TokenManagement.CheckUserIdFromToken(HttpContext, id))
             {
-                return new ResponseBuilder().Error("Access denied").ResponseModel;
+                return new ResponseBuilder().Error("Tài khoản không hợp lệ").ResponseModel;
             }
 
             var user = await _tnrssSupervisor.GetUserByIdAsync(id);
             if (!await _tnrssSupervisor.CheckUserPassword(user.UserID, dataModel.CurrentPassword))
             {
-                return new ResponseBuilder().Error("Invalid password").ResponseModel;
+                return new ResponseBuilder().Error("Số điện thoại hoặc mật khẩu sai").ResponseModel;
             }
 
             if (_tnrssSupervisor.CheckUserPhoneExists(dataModel.NewPhoneNumber))
             {
-                return new ResponseBuilder().Error("Phone Number existed").ResponseModel;
+                return new ResponseBuilder().Error("Số điện thoại đã tồn tại").ResponseModel;
             }
 
             var checkOTPExsits = _tnrssSupervisor.CheckPhoneOTPExists(dataModel.NewPhoneNumber);
             if (checkOTPExsits)
             {
-                return new ResponseBuilder().Error("Wait a minute then resend OTP").ResponseModel;
+                return new ResponseBuilder().Error("Nếu không nhận được OTP, hãy gửi lại sau 60s").ResponseModel;
             }
 
             //var otpCode = await StringeeAPI.SendOtpRequestAsync(dataModel.NewPhoneNumber);
             var otpCode = TwilioAPI.SendOtpRequest(dataModel.NewPhoneNumber);
             if (otpCode is null)
             {
-                return new ResponseBuilder().Error("Wait a minute then resend OTP").ResponseModel;
+                return new ResponseBuilder().Error("Nếu không nhận được OTP, hãy gửi lại sau 60s").ResponseModel;
             }
 
             var otpId = await _tnrssSupervisor.AddOTPAsync(otpCode, dataModel.NewPhoneNumber);
 
-            return new ResponseBuilder<Object>().Success("Success").WithData(new { OTPID = otpId }).ResponseModel;
+            return new ResponseBuilder<Object>().Success("Thành công").WithData(new { OTPID = otpId }).ResponseModel;
         }
         #endregion
     }

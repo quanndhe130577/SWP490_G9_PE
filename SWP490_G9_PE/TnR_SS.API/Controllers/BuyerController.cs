@@ -26,7 +26,7 @@ namespace TnR_SS.API.Controllers
         {
             var wcId = TokenManagement.GetUserIdInToken(HttpContext);
             await _tnrssSupervisor.CreateBuyerAsync(buyerApi, wcId);
-            return new ResponseBuilder().Success("Create Buyer Success").ResponseModel;
+            return new ResponseBuilder().Success("Tạo người mua thành công").ResponseModel;
         }
 
         [HttpGet("getall")]
@@ -34,7 +34,7 @@ namespace TnR_SS.API.Controllers
         {
             var wcId = TokenManagement.GetUserIdInToken(HttpContext);
             List<BuyerApiModel> list = _tnrssSupervisor.GetAllBuyerByWCId(wcId);
-            return new ResponseBuilder<List<BuyerApiModel>>().Success("Get all buyer").WithData(list).ResponseModel;
+            return new ResponseBuilder<List<BuyerApiModel>>().Success("Lấy dữ liệu người mua thành công").WithData(list).ResponseModel;
         }
 
         [HttpPost("update")]
@@ -42,7 +42,7 @@ namespace TnR_SS.API.Controllers
         {
             var wcId = TokenManagement.GetUserIdInToken(HttpContext);
             await _tnrssSupervisor.UpdateBuyerAsync(buyerApi, wcId);
-            return new ResponseBuilder().Success("Update Buyer Success").ResponseModel;
+            return new ResponseBuilder().Success("Cập nhật thông tin người mua thành công").ResponseModel;
         }
 
         [HttpPost("delete/{buyerId}")]
@@ -50,7 +50,7 @@ namespace TnR_SS.API.Controllers
         {
             var wcId = TokenManagement.GetUserIdInToken(HttpContext);
             await _tnrssSupervisor.DeleteBuyerAsync(buyerId, wcId);
-            return new ResponseBuilder().Success("Delete Buyer Success").ResponseModel;
+            return new ResponseBuilder().Success("Xóa thông tin người mua thành công").ResponseModel;
         }
 
         [HttpGet("detail/{buyerId}")]
@@ -58,7 +58,7 @@ namespace TnR_SS.API.Controllers
         {
             var wcId = TokenManagement.GetUserIdInToken(HttpContext);
             var buyerDetail = await _tnrssSupervisor.GetDetailBuyerAsync(buyerId, wcId);
-            return new ResponseBuilder<BuyerApiModel>().Success("Get Detail Buyer Success").WithData(buyerDetail).ResponseModel;
+            return new ResponseBuilder<BuyerApiModel>().Success("Lấy thông tin người mua thành công").WithData(buyerDetail).ResponseModel;
         }
     }
 }

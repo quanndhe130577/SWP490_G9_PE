@@ -28,7 +28,7 @@ namespace TnR_SS.API.Controllers
         public ResponseModel GetAllByTruckId(int truckId)
         {
             var rs = _tnrssSupervisor.GetAllDrumByTruckId(truckId);
-            return new ResponseBuilder<object>().Success("Get drum success").WithData(rs).ResponseModel;
+            return new ResponseBuilder<object>().Success("Lấy thông tin lồ thành công").WithData(rs).ResponseModel;
         }
 
         [HttpPost("create")]
@@ -36,7 +36,7 @@ namespace TnR_SS.API.Controllers
         {
             var userId = TokenManagement.GetUserIdInToken(HttpContext);
             var drumId = await _tnrssSupervisor.CreateDrumAsync(drumModel, userId);
-            return new ResponseBuilder<object>().Success("Create drum success").WithData(new { drumId = drumId }).ResponseModel;
+            return new ResponseBuilder<object>().Success("Tạo mới lồ thành công").WithData(new { drumId = drumId }).ResponseModel;
         }
 
         [HttpGet("getall")]
@@ -44,7 +44,7 @@ namespace TnR_SS.API.Controllers
         {
             var userId = TokenManagement.GetUserIdInToken(HttpContext);
             var rs = _tnrssSupervisor.GetAllDrumByTraderId(userId);
-            return new ResponseBuilder<object>().Success("Get drum success").WithData(rs).ResponseModel;
+            return new ResponseBuilder<object>().Success("Lấy thông tin lồ thành công").WithData(rs).ResponseModel;
         }
 
         [HttpPost("update")]
@@ -52,7 +52,7 @@ namespace TnR_SS.API.Controllers
         {
             var userId = TokenManagement.GetUserIdInToken(HttpContext);
             await _tnrssSupervisor.UpdateDrumAsync(drum, userId);
-            return new ResponseBuilder().Success("Update Drum Success").ResponseModel;
+            return new ResponseBuilder().Success("Cập nhật thông tin lồ thành công").ResponseModel;
         }
 
         [HttpPost("delete/{drumId}")]
@@ -60,7 +60,7 @@ namespace TnR_SS.API.Controllers
         {
             var userId = TokenManagement.GetUserIdInToken(HttpContext);
             await _tnrssSupervisor.DeleteDrumAsync(drumId, userId);
-            return new ResponseBuilder().Success("Delete Drum Success").ResponseModel;
+            return new ResponseBuilder().Success("Xóa thông tin lồ thành công").ResponseModel;
         }
 
         [HttpGet("detail/{drumId}")]
@@ -68,7 +68,7 @@ namespace TnR_SS.API.Controllers
         {
             var userId = TokenManagement.GetUserIdInToken(HttpContext);
             var detail = _tnrssSupervisor.GetDetailDrum(userId, drumId);
-            return new ResponseBuilder<DrumApiModel>().Success("Get Detail Drum Success").WithData(detail).ResponseModel;
+            return new ResponseBuilder<DrumApiModel>().Success("Lấy thông tin lồ thành công").WithData(detail).ResponseModel;
         }
     }
 }

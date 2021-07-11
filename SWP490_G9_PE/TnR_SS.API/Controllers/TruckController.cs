@@ -32,9 +32,7 @@ namespace TnR_SS.API.Controllers
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
             var listTruck = _tnrssSupervisor.GetAllTruckByTraderId(traderId);
 
-            var rs = "haha chau len ba".Normalize();
-
-            return new ResponseBuilder<object>().Success("Get all type").WithData(listTruck).ResponseModel;
+            return new ResponseBuilder<object>().Success("Lấy thông tin xe tải thành công").WithData(listTruck).ResponseModel;
         }
 
         [HttpPost("create")]
@@ -52,7 +50,7 @@ namespace TnR_SS.API.Controllers
 
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
             var truckId = await _tnrssSupervisor.CreateTruckAsync(truckModel, traderId);
-            return new ResponseBuilder<object>().Success("Create truck success").WithData(new { truckId = truckId }).ResponseModel;
+            return new ResponseBuilder<object>().Success("Tạo xe mới thành công").WithData(new { truckId = truckId }).ResponseModel;
         }
 
         [HttpPost("update")]
@@ -72,7 +70,7 @@ namespace TnR_SS.API.Controllers
                 return new ResponseBuilder<List<TruckApiModel>>().Error("Không tìm thấy truck").ResponseModel;
             }
             var truckId = await _tnrssSupervisor.UpdateTruckAsync(truckModel);
-            return new ResponseBuilder<object>().Success("Update truck success").ResponseModel;
+            return new ResponseBuilder<object>().Success("Cập nhật thông tin xe thành công").ResponseModel;
         }
 
         [HttpPost("delete/{id}")]
@@ -81,10 +79,10 @@ namespace TnR_SS.API.Controllers
             Truck truck = await _tnrssSupervisor.GetTruck(id);
             if (truck == null)
             {
-                return new ResponseBuilder<object>().Error("Truck not found").ResponseModel;
+                return new ResponseBuilder<object>().Error("Không tìm thấy xe").ResponseModel;
             }
             await _tnrssSupervisor.DeleteTruck(truck);
-            return new ResponseBuilder<object>().Success("Delete truck success").ResponseModel;
+            return new ResponseBuilder<object>().Success("Xóa thông tin xe thành công").ResponseModel;
         }
 
         [HttpGet("getall/{date_str}")]
@@ -96,7 +94,7 @@ namespace TnR_SS.API.Controllers
             {
                 var traderId = TokenManagement.GetUserIdInToken(HttpContext);
                 var rs = await _tnrssSupervisor.GetDetailTrucksByDate(traderId, date);
-                return new ResponseBuilder<List<TruckDateModel>>().Success("Get truck detail success").WithData(rs).ResponseModel;
+                return new ResponseBuilder<List<TruckDateModel>>().Success("Lấy thông tin xe thành công").WithData(rs).ResponseModel;
             }
             else
             {

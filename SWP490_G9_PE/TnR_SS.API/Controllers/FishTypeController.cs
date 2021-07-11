@@ -30,7 +30,7 @@ namespace TnR_SS.API.Controllers
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
             await _tnrssSupervisor.CreateListFishTypeAsync(listType.ListFishType, traderId);
-            return new ResponseBuilder().Success("Create Fish Type Success").ResponseModel;
+            return new ResponseBuilder().Success("Tạo giá cá thành công").ResponseModel;
         }
 
         [HttpPost("create")]
@@ -38,7 +38,7 @@ namespace TnR_SS.API.Controllers
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
             await _tnrssSupervisor.CreateFishTypeAsync(fishType, traderId);
-            return new ResponseBuilder().Success("Create Fish Type Success").ResponseModel;
+            return new ResponseBuilder().Success("Tạo giá cá thành công").ResponseModel;
         }
 
         [HttpGet("getlastall")]
@@ -46,7 +46,7 @@ namespace TnR_SS.API.Controllers
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
             var fishTypes = _tnrssSupervisor.GetAllLastFishTypeWithPondOwnerId(traderId);
-            return new ResponseBuilder<List<FishTypeApiModel>>().Success("Get all type").WithData(fishTypes).ResponseModel;
+            return new ResponseBuilder<List<FishTypeApiModel>>().Success("Lấy thông tin giá cá thành công").WithData(fishTypes).ResponseModel;
         }
 
         [HttpGet("getall")]
@@ -54,7 +54,7 @@ namespace TnR_SS.API.Controllers
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
             var fishTypes = await _tnrssSupervisor.GetAllFishTypeByTraderIdAsync(traderId);
-            return new ResponseBuilder<List<FishTypeResModel>>().Success("Get all type").WithData(fishTypes).ResponseModel;
+            return new ResponseBuilder<List<FishTypeResModel>>().Success("Lấy thông tin giá cá thành công").WithData(fishTypes).ResponseModel;
         }
 
         [HttpGet("getone/{date_str}/{poId}")]
@@ -80,7 +80,7 @@ namespace TnR_SS.API.Controllers
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
             await _tnrssSupervisor.UpdateFishTypeAsync(fishType, traderId);
-            return new ResponseBuilder().Success("Update Fish Type Success").ResponseModel;
+            return new ResponseBuilder().Success("Cập nhật giá cá thành công").ResponseModel;
         }
 
         [HttpPost("delete/{fishTypeId}")]
@@ -88,7 +88,7 @@ namespace TnR_SS.API.Controllers
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
             await _tnrssSupervisor.DeleteFishTypeAsync(fishTypeId, traderId);
-            return new ResponseBuilder().Success("Delete Fish Type Success").ResponseModel;
+            return new ResponseBuilder().Success("Xóa giá cá thành công").ResponseModel;
         }
     }
 }

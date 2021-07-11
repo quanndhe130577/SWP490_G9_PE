@@ -100,10 +100,10 @@ namespace TnR_SS.API.Controller
                     return new ResponseBuilder<LoginResModel>().Success("Đăng nhập thành công").WithData(rlm).ResponseModel;
                 }
 
-                return new ResponseBuilder().Error("Invalid Phone number or password").ResponseModel;
+                return new ResponseBuilder().Error("Số điện thoại hoặc mật khẩu không đúng").ResponseModel;
             }
 
-            return new ResponseBuilder().Error("Login failed").ResponseModel;
+            return new ResponseBuilder().Error("Đăng nhập thất bại. Hãy kiểm tra lại thông tin tài khoản").ResponseModel;
         }
         #endregion
 
@@ -114,7 +114,7 @@ namespace TnR_SS.API.Controller
         {
             if (!TokenManagement.CheckUserIdFromToken(HttpContext, id))
             {
-                return new ResponseBuilder().Error("Access denied").ResponseModel;
+                return new ResponseBuilder().Error("Sai thông tin tài khoản").ResponseModel;
             }
 
             string avatarLink = await ImgurAPI.UploadImgurAsync(userData.AvatarBase64);
@@ -123,7 +123,7 @@ namespace TnR_SS.API.Controller
             if (result.Succeeded)
             {
                 var userResModel = await _tnrssSupervisor.GetUserResModelByIdAsync(id);
-                return new ResponseBuilder<UserResModel>().Success("Update Success").WithData(userResModel).ResponseModel;
+                return new ResponseBuilder<UserResModel>().Success("Cập nhật thành công").WithData(userResModel).ResponseModel;
             }
 
             var errors = result.Errors.Select(x => x.Description).ToList();
@@ -140,13 +140,13 @@ namespace TnR_SS.API.Controller
             {
                 if (!TokenManagement.CheckUserIdFromToken(HttpContext, id))
                 {
-                    return new ResponseBuilder().Error("Access denied").ResponseModel;
+                    return new ResponseBuilder().Error("Sai thông tin tài khoản").ResponseModel;
                 }
 
                 var userInfor = await _tnrssSupervisor.GetUserByIdAsync(id);
                 if (userInfor is null)
                 {
-                    return new ResponseBuilder().Error("Invalid information").ResponseModel;
+                    return new ResponseBuilder().Error("Tài khoản không tồn tại").ResponseModel;
                 }
 
                 var result = await _tnrssSupervisor.ChangeUserPasswordAsync(userInfor.UserID, changePasswordModel.CurrentPassword, changePasswordModel.NewPassword);
@@ -161,7 +161,7 @@ namespace TnR_SS.API.Controller
                         User = await _tnrssSupervisor.GetUserResModelByIdAsync(id)
                     };
 
-                    return new ResponseBuilder<LoginResModel>().Success("Update Success").WithData(rlm).ResponseModel;
+                    return new ResponseBuilder<LoginResModel>().Success("Cập nhật thành công").WithData(rlm).ResponseModel;
                 }
                 else
                 {
@@ -170,7 +170,7 @@ namespace TnR_SS.API.Controller
                 }
             }
 
-            return new ResponseBuilder().Error("Invalid password").ResponseModel;
+            return new ResponseBuilder().Error("Sai mật khẩu").ResponseModel;
         }
         #endregion
 
@@ -250,7 +250,7 @@ namespace TnR_SS.API.Controller
         public async Task<ResponseModel> GetUserInfo(int id)
         {
             var user = await _tnrssSupervisor.GetUserByIdAsync(id);
-            return new ResponseBuilder<UserResModel>().Success("Login success").WithData(user).ResponseModel;
+            return new ResponseBuilder<UserResModel>().Success("Lấy thông tin tài khoản thành công").WithData(user).ResponseModel;
         }
         #endregion
 

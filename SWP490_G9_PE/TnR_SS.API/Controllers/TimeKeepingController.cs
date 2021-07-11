@@ -29,7 +29,7 @@ namespace TnR_SS.API.Controller
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
             var rs = _tnrssSupervisor.GetListTimeKeepingByTraderIdWithDate(traderId, date);
-            return new ResponseBuilder<List<TimeKeepingApiModel>>().Success("Get Info Success").WithData(rs).ResponseModel;
+            return new ResponseBuilder<List<TimeKeepingApiModel>>().Success("Lấy thông tin chấm công thành công").WithData(rs).ResponseModel;
         }
         [HttpGet]
         [Route("getByTrader/month/{date}")]
@@ -37,7 +37,7 @@ namespace TnR_SS.API.Controller
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
             var rs = _tnrssSupervisor.GetListTimeKeepingByTraderIdWithMonth(traderId, date);
-            return new ResponseBuilder<List<TimeKeepingApiModel>>().Success("Get Info Success").WithData(rs).ResponseModel;
+            return new ResponseBuilder<List<TimeKeepingApiModel>>().Success("Lấy thông tin chấm công thành công").WithData(rs).ResponseModel;
         }
 
         [HttpGet]
@@ -45,7 +45,7 @@ namespace TnR_SS.API.Controller
         public ResponseModel GetByEmployeeId(int id)
         {
             var rs = _tnrssSupervisor.GetListTimeKeepingByEmployeeId(id);
-            return new ResponseBuilder<List<TimeKeepingApiModel>>().Success("Get Info Success").WithData(rs).ResponseModel;
+            return new ResponseBuilder<List<TimeKeepingApiModel>>().Success("Lấy thông tin chấm công thành công").WithData(rs).ResponseModel;
         }
 
         [HttpGet]
@@ -53,7 +53,7 @@ namespace TnR_SS.API.Controller
         public ResponseModel GetAll()
         {
             var rs = _tnrssSupervisor.GetListTimeKeeping();
-            return new ResponseBuilder<List<TimeKeepingApiModel>>().Success("Get Info Success").WithData(rs).ResponseModel;
+            return new ResponseBuilder<List<TimeKeepingApiModel>>().Success("Lấy thông tin chấm công thành công").WithData(rs).ResponseModel;
         }
         [HttpPost]
         [Route("create")]

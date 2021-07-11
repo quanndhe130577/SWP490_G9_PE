@@ -30,7 +30,7 @@ namespace TnR_SS.API.Controller
         [Route("get-all")]
         public ResponseModel GetRoleUsers()
         {
-            return new ResponseBuilder<List<AllRoleResModel>>().Success("Get list role success").WithData(_tnrssSupervisor.GetAllResRoles()).ResponseModel;
+            return new ResponseBuilder<List<AllRoleResModel>>().Success("Lấy thông tin vai trò thành công").WithData(_tnrssSupervisor.GetAllResRoles()).ResponseModel;
         }
 
         [HttpPost]
@@ -42,7 +42,7 @@ namespace TnR_SS.API.Controller
             IdentityResult result = await _tnrssSupervisor.AddRoleUserAsync(roleUser);
             if (result.Succeeded)
             {
-                return new ResponseBuilder<RoleUser>().Success("Get list role success").WithData(roleUser).ResponseModel;
+                return new ResponseBuilder<RoleUser>().Success("Lấy thông tin vai trò thành công").WithData(roleUser).ResponseModel;
             }
 
             var errors = result.Errors.Select(x => x.Description).ToList();

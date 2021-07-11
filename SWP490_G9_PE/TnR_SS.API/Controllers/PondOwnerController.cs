@@ -40,7 +40,7 @@ namespace TnR_SS.API.Controllers
         public ResponseModel GetByTraderId(int traderId)
         {
             var rs = _tnrssSupervisor.GetPondOwnerByTraderId(traderId);
-            return new ResponseBuilder<List<PondOwnerApiModel>>().Success("Get Info Success").WithData(rs).ResponseModel;
+            return new ResponseBuilder<List<PondOwnerApiModel>>().Success("Lấy thông tin chủ ao thành công").WithData(rs).ResponseModel;
         }
 
         [HttpPost]

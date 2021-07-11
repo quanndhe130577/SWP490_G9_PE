@@ -28,7 +28,7 @@ namespace TnR_SS.API.Controllers
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
             await _tnrssSupervisor.CreateBasketAsync(basketApi, traderId);
-            return new ResponseBuilder().Success("Create Basket Success").ResponseModel;
+            return new ResponseBuilder().Success("Tạo rổ thành công").ResponseModel;
         }
 
         [HttpGet("getall")]
@@ -36,7 +36,7 @@ namespace TnR_SS.API.Controllers
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
             List<BasketApiModel> list = _tnrssSupervisor.GetAllBasket(traderId);
-            return new ResponseBuilder<List<BasketApiModel>>().Success("Get all basket").WithData(list).ResponseModel;
+            return new ResponseBuilder<List<BasketApiModel>>().Success("Lấy thông tin rổ thành công").WithData(list).ResponseModel;
         }
 
         [HttpPost("update")]
@@ -44,7 +44,7 @@ namespace TnR_SS.API.Controllers
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
             await _tnrssSupervisor.UpdateBasketAsync(basketApi, traderId);
-            return new ResponseBuilder<List<BasketApiModel> >().Success("Update Basket Success").WithData(_tnrssSupervisor.GetAllBasket(traderId)).ResponseModel;
+            return new ResponseBuilder<List<BasketApiModel> >().Success("Cập nhật thông tin rổ thành công").WithData(_tnrssSupervisor.GetAllBasket(traderId)).ResponseModel;
         }
 
         [HttpPost("delete/{basketId}")]
@@ -52,7 +52,7 @@ namespace TnR_SS.API.Controllers
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
             await _tnrssSupervisor.DeleteBasketAsync(basketId, traderId);
-            return new ResponseBuilder().Success("Delete Basket Success").ResponseModel;
+            return new ResponseBuilder().Success("Xóa thông tin rổ thành công").ResponseModel;
         }
     }
 }
