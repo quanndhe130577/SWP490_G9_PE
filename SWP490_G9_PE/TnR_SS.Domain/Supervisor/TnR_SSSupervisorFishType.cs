@@ -5,6 +5,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TnR_SS.Domain.ApiModels.FishTypeModel;
+using TnR_SS.Domain.ApiModels.FishTypeModel.ResponseModel;
+using TnR_SS.Domain.ApiModels.PondOwnerModel;
 using TnR_SS.Domain.Entities;
 
 namespace TnR_SS.Domain.Supervisor
@@ -12,7 +14,7 @@ namespace TnR_SS.Domain.Supervisor
     public partial class TnR_SSSupervisor
     {
         readonly Regex regexPrice = new(@"/^\d+$/");
-        public List<FishTypeApiModel> GetAllLastFishTypeByPondOwnerId(int traderId, int pondOwnerId)
+        public List<FishTypeApiModel> GetAllLastFishTypeWithPondOwnerId(int traderId, int pondOwnerId)
         {
             var listType = _unitOfWork.FishTypes.GetAllLastByTraderIdAndPondOwnerId(traderId, pondOwnerId);
             List<FishTypeApiModel> list = new List<FishTypeApiModel>();
@@ -24,13 +26,15 @@ namespace TnR_SS.Domain.Supervisor
 
         }
 
-        public List<FishTypeApiModel> GetAllFishTypeByTraderId(int traderId)
+        public async Task<List<FishTypeResModel>> GetAllFishTypeByTraderIdAsync(int traderId)
         {
             var listType = _unitOfWork.FishTypes.GetAllByTraderId(traderId);
-            List<FishTypeApiModel> list = new List<FishTypeApiModel>();
+            List<FishTypeResModel> list = new List<FishTypeResModel>();
             foreach (var type in listType)
             {
-                list.Add(_mapper.Map<FishType, FishTypeApiModel>(type));
+                FishTypeResModel newFish = _mapper.Map<FishType, FishTypeResModel>(type);
+                newFish.PondOwner = _mapper.Map<PondOwner, PondOwnerApiModel>(await _unitOfWork.PondOwners.FindAsync(newFish.PondOwnerID));
+                list.Add(newFish);
             }
             return list;
 

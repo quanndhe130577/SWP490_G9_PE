@@ -11,29 +11,28 @@ namespace TnR_SS.DataEFCore.Migrations
                 name: "PondOwnerID",
                 table: "FishType",
                 type: "int",
-                nullable: false,
-                defaultValue: 0);
+                nullable: true);
 
             migrationBuilder.UpdateData(
                 table: "RoleUser",
                 keyColumn: "Id",
                 keyValue: 1,
                 columns: new[] { "ConcurrencyStamp", "UpdatedAt" },
-                values: new object[] { "2420c0da-562e-47c2-b571-5054c799e59a", new DateTime(2021, 7, 11, 14, 53, 36, 936, DateTimeKind.Local).AddTicks(4048) });
+                values: new object[] { "937c40c0-34cb-4717-9067-b24965827c58", new DateTime(2021, 7, 11, 15, 47, 41, 221, DateTimeKind.Local).AddTicks(6347) });
 
             migrationBuilder.UpdateData(
                 table: "RoleUser",
                 keyColumn: "Id",
                 keyValue: 2,
                 columns: new[] { "ConcurrencyStamp", "UpdatedAt" },
-                values: new object[] { "53a06dfa-9e6e-42dd-a09b-18a8aac8b853", new DateTime(2021, 7, 11, 14, 53, 36, 936, DateTimeKind.Local).AddTicks(4162) });
+                values: new object[] { "35921199-c862-4b85-aae8-9a47f3afbd9e", new DateTime(2021, 7, 11, 15, 47, 41, 221, DateTimeKind.Local).AddTicks(6383) });
 
             migrationBuilder.UpdateData(
                 table: "RoleUser",
                 keyColumn: "Id",
                 keyValue: 3,
                 columns: new[] { "ConcurrencyStamp", "UpdatedAt" },
-                values: new object[] { "4cc06146-1da5-4621-911a-9590d7177c44", new DateTime(2021, 7, 11, 14, 53, 36, 934, DateTimeKind.Local).AddTicks(2585) });
+                values: new object[] { "570e1e8c-c874-42fc-b1ec-5c2068b65711", new DateTime(2021, 7, 11, 15, 47, 41, 219, DateTimeKind.Local).AddTicks(6929) });
 
             migrationBuilder.CreateIndex(
                 name: "IX_FishType_PondOwnerID",

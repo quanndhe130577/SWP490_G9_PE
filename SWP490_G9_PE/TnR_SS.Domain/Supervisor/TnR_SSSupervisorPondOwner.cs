@@ -15,25 +15,25 @@ namespace TnR_SS.Domain.Supervisor
             PondOwner pondOwner = await _unitOfWork.PondOwners.FindAsync(id);
             return pondOwner;
         }
-        public List<PondOwnerAPIModel> GetPondOwnerByTraderId(int traderId)
+        public List<PondOwnerApiModel> GetPondOwnerByTraderId(int traderId)
         {
             var pondOnwers = _unitOfWork.PondOwners.GetAllByTraderId(traderId);
-            List<PondOwnerAPIModel> list = new List<PondOwnerAPIModel>();
+            List<PondOwnerApiModel> list = new List<PondOwnerApiModel>();
             foreach (var item in pondOnwers)
             {
-                list.Add(_mapper.Map<PondOwner, PondOwnerAPIModel>(item));
+                list.Add(_mapper.Map<PondOwner, PondOwnerApiModel>(item));
             }
             return list;
         }
 
-        public async Task<int> AddPondOwnerAsync(PondOwnerAPIModel pondOwnerModel)
+        public async Task<int> AddPondOwnerAsync(PondOwnerApiModel pondOwnerModel)
         {
-            PondOwner pondOwner = _mapper.Map<PondOwnerAPIModel, PondOwner>(pondOwnerModel);
+            PondOwner pondOwner = _mapper.Map<PondOwnerApiModel, PondOwner>(pondOwnerModel);
             await _unitOfWork.PondOwners.CreateAsync(pondOwner);
             return await _unitOfWork.SaveChangeAsync();
         }
 
-        public async Task<int> EditPondOwner(PondOwnerAPIModel pondOwnerModel)
+        public async Task<int> EditPondOwner(PondOwnerApiModel pondOwnerModel)
         {
             PondOwner pondOwner = await _unitOfWork.PondOwners.FindAsync(pondOwnerModel.ID);
             pondOwner.Name = pondOwnerModel.Name;

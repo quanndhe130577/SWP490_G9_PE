@@ -40,22 +40,22 @@ namespace TnR_SS.API.Controllers
         public ResponseModel GetByTraderId(int traderId)
         {
             var rs = _tnrssSupervisor.GetPondOwnerByTraderId(traderId);
-            return new ResponseBuilder<List<PondOwnerAPIModel>>().Success("Get Info Success").WithData(rs).ResponseModel;
+            return new ResponseBuilder<List<PondOwnerApiModel>>().Success("Get Info Success").WithData(rs).ResponseModel;
         }
 
         [HttpPost]
         [Route("create")]
-        public async Task<ResponseModel> Create(PondOwnerAPIModel pondOwner)
+        public async Task<ResponseModel> Create(PondOwnerApiModel pondOwner)
         {
             var valid = Valid(pondOwner);
             if (valid.IsValid)
             {
                 await _tnrssSupervisor.AddPondOwnerAsync(pondOwner);
-                return new ResponseBuilder<List<PondOwnerAPIModel>>().Success("Thêm thành công").ResponseModel;
+                return new ResponseBuilder<List<PondOwnerApiModel>>().Success("Thêm thành công").ResponseModel;
             }
             else
             {
-                return new ResponseBuilder<List<PondOwnerAPIModel>>().Error(valid.Message).ResponseModel;
+                return new ResponseBuilder<List<PondOwnerApiModel>>().Error(valid.Message).ResponseModel;
             }
         }
 
@@ -66,43 +66,43 @@ namespace TnR_SS.API.Controllers
             PondOwner pondOwner = await _tnrssSupervisor.GetPondOwner(id);
             if (pondOwner == null)
             {
-                return new ResponseBuilder<List<PondOwnerAPIModel>>().Error("Không tìm thấy chủ ao").ResponseModel;
+                return new ResponseBuilder<List<PondOwnerApiModel>>().Error("Không tìm thấy chủ ao").ResponseModel;
             }
             int count = await _tnrssSupervisor.DeletePondOwner(pondOwner);
             if (count > 0)
             {
-                return new ResponseBuilder<List<PondOwnerAPIModel>>().Success("Xoá thành công").ResponseModel;
+                return new ResponseBuilder<List<PondOwnerApiModel>>().Success("Xoá thành công").ResponseModel;
             }
             else
             {
-                return new ResponseBuilder<List<PondOwnerAPIModel>>().Error("Xoá thất bại").ResponseModel;
+                return new ResponseBuilder<List<PondOwnerApiModel>>().Error("Xoá thất bại").ResponseModel;
             }
         }
 
 
         [HttpPost]
         [Route("update")]
-        public async Task<ResponseModel> Update(PondOwnerAPIModel pondOwner)
+        public async Task<ResponseModel> Update(PondOwnerApiModel pondOwner)
         {
             PondOwner po = await _tnrssSupervisor.GetPondOwner(pondOwner.ID);
             if (po == null)
             {
-                return new ResponseBuilder<List<PondOwnerAPIModel>>().Error("Không tìm thấy chủ ao").ResponseModel;
+                return new ResponseBuilder<List<PondOwnerApiModel>>().Error("Không tìm thấy chủ ao").ResponseModel;
             }
             var valid = Valid(pondOwner);
             if (valid.IsValid)
             {
                 var traderId = TokenManagement.GetUserIdInToken(HttpContext);
                 await _tnrssSupervisor.EditPondOwner(pondOwner);
-                return new ResponseBuilder<List<PondOwnerAPIModel>>().Success("Cập nhật thành công").WithData(_tnrssSupervisor.GetPondOwnerByTraderId(traderId)).ResponseModel;
+                return new ResponseBuilder<List<PondOwnerApiModel>>().Success("Cập nhật thành công").WithData(_tnrssSupervisor.GetPondOwnerByTraderId(traderId)).ResponseModel;
             }
             else
             {
-                return new ResponseBuilder<List<PondOwnerAPIModel>>().Error(valid.Message).ResponseModel;
+                return new ResponseBuilder<List<PondOwnerApiModel>>().Error(valid.Message).ResponseModel;
             }
         }
 
-        public static PondOwnerValidModel Valid(PondOwnerAPIModel pondOwner)
+        public static PondOwnerValidModel Valid(PondOwnerApiModel pondOwner)
         {
             Regex phoneNumberRegex = new Regex(@"^(84|0[3|5|7|8|9])+([0-9]{8})$");
             if (pondOwner.Name == null)

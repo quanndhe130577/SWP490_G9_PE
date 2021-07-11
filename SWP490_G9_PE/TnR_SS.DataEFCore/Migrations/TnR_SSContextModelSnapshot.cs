@@ -342,7 +342,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         .HasMaxLength(12)
                         .HasColumnType("real");
 
-                    b.Property<int>("PondOwnerID")
+                    b.Property<int?>("PondOwnerID")
                         .HasColumnType("int");
 
                     b.Property<double>("Price")
@@ -588,32 +588,32 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "4cc06146-1da5-4621-911a-9590d7177c44",
+                            ConcurrencyStamp = "570e1e8c-c874-42fc-b1ec-5c2068b65711",
                             CreatedAt = new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Chủ bến",
                             Name = "WeightRecorder",
                             NormalizedName = "WEIGHTRECORDER",
-                            UpdatedAt = new DateTime(2021, 7, 11, 14, 53, 36, 934, DateTimeKind.Local).AddTicks(2585)
+                            UpdatedAt = new DateTime(2021, 7, 11, 15, 47, 41, 219, DateTimeKind.Local).AddTicks(6929)
                         },
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "2420c0da-562e-47c2-b571-5054c799e59a",
+                            ConcurrencyStamp = "937c40c0-34cb-4717-9067-b24965827c58",
                             CreatedAt = new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Thương lái",
                             Name = "Trader",
                             NormalizedName = "TRADER",
-                            UpdatedAt = new DateTime(2021, 7, 11, 14, 53, 36, 936, DateTimeKind.Local).AddTicks(4048)
+                            UpdatedAt = new DateTime(2021, 7, 11, 15, 47, 41, 221, DateTimeKind.Local).AddTicks(6347)
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "53a06dfa-9e6e-42dd-a09b-18a8aac8b853",
+                            ConcurrencyStamp = "35921199-c862-4b85-aae8-9a47f3afbd9e",
                             CreatedAt = new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Admin",
                             Name = "Admin",
                             NormalizedName = "ADMIN",
-                            UpdatedAt = new DateTime(2021, 7, 11, 14, 53, 36, 936, DateTimeKind.Local).AddTicks(4162)
+                            UpdatedAt = new DateTime(2021, 7, 11, 15, 47, 41, 221, DateTimeKind.Local).AddTicks(6383)
                         });
                 });
 
@@ -910,8 +910,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         .WithMany("FishTypes")
                         .HasForeignKey("PondOwnerID")
                         .HasConstraintName("FK_FishType_PondOwner")
-                        .OnDelete(DeleteBehavior.ClientNoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.ClientNoAction);
 
                     b.HasOne("TnR_SS.Domain.Entities.UserInfor", "Trader")
                         .WithMany("FishTypes")

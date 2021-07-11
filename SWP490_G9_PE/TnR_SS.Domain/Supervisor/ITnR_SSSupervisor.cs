@@ -17,6 +17,7 @@ using TnR_SS.Domain.ApiModels.EmployeeModel;
 using TnR_SS.Domain.ApiModels.PurchaseDetailModel;
 using TnR_SS.Domain.ApiModels.CostIncurredModel;
 using TnR_SS.Domain.ApiModels.BuyerModel;
+using TnR_SS.Domain.ApiModels.FishTypeModel.ResponseModel;
 
 namespace TnR_SS.Domain.Supervisor
 {
@@ -58,9 +59,9 @@ namespace TnR_SS.Domain.Supervisor
         #endregion
 
         #region Fishtype
-        List<FishTypeApiModel> GetAllLastFishTypeByPondOwnerId(int traderId, int pondOwnerId);
+        List<FishTypeApiModel> GetAllLastFishTypeWithPondOwnerId(int traderId, int pondOwnerId);
         List<FishTypeApiModel> GetFishTypesByPondOwnerIdAndDate(int traderId, int poId, DateTime date);
-        List<FishTypeApiModel> GetAllFishTypeByTraderId(int traderId);
+        Task<List<FishTypeResModel>> GetAllFishTypeByTraderIdAsync(int traderId);
         Task CreateListFishTypeAsync(List<FishTypeApiModel> listType, int traderId);
         Task CreateFishTypeAsync(FishTypeApiModel listType, int traderId);
         Task UpdateFishTypeAsync(FishTypeApiModel fishTypeModel, int traderId);
@@ -86,9 +87,9 @@ namespace TnR_SS.Domain.Supervisor
 
         #region PondOwner
         Task<PondOwner> GetPondOwner(int id);
-        List<PondOwnerAPIModel> GetPondOwnerByTraderId(int traderId);
-        Task<int> AddPondOwnerAsync(PondOwnerAPIModel pondOwnerModel);
-        Task<int> EditPondOwner(PondOwnerAPIModel pondOwnerModel);
+        List<PondOwnerApiModel> GetPondOwnerByTraderId(int traderId);
+        Task<int> AddPondOwnerAsync(PondOwnerApiModel pondOwnerModel);
+        Task<int> EditPondOwner(PondOwnerApiModel pondOwnerModel);
         Task<int> DeletePondOwner(PondOwner pondOwner);
         #endregion
 

@@ -7,6 +7,7 @@ using TnR_SS.Domain.ApiModels.CostIncurredModel;
 using TnR_SS.Domain.ApiModels.DrumModel;
 using TnR_SS.Domain.ApiModels.EmployeeModel;
 using TnR_SS.Domain.ApiModels.FishTypeModel;
+using TnR_SS.Domain.ApiModels.FishTypeModel.ResponseModel;
 using TnR_SS.Domain.ApiModels.LK_PurchaseDetail_DrumModel;
 using TnR_SS.Domain.ApiModels.PondOwnerModel;
 using TnR_SS.Domain.ApiModels.PurchaseDetailModel;
@@ -47,6 +48,7 @@ namespace TnR_SS.Domain.ApiModels
 
             #region FishType
             CreateMap<FishType, FishTypeApiModel>().ReverseMap();
+            CreateMap<FishType, FishTypeResModel>().ReverseMap();
             #endregion
 
             #region Purchase
@@ -56,7 +58,7 @@ namespace TnR_SS.Domain.ApiModels
             #endregion
 
             #region PondOwner
-            CreateMap<PondOwnerAPIModel, PondOwner>().ReverseMap();
+            CreateMap<PondOwnerApiModel, PondOwner>().ReverseMap();
             #endregion
 
             #region TimeKeeping

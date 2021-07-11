@@ -45,16 +45,16 @@ namespace TnR_SS.API.Controllers
         public ResponseModel GetLastAllFishType(int pondOwnerId)
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
-            var fishTypes = _tnrssSupervisor.GetAllLastFishTypeByPondOwnerId(traderId, pondOwnerId);
+            var fishTypes = _tnrssSupervisor.GetAllLastFishTypeWithPondOwnerId(traderId, pondOwnerId);
             return new ResponseBuilder<List<FishTypeApiModel>>().Success("Get all type").WithData(fishTypes).ResponseModel;
         }
 
         [HttpGet("getall")]
-        public ResponseModel GetAllFishType()
+        public async Task<ResponseModel> GetAllFishType()
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
-            var fishTypes = _tnrssSupervisor.GetAllFishTypeByTraderId(traderId);
-            return new ResponseBuilder<List<FishTypeApiModel>>().Success("Get all type").WithData(fishTypes).ResponseModel;
+            var fishTypes = await _tnrssSupervisor.GetAllFishTypeByTraderIdAsync(traderId);
+            return new ResponseBuilder<List<FishTypeResModel>>().Success("Get all type").WithData(fishTypes).ResponseModel;
         }
 
         [HttpGet("getone/{date_str}/{poId}")]

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TnR_SS.Domain.ApiModels.PondOwnerModel
 {
-    public class PondOwnerAPIModel
+    public class PondOwnerApiModel
 
     {
         public int ID { get; set; }
