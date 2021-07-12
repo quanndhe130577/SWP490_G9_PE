@@ -61,7 +61,7 @@ namespace TnR_SS.Domain.Supervisor
         public async Task<List<PurchaseResModel>> GetAllPurchaseAsync(int traderId)
         {
             var listPurchase = _unitOfWork.Purchases.GetAll(x => x.TraderID == traderId)
-                .OrderByDescending(x => x.Date);
+                .OrderByDescending(x => x.Date).ThenBy(x => x.ID);
             List<PurchaseResModel> list = new List<PurchaseResModel>();
             foreach (var purchase in listPurchase)
             {
@@ -74,7 +74,7 @@ namespace TnR_SS.Domain.Supervisor
         public async Task<PurchaseResModel> GetPurchaseByIdAsync(int purchaseId, int traderId)
         {
             var purchase = await _unitOfWork.Purchases.FindAsync(purchaseId);
-            if(purchase.TraderID != traderId)
+            if (purchase.TraderID != traderId)
             {
                 throw new Exception("Đơn mua không tồn tại");
             }
