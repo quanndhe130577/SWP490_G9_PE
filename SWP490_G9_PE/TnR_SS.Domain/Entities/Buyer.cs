@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace TnR_SS.Domain.Entities
 {
-    public class Buyer
+    public class Buyer : BaseEntity
     {
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
@@ -19,11 +19,10 @@ namespace TnR_SS.Domain.Entities
         [MaxLength(11)]
         [MinLength(10)]
         public string PhoneNumber { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
 
         public int WeightRecorderId { get; set; }
 
         public UserInfor WeightRecorder { get; set; }
+        public List<TransactionDetail> TransactionDetails { get; set; }
     }
 }

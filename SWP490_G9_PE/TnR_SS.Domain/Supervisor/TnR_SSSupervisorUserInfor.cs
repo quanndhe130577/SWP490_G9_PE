@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using TnR_SS.Domain.ApiModels.AccountModel.RequestModel;
 using TnR_SS.Domain.ApiModels.AccountModel.ResponseModel;
+using TnR_SS.Domain.ApiModels.UserInforModel;
 using TnR_SS.Domain.Entities;
 
 namespace TnR_SS.Domain.Supervisor
@@ -134,6 +137,35 @@ namespace TnR_SS.Domain.Supervisor
             user.PhoneNumber = newPhone;
 
             return await _unitOfWork.UserInfors.UpdateIdentityAsync(user);
+        }
+
+        public async Task<FindTraderByPhoneApiModel> FindTraderByPhone(string phoneNumber)
+        {
+            return _mapper.Map<UserInfor, FindTraderByPhoneApiModel>(await _unitOfWork.UserInfors.FindTraderByPhoneAsync(phoneNumber));
+        }
+
+        public List<FindTraderByPhoneApiModel> FindTradersOfWeightRecorder(int weightRecorderId)
+        {
+            var listTraderId = _unitOfWork.TraderOfWeightRecorders.GetAll(x => x.WeightRecorderId == weightRecorderId).Select(x => x.TraderId).ToList();
+            return _unitOfWork.UserInfors.GetAll(x => listTraderId.Contains(x.Id)).Select(x => _mapper.Map<UserInfor, FindTraderByPhoneApiModel>(x)).ToList();
+        }
+
+        public async Task WeightRecorderAddTrader(int traderId, int weightRecorderId)
+        {
+            var traderList = await _unitOfWork.UserInfors.GetUserByRoleAsync(RoleName.Trader);
+            if (!traderList.Select(x => x.Id).Contains(traderId))
+            {
+                throw new Exception("Không tìm thấy thương lái");
+            }
+
+            var rs = _unitOfWork.TraderOfWeightRecorders.GetAll(x => x.TraderId == traderId && x.WeightRecorderId == weightRecorderId);
+            if (rs != null)
+            {
+                throw new Exception("Thương lái đã được thêm !!!");
+            }
+
+            await _unitOfWork.TraderOfWeightRecorders.CreateAsync(new TraderOfWeightRecorder() { TraderId = traderId, WeightRecorderId = weightRecorderId });
+            await _unitOfWork.SaveChangeAsync();
         }
     }
 }

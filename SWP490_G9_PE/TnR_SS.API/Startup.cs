@@ -35,7 +35,7 @@ namespace TnR_SS
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllers();
+            services.AddControllers()/*.AddNewtonsoftJson(); */;
 
             //services.AddControllers(options => options.Filters.Add(new HttpResponseExceptionFilter()));
 

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace TnR_SS.Domain.Entities
 {
-    public class PurchaseDetail
+    public class PurchaseDetail : BaseEntity
     {
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
@@ -22,10 +22,7 @@ namespace TnR_SS.Domain.Entities
         public double BuyPrice { get; set; }*/
         [Required]
         public double Weight { get; set; }
-        [Required]
-        public DateTime CreatedAt { get; set; }
-        [Required]
-        public DateTime UpdatedAt { get; set; }
+
 
         [Required]
         public int BasketId { get; set; }

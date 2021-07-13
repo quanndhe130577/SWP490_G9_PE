@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace TnR_SS.Domain.Entities
 {
     [Table("Employee")]
-    public class Employee
+    public class Employee : BaseEntity
     {
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
@@ -29,9 +29,6 @@ namespace TnR_SS.Domain.Entities
         [Required]
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
-
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
 
         [Required]
         public int TraderId { get; set; }

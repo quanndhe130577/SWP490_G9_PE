@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TnR_SS.DataEFCore;
 
 namespace TnR_SS.DataEFCore.Migrations
 {
     [DbContext(typeof(TnR_SSContext))]
-    partial class TnR_SSContextModelSnapshot : ModelSnapshot
+    [Migration("20210713174104_addTransactionAndTransactionDetail")]
+    partial class addTransactionAndTransactionDetail
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -588,32 +590,32 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "67992609-8f80-443c-b29f-bc4c94c39024",
+                            ConcurrencyStamp = "c76e2d7b-ef99-4706-8669-14fa8e0274fd",
                             CreatedAt = new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Chủ bến",
                             Name = "WeightRecorder",
                             NormalizedName = "WEIGHTRECORDER",
-                            UpdatedAt = new DateTime(2021, 7, 14, 1, 39, 13, 837, DateTimeKind.Local).AddTicks(7346)
+                            UpdatedAt = new DateTime(2021, 7, 14, 0, 41, 3, 220, DateTimeKind.Local).AddTicks(1125)
                         },
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "be1bc5d6-d09e-4aba-9d3d-102458925def",
+                            ConcurrencyStamp = "763710bd-0140-474c-aaaf-ef4db5382bca",
                             CreatedAt = new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Thương lái",
                             Name = "Trader",
                             NormalizedName = "TRADER",
-                            UpdatedAt = new DateTime(2021, 7, 14, 1, 39, 13, 839, DateTimeKind.Local).AddTicks(7324)
+                            UpdatedAt = new DateTime(2021, 7, 14, 0, 41, 3, 221, DateTimeKind.Local).AddTicks(9929)
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "ba0c477d-3750-465f-929a-c6e2cfd7be21",
+                            ConcurrencyStamp = "c1d5d471-a5f4-4f84-b698-5834b933d7d0",
                             CreatedAt = new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Admin",
                             Name = "Admin",
                             NormalizedName = "ADMIN",
-                            UpdatedAt = new DateTime(2021, 7, 14, 1, 39, 13, 839, DateTimeKind.Local).AddTicks(7420)
+                            UpdatedAt = new DateTime(2021, 7, 14, 0, 41, 3, 221, DateTimeKind.Local).AddTicks(9987)
                         });
                 });
 
@@ -653,38 +655,6 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.HasIndex("EmpId");
 
                     b.ToTable("TimeKeeping");
-                });
-
-            modelBuilder.Entity("TnR_SS.Domain.Entities.TraderOfWeightRecorder", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("ID")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsAccepted")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("TraderId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("WeightRecorderId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("TraderId");
-
-                    b.HasIndex("WeightRecorderId");
-
-                    b.ToTable("TraderOfWeightRecorder");
                 });
 
             modelBuilder.Entity("TnR_SS.Domain.Entities.Transaction", b =>
@@ -1127,27 +1097,6 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.Navigation("Employee");
                 });
 
-            modelBuilder.Entity("TnR_SS.Domain.Entities.TraderOfWeightRecorder", b =>
-                {
-                    b.HasOne("TnR_SS.Domain.Entities.UserInfor", "Trader")
-                        .WithMany("LK_Trader")
-                        .HasForeignKey("TraderId")
-                        .HasConstraintName("FK_TraderOfWeightRecorder_Trader")
-                        .OnDelete(DeleteBehavior.ClientNoAction)
-                        .IsRequired();
-
-                    b.HasOne("TnR_SS.Domain.Entities.UserInfor", "WeightRecorder")
-                        .WithMany("LK_WeightRecorder")
-                        .HasForeignKey("WeightRecorderId")
-                        .HasConstraintName("FK_TraderOfWeightRecorder_WeightRecorder")
-                        .OnDelete(DeleteBehavior.ClientNoAction)
-                        .IsRequired();
-
-                    b.Navigation("Trader");
-
-                    b.Navigation("WeightRecorder");
-                });
-
             modelBuilder.Entity("TnR_SS.Domain.Entities.Transaction", b =>
                 {
                     b.HasOne("TnR_SS.Domain.Entities.UserInfor", "Trader")
@@ -1276,10 +1225,6 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.Navigation("Employees");
 
                     b.Navigation("FishTypes");
-
-                    b.Navigation("LK_Trader");
-
-                    b.Navigation("LK_WeightRecorder");
 
                     b.Navigation("PondOwners");
 

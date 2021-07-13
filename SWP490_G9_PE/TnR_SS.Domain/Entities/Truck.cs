@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace TnR_SS.Domain.Entities
 {
-    public class Truck
+    public class Truck : BaseEntity
     {
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
@@ -19,10 +19,6 @@ namespace TnR_SS.Domain.Entities
 
         public string Name { get; set; }
 
-        [Required]
-        public DateTime CreatedAt { get; set; }
-        [Required]
-        public DateTime UpdatedAt { get; set; }
 
         [Required]
         public int TraderID { get; set; }

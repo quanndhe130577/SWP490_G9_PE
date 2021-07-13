@@ -18,6 +18,7 @@ using TnR_SS.Domain.ApiModels.PurchaseDetailModel;
 using TnR_SS.Domain.ApiModels.CostIncurredModel;
 using TnR_SS.Domain.ApiModels.BuyerModel;
 using TnR_SS.Domain.ApiModels.FishTypeModel.ResponseModel;
+using TnR_SS.Domain.ApiModels.UserInforModel;
 
 namespace TnR_SS.Domain.Supervisor
 {
@@ -56,6 +57,9 @@ namespace TnR_SS.Domain.Supervisor
         Task<string> GetPasswordResetTokenAsync(UserInfor user);
         Task<bool> CheckUserPassword(int userId, string password);
         Task<UserResModel> GetUserResModelByIdAsync(int id);
+        Task<FindTraderByPhoneApiModel> FindTraderByPhone(string phoneNumber);
+        List<FindTraderByPhoneApiModel> FindTradersOfWeightRecorder(int weightRecorderId);
+        Task WeightRecorderAddTrader(int traderId, int weightRecorderId);
         #endregion
 
         #region Fishtype

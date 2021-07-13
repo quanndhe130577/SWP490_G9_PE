@@ -16,6 +16,7 @@ using TnR_SS.Domain.ApiModels.RoleUserModel.RequestModel;
 using TnR_SS.Domain.ApiModels.RoleUserModel.ResponseModel;
 using TnR_SS.Domain.ApiModels.TimeKeepingModel;
 using TnR_SS.Domain.ApiModels.TruckModel;
+using TnR_SS.Domain.ApiModels.UserInforModel;
 using TnR_SS.Domain.Entities;
 
 namespace TnR_SS.Domain.ApiModels
@@ -26,14 +27,15 @@ namespace TnR_SS.Domain.ApiModels
         public MapperProfile()
         {
             #region UserInfor
-            CreateMap<RegisterUserReqModel, UserInfor>().ForMember(destination => destination.UserName, options => options.MapFrom(source => source.PhoneNumber));
+            CreateMap<RegisterUserReqModel, UserInfor>().ForMember(destination => destination.UserName, options => options.MapFrom(source => source.PhoneNumber)).ReverseMap();
             /*.AfterMap((source, destination) =>
             {
                 destination.CreatedDate = DateTime.Now;
             });*/
 
-            CreateMap<UpdateUserReqModel, UserInfor>();
-            CreateMap<UserInfor, UserResModel>().ForMember(destination => destination.UserID, options => options.MapFrom(source => source.Id));
+            CreateMap<UpdateUserReqModel, UserInfor>().ReverseMap();
+            CreateMap<FindTraderByPhoneApiModel, UserInfor>().ReverseMap();
+            CreateMap<UserInfor, UserResModel>().ForMember(destination => destination.UserID, options => options.MapFrom(source => source.Id)).ReverseMap();
             #endregion
 
             #region Role
