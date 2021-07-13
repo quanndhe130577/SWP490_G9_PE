@@ -30,6 +30,7 @@ namespace TnR_SS.DataEFCore.UnitOfWorks
             CostIncurreds = new CostIncurredRepository(_context);
             LK_PurchaseDetail_Drums = new LK_PurchaseDeatil_DrumRepository(_context);
             Buyers = new BuyerRepository(_context);
+            HistorySalaryEmps = new HistorySalaryEmpRepository(_context);
         }
 
         public IOTPRepository OTPs { get; private set; }
@@ -47,6 +48,7 @@ namespace TnR_SS.DataEFCore.UnitOfWorks
         public IDrumRepository Drums { get; private set; }
         public ICostIncurredRepository CostIncurreds { get; private set; }
         public IBuyerRepository Buyers { get; private set; }
+        public IHistorySalaryEmpRepository HistorySalaryEmps { get; private set; }
 
         public async Task<int> SaveChangeAsync()
         {
