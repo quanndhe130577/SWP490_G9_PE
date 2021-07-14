@@ -27,7 +27,7 @@ namespace TnR_SS.API.Controllers
 
         #region create purchase
         [HttpPost("create")]
-        public async Task<ResponseModel> CreatePurchase(PurchaseReqModel purchaseData)
+        public async Task<ResponseModel> CreatePurchase(PurchaseCreateReqModel purchaseData)
         {
             if (!TokenManagement.CheckUserIdFromToken(HttpContext, purchaseData.TraderID))
             {
@@ -52,7 +52,7 @@ namespace TnR_SS.API.Controllers
         }
         #endregion
 
-        #region Get all purchase
+        #region Get one purchase
         [HttpGet("getone/{purchaseId}")]
         public async Task<ResponseModel> Get(int purchaseId)
         {

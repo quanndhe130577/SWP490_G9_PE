@@ -42,30 +42,30 @@ namespace TnR_SS.API.Controllers
         }
 
         [HttpGet("getlastall")]
-        public ResponseModel GetLastAllFishType()
+        public async Task<ResponseModel> GetLastAllFishType()
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
-            var fishTypes = _tnrssSupervisor.GetAllLastFishTypeWithPondOwnerId(traderId);
+            var fishTypes = await _tnrssSupervisor.GetAllLastFishTypeWithPondOwnerId(traderId);
             return new ResponseBuilder<List<FishTypeApiModel>>().Success("Lấy thông tin giá cá thành công").WithData(fishTypes).ResponseModel;
         }
 
         [HttpGet("getall")]
-        public async Task<ResponseModel> GetAllFishType()
+        public ResponseModel GetAllFishType()
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
-            var fishTypes = await _tnrssSupervisor.GetAllFishTypeByTraderIdAsync(traderId);
+            var fishTypes = _tnrssSupervisor.GetAllFishTypeByTraderIdAsync(traderId);
             return new ResponseBuilder<List<FishTypeResModel>>().Success("Lấy thông tin giá cá thành công").WithData(fishTypes).ResponseModel;
         }
 
         [HttpGet("getone/{date_str}/{poId}")]
-        public ResponseModel GetByDate(string date_str, int poId)
+        public async Task<ResponseModel> GetByDate(string date_str, int poId)
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
             DateTime date = DateTime.Now;
             CultureInfo enUS = new CultureInfo("en-US");
             if (DateTime.TryParseExact(date_str, "ddMMyyyy", enUS, DateTimeStyles.None, out date))
             {
-                var fishTypes = _tnrssSupervisor.GetFishTypesByPondOwnerIdAndDate(traderId, poId, date);
+                var fishTypes = await _tnrssSupervisor.GetFishTypesByPondOwnerIdAndDate(traderId, poId, date);
                 return new ResponseBuilder<List<FishTypeApiModel>>().Success("Lấy thông tin loại cá thành công").WithData(fishTypes).ResponseModel;
             }
             else
@@ -75,11 +75,28 @@ namespace TnR_SS.API.Controllers
 
         }
 
+        [HttpGet("getall/{purchaseId}")]
+        public async Task<ResponseModel> GetByPurchaseId(int purchaseId)
+        {
+            var traderId = TokenManagement.GetUserIdInToken(HttpContext);
+
+            var fishTypes = await _tnrssSupervisor.GetListFishTypeByPurchaseIdAsync(purchaseId, traderId);
+            return new ResponseBuilder<List<FishTypeApiModel>>().Success("Lấy thông tin loại cá thành công").WithData(fishTypes).ResponseModel;
+        }
+
         [HttpPost("update")]
         public async Task<ResponseModel> UpdateFishTypeAsync(FishTypeApiModel fishType)
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
             await _tnrssSupervisor.UpdateFishTypeAsync(fishType, traderId);
+            return new ResponseBuilder().Success("Cập nhật giá cá thành công").ResponseModel;
+        }
+
+        [HttpPost("updatelist")]
+        public async Task<ResponseModel> UpdateListFishTypeAsync(ListFishTypeModel listFishType)
+        {
+            var traderId = TokenManagement.GetUserIdInToken(HttpContext);
+            await _tnrssSupervisor.UpdateListFishTypeAsync(listFishType, traderId);
             return new ResponseBuilder().Success("Cập nhật giá cá thành công").ResponseModel;
         }
 

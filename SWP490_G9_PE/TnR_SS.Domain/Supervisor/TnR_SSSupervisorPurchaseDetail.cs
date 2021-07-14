@@ -145,7 +145,7 @@ namespace TnR_SS.Domain.Supervisor
                 PurchaseDetailResModel data = _mapper.Map<PurchaseDetail, PurchaseDetailResModel>(item);
                 data.Basket = _mapper.Map<Basket, BasketApiModel>(await _unitOfWork.Baskets.FindAsync(item.BasketId));
                 data.FishType = _mapper.Map<FishType, FishTypeApiModel>(await _unitOfWork.FishTypes.FindAsync(item.FishTypeID));
-                data.Price = GetPurchaseDetailPrice((double)data.FishType.Price, data.Basket.Weight, data.Weight);
+                data.Price = GetPurchaseDetailPrice(data.FishType.Price, data.Basket.Weight, data.Weight);
                 data.ListDrum = GetListDrumByPurchaseDetail(item);
                 if (data.ListDrum.Count > 0)
                 {

@@ -63,13 +63,15 @@ namespace TnR_SS.Domain.Supervisor
         #endregion
 
         #region Fishtype
-        List<FishTypeApiModel> GetAllLastFishTypeWithPondOwnerId(int traderId);
-        List<FishTypeApiModel> GetFishTypesByPondOwnerIdAndDate(int traderId, int poId, DateTime date);
-        Task<List<FishTypeResModel>> GetAllFishTypeByTraderIdAsync(int traderId);
+        Task<List<FishTypeApiModel>> GetAllLastFishTypeWithPondOwnerId(int traderId);
+        Task<List<FishTypeApiModel>> GetFishTypesByPondOwnerIdAndDate(int traderId, int poId, DateTime date);
+        List<FishTypeResModel> GetAllFishTypeByTraderIdAsync(int traderId);
         Task CreateListFishTypeAsync(List<FishTypeApiModel> listType, int traderId);
         Task CreateFishTypeAsync(FishTypeApiModel listType, int traderId);
         Task UpdateFishTypeAsync(FishTypeApiModel fishTypeModel, int traderId);
         Task DeleteFishTypeAsync(int empId, int traderId);
+        Task<List<FishTypeApiModel>> GetListFishTypeByPurchaseIdAsync(int purchaseId, int traderId);
+        Task UpdateListFishTypeAsync(ListFishTypeModel listFishType, int traderId);
         #endregion
 
         #region Basket
@@ -81,7 +83,7 @@ namespace TnR_SS.Domain.Supervisor
         #endregion
 
         #region Purchase
-        Task<PurchaseResModel> CreatePurchaseAsync(PurchaseReqModel purchaseModel);
+        Task<PurchaseResModel> CreatePurchaseAsync(PurchaseCreateReqModel purchaseModel);
         Task<List<PurchaseResModel>> GetAllPurchaseAsync(int traderId);
         Task<PurchaseResModel> GetPurchaseByIdAsync(int purchaseId, int traderId);
         Task UpdatePurchaseAsync(PurchaseApiModel models, int traderId);
