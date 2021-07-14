@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace TnR_SS.Domain.Entities
 {
     [Table("PondOwner")]
-    public class PondOwner
+    public class PondOwner : BaseEntity
     {
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
@@ -22,10 +22,7 @@ namespace TnR_SS.Domain.Entities
 
         [Required]
         public string PhoneNumber { get; set; }
-        [Required]
-        public DateTime CreatedAt { get; set; }
-        [Required]
-        public DateTime UpdatedAt { get; set; }
+
 
         [Required]
         public int TraderID { get; set; }

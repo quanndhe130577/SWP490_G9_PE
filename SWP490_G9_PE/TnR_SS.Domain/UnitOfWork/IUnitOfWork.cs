@@ -25,6 +25,7 @@ namespace TnR_SS.Domain.UnitOfWork
         ICostIncurredRepository CostIncurreds { get; }
         ILK_PurchaseDeatil_DrumRepository LK_PurchaseDetail_Drums { get; }
         IBuyerRepository Buyers { get; }
+        ITraderOfWeightRecorderRepository TraderOfWeightRecorders { get; }
         Task<int> SaveChangeAsync();
         IDbContextTransaction BeginTransaction();
         IExecutionStrategy CreateExecutionStrategy();

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace TnR_SS.Domain.Entities
 {
-    public class LK_PurchaseDeatil_Drum
+    public class LK_PurchaseDeatil_Drum : BaseEntity
     {
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
@@ -22,10 +22,6 @@ namespace TnR_SS.Domain.Entities
         /*[Required]
         public double Weight { get; set; }*/
 
-        [Required]
-        public DateTime CreatedAt { get; set; }
 
-        [Required]
-        public DateTime UpdatedAt { get; set; }
     }
 }

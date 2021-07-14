@@ -10,7 +10,7 @@ namespace TnR_SS.Domain.Entities
 {
     public enum TimeKeepingNote { IsPaid, NotPaid }
     [Table("TimeKeeping")]
-    public class TimeKeeping
+    public class TimeKeeping : BaseEntity
     {
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
@@ -24,8 +24,6 @@ namespace TnR_SS.Domain.Entities
         public double Money { get; set; }
 
         public TimeKeepingNote Note { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
 
         [Required]
         public int EmpId { get; set; }

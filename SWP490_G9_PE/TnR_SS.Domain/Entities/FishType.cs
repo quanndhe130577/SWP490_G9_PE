@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace TnR_SS.Domain.Entities
 {
     [Table("FishType")]
-    public class FishType
+    public class FishType : BaseEntity
     {
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
@@ -22,10 +22,6 @@ namespace TnR_SS.Domain.Entities
         [Required]
         public float MaxWeight { get; set; }
 
-        [Required]
-        public DateTime CreatedAt { get; set; }
-        [Required]
-        public DateTime UpdatedAt { get; set; }
 
         public DateTime Date { get; set; }
 
@@ -40,5 +36,6 @@ namespace TnR_SS.Domain.Entities
         public PondOwner PondOwner { get; set; }
 
         public List<PurchaseDetail> PurchaseDetails { get; set; }
+        public List<TransactionDetail> TransactionDetails { get; set; }
     }
 }

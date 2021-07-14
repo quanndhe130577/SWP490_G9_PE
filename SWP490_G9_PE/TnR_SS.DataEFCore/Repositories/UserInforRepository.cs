@@ -92,5 +92,16 @@ namespace TnR_SS.DataEFCore.Repositories
         {
             return await _userManager.DeleteAsync(userInfor);
         }
+
+        public async Task<UserInfor> FindTraderByPhoneAsync(string phoneNumber)
+        {
+            var rs = await _userManager.GetUsersInRoleAsync(RoleName.Trader);
+            return rs.Where(x => x.PhoneNumber == phoneNumber).FirstOrDefault();
+        }
+
+        public async Task<List<UserInfor>> GetUserByRoleAsync(string roleName)
+        {
+            return (List<UserInfor>)await _userManager.GetUsersInRoleAsync(roleName);
+        }
     }
 }

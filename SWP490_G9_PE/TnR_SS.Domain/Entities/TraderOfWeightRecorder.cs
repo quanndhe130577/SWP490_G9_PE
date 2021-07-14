@@ -8,23 +8,15 @@ using System.Threading.Tasks;
 
 namespace TnR_SS.Domain.Entities
 {
-    public class Basket : BaseEntity
+    public class TraderOfWeightRecorder : BaseEntity
     {
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
-
-        [Required]
-        public string Type { get; set; }
-
-        [Required]
-        public double Weight { get; set; }
-
-        [Required]
-        public int TraderID { get; set; }
-
+        public int TraderId { get; set; }
         public UserInfor Trader { get; set; }
-
-        public List<PurchaseDetail> PurchaseDetails { get; set; }
+        public int WeightRecorderId { get; set; }
+        public UserInfor WeightRecorder { get; set; }
+        public bool IsAccepted { get; set; } = true;
     }
 }

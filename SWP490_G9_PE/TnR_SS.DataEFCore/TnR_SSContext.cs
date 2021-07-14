@@ -35,6 +35,9 @@ namespace TnR_SS.DataEFCore
         public virtual DbSet<CostIncurred> CostIncurreds { get; set; }
         public virtual DbSet<LK_PurchaseDeatil_Drum> LK_PurchaseDeatil_Drums { get; set; }
         public virtual DbSet<Buyer> Buyers { get; set; }
+        public virtual DbSet<Transaction> Transactions { get; set; }
+        public virtual DbSet<TransactionDetail> TransactionDetails { get; set; }
+        public virtual DbSet<TraderOfWeightRecorder> TraderOfWeightRecorders { get; set; }
 
         /*protected override void OnConfiguring(DbContextOptionsBuilder options)
     => options.UseSqlServer("Server=localhost;Database=TnR_SS;Trusted_Connection=True;");*/
@@ -66,6 +69,9 @@ namespace TnR_SS.DataEFCore
             new DrumConfiguration(modelBuilder.Entity<Drum>());
             new CostIncurredConfiguration(modelBuilder.Entity<CostIncurred>());
             new BuyerConfiguration(modelBuilder.Entity<Buyer>());
+            new TransactionConfiguration(modelBuilder.Entity<Transaction>());
+            new TransactionDetailConfiguration(modelBuilder.Entity<TransactionDetail>());
+            new TraderOfWeightRecorderConfiguration(modelBuilder.Entity<TraderOfWeightRecorder>());
 
             OnModelCreatingPartial(modelBuilder);
         }

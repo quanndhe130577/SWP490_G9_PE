@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace TnR_SS.Domain.Entities
 {
-    public class Purchase
+    public class Purchase : BaseEntity
     {
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
@@ -26,8 +26,6 @@ namespace TnR_SS.Domain.Entities
         [Required]
         public DateTime Date { get; set; }
         public double Commission { get; set; } // tiền trả cho môi giới
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
 
         [Required]
         public bool isPaid { get; set; } = false;

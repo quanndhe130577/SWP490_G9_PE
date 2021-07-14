@@ -22,8 +22,10 @@ namespace TnR_SS.Domain.Entities
         public DateTime Dob { get; set; }
         public string IdentifyCode { get; set; }
         public string Avatar { get; set; }
+
         [Required]
         public DateTime CreatedAt { get; set; }
+
         [Required]
         public DateTime UpdatedAt { get; set; }
 
@@ -35,5 +37,9 @@ namespace TnR_SS.Domain.Entities
         public List<Truck> Trucks { get; set; }
         public List<CostIncurred> CostIncurreds { get; set; }
         public List<Buyer> Buyers { get; set; }
+        public List<Transaction> TransactionTraders { get; set; }
+        public List<Transaction> TransactionWeightRecorders { get; set; }
+        public List<TraderOfWeightRecorder> LK_Trader { get; set; }
+        public List<TraderOfWeightRecorder> LK_WeightRecorder { get; set; }
     }
 }
