@@ -57,7 +57,8 @@ namespace TnR_SS.Domain.Supervisor
         Task<string> GetPasswordResetTokenAsync(UserInfor user);
         Task<bool> CheckUserPassword(int userId, string password);
         Task<UserResModel> GetUserResModelByIdAsync(int id);
-        Task<FindTraderByPhoneApiModel> FindTraderByPhone(string phoneNumber);
+        Task<FindTraderByPhoneApiModel> FindTraderByPhoneAsync(string phoneNumber);
+        Task<List<FindTraderByPhoneApiModel>> SuggestTradersByPhoneAsync(string phoneNumber);
         List<FindTraderByPhoneApiModel> FindTradersOfWeightRecorder(int weightRecorderId);
         Task WeightRecorderAddTrader(int traderId, int weightRecorderId);
         #endregion
