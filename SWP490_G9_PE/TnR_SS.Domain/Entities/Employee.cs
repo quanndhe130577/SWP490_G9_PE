@@ -34,5 +34,6 @@ namespace TnR_SS.Domain.Entities
         public int TraderId { get; set; }
         public UserInfor UserInfor { get; set; }
         public List<TimeKeeping> TimeKeepings { get; set; }
+        public List<HistorySalaryEmp> HistorySalaryEmps { get; set; }
     }
 }
