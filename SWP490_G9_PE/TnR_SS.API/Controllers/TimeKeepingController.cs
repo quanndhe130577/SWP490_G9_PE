@@ -32,14 +32,13 @@ namespace TnR_SS.API.Controller
             return new ResponseBuilder<List<TimeKeepingApiModel>>().Success("Lấy thông tin chấm công thành công").WithData(rs).ResponseModel;
         }
         [HttpGet]
-        [Route("getByTrader/month/{date}")]
-        public ResponseModel GetByTraderIdWithMoth(DateTime date)
+        [Route("getByTrader/month/{month}")]
+        public ResponseModel GetByTraderIdWithMoth(DateTime month)
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
-            var rs = _tnrssSupervisor.GetListTimeKeepingByTraderIdWithMonth(traderId, date);
+            var rs = _tnrssSupervisor.GetListTimeKeepingByTraderIdWithMonth(traderId, month);
             return new ResponseBuilder<List<TimeKeepingApiModel>>().Success("Lấy thông tin chấm công thành công").WithData(rs).ResponseModel;
         }
-
         [HttpGet]
         [Route("getByEmployee/{id}")]
         public ResponseModel GetByEmployeeId(int id)
