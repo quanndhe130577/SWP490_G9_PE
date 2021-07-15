@@ -15,6 +15,7 @@ using TnR_SS.Domain.ApiModels.PurchaseModal;
 using TnR_SS.Domain.ApiModels.RoleUserModel.RequestModel;
 using TnR_SS.Domain.ApiModels.RoleUserModel.ResponseModel;
 using TnR_SS.Domain.ApiModels.TimeKeepingModel;
+using TnR_SS.Domain.ApiModels.TransactionDetailModel;
 using TnR_SS.Domain.ApiModels.TransactionModel;
 using TnR_SS.Domain.ApiModels.TruckModel;
 using TnR_SS.Domain.ApiModels.UserInforModel;
@@ -98,6 +99,10 @@ namespace TnR_SS.Domain.ApiModels
 
             #region Buyer
             CreateMap<Buyer, BuyerApiModel>().ReverseMap();
+            #endregion
+
+            #region Transaction Detail
+            CreateMap<TransactionDetail, CreateTransactionDetailApiModel>().ReverseMap();
             #endregion
         }
 

@@ -33,6 +33,7 @@ namespace TnR_SS.DataEFCore.UnitOfWorks
             TraderOfWeightRecorders = new TraderOfWeightRecorderRepository(_context);
             HistorySalaryEmps = new HistorySalaryEmpRepository(_context);
             Transactions = new TransactionRepository(_context);
+            TransactionDetails = new TransactionDetailRepository(_context);
         }
 
         public IOTPRepository OTPs { get; private set; }
@@ -52,7 +53,8 @@ namespace TnR_SS.DataEFCore.UnitOfWorks
         public IBuyerRepository Buyers { get; private set; }
         public ITraderOfWeightRecorderRepository TraderOfWeightRecorders { get; private set; }
         public ITransactionRepository Transactions { get; private set; }
-	public IHistorySalaryEmpRepository HistorySalaryEmps { get; private set; }
+        public ITransactionDetailRepository TransactionDetails { get; private set; }
+        public IHistorySalaryEmpRepository HistorySalaryEmps { get; private set; }
 
         public async Task<int> SaveChangeAsync()
         {

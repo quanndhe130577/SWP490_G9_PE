@@ -20,6 +20,7 @@ using TnR_SS.Domain.ApiModels.BuyerModel;
 using TnR_SS.Domain.ApiModels.FishTypeModel.ResponseModel;
 using TnR_SS.Domain.ApiModels.UserInforModel;
 using TnR_SS.Domain.ApiModels.TransactionModel;
+using TnR_SS.Domain.ApiModels.TransactionDetailModel;
 
 namespace TnR_SS.Domain.Supervisor
 {
@@ -167,5 +168,8 @@ namespace TnR_SS.Domain.Supervisor
         Task<List<TransactionResModel>> GetAllTransactionAsync(int wcId, DateTime? date);
         #endregion
 
+        #region Transaction Detail
+        Task CreateTransactionDetailAsync(CreateTransactionDetailApiModel apiModel, int wcId);
+        #endregion
     }
 }
