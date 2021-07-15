@@ -52,11 +52,11 @@ namespace TnR_SS.DataEFCore.Configurations
                .OnDelete(DeleteBehavior.ClientNoAction)
                .HasConstraintName("FK_FishType_UserInfor");
 
-            entity.HasOne(p => p.PondOwner)
+            /*entity.HasOne(p => p.PondOwner)
                .WithMany(b => b.FishTypes)
                .HasForeignKey(p => p.PondOwnerID)
                .OnDelete(DeleteBehavior.ClientNoAction)
-               .HasConstraintName("FK_FishType_PondOwner");
+               .HasConstraintName("FK_FishType_PondOwner");*/
         }
     }
 }

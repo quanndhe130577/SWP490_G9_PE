@@ -54,7 +54,7 @@ namespace TnR_SS.Domain.ApiModels
             #endregion
 
             #region Purchase
-            CreateMap<PurchaseReqModel, Purchase>().ReverseMap();
+            CreateMap<PurchaseCreateReqModel, Purchase>().ReverseMap();
             CreateMap<PurchaseResModel, Purchase>().ReverseMap();
             CreateMap<PurchaseApiModel, Purchase>().ReverseMap();
             #endregion

@@ -16,7 +16,7 @@ namespace TnR_SS.API.Controllers
 {
     [Route("api/truck")]
     [ApiController]
-    [Authorize(Roles = RoleName.Trader)]
+    //[Authorize(Roles = RoleName.Trader)]
     public class TruckController : ControllerBase
     {
         private readonly ITnR_SSSupervisor _tnrssSupervisor;

@@ -82,9 +82,9 @@ namespace TnR_SS.Domain.Supervisor
             return await MapPurchaseResModelAsync(purchase);
         }
 
-        public async Task<PurchaseResModel> CreatePurchaseAsync(PurchaseReqModel purchaseModel)
+        public async Task<PurchaseResModel> CreatePurchaseAsync(PurchaseCreateReqModel purchaseModel)
         {
-            var purchase = _mapper.Map<PurchaseReqModel, Purchase>(purchaseModel);
+            var purchase = _mapper.Map<PurchaseCreateReqModel, Purchase>(purchaseModel);
             await _unitOfWork.Purchases.CreateAsync(purchase);
             await _unitOfWork.SaveChangeAsync();
 

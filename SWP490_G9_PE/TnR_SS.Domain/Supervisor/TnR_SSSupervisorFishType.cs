@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 using TnR_SS.Domain.ApiModels.FishTypeModel;
 using TnR_SS.Domain.ApiModels.FishTypeModel.ResponseModel;
 using TnR_SS.Domain.ApiModels.PondOwnerModel;
+using TnR_SS.Domain.ApiModels.PurchaseDetailModel;
 using TnR_SS.Domain.Entities;
 
 namespace TnR_SS.Domain.Supervisor
@@ -14,35 +16,54 @@ namespace TnR_SS.Domain.Supervisor
     public partial class TnR_SSSupervisor
     {
         readonly Regex regexPrice = new(@"/^\d+$/");
-        public List<FishTypeApiModel> GetAllLastFishTypeWithPondOwnerId(int traderId)
+        public async Task<List<FishTypeApiModel>> GetAllLastFishTypeWithPondOwnerId(int traderId)
         {
             var listType = _unitOfWork.FishTypes.GetAllLastByTraderIdAndPondOwnerId(traderId);
             List<FishTypeApiModel> list = new List<FishTypeApiModel>();
             foreach (var type in listType)
             {
-                list.Add(_mapper.Map<FishType, FishTypeApiModel>(type));
+                FishType newFish = type;
+                newFish.Date = DateTime.Now;
+                newFish.ID = 0;
+                await _unitOfWork.FishTypes.CreateAsync(newFish);
+                await _unitOfWork.SaveChangeAsync();
+                list.Add(_mapper.Map<FishType, FishTypeApiModel>(newFish));
             }
             return list;
-
         }
 
-        public async Task<List<FishTypeResModel>> GetAllFishTypeByTraderIdAsync(int traderId)
+        public List<FishTypeResModel> GetAllFishTypeByTraderIdAsync(int traderId)
         {
             var listType = _unitOfWork.FishTypes.GetAllByTraderId(traderId);
             List<FishTypeResModel> list = new List<FishTypeResModel>();
             foreach (var type in listType)
             {
                 FishTypeResModel newFish = _mapper.Map<FishType, FishTypeResModel>(type);
-                newFish.PondOwner = _mapper.Map<PondOwner, PondOwnerApiModel>(await _unitOfWork.PondOwners.FindAsync(newFish.PondOwnerID));
+                //newFish.PondOwner = _mapper.Map<PondOwner, PondOwnerApiModel>(await _unitOfWork.PondOwners.FindAsync(newFish.PondOwnerID));
                 list.Add(newFish);
             }
             return list;
 
         }
 
-        public List<FishTypeApiModel> GetFishTypesByPondOwnerIdAndDate(int traderId, int poId, DateTime date)
+        public async Task<List<FishTypeApiModel>> GetFishTypesByPondOwnerIdAndDate(int traderId, int poId, DateTime date)
         {
-            return _unitOfWork.FishTypes.GetAll(x => x.Date.Date == date.Date && x.TraderID == traderId && x.PondOwnerID == poId).Select(x => _mapper.Map<FishType, FishTypeApiModel>(x)).ToList();
+            var purchaseList = _unitOfWork.Purchases.GetAll(x => x.TraderID == traderId && x.PondOwnerID == poId && x.Date.Date == date.Date).ToList();
+            List<PurchaseDetailResModel> list = new List<PurchaseDetailResModel>();
+            foreach (var item in purchaseList)
+            {
+                list.AddRange(await GetAllPurchaseDetailAsync(item.ID));
+            }
+
+            var listFishTypeId = list.Select(x => x.FishType.ID).Distinct();
+            List<FishTypeApiModel> listFishType = new List<FishTypeApiModel>();
+            foreach (var item in listFishTypeId)
+            {
+                listFishType.Add(_mapper.Map<FishType, FishTypeApiModel>(await _unitOfWork.FishTypes.FindAsync(item)));
+            }
+
+            return listFishType;
+            //return _unitOfWork.FishTypes.GetAll(x => x.Date.Date == date.Date && x.TraderID == traderId && x.PondOwnerID == poId).Select(x => _mapper.Map<FishType, FishTypeApiModel>(x)).ToList();
         }
 
         public async Task CreateListFishTypeAsync(List<FishTypeApiModel> listType, int traderId)
@@ -112,6 +133,32 @@ namespace TnR_SS.Domain.Supervisor
             }
         }
 
+        public async Task UpdateListFishTypeAsync(ListFishTypeModel listFishType, int traderId)
+        {
+            var strategy = _unitOfWork.CreateExecutionStrategy();
+
+            await strategy.ExecuteAsync(async () =>
+            {
+                using (var transaction = _unitOfWork.BeginTransaction())
+                {
+                    try
+                    {
+                        foreach (var item in listFishType.ListFishType)
+                        {
+                            await UpdateFishTypeAsync(item, traderId);
+                        }
+
+                        await transaction.CommitAsync();
+                    }
+                    catch
+                    {
+                        await transaction.RollbackAsync();
+                        throw;
+                    }
+                }
+            });
+        }
+
         public async Task DeleteFishTypeAsync(int fishTypeId, int traderId)
         {
             var fishtypeEdit = await _unitOfWork.FishTypes.FindAsync(fishTypeId);
@@ -124,6 +171,26 @@ namespace TnR_SS.Domain.Supervisor
             {
                 throw new Exception("Thông tin giá cá không hợp lệ");
             }
+        }
+
+        public async Task<List<FishTypeApiModel>> GetListFishTypeByPurchaseIdAsync(int purchaseId, int traderId)
+        {
+            var purchase = await _unitOfWork.Purchases.FindAsync(purchaseId);
+            if (purchase.TraderID != traderId)
+            {
+                throw new Exception("Đơn mua không tồn tại hoặc đã bị xóa !!!");
+            }
+
+            var listPurchaseDetail = await GetAllPurchaseDetailAsync(purchaseId);
+
+            var listFishTypeId = listPurchaseDetail.Select(x => x.FishType.ID).Distinct();
+            List<FishTypeApiModel> listFishType = new List<FishTypeApiModel>();
+            foreach (var item in listFishTypeId)
+            {
+                listFishType.Add(_mapper.Map<FishType, FishTypeApiModel>(await _unitOfWork.FishTypes.FindAsync(item)));
+            }
+
+            return listFishType;
         }
     }
 }
