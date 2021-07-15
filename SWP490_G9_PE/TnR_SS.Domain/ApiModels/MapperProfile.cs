@@ -8,6 +8,7 @@ using TnR_SS.Domain.ApiModels.DrumModel;
 using TnR_SS.Domain.ApiModels.EmployeeModel;
 using TnR_SS.Domain.ApiModels.FishTypeModel;
 using TnR_SS.Domain.ApiModels.FishTypeModel.ResponseModel;
+using TnR_SS.Domain.ApiModels.HistorySalaryEmpModel;
 using TnR_SS.Domain.ApiModels.LK_PurchaseDetail_DrumModel;
 using TnR_SS.Domain.ApiModels.PondOwnerModel;
 using TnR_SS.Domain.ApiModels.PurchaseDetailModel;
@@ -96,6 +97,10 @@ namespace TnR_SS.Domain.ApiModels
 
             #region Buyer
             CreateMap<Buyer, BuyerApiModel>().ReverseMap();
+            #endregion
+
+            #region History Salary Employee
+            CreateMap<HistorySalaryEmp, HistorySalaryEmpApiModel>().ReverseMap();
             #endregion
         }
 

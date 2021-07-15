@@ -19,6 +19,7 @@ using TnR_SS.Domain.ApiModels.CostIncurredModel;
 using TnR_SS.Domain.ApiModels.BuyerModel;
 using TnR_SS.Domain.ApiModels.FishTypeModel.ResponseModel;
 using TnR_SS.Domain.ApiModels.UserInforModel;
+using TnR_SS.Domain.ApiModels.HistorySalaryEmpModel;
 
 namespace TnR_SS.Domain.Supervisor
 {
@@ -161,7 +162,13 @@ namespace TnR_SS.Domain.Supervisor
         Task<BuyerApiModel> GetDetailBuyerAsync(int buyerId, int wcId);
         #endregion
 
-
+        #region HistorySalaryEmp
+        List<HistorySalaryEmpApiModel> GetAllSalaryByEmpId(int empId);
+        Task CreateHistorySalaryAsync(HistorySalaryEmpApiModel salaryModel, int empId);
+        Task UpdateHistorySalaryAsync(HistorySalaryEmpApiModel salaryModel, int empId);
+        Task DeleteHistorySalaryAsync(int salaryId, int empId);
+        public HistorySalaryEmpApiModel GetDetailHistorySalary(int salaryId, int empId);
+        #endregion
 
     }
 }
