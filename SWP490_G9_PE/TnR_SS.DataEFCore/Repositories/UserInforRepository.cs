@@ -51,6 +51,12 @@ namespace TnR_SS.DataEFCore.Repositories
             return await _userManager.GetRolesAsync(user);
         }
 
+        public async Task<IList<string>> GetRolesAsync(int userid)
+        {
+            var user = await _userManager.FindByIdAsync(userid.ToString());
+            return await _userManager.GetRolesAsync(user);
+        }
+
         public UserInfor GetUserById(int id)
         {
             return _userManager.Users.FirstOrDefault(x => x.Id == id);

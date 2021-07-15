@@ -20,6 +20,8 @@ namespace TnR_SS.Domain.Entities
 
         /*[Required]
         public int BuyerId { get; set; }*/
+        [Required]
+        public DateTime Date { get; set; }
 
         [Required]
         public int WeightRecorderId { get; set; }
