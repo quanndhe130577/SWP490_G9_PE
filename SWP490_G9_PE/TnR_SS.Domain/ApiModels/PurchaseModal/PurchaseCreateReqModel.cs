@@ -5,7 +5,7 @@ using TnR_SS.Domain.ApiModels.FishTypeModel;
 
 namespace TnR_SS.Domain.ApiModels.PurchaseModal
 {
-    public class PurchaseReqModel
+    public class PurchaseCreateReqModel
     {
         [Required]
         public DateTime Date { get; set; }

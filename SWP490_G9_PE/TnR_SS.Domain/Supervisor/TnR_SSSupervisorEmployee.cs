@@ -36,6 +36,7 @@ namespace TnR_SS.Domain.Supervisor
             foreach (var type in listEmp)
             {
                 list.Add(_mapper.Map<Employee, EmployeeApiModel>(type));
+                list = AddStatusToEmployee(traderId);
             }
             return list;
         }
@@ -123,7 +124,7 @@ namespace TnR_SS.Domain.Supervisor
         public bool CheckEmployeeExist(int traderId, EmployeeApiModel employee)
         {
             var listEmp = _unitOfWork.Employees.GetAllEmployeeByTraderId(traderId);
-            var flag = listEmp.Where(x => x.PhoneNumber == employee.PhoneNumber && x.DOB == employee.DOB).Count() == 0;
+            var flag = listEmp.Where(x => x.PhoneNumber == employee.PhoneNumber).Count() == 0;
             if (flag)
             {
                 return true;

@@ -19,8 +19,7 @@ namespace TnR_SS.Domain.ApiModels.FishTypeModel
         [Required]
         public float MaxWeight { get; set; }
         public DateTime Date { get; set; }
-        public double? Price { get; set; }
-        public double? TransactionPrice { get; set; }
-        public int? PondOwnerID { get; set; }
+        public double Price { get; set; }
+        public double TransactionPrice { get; set; }
     }
 }

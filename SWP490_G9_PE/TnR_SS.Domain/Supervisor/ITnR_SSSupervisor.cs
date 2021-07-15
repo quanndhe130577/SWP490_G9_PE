@@ -19,6 +19,7 @@ using TnR_SS.Domain.ApiModels.CostIncurredModel;
 using TnR_SS.Domain.ApiModels.BuyerModel;
 using TnR_SS.Domain.ApiModels.FishTypeModel.ResponseModel;
 using TnR_SS.Domain.ApiModels.UserInforModel;
+using TnR_SS.Domain.ApiModels.HistorySalaryEmpModel;
 
 namespace TnR_SS.Domain.Supervisor
 {
@@ -57,19 +58,22 @@ namespace TnR_SS.Domain.Supervisor
         Task<string> GetPasswordResetTokenAsync(UserInfor user);
         Task<bool> CheckUserPassword(int userId, string password);
         Task<UserResModel> GetUserResModelByIdAsync(int id);
-        Task<FindTraderByPhoneApiModel> FindTraderByPhone(string phoneNumber);
+        Task<FindTraderByPhoneApiModel> FindTraderByPhoneAsync(string phoneNumber);
+        Task<List<FindTraderByPhoneApiModel>> SuggestTradersByPhoneAsync(string phoneNumber);
         List<FindTraderByPhoneApiModel> FindTradersOfWeightRecorder(int weightRecorderId);
         Task WeightRecorderAddTrader(int traderId, int weightRecorderId);
         #endregion
 
         #region Fishtype
-        List<FishTypeApiModel> GetAllLastFishTypeWithPondOwnerId(int traderId);
-        List<FishTypeApiModel> GetFishTypesByPondOwnerIdAndDate(int traderId, int poId, DateTime date);
-        Task<List<FishTypeResModel>> GetAllFishTypeByTraderIdAsync(int traderId);
+        Task<List<FishTypeApiModel>> GetAllLastFishTypeWithPondOwnerId(int traderId);
+        Task<List<FishTypeApiModel>> GetFishTypesByPondOwnerIdAndDate(int traderId, int poId, DateTime date);
+        List<FishTypeResModel> GetAllFishTypeByTraderIdAsync(int traderId);
         Task CreateListFishTypeAsync(List<FishTypeApiModel> listType, int traderId);
         Task CreateFishTypeAsync(FishTypeApiModel listType, int traderId);
         Task UpdateFishTypeAsync(FishTypeApiModel fishTypeModel, int traderId);
         Task DeleteFishTypeAsync(int empId, int traderId);
+        Task<List<FishTypeApiModel>> GetListFishTypeByPurchaseIdAsync(int purchaseId, int traderId);
+        Task UpdateListFishTypeAsync(ListFishTypeModel listFishType, int traderId);
         #endregion
 
         #region Basket
@@ -81,7 +85,7 @@ namespace TnR_SS.Domain.Supervisor
         #endregion
 
         #region Purchase
-        Task<PurchaseResModel> CreatePurchaseAsync(PurchaseReqModel purchaseModel);
+        Task<PurchaseResModel> CreatePurchaseAsync(PurchaseCreateReqModel purchaseModel);
         Task<List<PurchaseResModel>> GetAllPurchaseAsync(int traderId);
         Task<PurchaseResModel> GetPurchaseByIdAsync(int purchaseId, int traderId);
         Task UpdatePurchaseAsync(PurchaseApiModel models, int traderId);
@@ -158,7 +162,13 @@ namespace TnR_SS.Domain.Supervisor
         Task<BuyerApiModel> GetDetailBuyerAsync(int buyerId, int wcId);
         #endregion
 
-
+        #region HistorySalaryEmp
+        List<HistorySalaryEmpApiModel> GetAllSalaryByEmpId(int empId);
+        Task CreateHistorySalaryAsync(HistorySalaryEmpApiModel salaryModel, int empId);
+        Task UpdateHistorySalaryAsync(HistorySalaryEmpApiModel salaryModel, int empId);
+        Task DeleteHistorySalaryAsync(int salaryId, int empId);
+        public HistorySalaryEmpApiModel GetDetailHistorySalary(int salaryId, int empId);
+        #endregion
 
     }
 }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace TnR_SS.Domain.Entities
 {
     [Table("HistorySalaryEmp")]
-    public class HistorySalaryEmp
+    public class HistorySalaryEmp : BaseEntity
     {
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
@@ -18,8 +18,8 @@ namespace TnR_SS.Domain.Entities
         [Required]
         public DateTime StartDate { get; set; }
 
-        [Required]
-        public DateTime EndDate { get; set; }
+        //[Required]
+        public DateTime? EndDate { get; set; }
 
         [Required]
         public double Salary { get; set; }

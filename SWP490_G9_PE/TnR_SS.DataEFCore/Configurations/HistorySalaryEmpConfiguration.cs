@@ -30,7 +30,7 @@ namespace TnR_SS.DataEFCore.Configurations
                 .HasColumnType("datetime");
 
             entity.Property(e => e.EndDate)
-                .IsRequired()
+                .IsRequired(false)
                 .HasColumnType("datetime");
 
             entity.Property(e => e.Salary)

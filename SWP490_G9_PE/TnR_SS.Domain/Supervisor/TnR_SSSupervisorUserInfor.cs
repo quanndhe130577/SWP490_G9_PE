@@ -139,9 +139,16 @@ namespace TnR_SS.Domain.Supervisor
             return await _unitOfWork.UserInfors.UpdateIdentityAsync(user);
         }
 
-        public async Task<FindTraderByPhoneApiModel> FindTraderByPhone(string phoneNumber)
+        public async Task<List<FindTraderByPhoneApiModel>> SuggestTradersByPhoneAsync(string phoneNumber)
         {
-            return _mapper.Map<UserInfor, FindTraderByPhoneApiModel>(await _unitOfWork.UserInfors.FindTraderByPhoneAsync(phoneNumber));
+            var rs = await _unitOfWork.UserInfors.FindTradersByPhoneAsync(phoneNumber);
+            return rs.Select(x => _mapper.Map<UserInfor, FindTraderByPhoneApiModel>(x)).ToList();
+        }
+
+        public async Task<FindTraderByPhoneApiModel> FindTraderByPhoneAsync(string phoneNumber)
+        {
+            var rs = await _unitOfWork.UserInfors.FindTraderByPhoneAsync(phoneNumber);
+            return _mapper.Map<UserInfor, FindTraderByPhoneApiModel>(rs);
         }
 
         public List<FindTraderByPhoneApiModel> FindTradersOfWeightRecorder(int weightRecorderId)
