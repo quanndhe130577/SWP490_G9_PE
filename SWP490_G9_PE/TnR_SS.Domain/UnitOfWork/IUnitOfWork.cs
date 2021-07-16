@@ -27,6 +27,8 @@ namespace TnR_SS.Domain.UnitOfWork
         IBuyerRepository Buyers { get; }
         ITraderOfWeightRecorderRepository TraderOfWeightRecorders { get; }
         IHistorySalaryEmpRepository HistorySalaryEmps { get; }
+        ITransactionRepository Transactions { get; }
+        ITransactionDetailRepository TransactionDetails { get; }
         Task<int> SaveChangeAsync();
         IDbContextTransaction BeginTransaction();
         IExecutionStrategy CreateExecutionStrategy();

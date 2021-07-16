@@ -20,6 +20,8 @@ using TnR_SS.Domain.ApiModels.BuyerModel;
 using TnR_SS.Domain.ApiModels.FishTypeModel.ResponseModel;
 using TnR_SS.Domain.ApiModels.UserInforModel;
 using TnR_SS.Domain.ApiModels.HistorySalaryEmpModel;
+using TnR_SS.Domain.ApiModels.TransactionModel;
+using TnR_SS.Domain.ApiModels.TransactionDetailModel;
 
 namespace TnR_SS.Domain.Supervisor
 {
@@ -169,6 +171,14 @@ namespace TnR_SS.Domain.Supervisor
         Task DeleteHistorySalaryAsync(int salaryId, int empId);
         public HistorySalaryEmpApiModel GetDetailHistorySalary(int salaryId, int empId);
         #endregion
-
+        
+        #region Transaction
+        Task CreateListTransactionAsync(CreateListTransactionModel apiModel, int wcId);
+        Task<List<TransactionResModel>> GetAllTransactionAsync(int wcId, DateTime? date);
+        #endregion
+        
+        #region Transaction Detail
+        Task CreateTransactionDetailAsync(CreateTransactionDetailApiModel apiModel, int wcId);
+        #endregion
     }
 }

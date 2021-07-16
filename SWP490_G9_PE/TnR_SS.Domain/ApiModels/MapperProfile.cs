@@ -16,6 +16,8 @@ using TnR_SS.Domain.ApiModels.PurchaseModal;
 using TnR_SS.Domain.ApiModels.RoleUserModel.RequestModel;
 using TnR_SS.Domain.ApiModels.RoleUserModel.ResponseModel;
 using TnR_SS.Domain.ApiModels.TimeKeepingModel;
+using TnR_SS.Domain.ApiModels.TransactionDetailModel;
+using TnR_SS.Domain.ApiModels.TransactionModel;
 using TnR_SS.Domain.ApiModels.TruckModel;
 using TnR_SS.Domain.ApiModels.UserInforModel;
 using TnR_SS.Domain.Entities;
@@ -36,6 +38,7 @@ namespace TnR_SS.Domain.ApiModels
 
             CreateMap<UpdateUserReqModel, UserInfor>().ReverseMap();
             CreateMap<FindTraderByPhoneApiModel, UserInfor>().ReverseMap();
+            CreateMap<TraderInformation, UserInfor>().ReverseMap();
             CreateMap<UserInfor, UserResModel>().ForMember(destination => destination.UserID, options => options.MapFrom(source => source.Id)).ReverseMap();
             #endregion
 
@@ -101,6 +104,10 @@ namespace TnR_SS.Domain.ApiModels
 
             #region History Salary Employee
             CreateMap<HistorySalaryEmp, HistorySalaryEmpApiModel>().ReverseMap();
+            #endregion
+            
+            #region Transaction Detail
+            CreateMap<TransactionDetail, CreateTransactionDetailApiModel>().ReverseMap();
             #endregion
         }
 

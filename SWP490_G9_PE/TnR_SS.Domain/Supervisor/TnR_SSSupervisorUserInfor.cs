@@ -165,8 +165,8 @@ namespace TnR_SS.Domain.Supervisor
                 throw new Exception("Không tìm thấy thương lái");
             }
 
-            var rs = _unitOfWork.TraderOfWeightRecorders.GetAll(x => x.TraderId == traderId && x.WeightRecorderId == weightRecorderId);
-            if (rs != null)
+            var rs = _unitOfWork.TraderOfWeightRecorders.GetAll(x => x.TraderId == traderId && x.WeightRecorderId == weightRecorderId).ToList();
+            if ( rs.Count() != 0)
             {
                 throw new Exception("Thương lái đã được thêm !!!");
             }
