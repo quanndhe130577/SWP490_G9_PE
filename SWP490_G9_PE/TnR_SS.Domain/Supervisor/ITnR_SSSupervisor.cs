@@ -21,6 +21,7 @@ using TnR_SS.Domain.ApiModels.FishTypeModel.ResponseModel;
 using TnR_SS.Domain.ApiModels.UserInforModel;
 using TnR_SS.Domain.ApiModels.TransactionModel;
 using TnR_SS.Domain.ApiModels.TransactionDetailModel;
+using TnR_SS.Domain.ApiModels.EmployeeDebtModel;
 
 namespace TnR_SS.Domain.Supervisor
 {
@@ -170,6 +171,14 @@ namespace TnR_SS.Domain.Supervisor
 
         #region Transaction Detail
         Task CreateTransactionDetailAsync(CreateTransactionDetailApiModel apiModel, int wcId);
+        #endregion
+
+        #region Employee Debt
+        Task<EmployeeDebt> GetEmpDebt(int id);
+        List<EmployeeDebtApiModel> GetAllEmployeeDebt(int id);
+        Task CreateEmployeeDebt(EmployeeDebtApiModel apiModel);
+        Task UpdateEmployeeDebt(EmployeeDebtApiModel apiModel);
+        Task DeleteEmployeeDebt(EmployeeDebt apiModel);
         #endregion
     }
 }

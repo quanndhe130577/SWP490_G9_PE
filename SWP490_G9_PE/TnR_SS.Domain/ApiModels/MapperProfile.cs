@@ -19,6 +19,7 @@ using TnR_SS.Domain.ApiModels.TransactionDetailModel;
 using TnR_SS.Domain.ApiModels.TransactionModel;
 using TnR_SS.Domain.ApiModels.TruckModel;
 using TnR_SS.Domain.ApiModels.UserInforModel;
+using TnR_SS.Domain.ApiModels.EmployeeDebtModel;
 using TnR_SS.Domain.Entities;
 
 namespace TnR_SS.Domain.ApiModels
@@ -103,6 +104,10 @@ namespace TnR_SS.Domain.ApiModels
 
             #region Transaction Detail
             CreateMap<TransactionDetail, CreateTransactionDetailApiModel>().ReverseMap();
+            #endregion
+
+            #region Employee Debt
+            CreateMap<EmployeeDebt, EmployeeDebtApiModel>().ReverseMap();
             #endregion
         }
 
