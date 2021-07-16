@@ -69,5 +69,12 @@ namespace TnR_SS.Domain.Supervisor
             return buyerApi;
 
         }
+
+        public List<BuyerApiModel> GetBuyerByNameOrPhone(string input, int wcId)
+        {
+            return _unitOfWork.Buyers.GetAll(x => x.WeightRecorderId == wcId)
+                .Where(x => x.Name == input || x.PhoneNumber == input)
+                .Select(x => _mapper.Map<Buyer, BuyerApiModel>(x)).ToList();
+        }
     }
 }

@@ -36,6 +36,13 @@ namespace TnR_SS.API.Controllers
             return new ResponseBuilder<List<HistorySalaryEmpApiModel>>().Success("Lấy thông tin lương nhân viên thành công").WithData(listSalary).ResponseModel;
         }
 
+        [HttpPost("update/{empId}")]
+        public async Task<ResponseModel> UpdateHistorySalaryAsync(HistorySalaryEmpApiModel salaryApi, int empId)
+        {
+            await _tnrssSupervisor.UpdateHistorySalaryAsync(salaryApi, empId);
+            return new ResponseBuilder().Success("Cập nhật lương cho nhân viên thành công").ResponseModel;
+        }
+
 
     }
 }

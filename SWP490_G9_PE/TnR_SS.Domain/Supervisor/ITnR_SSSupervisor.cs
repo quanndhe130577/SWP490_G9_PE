@@ -162,6 +162,7 @@ namespace TnR_SS.Domain.Supervisor
         Task UpdateBuyerAsync(BuyerApiModel buyerModel, int wcId);
         Task DeleteBuyerAsync(int buyerId, int wcId);
         Task<BuyerApiModel> GetDetailBuyerAsync(int buyerId, int wcId);
+        List<BuyerApiModel> GetBuyerByNameOrPhone(string input, int wcId);
         #endregion
 
         #region HistorySalaryEmp
