@@ -24,10 +24,10 @@ namespace TnR_SS.API.Controllers
         }
 
         [Route("create")]
-        public async Task<ResponseModel> Create(CreateTransactionDetailApiModel model)
+        public async Task<ResponseModel> Create(CreateTransactionDetailReqModel model)
         {
-            var wcId = TokenManagement.GetUserIdInToken(HttpContext);
-            await _tnrssSupervisor.CreateTransactionDetailAsync(model, wcId);
+            var userId = TokenManagement.GetUserIdInToken(HttpContext);
+            await _tnrssSupervisor.CreateTransactionDetailAsync(model, userId);
             return new ResponseBuilder().Success("Tạo đơn bán thành công").ResponseModel;
         }
 
@@ -56,7 +56,7 @@ namespace TnR_SS.API.Controllers
             }
 
             var rs = await _tnrssSupervisor.GetAllTransactionDetailAsync(wcId, date);
-            return new ResponseBuilder<List<GetAllTransactionDetailApiModel>>().Success("Lấy thông tin hóa đơn thành công !!").WithData(rs).ResponseModel;
+            return new ResponseBuilder<List<GetAllTransactionDetailResModel>>().Success("Lấy thông tin hóa đơn thành công !!").WithData(rs).ResponseModel;
         }
     }
 }

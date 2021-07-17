@@ -22,8 +22,7 @@ namespace TnR_SS.Domain.Entities
         public int TransId { get; set; }
         public Transaction Transaction { get; set; }
 
-        [Required]
-        public int BuyerId { get; set; }
+        public int? BuyerId { get; set; }
         public Buyer Buyer { get; set; }
 
         public bool IsPaid { get; set; } = false;
