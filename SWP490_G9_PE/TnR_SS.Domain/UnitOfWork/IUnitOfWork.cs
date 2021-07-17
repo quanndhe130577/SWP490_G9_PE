@@ -29,6 +29,7 @@ namespace TnR_SS.Domain.UnitOfWork
         IHistorySalaryEmpRepository HistorySalaryEmps { get; }
         ITransactionRepository Transactions { get; }
         ITransactionDetailRepository TransactionDetails { get; }
+        IEmployeeDebtRepository EmployeeDebts { get; }
         Task<int> SaveChangeAsync();
         IDbContextTransaction BeginTransaction();
         IExecutionStrategy CreateExecutionStrategy();
