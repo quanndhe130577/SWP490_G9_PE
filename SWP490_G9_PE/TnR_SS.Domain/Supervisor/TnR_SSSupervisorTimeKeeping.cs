@@ -68,5 +68,16 @@ namespace TnR_SS.Domain.Supervisor
             List<TimeKeepingApiModel> timeKeepings = _unitOfWork.TimeKeepings.GetAllByEmployeeId(id).Select(tk => _mapper.Map<TimeKeepingApiModel>(tk)).ToList();
             return timeKeepings;
         }
+
+        public async Task<int> PaidTimeKeeping(int id, DateTime date)
+        {
+            List<TimeKeeping> timeKeepings = _unitOfWork.TimeKeepings.GetTimeKeepingPaid(id, date);
+            foreach (TimeKeeping timeKeeping in timeKeepings)
+            {
+                timeKeeping.Note = TimeKeepingNote.IsPaid;
+                _unitOfWork.TimeKeepings.Update(timeKeeping);
+            }
+            return await _unitOfWork.SaveChangeAsync();
+        }
     }
 }

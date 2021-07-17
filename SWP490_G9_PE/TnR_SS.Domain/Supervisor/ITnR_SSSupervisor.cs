@@ -179,6 +179,7 @@ namespace TnR_SS.Domain.Supervisor
         Task CreateEmployeeDebt(EmployeeDebtApiModel apiModel);
         Task UpdateEmployeeDebt(EmployeeDebtApiModel apiModel);
         Task DeleteEmployeeDebt(EmployeeDebt apiModel);
+        Task<int> PaidTimeKeeping(int id, DateTime date);
         #endregion
     }
 }

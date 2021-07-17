@@ -36,7 +36,7 @@ namespace TnR_SS.DataEFCore.Repositories
                      join employee in _context.Employees on timeKeeping.EmpId equals employee.ID
                      where employee.TraderId == id && timeKeeping.WorkDay.Day == date.Day &&
                       timeKeeping.WorkDay.Month == date.Month && timeKeeping.WorkDay.Year == date.Year
-                    orderby employee.CreatedAt descending
+                     orderby employee.CreatedAt descending
                      select new TimeKeepingApiModel()
                      {
                          ID = timeKeeping.ID,
@@ -70,6 +70,11 @@ namespace TnR_SS.DataEFCore.Repositories
         {
             var rs = _context.TimeKeepings.Where(tk => tk.EmpId == id).ToList();
             return rs;
+        }
+
+        public List<TimeKeeping> GetTimeKeepingPaid(int id, DateTime date)
+        {
+            return _context.TimeKeepings.Where(tk => tk.EmpId == id && tk.WorkDay.Month == date.Month && tk.WorkDay.Year == date.Year).ToList();
         }
     }
 }
