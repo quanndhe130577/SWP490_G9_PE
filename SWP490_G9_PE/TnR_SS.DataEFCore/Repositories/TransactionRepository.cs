@@ -11,5 +11,6 @@ namespace TnR_SS.DataEFCore.Repositories
     public class TransactionRepository : RepositoryBase<Transaction>, ITransactionRepository
     {
         public TransactionRepository(TnR_SSContext context) : base(context) { }
+
     }
 }

@@ -14,6 +14,7 @@ namespace TnR_SS.Domain.Supervisor
         {
             foreach (var item in apiModel.ListTraderId)
             {
+                // check role trader in transaction
                 var listRole = await _unitOfWork.UserInfors.GetRolesAsync(item);
                 if (listRole.Contains(RoleName.Trader))
                 {
