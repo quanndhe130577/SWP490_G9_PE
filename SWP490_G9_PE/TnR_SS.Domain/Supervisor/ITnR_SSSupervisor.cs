@@ -19,6 +19,7 @@ using TnR_SS.Domain.ApiModels.CostIncurredModel;
 using TnR_SS.Domain.ApiModels.BuyerModel;
 using TnR_SS.Domain.ApiModels.FishTypeModel.ResponseModel;
 using TnR_SS.Domain.ApiModels.UserInforModel;
+using TnR_SS.Domain.ApiModels.HistorySalaryEmpModel;
 using TnR_SS.Domain.ApiModels.TransactionModel;
 using TnR_SS.Domain.ApiModels.TransactionDetailModel;
 using TnR_SS.Domain.ApiModels.EmployeeDebtModel;
@@ -162,13 +163,23 @@ namespace TnR_SS.Domain.Supervisor
         Task UpdateBuyerAsync(BuyerApiModel buyerModel, int wcId);
         Task DeleteBuyerAsync(int buyerId, int wcId);
         Task<BuyerApiModel> GetDetailBuyerAsync(int buyerId, int wcId);
+        List<BuyerApiModel> GetBuyerByNameOrPhone(string input, int wcId);
+        #endregion
+
+        #region HistorySalaryEmp
+        List<HistorySalaryEmpApiModel> GetAllSalaryByEmpId(int empId);
+        Task CreateHistorySalaryAsync(HistorySalaryEmpApiModel salaryModel, int empId);
+        Task UpdateHistorySalaryAsync(HistorySalaryEmpApiModel salaryModel, int empId);
+        Task DeleteHistorySalaryAsync(int salaryId, int empId);
+        HistorySalaryEmpApiModel GetDetailHistorySalary(int salaryId, int empId);
+        HistorySalaryEmpApiModel GetSalaryByDate(DateTime date, int empId);
         #endregion
 
         #region Transaction
         Task CreateListTransactionAsync(CreateListTransactionModel apiModel, int wcId);
         Task<List<TransactionResModel>> GetAllTransactionAsync(int wcId, DateTime? date);
         #endregion
-
+        
         #region Transaction Detail
         Task CreateTransactionDetailAsync(CreateTransactionDetailApiModel apiModel, int wcId);
         #endregion

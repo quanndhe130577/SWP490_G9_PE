@@ -36,8 +36,9 @@ namespace TnR_SS.Domain.Supervisor
             foreach (var type in listEmp)
             {
                 list.Add(_mapper.Map<Employee, EmployeeApiModel>(type));
+                list = AddStatusToEmployee(traderId);
             }
-            return list;
+            return list.OrderBy(a => a.Status).ToList();
         }
 
         public async Task CreateEmployeesAsync(EmployeeApiModel employee, int traderId)
@@ -123,7 +124,7 @@ namespace TnR_SS.Domain.Supervisor
         public bool CheckEmployeeExist(int traderId, EmployeeApiModel employee)
         {
             var listEmp = _unitOfWork.Employees.GetAllEmployeeByTraderId(traderId);
-            var flag = listEmp.Where(x => x.PhoneNumber == employee.PhoneNumber && x.DOB == employee.DOB).Count() == 0;
+            var flag = listEmp.Where(x => x.PhoneNumber == employee.PhoneNumber).Count() == 0;
             if (flag)
             {
                 return true;
@@ -140,11 +141,13 @@ namespace TnR_SS.Domain.Supervisor
                 var empMap = _mapper.Map<Employee, EmployeeApiModel>(emp);
                 if (empMap.EndDate != null && empMap.EndDate <= DateTime.Now)
                 {
-                    empMap.Status = EmployeeStatus.unavailable.ToString();
+                    //empMap.Status = EmployeeStatus.unavailable.ToString();
+                    empMap.Status = "Nghỉ làm";
                 }
                 else
                 {
-                    empMap.Status = EmployeeStatus.available.ToString();
+                    //empMap.Status = EmployeeStatus.available.ToString();
+                    empMap.Status = "Đang làm";
                 }
                 listEmpApi.Add(empMap);
             }

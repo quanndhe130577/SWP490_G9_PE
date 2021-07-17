@@ -35,6 +35,12 @@ namespace TnR_SS.DataEFCore.Configurations
 
             entity.Property(e => e.Salary)
                 .IsRequired();
+
+            entity.Property(e => e.CreatedAt)
+                .HasColumnType("datetime");
+
+            entity.Property(e => e.UpdatedAt)
+                .HasColumnType("datetime");
         }
     }
 }

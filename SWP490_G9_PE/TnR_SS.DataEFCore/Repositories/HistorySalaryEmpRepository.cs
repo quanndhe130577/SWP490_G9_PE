@@ -11,5 +11,12 @@ namespace TnR_SS.DataEFCore.Repositories
     public class HistorySalaryEmpRepository : RepositoryBase<HistorySalaryEmp>, IHistorySalaryEmpRepository
     {
         public HistorySalaryEmpRepository(TnR_SSContext context) : base(context) { }
+
+        public List<HistorySalaryEmp> GetAllSalaryByEmpId(int empId)
+        {
+            var rs = _context.HistorySalaryEmps.AsEnumerable().Where(x => x.EmpId == empId)
+                .OrderByDescending(x => x.StartDate).ToList();
+            return rs;
+        }
     }
 }

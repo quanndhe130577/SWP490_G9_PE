@@ -9,6 +9,6 @@ namespace TnR_SS.Domain.Repositories
 {
     public interface IHistorySalaryEmpRepository : IRepositoryBase<HistorySalaryEmp>
     {
-
+        List<HistorySalaryEmp> GetAllSalaryByEmpId(int traderId);
     }
 }
