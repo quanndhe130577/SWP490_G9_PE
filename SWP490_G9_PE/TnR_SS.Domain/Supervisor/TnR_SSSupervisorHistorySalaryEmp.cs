@@ -75,5 +75,15 @@ namespace TnR_SS.Domain.Supervisor
             }
             return null;
         }
+
+        public HistorySalaryEmpApiModel GetSalaryByDate(DateTime date, int empId)
+        {
+            var listSalary = _unitOfWork.HistorySalaryEmps.GetAllSalaryByEmpId(empId)
+                .Select(x => _mapper.Map<HistorySalaryEmp, HistorySalaryEmpApiModel>(x))
+                .Where(x => x.StartDate <= date && x.EndDate >= date)
+                .OrderByDescending(x => x.StartDate)
+                .First();
+            return listSalary;
+        }
     }
 }

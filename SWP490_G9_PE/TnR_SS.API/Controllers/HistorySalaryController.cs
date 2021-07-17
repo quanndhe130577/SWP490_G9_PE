@@ -43,6 +43,25 @@ namespace TnR_SS.API.Controllers
             return new ResponseBuilder().Success("Cập nhật lương cho nhân viên thành công").ResponseModel;
         }
 
+        [HttpPost("delete/{empId}/{salaryId}")]
+        public async Task<ResponseModel> DeleteHistorySalaryAsync(int empId, int salaryId)
+        {
+            await _tnrssSupervisor.DeleteHistorySalaryAsync(salaryId, empId);
+            return new ResponseBuilder().Success("Xóa lương cho nhân viên thành công").ResponseModel;
+        }
 
+        [HttpPost("detail/{empId}/{salaryId}")]
+        public ResponseModel DetailHistorySalaryAsync(int empId, int salaryId)
+        {
+            var salary = _tnrssSupervisor.GetDetailHistorySalary(salaryId, empId);
+            return new ResponseBuilder<HistorySalaryEmpApiModel>().Success("Lấy thông tin lương cho nhân viên thành công").WithData(salary).ResponseModel;
+        }
+
+        [HttpGet("getsalary/{empId}/{date}")]
+        public ResponseModel GetSalaryByDate(int empId, DateTime date)
+        {
+            var salary = _tnrssSupervisor.GetSalaryByDate(date, empId);
+            return new ResponseBuilder<HistorySalaryEmpApiModel>().Success("Lấy lương hiện tại của nhân viên thành công").WithData(salary).ResponseModel;
+        }
     }
 }

@@ -170,9 +170,10 @@ namespace TnR_SS.Domain.Supervisor
         Task CreateHistorySalaryAsync(HistorySalaryEmpApiModel salaryModel, int empId);
         Task UpdateHistorySalaryAsync(HistorySalaryEmpApiModel salaryModel, int empId);
         Task DeleteHistorySalaryAsync(int salaryId, int empId);
-        public HistorySalaryEmpApiModel GetDetailHistorySalary(int salaryId, int empId);
+        HistorySalaryEmpApiModel GetDetailHistorySalary(int salaryId, int empId);
+        HistorySalaryEmpApiModel GetSalaryByDate(DateTime date, int empId);
         #endregion
-        
+
         #region Transaction
         Task CreateListTransactionAsync(CreateListTransactionModel apiModel, int wcId);
         Task<List<TransactionResModel>> GetAllTransactionAsync(int wcId, DateTime? date);
