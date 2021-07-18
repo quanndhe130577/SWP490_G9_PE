@@ -40,6 +40,9 @@ namespace TnR_SS.DataEFCore.Configurations
                 .OnDelete(DeleteBehavior.ClientNoAction)
                 .HasConstraintName("FK_Transaction_UserInfor-Trader");
 
+            entity.Property(e => e.WeightRecorderId)
+               .IsRequired(false);
+
             entity.HasOne(p => p.WeightRecorder)
                 .WithMany(b => b.TransactionWeightRecorders)
                 .HasForeignKey(x => x.WeightRecorderId)

@@ -30,6 +30,11 @@ namespace TnR_SS.Domain.Supervisor
 
         private async Task CreateLK(List<int> listDrumId, int purchaseDetailId)
         {
+            if (listDrumId.Count == 0 || listDrumId == null)
+            {
+                throw new Exception("Chưa chọn Lồ để chứa cá !!!");
+            }
+
             foreach (var item in listDrumId)
             {
                 LK_PurchaseDeatil_Drum lk = new LK_PurchaseDeatil_Drum()
