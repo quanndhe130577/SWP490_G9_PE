@@ -18,5 +18,15 @@ namespace TnR_SS.DataEFCore.Repositories
                 .Join(_context.PurchaseDetails, x => x.ID, y => y.PurchaseId,
                 (x, y) => y).ToList();
         }
+
+        public List<PurchaseDetail> GetAllPurchaseDetailByTrader(int traderId)
+        {
+
+             var  list = _context.Purchases.Where(a => a.TraderID == traderId)
+                .Join(_context.PurchaseDetails, x => x.ID, y => y.PurchaseId,
+                (x, y) => y).ToList();
+
+            return list;
+        }
     }
 }
