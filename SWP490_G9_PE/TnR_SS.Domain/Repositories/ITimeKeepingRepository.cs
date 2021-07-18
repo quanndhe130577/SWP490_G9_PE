@@ -14,5 +14,6 @@ namespace TnR_SS.Domain.Repositories
         List<TimeKeepingApiModel> GetAllWithTraderIdPerMonth(int id, DateTime date);
         List<TimeKeepingApiModel> GetStatisticsByTraderIdByMonth(int id, DateTime date);
         List<TimeKeeping> GetAllByEmployeeId(int id);
+        List<TimeKeeping> GetTimeKeepingPaid(int id, DateTime date);
     }
 }

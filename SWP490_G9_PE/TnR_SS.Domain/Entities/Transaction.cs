@@ -23,8 +23,7 @@ namespace TnR_SS.Domain.Entities
         [Required]
         public DateTime Date { get; set; }
 
-        [Required]
-        public int WeightRecorderId { get; set; }
+        public int? WeightRecorderId { get; set; }
         public UserInfor WeightRecorder { get; set; }
 
         [Required]

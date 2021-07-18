@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TnR_SS.DataEFCore;
 
 namespace TnR_SS.DataEFCore.Migrations
 {
     [DbContext(typeof(TnR_SSContext))]
-    partial class TnR_SSContextModelSnapshot : ModelSnapshot
+    [Migration("20210716133903_AddEmployeeDebtPaid")]
+    partial class AddEmployeeDebtPaid
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -651,32 +653,32 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "fa9bcbf6-8e6f-494f-a719-8ad21950b69c",
+                            ConcurrencyStamp = "0091eac6-3f46-4d42-a352-d83e80112505",
                             CreatedAt = new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Chủ bến",
                             Name = "WeightRecorder",
                             NormalizedName = "WEIGHTRECORDER",
-                            UpdatedAt = new DateTime(2021, 7, 18, 1, 27, 40, 919, DateTimeKind.Local).AddTicks(243)
+                            UpdatedAt = new DateTime(2021, 7, 16, 20, 39, 3, 50, DateTimeKind.Local).AddTicks(5230)
                         },
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "f170240d-418b-496c-af6b-8538e2363766",
+                            ConcurrencyStamp = "2c21961b-264a-460a-ae5d-19fc52618850",
                             CreatedAt = new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Thương lái",
                             Name = "Trader",
                             NormalizedName = "TRADER",
-                            UpdatedAt = new DateTime(2021, 7, 18, 1, 27, 40, 920, DateTimeKind.Local).AddTicks(6547)
+                            UpdatedAt = new DateTime(2021, 7, 16, 20, 39, 3, 64, DateTimeKind.Local).AddTicks(7130)
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "308d3956-05f6-4b32-a6b7-4c3e52fb5efd",
+                            ConcurrencyStamp = "f627206a-e86b-4482-bfaa-433b51f4394d",
                             CreatedAt = new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Admin",
                             Name = "Admin",
                             NormalizedName = "ADMIN",
-                            UpdatedAt = new DateTime(2021, 7, 18, 1, 27, 40, 920, DateTimeKind.Local).AddTicks(6599)
+                            UpdatedAt = new DateTime(2021, 7, 16, 20, 39, 3, 64, DateTimeKind.Local).AddTicks(7170)
                         });
                 });
 
@@ -773,7 +775,7 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime");
 
-                    b.Property<int?>("WeightRecorderId")
+                    b.Property<int>("WeightRecorderId")
                         .HasColumnType("int");
 
                     b.HasKey("ID");
@@ -793,7 +795,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         .HasColumnName("ID")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("BuyerId")
+                    b.Property<int>("BuyerId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
@@ -1240,7 +1242,8 @@ namespace TnR_SS.DataEFCore.Migrations
                         .WithMany("TransactionWeightRecorders")
                         .HasForeignKey("WeightRecorderId")
                         .HasConstraintName("FK_Transaction_UserInfor-WeightRecorder")
-                        .OnDelete(DeleteBehavior.ClientNoAction);
+                        .OnDelete(DeleteBehavior.ClientNoAction)
+                        .IsRequired();
 
                     b.Navigation("Trader");
 
@@ -1253,7 +1256,8 @@ namespace TnR_SS.DataEFCore.Migrations
                         .WithMany("TransactionDetails")
                         .HasForeignKey("BuyerId")
                         .HasConstraintName("FK_TransactionDetail_Buyer")
-                        .OnDelete(DeleteBehavior.ClientNoAction);
+                        .OnDelete(DeleteBehavior.ClientNoAction)
+                        .IsRequired();
 
                     b.HasOne("TnR_SS.Domain.Entities.FishType", "FishType")
                         .WithMany("TransactionDetails")

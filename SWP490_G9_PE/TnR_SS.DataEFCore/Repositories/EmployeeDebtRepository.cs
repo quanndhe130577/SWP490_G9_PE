@@ -8,9 +8,8 @@ using TnR_SS.Domain.Repositories;
 
 namespace TnR_SS.DataEFCore.Repositories
 {
-    public class TransactionRepository : RepositoryBase<Transaction>, ITransactionRepository
+    public class EmployeeDebtRepository : RepositoryBase<EmployeeDebt>, IEmployeeDebtRepository
     {
-        public TransactionRepository(TnR_SSContext context) : base(context) { }
-
+        public EmployeeDebtRepository(TnR_SSContext context) : base(context) { }
     }
 }

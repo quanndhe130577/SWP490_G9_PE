@@ -7,8 +7,8 @@ using TnR_SS.Domain.Entities;
 
 namespace TnR_SS.Domain.Repositories
 {
-    public interface ITransactionDetailRepository : IRepositoryBase<TransactionDetail>
+    public interface IEmployeeDebtRepository : IRepositoryBase<EmployeeDebt>
     {
-        List<TransactionDetail> GetAllTransactionByWcIDAndDate(int wcId, DateTime? date);
+
     }
 }
