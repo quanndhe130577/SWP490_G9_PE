@@ -72,14 +72,12 @@ namespace TnR_SS.API.Controllers
             {
                 return new ResponseBuilder().Error("Lỗi format date !!!").ResponseModel;
             }
-
         }
 
         [HttpGet("getall/{purchaseId}")]
         public async Task<ResponseModel> GetByPurchaseId(int purchaseId)
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
-
             var fishTypes = await _tnrssSupervisor.GetListFishTypeByPurchaseIdAsync(purchaseId, traderId);
             return new ResponseBuilder<List<FishTypeApiModel>>().Success("Lấy thông tin loại cá thành công").WithData(fishTypes).ResponseModel;
         }

@@ -33,9 +33,9 @@ namespace TnR_SS.DataEFCore.Configurations
                 .IsRequired()
                 .HasMaxLength(11);
 
-            entity.HasOne(p => p.WeightRecorder)
+            entity.HasOne(p => p.Seller)
                 .WithMany(b => b.Buyers)
-                .HasForeignKey(p => p.WeightRecorderId)
+                .HasForeignKey(p => p.SellerId)
                 .OnDelete(DeleteBehavior.ClientNoAction)
                 .HasConstraintName("FK_Buyer_UserInfor");
         }

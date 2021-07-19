@@ -117,6 +117,11 @@ namespace TnR_SS.Domain.Supervisor
                             throw new Exception("Loại rổ không tồn tại !!!");
                         }
 
+                        if(basket.Weight >= data.Weight)
+                        {
+                            throw new Exception("Cân nặng mã cân phải lớn hơn cân nặng của rổ !!!");
+                        }
+
                         var purchaseDetail = _mapper.Map<PurchaseDetailReqModel, PurchaseDetail>(data);
                         //double totalFishWeight = data.ListDrum.Sum(x => x.Weight) - basket.Weight;
                         //purchaseDetail.BuyPrice = fishType.Price * totalFishWeight;
