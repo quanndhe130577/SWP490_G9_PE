@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TnR_SS.Domain.ApiModels.EmployeeDebtModel
+namespace TnR_SS.Domain.ApiModels.AdvanceSalaryModel
 {
-    public class EmployeeDebtApiModel
+    public class AdvanceSalaryApiModel
     {
         public int ID { get; set; }
         public DateTime Date { get; set; }

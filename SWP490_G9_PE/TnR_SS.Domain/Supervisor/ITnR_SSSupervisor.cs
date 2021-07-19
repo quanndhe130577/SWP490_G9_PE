@@ -22,7 +22,7 @@ using TnR_SS.Domain.ApiModels.UserInforModel;
 using TnR_SS.Domain.ApiModels.HistorySalaryEmpModel;
 using TnR_SS.Domain.ApiModels.TransactionModel;
 using TnR_SS.Domain.ApiModels.TransactionDetailModel;
-using TnR_SS.Domain.ApiModels.EmployeeDebtModel;
+using TnR_SS.Domain.ApiModels.AdvanceSalaryModel;
 
 namespace TnR_SS.Domain.Supervisor
 {
@@ -179,18 +179,18 @@ namespace TnR_SS.Domain.Supervisor
         Task CreateListTransactionAsync(CreateListTransactionReqModel apiModel, int wcId);
         Task<List<TransactionResModel>> GetAllTransactionAsync(int userId, DateTime? date);
         #endregion
-        
+
         #region Transaction Detail
         Task CreateTransactionDetailAsync(CreateTransactionDetailReqModel apiModel, int userId);
         Task<List<GetAllTransactionDetailResModel>> GetAllTransactionDetailAsync(int wcId, DateTime? date);
         #endregion
 
         #region Employee Debt
-        Task<EmployeeDebt> GetEmpDebt(int id);
-        List<EmployeeDebtApiModel> GetAllEmployeeDebt(int id);
-        Task CreateEmployeeDebt(EmployeeDebtApiModel apiModel);
-        Task UpdateEmployeeDebt(EmployeeDebtApiModel apiModel);
-        Task DeleteEmployeeDebt(EmployeeDebt apiModel);
+        Task<AdvanceSalary> GetEmpDebt(int id);
+        List<AdvanceSalaryApiModel> GetAllAdvanceSalary(int id);
+        Task CreateAdvanceSalary(AdvanceSalaryApiModel apiModel);
+        Task UpdateAdvanceSalary(AdvanceSalaryApiModel apiModel);
+        Task DeleteAdvanceSalary(AdvanceSalary apiModel);
         Task<int> PaidTimeKeeping(int id, DateTime date);
         #endregion
     }

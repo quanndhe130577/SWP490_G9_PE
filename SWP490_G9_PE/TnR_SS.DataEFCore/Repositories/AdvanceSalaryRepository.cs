@@ -8,8 +8,8 @@ using TnR_SS.Domain.Repositories;
 
 namespace TnR_SS.DataEFCore.Repositories
 {
-    public class EmployeeDebtRepository : RepositoryBase<EmployeeDebt>, IEmployeeDebtRepository
+    public class AdvanceSalaryRepository : RepositoryBase<AdvanceSalary>, IAdvanceSalaryRepository
     {
-        public EmployeeDebtRepository(TnR_SSContext context) : base(context) { }
+        public AdvanceSalaryRepository(TnR_SSContext context) : base(context) { }
     }
 }
