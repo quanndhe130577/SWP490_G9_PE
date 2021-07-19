@@ -198,5 +198,7 @@ namespace TnR_SS.Domain.Supervisor
         Task DeleteEmployeeDebt(EmployeeDebt apiModel);
         Task<int> PaidTimeKeeping(int id, DateTime date);
         #endregion
+
+        Task CreateHistorySalaryAsync(CreateHistorySalaryEmpModel salaryApi, int traderId);
     }
 }
