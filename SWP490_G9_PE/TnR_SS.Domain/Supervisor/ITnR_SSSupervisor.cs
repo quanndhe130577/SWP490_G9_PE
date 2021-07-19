@@ -176,12 +176,13 @@ namespace TnR_SS.Domain.Supervisor
         #endregion
 
         #region Transaction
-        Task CreateListTransactionAsync(CreateListTransactionModel apiModel, int wcId);
-        Task<List<TransactionResModel>> GetAllTransactionAsync(int wcId, DateTime? date);
+        Task CreateListTransactionAsync(CreateListTransactionReqModel apiModel, int wcId);
+        Task<List<TransactionResModel>> GetAllTransactionAsync(int userId, DateTime? date);
         #endregion
         
         #region Transaction Detail
-        Task CreateTransactionDetailAsync(CreateTransactionDetailApiModel apiModel, int wcId);
+        Task CreateTransactionDetailAsync(CreateTransactionDetailReqModel apiModel, int userId);
+        Task<List<GetAllTransactionDetailResModel>> GetAllTransactionDetailAsync(int wcId, DateTime? date);
         #endregion
 
         #region Employee Debt
@@ -190,6 +191,7 @@ namespace TnR_SS.Domain.Supervisor
         Task CreateEmployeeDebt(EmployeeDebtApiModel apiModel);
         Task UpdateEmployeeDebt(EmployeeDebtApiModel apiModel);
         Task DeleteEmployeeDebt(EmployeeDebt apiModel);
+        Task<int> PaidTimeKeeping(int id, DateTime date);
         #endregion
     }
 }

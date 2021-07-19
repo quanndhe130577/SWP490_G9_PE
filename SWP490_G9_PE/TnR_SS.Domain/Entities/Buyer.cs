@@ -20,9 +20,9 @@ namespace TnR_SS.Domain.Entities
         [MinLength(10)]
         public string PhoneNumber { get; set; }
 
-        public int WeightRecorderId { get; set; }
+        public int SellerId { get; set; }
 
-        public UserInfor WeightRecorder { get; set; }
+        public UserInfor Seller { get; set; }
         public List<TransactionDetail> TransactionDetails { get; set; }
     }
 }

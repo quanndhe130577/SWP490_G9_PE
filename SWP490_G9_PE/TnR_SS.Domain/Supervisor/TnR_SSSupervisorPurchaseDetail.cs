@@ -30,6 +30,11 @@ namespace TnR_SS.Domain.Supervisor
 
         private async Task CreateLK(List<int> listDrumId, int purchaseDetailId)
         {
+            if (listDrumId.Count == 0 || listDrumId == null)
+            {
+                throw new Exception("Chưa chọn Lồ để chứa cá !!!");
+            }
+
             foreach (var item in listDrumId)
             {
                 LK_PurchaseDeatil_Drum lk = new LK_PurchaseDeatil_Drum()
@@ -110,6 +115,11 @@ namespace TnR_SS.Domain.Supervisor
                         if (basket == null)
                         {
                             throw new Exception("Loại rổ không tồn tại !!!");
+                        }
+
+                        if(basket.Weight >= data.Weight)
+                        {
+                            throw new Exception("Cân nặng mã cân phải lớn hơn cân nặng của rổ !!!");
                         }
 
                         var purchaseDetail = _mapper.Map<PurchaseDetailReqModel, PurchaseDetail>(data);

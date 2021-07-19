@@ -10,10 +10,11 @@ namespace TnR_SS.Domain.Supervisor
 {
     public partial class TnR_SSSupervisor
     {
-        public async Task CreateListTransactionAsync(CreateListTransactionModel apiModel, int wcId)
+        public async Task CreateListTransactionAsync(CreateListTransactionReqModel apiModel, int wcId)
         {
             foreach (var item in apiModel.ListTraderId)
             {
+                // check role trader in transaction
                 var listRole = await _unitOfWork.UserInfors.GetRolesAsync(item);
                 if (listRole.Contains(RoleName.Trader))
                 {
@@ -29,7 +30,6 @@ namespace TnR_SS.Domain.Supervisor
                     throw new Exception("Thông tin thương lái chưa chính xác !!!");
                 }
 
-
             }
 
             await _unitOfWork.SaveChangeAsync();
@@ -37,7 +37,21 @@ namespace TnR_SS.Domain.Supervisor
 
         public async Task<List<TransactionResModel>> GetAllTransactionAsync(int wcId, DateTime? date)
         {
-            var listTran = _unitOfWork.Transactions.GetAll(x => x.WeightRecorderId == wcId).OrderByDescending(x => x.Date).ToList();
+            var roleUser = await _unitOfWork.UserInfors.GetRolesAsync(wcId);
+            var listTran = new List<Transaction>();
+            if (roleUser.Contains(RoleName.WeightRecorder))
+            {
+                listTran = _unitOfWork.Transactions.GetAll(x => x.WeightRecorderId == wcId).OrderByDescending(x => x.Date).ToList();
+            }
+            /*else if (roleUser.Contains(RoleName.Trader))
+            {
+                listTran = _unitOfWork.Transactions.GetAll(x => x.TraderId == userId).OrderByDescending(x => x.Date).ToList();
+            }*/
+            else
+            {
+                throw new Exception("Tài khoản không hợp lệ");
+            }
+
             if (date != null)
             {
                 listTran = listTran.Where(x => x.Date == date.Value).ToList();

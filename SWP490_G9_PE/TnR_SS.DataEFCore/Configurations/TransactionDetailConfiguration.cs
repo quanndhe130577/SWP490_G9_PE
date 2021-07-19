@@ -47,6 +47,9 @@ namespace TnR_SS.DataEFCore.Configurations
                 .OnDelete(DeleteBehavior.ClientNoAction)
                 .HasConstraintName("FK_TransactionDetail_Transaction");
 
+            entity.Property(e => e.BuyerId)
+                .IsRequired(false);
+
             entity.HasOne(p => p.Buyer)
                 .WithMany(b => b.TransactionDetails)
                 .HasForeignKey(x => x.BuyerId)

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -8,12 +9,14 @@ using System.Threading.Tasks;
 using TnR_SS.API.Common.Response;
 using TnR_SS.API.Common.Token;
 using TnR_SS.Domain.ApiModels.TransactionModel;
+using TnR_SS.Domain.Entities;
 using TnR_SS.Domain.Supervisor;
 
 namespace TnR_SS.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = RoleName.WeightRecorder)]
     public class TransactionController : ControllerBase
     {
         private readonly ITnR_SSSupervisor _tnrssSupervisor;
@@ -23,8 +26,8 @@ namespace TnR_SS.API.Controllers
             _tnrssSupervisor = tnrssSupervisor;
         }
 
-        [Route("createlist")]
-        public async Task<ResponseModel> Create(CreateListTransactionModel createModel)
+        [Route("createlist")]    
+        public async Task<ResponseModel> Create(CreateListTransactionReqModel createModel)
         {
             var wcId = TokenManagement.GetUserIdInToken(HttpContext);
             await _tnrssSupervisor.CreateListTransactionAsync(createModel, wcId);

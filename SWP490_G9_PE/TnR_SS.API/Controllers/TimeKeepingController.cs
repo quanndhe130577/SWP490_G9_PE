@@ -92,6 +92,14 @@ namespace TnR_SS.API.Controller
         }
 
         [HttpPost]
+        [Route("paid")]
+        public async Task<ResponseModel> Paid(TimeKeepingApiModel timeKeeping)
+        {
+            await _tnrssSupervisor.PaidTimeKeeping(timeKeeping.EmpId, timeKeeping.WorkDay);
+            return new ResponseBuilder().Success("Thanh toán thành công").ResponseModel;
+        }
+
+        [HttpPost]
         [Route("delete/{id}")]
         public async Task<ResponseModel> Delete(int id)
         {
