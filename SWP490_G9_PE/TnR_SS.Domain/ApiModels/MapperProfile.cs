@@ -112,6 +112,11 @@ namespace TnR_SS.Domain.ApiModels
             CreateMap<TransactionDetail, GetAllTransactionDetailResModel>();
             #endregion
 
+
+            #region Transaction
+            CreateMap<Transaction, TransactionResModel>();
+            #endregion
+
             #region Employee Debt
             CreateMap<EmployeeDebt, EmployeeDebtApiModel>().ReverseMap();
             #endregion

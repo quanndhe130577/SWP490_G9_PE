@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ namespace TnR_SS.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class TransactionDetailController : ControllerBase
     {
         private readonly ITnR_SSSupervisor _tnrssSupervisor;
@@ -34,7 +36,7 @@ namespace TnR_SS.API.Controllers
         [Route("getall/{date_str?}")]
         public async Task<ResponseModel> GetAll(string date_str = null)
         {
-            var wcId = TokenManagement.GetUserIdInToken(HttpContext);
+            var userId = TokenManagement.GetUserIdInToken(HttpContext);
             DateTime? date = DateTime.Now;
 
             if (date_str == null)
@@ -55,7 +57,7 @@ namespace TnR_SS.API.Controllers
                 }
             }
 
-            var rs = await _tnrssSupervisor.GetAllTransactionDetailAsync(wcId, date);
+            var rs = await _tnrssSupervisor.GetAllTransactionDetailAsync(userId, date);
             return new ResponseBuilder<List<GetAllTransactionDetailResModel>>().Success("Lấy thông tin hóa đơn thành công !!").WithData(rs).ResponseModel;
         }
     }
