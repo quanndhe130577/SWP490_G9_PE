@@ -13,7 +13,7 @@ namespace TnR_SS.Domain.Supervisor
     {
         public List<BuyerApiModel> GetAllBuyerByWCId(int wcId)
         {
-            return _unitOfWork.Buyers.GetAll(x => x.WeightRecorderId == wcId).Select(x => _mapper.Map<Buyer, BuyerApiModel>(x)).ToList();
+            return _unitOfWork.Buyers.GetAll(x => x.SellerId == wcId).Select(x => _mapper.Map<Buyer, BuyerApiModel>(x)).ToList();
             /*List<BuyerApiModel> buyers = new();
             foreach (var item in listBuyer)
             {
@@ -25,7 +25,7 @@ namespace TnR_SS.Domain.Supervisor
         public async Task CreateBuyerAsync(BuyerApiModel model, int wcId)
         {
             var buyer = _mapper.Map<BuyerApiModel, Buyer>(model);
-            buyer.WeightRecorderId = wcId;
+            buyer.SellerId = wcId;
             await _unitOfWork.Buyers.CreateAsync(buyer);
             await _unitOfWork.SaveChangeAsync();
         }
@@ -33,7 +33,7 @@ namespace TnR_SS.Domain.Supervisor
         public async Task UpdateBuyerAsync(BuyerApiModel model, int wcId)
         {
             var buyer = await _unitOfWork.Buyers.FindAsync(model.ID);
-            if (buyer.WeightRecorderId != wcId)
+            if (buyer.SellerId != wcId)
             {
                 throw new Exception("Thông tin người mua không tồn tại !!!");
             }
@@ -46,7 +46,7 @@ namespace TnR_SS.Domain.Supervisor
         public async Task DeleteBuyerAsync(int buyerId, int wcId)
         {
             var buyer = await _unitOfWork.Buyers.FindAsync(buyerId);
-            if (buyer != null && buyer.WeightRecorderId == wcId)
+            if (buyer != null && buyer.SellerId == wcId)
             {
                 _unitOfWork.Buyers.DeleteById(buyerId);
                 await _unitOfWork.SaveChangeAsync();
@@ -61,7 +61,7 @@ namespace TnR_SS.Domain.Supervisor
         public async Task<BuyerApiModel> GetDetailBuyerAsync(int buyerId, int wcId)
         {
             var buyerDetail = await _unitOfWork.Buyers.FindAsync(buyerId);
-            if (buyerDetail.WeightRecorderId != wcId)
+            if (buyerDetail.SellerId != wcId)
             {
                 throw new Exception("Thông tin người mua không tồn tại !!!");
             }
@@ -72,7 +72,7 @@ namespace TnR_SS.Domain.Supervisor
 
         public List<BuyerApiModel> GetBuyerByNameOrPhone(string input, int wcId)
         {
-            return _unitOfWork.Buyers.GetAll(x => x.WeightRecorderId == wcId)
+            return _unitOfWork.Buyers.GetAll(x => x.SellerId == wcId)
                 .Where(x => x.Name == input || x.PhoneNumber == input)
                 .Select(x => _mapper.Map<Buyer, BuyerApiModel>(x)).ToList();
         }

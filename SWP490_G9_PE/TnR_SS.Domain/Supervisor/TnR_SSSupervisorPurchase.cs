@@ -61,7 +61,7 @@ namespace TnR_SS.Domain.Supervisor
         public async Task<List<PurchaseResModel>> GetAllPurchaseAsync(int traderId)
         {
             var listPurchase = _unitOfWork.Purchases.GetAll(x => x.TraderID == traderId)
-                .OrderByDescending(x => x.Date).ThenBy(x => x.ID);
+                .OrderByDescending(x => x.Date).ThenByDescending(x => x.ID);
             List<PurchaseResModel> list = new List<PurchaseResModel>();
             foreach (var purchase in listPurchase)
             {
