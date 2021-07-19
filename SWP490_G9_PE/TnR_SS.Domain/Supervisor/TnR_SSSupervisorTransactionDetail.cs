@@ -17,7 +17,7 @@ namespace TnR_SS.Domain.Supervisor
         private async Task WeightRecorderCreateTransactionDetailAsync(CreateTransactionDetailReqModel apiModel, int wcId)
         {
             var trans = await _unitOfWork.Transactions.FindAsync(apiModel.TransId);
-            if (trans == null)
+            if (trans == null || trans.WeightRecorderId != wcId)
             {
                 throw new Exception("Hóa đơn không tồn tại !!");
             }
@@ -31,7 +31,7 @@ namespace TnR_SS.Domain.Supervisor
             if (apiModel.BuyerId != null)
             {
                 var buyer = await _unitOfWork.Buyers.FindAsync(apiModel.BuyerId.Value);
-                if (buyer == null || buyer.WeightRecorderId != wcId)
+                if (buyer == null || buyer.SellerId != wcId)
                 {
                     throw new Exception("Người mua không tồn tại !!");
                 }
