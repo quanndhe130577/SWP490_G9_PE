@@ -35,7 +35,8 @@ namespace TnR_SS.DataEFCore
         public virtual DbSet<CostIncurred> CostIncurreds { get; set; }
         public virtual DbSet<LK_PurchaseDeatil_Drum> LK_PurchaseDeatil_Drums { get; set; }
         public virtual DbSet<Buyer> Buyers { get; set; }
-        public virtual DbSet<HistorySalaryEmp> HistorySalaryEmps { get; set; }
+        public virtual DbSet<BaseSalaryEmp> BaseSalaryEmp { get; set; }
+        public virtual DbSet<HistorySalaryEmp> HistorySalaryEmp { get; set; }
         public virtual DbSet<EmployeeDebt> EmployeeDebts { get; set; }
         public virtual DbSet<Transaction> Transactions { get; set; }
         public virtual DbSet<TransactionDetail> TransactionDetails { get; set; }
@@ -71,6 +72,7 @@ namespace TnR_SS.DataEFCore
             new DrumConfiguration(modelBuilder.Entity<Drum>());
             new CostIncurredConfiguration(modelBuilder.Entity<CostIncurred>());
             new BuyerConfiguration(modelBuilder.Entity<Buyer>());
+            new BaseSalaryEmpConfiguration(modelBuilder.Entity<BaseSalaryEmp>());
             new HistorySalaryEmpConfiguration(modelBuilder.Entity<HistorySalaryEmp>());
             new TransactionConfiguration(modelBuilder.Entity<Transaction>());
             new TransactionDetailConfiguration(modelBuilder.Entity<TransactionDetail>());

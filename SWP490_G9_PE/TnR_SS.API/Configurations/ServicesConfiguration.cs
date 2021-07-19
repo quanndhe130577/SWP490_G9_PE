@@ -20,7 +20,7 @@ namespace TnR_SS.API.Configurations
                 .AddScoped<IPurchaseDetailRepository, PurchaseDetailRepository>()
                 .AddScoped<IPurchaseRepository, PurchaseRepository>()
                 .AddScoped<IEmployeeRepository, EmployeeRepository>()
-                .AddScoped<IHistorySalaryEmpRepository, HistorySalaryEmpRepository>();
+                .AddScoped<IBaseSalaryEmpRepository, BaseSalaryEmpRepository>();
 
             return services;
         }

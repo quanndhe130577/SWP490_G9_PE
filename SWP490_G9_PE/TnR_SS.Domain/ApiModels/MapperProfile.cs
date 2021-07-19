@@ -104,7 +104,7 @@ namespace TnR_SS.Domain.ApiModels
             #endregion
 
             #region History Salary Employee
-            CreateMap<HistorySalaryEmp, HistorySalaryEmpApiModel>().ReverseMap();
+            CreateMap<BaseSalaryEmp, BaseSalaryEmpApiModel>().ReverseMap();
             #endregion
 
             #region Transaction Detail
@@ -114,6 +114,10 @@ namespace TnR_SS.Domain.ApiModels
 
             #region Employee Debt
             CreateMap<EmployeeDebt, EmployeeDebtApiModel>().ReverseMap();
+            #endregion
+
+            #region History Salary Employee
+            CreateMap<HistorySalaryEmp, CreateHistorySalaryEmpModel>().ReverseMap();
             #endregion
         }
 

@@ -9,11 +9,11 @@ using TnR_SS.Domain.Entities;
 
 namespace TnR_SS.DataEFCore.Configurations
 {
-    public class HistorySalaryEmpConfiguration
+    public class BaseSalaryEmpConfiguration
     {
-        public HistorySalaryEmpConfiguration(EntityTypeBuilder<HistorySalaryEmp> entity)
+        public BaseSalaryEmpConfiguration(EntityTypeBuilder<BaseSalaryEmp> entity)
         {
-            entity.ToTable("HistorySalaryEmp");
+            entity.ToTable("BaseSalaryEmp");
 
             entity.Property(e => e.ID).HasColumnName("ID");
 
@@ -21,15 +21,17 @@ namespace TnR_SS.DataEFCore.Configurations
                 .IsRequired();
 
             entity.HasOne(p => p.Employee)
-                .WithMany(b => b.HistorySalaryEmps)
+                .WithMany(b => b.BaseSalaryEmps)
                 .HasForeignKey(p => p.EmpId)
-                .HasConstraintName("FK_HistorySalaryEmp_Employee");
+                .HasConstraintName("FK_BaseSalaryEmp_Employee");
 
-            entity.Property(e => e.Month)
-                .IsRequired();
+            entity.Property(e => e.StartDate)
+                .IsRequired()
+                .HasColumnType("datetime");
 
-            entity.Property(e => e.Year)
-                .IsRequired();
+            entity.Property(e => e.EndDate)
+                .IsRequired(false)
+                .HasColumnType("datetime");
 
             entity.Property(e => e.Salary)
                 .IsRequired();

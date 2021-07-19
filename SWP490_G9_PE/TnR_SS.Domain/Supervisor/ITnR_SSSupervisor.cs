@@ -168,12 +168,12 @@ namespace TnR_SS.Domain.Supervisor
         #endregion
 
         #region HistorySalaryEmp
-        List<HistorySalaryEmpApiModel> GetAllSalaryByEmpId(int empId);
-        Task CreateHistorySalaryAsync(HistorySalaryEmpApiModel salaryModel, int empId);
-        Task UpdateHistorySalaryAsync(HistorySalaryEmpApiModel salaryModel, int empId);
-        Task DeleteHistorySalaryAsync(int salaryId, int empId);
-        HistorySalaryEmpApiModel GetDetailHistorySalary(int salaryId, int empId);
-        HistorySalaryEmpApiModel GetSalaryByDate(DateTime date, int empId);
+        List<BaseSalaryEmpApiModel> GetAllSalaryByEmpId(int empId);
+        Task CreateBaseSalaryAsync(BaseSalaryEmpApiModel salaryModel, int empId);
+        Task UpdateBaseSalaryAsync(BaseSalaryEmpApiModel salaryModel, int empId);
+        Task DeleteBaseSalaryAsync(int salaryId, int empId);
+        BaseSalaryEmpApiModel GetDetailBaseSalary(int salaryId, int empId);
+        BaseSalaryEmpApiModel GetSalaryByDate(DateTime date, int empId);
         #endregion
 
         #region Transaction

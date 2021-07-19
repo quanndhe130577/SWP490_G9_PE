@@ -13,55 +13,55 @@ namespace TnR_SS.API.Controllers
     [Route("api/salary")]
     [ApiController]
     [Authorize]
-    public class HistorySalaryController : ControllerBase
+    public class BaseSalaryController : ControllerBase
     {
         private readonly ITnR_SSSupervisor _tnrssSupervisor;
 
-        public HistorySalaryController(ITnR_SSSupervisor tnrssSupervisor)
+        public BaseSalaryController(ITnR_SSSupervisor tnrssSupervisor)
         {
             _tnrssSupervisor = tnrssSupervisor;
         }
 
         [HttpPost("create/{empId}")]
-        public async Task<ResponseModel> CreateHistorySalaryAsync(HistorySalaryEmpApiModel salary, int empId)
+        public async Task<ResponseModel> CreateBaseSalaryAsync(BaseSalaryEmpApiModel salary, int empId)
         {
-            await _tnrssSupervisor.CreateHistorySalaryAsync(salary, empId);
+            await _tnrssSupervisor.CreateBaseSalaryAsync(salary, empId);
             return new ResponseBuilder().Success("Tạo lương cho nhân viên thành công").ResponseModel;
         }
 
         [HttpGet("getall/{empId}")]
-        public ResponseModel GetAllHistorySalary(int empId)
+        public ResponseModel GetAllBaseSalary(int empId)
         {
             var listSalary = _tnrssSupervisor.GetAllSalaryByEmpId(empId);
-            return new ResponseBuilder<List<HistorySalaryEmpApiModel>>().Success("Lấy thông tin lương nhân viên thành công").WithData(listSalary).ResponseModel;
+            return new ResponseBuilder<List<BaseSalaryEmpApiModel>>().Success("Lấy thông tin lương nhân viên thành công").WithData(listSalary).ResponseModel;
         }
 
         [HttpPost("update/{empId}")]
-        public async Task<ResponseModel> UpdateHistorySalaryAsync(HistorySalaryEmpApiModel salaryApi, int empId)
+        public async Task<ResponseModel> UpdateBaseSalaryAsync(BaseSalaryEmpApiModel salaryApi, int empId)
         {
-            await _tnrssSupervisor.UpdateHistorySalaryAsync(salaryApi, empId);
+            await _tnrssSupervisor.UpdateBaseSalaryAsync(salaryApi, empId);
             return new ResponseBuilder().Success("Cập nhật lương cho nhân viên thành công").ResponseModel;
         }
 
         [HttpPost("delete/{empId}/{salaryId}")]
-        public async Task<ResponseModel> DeleteHistorySalaryAsync(int empId, int salaryId)
+        public async Task<ResponseModel> DeleteBaseSalaryAsync(int empId, int salaryId)
         {
-            await _tnrssSupervisor.DeleteHistorySalaryAsync(salaryId, empId);
+            await _tnrssSupervisor.DeleteBaseSalaryAsync(salaryId, empId);
             return new ResponseBuilder().Success("Xóa lương cho nhân viên thành công").ResponseModel;
         }
 
         [HttpPost("detail/{empId}/{salaryId}")]
-        public ResponseModel DetailHistorySalaryAsync(int empId, int salaryId)
+        public ResponseModel DetailBaseSalaryAsync(int empId, int salaryId)
         {
-            var salary = _tnrssSupervisor.GetDetailHistorySalary(salaryId, empId);
-            return new ResponseBuilder<HistorySalaryEmpApiModel>().Success("Lấy thông tin lương cho nhân viên thành công").WithData(salary).ResponseModel;
+            var salary = _tnrssSupervisor.GetDetailBaseSalary(salaryId, empId);
+            return new ResponseBuilder<BaseSalaryEmpApiModel>().Success("Lấy thông tin lương cho nhân viên thành công").WithData(salary).ResponseModel;
         }
 
         [HttpGet("getsalary/{empId}/{date}")]
         public ResponseModel GetSalaryByDate(int empId, DateTime date)
         {
             var salary = _tnrssSupervisor.GetSalaryByDate(date, empId);
-            return new ResponseBuilder<HistorySalaryEmpApiModel>().Success("Lấy lương hiện tại của nhân viên thành công").WithData(salary).ResponseModel;
+            return new ResponseBuilder<BaseSalaryEmpApiModel>().Success("Lấy lương hiện tại của nhân viên thành công").WithData(salary).ResponseModel;
         }
     }
 }

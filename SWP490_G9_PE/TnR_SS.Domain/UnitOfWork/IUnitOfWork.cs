@@ -26,6 +26,7 @@ namespace TnR_SS.Domain.UnitOfWork
         ILK_PurchaseDeatil_DrumRepository LK_PurchaseDetail_Drums { get; }
         IBuyerRepository Buyers { get; }
         ITraderOfWeightRecorderRepository TraderOfWeightRecorders { get; }
+        IBaseSalaryEmpRepository BaseSalaryEmps { get; }
         IHistorySalaryEmpRepository HistorySalaryEmps { get; }
         ITransactionRepository Transactions { get; }
         ITransactionDetailRepository TransactionDetails { get; }
