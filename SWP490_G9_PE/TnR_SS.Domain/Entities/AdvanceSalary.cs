@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace TnR_SS.Domain.Entities
 {
-    [Table("EmployeeDebt")]
-    public class EmployeeDebt : BaseEntity
+    [Table("AdvanceSalary")]
+    public class AdvanceSalary : BaseEntity
     {
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]

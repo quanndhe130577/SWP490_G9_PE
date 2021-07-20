@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using TnR_SS.Domain.ApiModels.AccountModel.RequestModel;
 using TnR_SS.Domain.ApiModels.AccountModel.ResponseModel;
+using TnR_SS.Domain.ApiModels.AdvanceSalaryModel;
 using TnR_SS.Domain.ApiModels.BasketModel.ResponseModel;
 using TnR_SS.Domain.ApiModels.BuyerModel;
 using TnR_SS.Domain.ApiModels.CostIncurredModel;
@@ -20,7 +21,6 @@ using TnR_SS.Domain.ApiModels.TransactionDetailModel;
 using TnR_SS.Domain.ApiModels.TransactionModel;
 using TnR_SS.Domain.ApiModels.TruckModel;
 using TnR_SS.Domain.ApiModels.UserInforModel;
-using TnR_SS.Domain.ApiModels.EmployeeDebtModel;
 using TnR_SS.Domain.Entities;
 
 namespace TnR_SS.Domain.ApiModels
@@ -112,8 +112,13 @@ namespace TnR_SS.Domain.ApiModels
             CreateMap<TransactionDetail, GetAllTransactionDetailResModel>();
             #endregion
 
+
+            #region Transaction
+            CreateMap<Transaction, TransactionResModel>();
+            #endregion
+
             #region Employee Debt
-            CreateMap<EmployeeDebt, EmployeeDebtApiModel>().ReverseMap();
+            CreateMap<AdvanceSalary, AdvanceSalaryApiModel>().ReverseMap();
             #endregion
 
             #region History Salary Employee

@@ -102,11 +102,25 @@ namespace TnR_SS.Domain.Supervisor
             }
         }
 
-        public async Task<List<GetAllTransactionDetailResModel>> GetAllTransactionDetailAsync(int wcId, DateTime? date)
+        public async Task<List<GetAllTransactionDetailResModel>> GetAllTransactionDetailAsync(int userId, DateTime? date)
         {
-            var listTranDetail = _unitOfWork.TransactionDetails.GetAllTransactionByWcIDAndDate(wcId, date);
+            var roleUser = await _unitOfWork.UserInfors.GetRolesAsync(userId);
+            List<TransactionDetail> listTranDe = new List<TransactionDetail>();
+            if (roleUser.Contains(RoleName.WeightRecorder))
+            {
+                listTranDe = _unitOfWork.TransactionDetails.GetAllTransactionByWcIDAndDate(userId, date);
+            }
+            else if (roleUser.Contains(RoleName.Trader))
+            {
+                listTranDe = _unitOfWork.TransactionDetails.GetAllTransactionByTraderIdAndDate(userId, date);
+            }
+            else
+            {
+                throw new Exception("Người mua không tồn tại !!");
+            }
+
             List<GetAllTransactionDetailResModel> list = new List<GetAllTransactionDetailResModel>();
-            foreach (var td in listTranDetail)
+            foreach (var td in listTranDe)
             {
                 GetAllTransactionDetailResModel apiModel = _mapper.Map<TransactionDetail, GetAllTransactionDetailResModel>(td);
                 apiModel.FishType = _mapper.Map<FishType, FishTypeApiModel>(await _unitOfWork.FishTypes.FindAsync(td.FishTypeId));

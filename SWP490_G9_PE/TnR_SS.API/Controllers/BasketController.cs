@@ -44,7 +44,7 @@ namespace TnR_SS.API.Controllers
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
             await _tnrssSupervisor.UpdateBasketAsync(basketApi, traderId);
-            return new ResponseBuilder<List<BasketApiModel> >().Success("Cập nhật thông tin rổ thành công").WithData(_tnrssSupervisor.GetAllBasket(traderId)).ResponseModel;
+            return new ResponseBuilder<List<BasketApiModel>>().Success("Cập nhật thông tin rổ thành công").WithData(_tnrssSupervisor.GetAllBasket(traderId)).ResponseModel;
         }
 
         [HttpPost("delete/{basketId}")]

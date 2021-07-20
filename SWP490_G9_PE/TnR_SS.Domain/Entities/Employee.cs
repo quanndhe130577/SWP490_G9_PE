@@ -36,6 +36,6 @@ namespace TnR_SS.Domain.Entities
         public List<TimeKeeping> TimeKeepings { get; set; }
         public List<BaseSalaryEmp> BaseSalaryEmps { get; set; }
         public List<HistorySalaryEmp> HistorySalaryEmps { get; set; }
-        public List<EmployeeDebt> EmployeeDebts { get; set; }
+        public List<AdvanceSalary> AdvanceSalaries { get; set; }
     }
 }

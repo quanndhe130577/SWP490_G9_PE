@@ -86,11 +86,13 @@ namespace TnR_SS.API.Controller
             }
 
             //var otpCode = await StringeeAPI.SendOtpRequestAsync(phoneNumber);
-            var otpCode = TwilioAPI.SendOtpRequest(phoneNumber);
+            /*var otpCode = TwilioAPI.SendOtpRequest(phoneNumber);
             if (otpCode is null)
             {
                 return new ResponseBuilder().Error("Wait a minute then resend OTP").ResponseModel;
-            }
+            }*/
+
+            var otpCode = "123456";
 
             var optId = await _tnrssSupervisor.AddOTPAsync(otpCode, phoneNumber);
 
