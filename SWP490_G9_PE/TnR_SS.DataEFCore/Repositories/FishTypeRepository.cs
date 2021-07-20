@@ -25,5 +25,11 @@ namespace TnR_SS.DataEFCore.Repositories
                 .OrderByDescending(x => x.Date).ToList();
             return rs;
         }
+
+        public void RemoveFishTypeByPurchaseId(int purchaseId)
+        {
+            var rs = _context.FishTypes.Where(x => x.PurchaseID == purchaseId);
+            _context.FishTypes.RemoveRange(rs);
+        }
     }
 }
