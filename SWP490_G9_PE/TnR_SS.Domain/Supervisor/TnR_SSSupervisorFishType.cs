@@ -188,7 +188,7 @@ namespace TnR_SS.Domain.Supervisor
             /*var listPurchaseDetail = await GetAllPurchaseDetailAsync(purchaseId);
 
             var listFishTypeId = listPurchaseDetail.Select(x => x.FishType.ID).Distinct();*/
-            var listFishTypeId = _unitOfWork.FishTypes.GetAll(x => x.PurchaseID == purchaseId && x.TraderID == traderId);
+            var listFishTypeId = _unitOfWork.FishTypes.GetAll(x => x.PurchaseID == purchaseId && x.TraderID == traderId).Select(x => x.ID);
             List<FishTypeApiModel> listFishType = new List<FishTypeApiModel>();
             foreach (var item in listFishTypeId)
             {
