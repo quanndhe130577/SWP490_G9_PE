@@ -71,6 +71,20 @@ namespace TnR_SS.Domain.Supervisor
             }
             return list;
         }
+
+        public async Task<List<DebtApiModel>> GetDebtAsync(int userId, DateTime? date)
+        {
+            var roleUser = await _unitOfWork.UserInfors.GetRolesAsync(userId);
+            if (roleUser.Contains(RoleName.WeightRecorder))
+            {
+                return await GetAllDebtWRAsync(userId, date);
+            }
+            else if (roleUser.Contains(RoleName.Trader))
+            {
+                return await GetAllDebtTraderAsync(userId);
+            }
+            return null;
+        }
     }
 }
  

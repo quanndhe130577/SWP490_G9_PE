@@ -38,5 +38,14 @@ namespace TnR_SS.API.Controllers
             return new ResponseBuilder<List<DebtApiModel>>().Success("Lấy thông tin nợ thành công")
                 .WithData(list).ResponseModel;
         }
+
+        [HttpGet("getall")]
+        public async Task<ResponseModel> GetAllDebt()
+        {
+            var userId = TokenManagement.GetUserIdInToken(HttpContext);
+            var list = await _tnrssSupervisor.GetDebtAsync(userId, null);
+            return new ResponseBuilder<List<DebtApiModel>>().Success("Lấy thông tin nợ thành công")
+                .WithData(list).ResponseModel;
+        }
     }
 }
