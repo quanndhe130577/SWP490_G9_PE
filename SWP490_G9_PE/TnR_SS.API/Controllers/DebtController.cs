@@ -22,10 +22,10 @@ namespace TnR_SS.API.Controllers
         }
 
         [HttpGet("getall")]
-        public ResponseModel GetAllDebtByTrader()
+        public async Task<ResponseModel> GetAllDebtByTrader()
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
-            var list = _tnrssSupervisor.GetAllDebtTrader(traderId);
+            var list = await _tnrssSupervisor.GetAllDebtTraderAsync(traderId);
             return new ResponseBuilder<List<DebtApiModel>>().Success("Lấy thông tin rổ thành công")
                 .WithData(list).ResponseModel;
         }

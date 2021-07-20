@@ -103,7 +103,7 @@ namespace TnR_SS.Domain.ApiModels
             CreateMap<Buyer, BuyerApiModel>().ReverseMap();
             #endregion
 
-            #region History Salary Employee
+            #region Base Salary Employee
             CreateMap<BaseSalaryEmp, BaseSalaryEmpApiModel>().ReverseMap();
             #endregion
 
