@@ -13,11 +13,8 @@ namespace TnR_SS.Domain.ApiModels.AdvanceSalaryModel
         public int ID { get; set; }
         public DateTime Date { get; set; }
 
-        public double Debt { get; set; }
+        public double Amount { get; set; }
 
         public int EmpId { get; set; }
-
-
-        public bool Paid { get; set; }
     }
 }

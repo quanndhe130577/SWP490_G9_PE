@@ -30,9 +30,8 @@ namespace TnR_SS.Domain.Supervisor
         {
             AdvanceSalary advanceSalary = await _unitOfWork.AdvanceSalaries.FindAsync(apiModel.ID);
             advanceSalary.Date = apiModel.Date;
-            advanceSalary.Debt = apiModel.Debt;
+            advanceSalary.Amount = apiModel.Amount;
             advanceSalary.EmpId = apiModel.EmpId;
-            advanceSalary.Paid = apiModel.Paid;
             _unitOfWork.AdvanceSalaries.Update(advanceSalary);
             await _unitOfWork.SaveChangeAsync();
         }

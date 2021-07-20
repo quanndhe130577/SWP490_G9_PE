@@ -121,6 +121,36 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("TnR_SS.Domain.Entities.AdvanceSalary", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("ID")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<double>("Amount")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime");
+
+                    b.Property<int>("EmpId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("EmpId");
+
+                    b.ToTable("AdvanceSalary");
+                });
+
             modelBuilder.Entity("TnR_SS.Domain.Entities.BaseSalaryEmp", b =>
                 {
                     b.Property<int>("ID")
@@ -342,41 +372,6 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.HasIndex("TraderId");
 
                     b.ToTable("Employee");
-                });
-
-            modelBuilder.Entity("TnR_SS.Domain.Entities.EmployeeDebt", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<double>("Debt")
-                        .HasColumnType("float");
-
-                    b.Property<int>("EmpId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("EmployeeID")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Paid")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("EmployeeID");
-
-                    b.ToTable("EmployeeDebt");
                 });
 
             modelBuilder.Entity("TnR_SS.Domain.Entities.FishType", b =>
@@ -684,32 +679,32 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "488323d1-316d-440d-9fde-c1f803e356d3",
+                            ConcurrencyStamp = "5ec647b6-934a-4723-9c9d-71504c60425a",
                             CreatedAt = new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Chủ bến",
                             Name = "WeightRecorder",
                             NormalizedName = "WEIGHTRECORDER",
-                            UpdatedAt = new DateTime(2021, 7, 19, 22, 41, 19, 22, DateTimeKind.Local).AddTicks(275)
+                            UpdatedAt = new DateTime(2021, 7, 20, 20, 53, 6, 746, DateTimeKind.Local).AddTicks(9110)
                         },
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "62c0c25f-f55a-4c92-b85d-d1d1269cf582",
+                            ConcurrencyStamp = "70d44482-92b9-469e-a863-7639efdcfa37",
                             CreatedAt = new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Thương lái",
                             Name = "Trader",
                             NormalizedName = "TRADER",
-                            UpdatedAt = new DateTime(2021, 7, 19, 22, 41, 19, 23, DateTimeKind.Local).AddTicks(2118)
+                            UpdatedAt = new DateTime(2021, 7, 20, 20, 53, 6, 763, DateTimeKind.Local).AddTicks(9080)
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "35ae58a7-3b1b-4d9a-bc3d-710e07afa7e1",
+                            ConcurrencyStamp = "2ec55572-e878-4f10-972a-8bcc42b16fc9",
                             CreatedAt = new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Admin",
                             Name = "Admin",
                             NormalizedName = "ADMIN",
-                            UpdatedAt = new DateTime(2021, 7, 19, 22, 41, 19, 23, DateTimeKind.Local).AddTicks(2156)
+                            UpdatedAt = new DateTime(2021, 7, 20, 20, 53, 6, 763, DateTimeKind.Local).AddTicks(9130)
                         });
                 });
 
@@ -1050,6 +1045,18 @@ namespace TnR_SS.DataEFCore.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("TnR_SS.Domain.Entities.AdvanceSalary", b =>
+                {
+                    b.HasOne("TnR_SS.Domain.Entities.Employee", "Employee")
+                        .WithMany("AdvanceSalaries")
+                        .HasForeignKey("EmpId")
+                        .HasConstraintName("FK_AdvanceSalary_Employee")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+                });
+
             modelBuilder.Entity("TnR_SS.Domain.Entities.BaseSalaryEmp", b =>
                 {
                     b.HasOne("TnR_SS.Domain.Entities.Employee", "Employee")
@@ -1120,15 +1127,6 @@ namespace TnR_SS.DataEFCore.Migrations
                         .IsRequired();
 
                     b.Navigation("UserInfor");
-                });
-
-            modelBuilder.Entity("TnR_SS.Domain.Entities.EmployeeDebt", b =>
-                {
-                    b.HasOne("TnR_SS.Domain.Entities.Employee", "Employee")
-                        .WithMany("EmployeeDebts")
-                        .HasForeignKey("EmployeeID");
-
-                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("TnR_SS.Domain.Entities.FishType", b =>
@@ -1350,9 +1348,9 @@ namespace TnR_SS.DataEFCore.Migrations
 
             modelBuilder.Entity("TnR_SS.Domain.Entities.Employee", b =>
                 {
-                    b.Navigation("BaseSalaryEmps");
+                    b.Navigation("AdvanceSalaries");
 
-                    b.Navigation("EmployeeDebts");
+                    b.Navigation("BaseSalaryEmps");
 
                     b.Navigation("HistorySalaryEmps");
 

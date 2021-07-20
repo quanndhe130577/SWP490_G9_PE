@@ -3,32 +3,31 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TnR_SS.DataEFCore.Migrations
 {
-    public partial class AddEmployeeDebt : Migration
+    public partial class AddAdvanceSalary : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "EmployeeDebt",
+                name: "AdvanceSalary",
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Debt = table.Column<double>(type: "float", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime", nullable: false),
+                    Amount = table.Column<double>(type: "float", nullable: false),
                     EmpId = table.Column<int>(type: "int", nullable: false),
-                    EmployeeID = table.Column<int>(type: "int", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EmployeeDebt", x => x.ID);
+                    table.PrimaryKey("PK_AdvanceSalary", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_EmployeeDebt_Employee_EmployeeID",
-                        column: x => x.EmployeeID,
+                        name: "FK_AdvanceSalary_Employee",
+                        column: x => x.EmpId,
                         principalTable: "Employee",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.UpdateData(
@@ -36,53 +35,53 @@ namespace TnR_SS.DataEFCore.Migrations
                 keyColumn: "Id",
                 keyValue: 1,
                 columns: new[] { "ConcurrencyStamp", "UpdatedAt" },
-                values: new object[] { "e58811d1-e19e-421f-af62-10a3c778e6ae", new DateTime(2021, 7, 16, 20, 26, 14, 829, DateTimeKind.Local).AddTicks(9570) });
+                values: new object[] { "70d44482-92b9-469e-a863-7639efdcfa37", new DateTime(2021, 7, 20, 20, 53, 6, 763, DateTimeKind.Local).AddTicks(9080) });
 
             migrationBuilder.UpdateData(
                 table: "RoleUser",
                 keyColumn: "Id",
                 keyValue: 2,
                 columns: new[] { "ConcurrencyStamp", "UpdatedAt" },
-                values: new object[] { "a0225550-7155-4752-af9e-6c74df481223", new DateTime(2021, 7, 16, 20, 26, 14, 829, DateTimeKind.Local).AddTicks(9650) });
+                values: new object[] { "2ec55572-e878-4f10-972a-8bcc42b16fc9", new DateTime(2021, 7, 20, 20, 53, 6, 763, DateTimeKind.Local).AddTicks(9130) });
 
             migrationBuilder.UpdateData(
                 table: "RoleUser",
                 keyColumn: "Id",
                 keyValue: 3,
                 columns: new[] { "ConcurrencyStamp", "UpdatedAt" },
-                values: new object[] { "d72b6215-397e-4d6b-bab0-06b81ebfb03b", new DateTime(2021, 7, 16, 20, 26, 14, 816, DateTimeKind.Local).AddTicks(3400) });
+                values: new object[] { "5ec647b6-934a-4723-9c9d-71504c60425a", new DateTime(2021, 7, 20, 20, 53, 6, 746, DateTimeKind.Local).AddTicks(9110) });
 
             migrationBuilder.CreateIndex(
-                name: "IX_EmployeeDebt_EmployeeID",
-                table: "EmployeeDebt",
-                column: "EmployeeID");
+                name: "IX_AdvanceSalary_EmpId",
+                table: "AdvanceSalary",
+                column: "EmpId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "EmployeeDebt");
+                name: "AdvanceSalary");
 
             migrationBuilder.UpdateData(
                 table: "RoleUser",
                 keyColumn: "Id",
                 keyValue: 1,
                 columns: new[] { "ConcurrencyStamp", "UpdatedAt" },
-                values: new object[] { "8b0bc746-0bf0-488c-b60a-def40723131e", new DateTime(2021, 7, 15, 16, 10, 38, 828, DateTimeKind.Local).AddTicks(8281) });
+                values: new object[] { "fb929971-1c25-443f-aa22-ac47c6c5fd74", new DateTime(2021, 7, 20, 20, 44, 44, 874, DateTimeKind.Local).AddTicks(1010) });
 
             migrationBuilder.UpdateData(
                 table: "RoleUser",
                 keyColumn: "Id",
                 keyValue: 2,
                 columns: new[] { "ConcurrencyStamp", "UpdatedAt" },
-                values: new object[] { "134489cd-e9ef-4df8-b921-40853b4f4e80", new DateTime(2021, 7, 15, 16, 10, 38, 828, DateTimeKind.Local).AddTicks(8319) });
+                values: new object[] { "c1c704a3-7712-4047-97af-d596418d56e2", new DateTime(2021, 7, 20, 20, 44, 44, 874, DateTimeKind.Local).AddTicks(1120) });
 
             migrationBuilder.UpdateData(
                 table: "RoleUser",
                 keyColumn: "Id",
                 keyValue: 3,
                 columns: new[] { "ConcurrencyStamp", "UpdatedAt" },
-                values: new object[] { "74877de3-6b7e-46d5-a940-6d017cda0bcd", new DateTime(2021, 7, 15, 16, 10, 38, 827, DateTimeKind.Local).AddTicks(4448) });
+                values: new object[] { "cabc4f0a-d86e-4cab-bdf0-82c0cfb98dbf", new DateTime(2021, 7, 20, 20, 44, 44, 827, DateTimeKind.Local).AddTicks(3330) });
         }
     }
 }

@@ -77,6 +77,7 @@ namespace TnR_SS.DataEFCore
             new TransactionConfiguration(modelBuilder.Entity<Transaction>());
             new TransactionDetailConfiguration(modelBuilder.Entity<TransactionDetail>());
             new TraderOfWeightRecorderConfiguration(modelBuilder.Entity<TraderOfWeightRecorder>());
+            new AdvanceSalaryConfiguration(modelBuilder.Entity<AdvanceSalary>());
 
             OnModelCreatingPartial(modelBuilder);
         }
