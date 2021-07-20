@@ -188,6 +188,7 @@ namespace TnR_SS.Domain.Supervisor
 
         #region Debt
         Task<List<DebtApiModel>> GetAllDebtTraderAsync(int traderId);
+        Task<List<DebtApiModel>> GetAllDebtWRAsync(int userId, DateTime? date);
         #endregion
 
         #region Employee Debt

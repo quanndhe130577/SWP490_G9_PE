@@ -21,12 +21,21 @@ namespace TnR_SS.API.Controllers
             _tnrssSupervisor = tnrssSupervisor;
         }
 
-        [HttpGet("getall")]
+        [HttpGet("getallTR")]
         public async Task<ResponseModel> GetAllDebtByTrader()
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
             var list = await _tnrssSupervisor.GetAllDebtTraderAsync(traderId);
-            return new ResponseBuilder<List<DebtApiModel>>().Success("Lấy thông tin rổ thành công")
+            return new ResponseBuilder<List<DebtApiModel>>().Success("Lấy thông tin nợ thành công")
+                .WithData(list).ResponseModel;
+        }
+
+        [HttpGet("getallWR")]
+        public async Task<ResponseModel> GetAllDebtByWR()
+        {
+            var userId = TokenManagement.GetUserIdInToken(HttpContext);
+            var list = await _tnrssSupervisor.GetAllDebtWRAsync(userId,null);
+            return new ResponseBuilder<List<DebtApiModel>>().Success("Lấy thông tin nợ thành công")
                 .WithData(list).ResponseModel;
         }
     }
