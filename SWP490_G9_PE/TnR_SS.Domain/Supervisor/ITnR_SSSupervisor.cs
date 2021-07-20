@@ -130,6 +130,7 @@ namespace TnR_SS.Domain.Supervisor
         Task UpdateEmployeeAsync(EmployeeApiModel employee, int traderId);
         Task DeleteEmployeeAsync(int empId, int traderId);
         EmployeeApiModel GetDetailEmployee(int traderId, int empId);
+        Task<List<EmployeeSalaryApiModel>> GetEmployeesSalaryInMonth(int empId, DateTime date);
         #endregion
 
         #region TimeKeeping
@@ -190,8 +191,9 @@ namespace TnR_SS.Domain.Supervisor
         List<DebtApiModel> GetAllDebtTrader(int traderId);
         #endregion
 
-        #region Employee Debt
-        Task<AdvanceSalary> GetEmpDebt(int id);
+        #region Advance Salary
+        Task<AdvanceSalary> GetAdvanceSalary(int id);
+        Task<AdvanceSalary> GetSalaryDetail(int id, DateTime date);
         List<AdvanceSalaryApiModel> GetAllAdvanceSalary(int id);
         Task CreateAdvanceSalary(AdvanceSalaryApiModel apiModel);
         Task UpdateAdvanceSalary(AdvanceSalaryApiModel apiModel);

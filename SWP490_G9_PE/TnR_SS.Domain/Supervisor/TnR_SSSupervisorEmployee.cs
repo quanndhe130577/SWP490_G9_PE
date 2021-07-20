@@ -153,5 +153,18 @@ namespace TnR_SS.Domain.Supervisor
             }
             return listEmpApi;
         }
+
+        public async Task<List<EmployeeSalaryApiModel>> GetEmployeesSalaryInMonth(int traderId, DateTime date)
+        {
+            List<EmployeeSalaryApiModel> employeeSalaries = new List<EmployeeSalaryApiModel>();
+            List<Employee> employees = _unitOfWork.Employees.GetAllEmployeeByTraderId(traderId).Where(e => e.StartDate < date && (e.EndDate == null || date < e.EndDate)).ToList();
+            foreach (Employee employee in employees)
+            {
+                EmployeeSalaryApiModel employeeSalary = await _unitOfWork.AdvanceSalaries.GetSalaryDetail(employee.ID, date);
+                employeeSalaries.Add(employeeSalary);
+            }
+
+            return employeeSalaries;
+        }
     }
 }

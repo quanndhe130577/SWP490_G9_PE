@@ -12,7 +12,11 @@ namespace TnR_SS.Domain.Supervisor
 {
     public partial class TnR_SSSupervisor
     {
-        public async Task<AdvanceSalary> GetEmpDebt(int id)
+        public async Task<AdvanceSalary> GetSalaryDetail(int id, DateTime date)
+        {
+            return await _unitOfWork.AdvanceSalaries.FindAsync(id);
+        }
+        public async Task<AdvanceSalary> GetAdvanceSalary(int id)
         {
             return await _unitOfWork.AdvanceSalaries.FindAsync(id);
         }

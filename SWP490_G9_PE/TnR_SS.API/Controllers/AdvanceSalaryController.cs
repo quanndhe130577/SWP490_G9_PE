@@ -44,7 +44,7 @@ namespace TnR_SS.API.Controllers
         [HttpPost("delete/{empId}")]
         public async Task<ResponseModel> DeleteAdvanceSalaryAsync(int empId)
         {
-            var ed = await _tnrssSupervisor.GetEmpDebt(empId);
+            var ed = await _tnrssSupervisor.GetAdvanceSalary(empId);
             await _tnrssSupervisor.DeleteAdvanceSalary(ed);
             return new ResponseBuilder().Success("Xóa thông tin nợ thành công").ResponseModel;
         }

@@ -146,7 +146,7 @@ namespace TnR_SS.Domain.Supervisor
                 }
             }
 
-            var totalAmount = await  GetTotalAmountPurchaseAsync(data.ID);
+            var totalAmount = await GetTotalAmountPurchaseAsync(data.ID);
             purchase.Commission = totalAmount * data.CommissionPercent / 100;
             purchase.PayForPondOwner = totalAmount - purchase.Commission;
             purchase.isCompleted = PurchaseStatus.Completed;
@@ -169,7 +169,7 @@ namespace TnR_SS.Domain.Supervisor
                 if (purchase.TraderID == traderId)
                 {
                     var strategy = _unitOfWork.CreateExecutionStrategy();
-                        
+
                     await strategy.ExecuteAsync(async () =>
                     {
                         using (var transaction = _unitOfWork.BeginTransaction())
@@ -207,7 +207,6 @@ namespace TnR_SS.Domain.Supervisor
             }
             catch (Exception ex)
             {
-
                 throw;
             }
         }
