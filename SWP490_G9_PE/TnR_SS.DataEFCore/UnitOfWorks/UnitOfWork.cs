@@ -35,7 +35,7 @@ namespace TnR_SS.DataEFCore.UnitOfWorks
             HistorySalaryEmps = new HistorySalaryEmpRepository(_context);
             Transactions = new TransactionRepository(_context);
             TransactionDetails = new TransactionDetailRepository(_context);
-            EmployeeDebts = new EmployeeDebtRepository(_context);
+            AdvanceSalaries = new AdvanceSalaryRepository(_context);
         }
 
         public IOTPRepository OTPs { get; private set; }
@@ -58,7 +58,7 @@ namespace TnR_SS.DataEFCore.UnitOfWorks
         public ITransactionDetailRepository TransactionDetails { get; private set; }
         public IBaseSalaryEmpRepository BaseSalaryEmps { get; private set; }
         public IHistorySalaryEmpRepository HistorySalaryEmps { get; private set; }
-        public IEmployeeDebtRepository EmployeeDebts { get; private set; }
+        public IAdvanceSalaryRepository AdvanceSalaries { get; private set; }
 
         public async Task<int> SaveChangeAsync()
         {

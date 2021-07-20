@@ -37,7 +37,7 @@ namespace TnR_SS.DataEFCore
         public virtual DbSet<Buyer> Buyers { get; set; }
         public virtual DbSet<BaseSalaryEmp> BaseSalaryEmp { get; set; }
         public virtual DbSet<HistorySalaryEmp> HistorySalaryEmp { get; set; }
-        public virtual DbSet<EmployeeDebt> EmployeeDebts { get; set; }
+        public virtual DbSet<AdvanceSalary> AdvanceSalaries { get; set; }
         public virtual DbSet<Transaction> Transactions { get; set; }
         public virtual DbSet<TransactionDetail> TransactionDetails { get; set; }
         public virtual DbSet<TraderOfWeightRecorder> TraderOfWeightRecorders { get; set; }

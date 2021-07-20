@@ -7,7 +7,7 @@ using TnR_SS.Domain.Entities;
 
 namespace TnR_SS.Domain.Repositories
 {
-    public interface IEmployeeDebtRepository : IRepositoryBase<EmployeeDebt>
+    public interface IAdvanceSalaryRepository : IRepositoryBase<AdvanceSalary>
     {
 
     }

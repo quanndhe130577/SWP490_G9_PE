@@ -9,11 +9,11 @@ using TnR_SS.Domain.Entities;
 
 namespace TnR_SS.DataEFCore.Configurations
 {
-    public class EmployeeDebtConfiguration
+    public class AdvanceSalaryConfiguration
     {
-        public EmployeeDebtConfiguration(EntityTypeBuilder<EmployeeDebt> entity)
+        public AdvanceSalaryConfiguration(EntityTypeBuilder<AdvanceSalary> entity)
         {
-            entity.ToTable("EmployeeDebt");
+            entity.ToTable("AdvanceSalary");
 
             entity.Property(e => e.ID).HasColumnName("ID");
 
@@ -21,9 +21,9 @@ namespace TnR_SS.DataEFCore.Configurations
                 .IsRequired();
 
             entity.HasOne(p => p.Employee)
-                .WithMany(b => b.EmployeeDebts)
+                .WithMany(b => b.AdvanceSalaries)
                 .HasForeignKey(p => p.EmpId)
-                .HasConstraintName("FK_EmployeeDebt_Employee");
+                .HasConstraintName("FK_AdvanceSalary_Employee");
 
             entity.Property(e => e.Date)
                 .IsRequired()
