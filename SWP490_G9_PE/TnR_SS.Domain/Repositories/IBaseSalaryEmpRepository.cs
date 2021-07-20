@@ -7,8 +7,8 @@ using TnR_SS.Domain.Entities;
 
 namespace TnR_SS.Domain.Repositories
 {
-    public interface IHistorySalaryEmpRepository : IRepositoryBase<HistorySalaryEmp>
+    public interface IBaseSalaryEmpRepository : IRepositoryBase<BaseSalaryEmp>
     {
-
+        List<BaseSalaryEmp> GetAllSalaryByEmpId(int traderId);
     }
 }

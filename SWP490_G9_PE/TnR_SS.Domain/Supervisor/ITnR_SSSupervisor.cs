@@ -22,6 +22,7 @@ using TnR_SS.Domain.ApiModels.UserInforModel;
 using TnR_SS.Domain.ApiModels.HistorySalaryEmpModel;
 using TnR_SS.Domain.ApiModels.TransactionModel;
 using TnR_SS.Domain.ApiModels.TransactionDetailModel;
+using TnR_SS.Domain.ApiModels.DebtModel;
 using TnR_SS.Domain.ApiModels.EmployeeDebtModel;
 
 namespace TnR_SS.Domain.Supervisor
@@ -167,13 +168,14 @@ namespace TnR_SS.Domain.Supervisor
         #endregion
 
         #region HistorySalaryEmp
-        List<HistorySalaryEmpApiModel> GetAllSalaryByEmpId(int empId);
-        Task CreateHistorySalaryAsync(HistorySalaryEmpApiModel salaryModel, int empId);
-        Task UpdateHistorySalaryAsync(HistorySalaryEmpApiModel salaryModel, int empId);
-        Task DeleteHistorySalaryAsync(int salaryId, int empId);
-        public HistorySalaryEmpApiModel GetDetailHistorySalary(int salaryId, int empId);
+        List<BaseSalaryEmpApiModel> GetAllSalaryByEmpId(int empId);
+        Task CreateBaseSalaryAsync(BaseSalaryEmpApiModel salaryModel, int empId);
+        Task UpdateBaseSalaryAsync(BaseSalaryEmpApiModel salaryModel, int empId);
+        Task DeleteBaseSalaryAsync(int salaryId, int empId);
+        BaseSalaryEmpApiModel GetDetailBaseSalary(int salaryId, int empId);
+        BaseSalaryEmpApiModel GetSalaryByDate(DateTime date, int empId);
         #endregion
-        
+
         #region Transaction
         Task CreateListTransactionAsync(CreateListTransactionReqModel apiModel, int wcId);
         Task<List<TransactionResModel>> GetAllTransactionAsync(int userId, DateTime? date);
@@ -182,6 +184,10 @@ namespace TnR_SS.Domain.Supervisor
         #region Transaction Detail
         Task CreateTransactionDetailAsync(CreateTransactionDetailReqModel apiModel, int userId);
         Task<List<GetAllTransactionDetailResModel>> GetAllTransactionDetailAsync(int userId, DateTime? date);
+        #endregion
+        
+        #region Debt
+        List<DebtApiModel> GetAllDebtTrader(int traderId);
         #endregion
 
         #region Employee Debt
@@ -192,5 +198,7 @@ namespace TnR_SS.Domain.Supervisor
         Task DeleteEmployeeDebt(EmployeeDebt apiModel);
         Task<int> PaidTimeKeeping(int id, DateTime date);
         #endregion
+
+        Task CreateHistorySalaryAsync(CreateHistorySalaryEmpModel salaryApi, int traderId);
     }
 }

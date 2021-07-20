@@ -146,7 +146,7 @@ namespace TnR_SS.Domain.Supervisor
                 }
             }
 
-            var totalAmount = await GetTotalAmountPurchaseAsync(data.ID);
+            var totalAmount = await  GetTotalAmountPurchaseAsync(data.ID);
             purchase.Commission = totalAmount * data.CommissionPercent / 100;
             purchase.PayForPondOwner = totalAmount - purchase.Commission;
             purchase.isCompleted = PurchaseStatus.Completed;
@@ -159,48 +159,56 @@ namespace TnR_SS.Domain.Supervisor
 
         public async Task DeletePurchaseAsync(int purchaseId, int traderId)
         {
-            var purchase = await _unitOfWork.Purchases.FindAsync(purchaseId);
-            if (purchase == null)
+            try
             {
-                throw new Exception("Đơn mua không tồn tại !!!");
-            }
-            if (purchase.TraderID == traderId)
-            {
-                var strategy = _unitOfWork.CreateExecutionStrategy();
-
-                await strategy.ExecuteAsync(async () =>
+                var purchase = await _unitOfWork.Purchases.FindAsync(purchaseId);
+                if (purchase == null)
                 {
-                    using (var transaction = _unitOfWork.BeginTransaction())
+                    throw new Exception("Đơn mua không tồn tại !!!");
+                }
+                if (purchase.TraderID == traderId)
+                {
+                    var strategy = _unitOfWork.CreateExecutionStrategy();
+                        
+                    await strategy.ExecuteAsync(async () =>
                     {
-                        try
+                        using (var transaction = _unitOfWork.BeginTransaction())
                         {
-                            var purchaseDetail = _unitOfWork.PurchaseDetails.GetAll(x => x.PurchaseId == purchaseId);
-                            if (purchaseDetail != null && purchaseDetail.Count() > 0)
+                            try
                             {
-                                foreach (var item in purchaseDetail)
+                                var purchaseDetail = _unitOfWork.PurchaseDetails.GetAll(x => x.PurchaseId == purchaseId);
+                                if (purchaseDetail != null && purchaseDetail.Count() > 0)
                                 {
-                                    _unitOfWork.LK_PurchaseDetail_Drums.RemoveLKByPurchaseDetailId(item.ID);
-                                    _unitOfWork.PurchaseDetails.Delete(item);
+                                    foreach (var item in purchaseDetail)
+                                    {
+                                        _unitOfWork.LK_PurchaseDetail_Drums.RemoveLKByPurchaseDetailId(item.ID);
+                                        _unitOfWork.PurchaseDetails.Delete(item);
+                                    }
                                 }
+
+                                _unitOfWork.Purchases.DeleteById(purchaseId);
+                                await _unitOfWork.SaveChangeAsync();
+
+                                await transaction.CommitAsync();
                             }
-
-                            _unitOfWork.Purchases.DeleteById(purchaseId);
-                            await _unitOfWork.SaveChangeAsync();
-
-                            await transaction.CommitAsync();
+                            catch
+                            {
+                                await transaction.RollbackAsync();
+                                throw;
+                            }
                         }
-                        catch
-                        {
-                            await transaction.RollbackAsync();
-                            throw;
-                        }
-                    }
-                });
+                    });
 
+                }
+                else
+                {
+                    throw new Exception("Đơn mua không hợp lệ !!!");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                throw new Exception("Đơn mua không hợp lệ !!!");
+
+                throw;
             }
         }
     }

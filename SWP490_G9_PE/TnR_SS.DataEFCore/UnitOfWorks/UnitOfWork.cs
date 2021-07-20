@@ -31,6 +31,7 @@ namespace TnR_SS.DataEFCore.UnitOfWorks
             LK_PurchaseDetail_Drums = new LK_PurchaseDeatil_DrumRepository(_context);
             Buyers = new BuyerRepository(_context);
             TraderOfWeightRecorders = new TraderOfWeightRecorderRepository(_context);
+            BaseSalaryEmps = new BaseSalaryEmpRepository(_context);
             HistorySalaryEmps = new HistorySalaryEmpRepository(_context);
             Transactions = new TransactionRepository(_context);
             TransactionDetails = new TransactionDetailRepository(_context);
@@ -55,6 +56,7 @@ namespace TnR_SS.DataEFCore.UnitOfWorks
         public ITraderOfWeightRecorderRepository TraderOfWeightRecorders { get; private set; }
         public ITransactionRepository Transactions { get; private set; }
         public ITransactionDetailRepository TransactionDetails { get; private set; }
+        public IBaseSalaryEmpRepository BaseSalaryEmps { get; private set; }
         public IHistorySalaryEmpRepository HistorySalaryEmps { get; private set; }
         public IEmployeeDebtRepository EmployeeDebts { get; private set; }
 

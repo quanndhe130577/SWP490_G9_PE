@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 
 namespace TnR_SS.Domain.ApiModels.HistorySalaryEmpModel
 {
-    public class HistorySalaryEmpApiModel
+    public class CreateHistorySalaryEmpModel
     {
-        public int Id { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public int Month { get; set; }
+
+        public int Year { get; set; }
+
         public double Salary { get; set; }
+
         public int EmpId { get; set; }
     }
 }
