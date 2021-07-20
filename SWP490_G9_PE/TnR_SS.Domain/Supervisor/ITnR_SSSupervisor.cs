@@ -23,6 +23,7 @@ using TnR_SS.Domain.ApiModels.HistorySalaryEmpModel;
 using TnR_SS.Domain.ApiModels.TransactionModel;
 using TnR_SS.Domain.ApiModels.TransactionDetailModel;
 using TnR_SS.Domain.ApiModels.AdvanceSalaryModel;
+using TnR_SS.Domain.ApiModels.DebtModel;
 
 namespace TnR_SS.Domain.Supervisor
 {
@@ -184,7 +185,7 @@ namespace TnR_SS.Domain.Supervisor
         Task CreateTransactionDetailAsync(CreateTransactionDetailReqModel apiModel, int userId);
         Task<List<GetAllTransactionDetailResModel>> GetAllTransactionDetailAsync(int userId, DateTime? date);
         #endregion
-        
+
         #region Debt
         List<DebtApiModel> GetAllDebtTrader(int traderId);
         #endregion
