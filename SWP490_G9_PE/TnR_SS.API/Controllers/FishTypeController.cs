@@ -95,7 +95,7 @@ namespace TnR_SS.API.Controllers
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
             await _tnrssSupervisor.UpdateListFishTypeAsync(listFishType, traderId);
-            return new ResponseBuilder().Success("Cập nhật giá cá thành công").ResponseModel;
+            return new ResponseBuilder<List<FishTypeApiModel>>().Success("Cập nhật giá cá thành công").WithData(listFishType.ListFishType).ResponseModel;
         }
 
         [HttpPost("delete/{fishTypeId}")]
