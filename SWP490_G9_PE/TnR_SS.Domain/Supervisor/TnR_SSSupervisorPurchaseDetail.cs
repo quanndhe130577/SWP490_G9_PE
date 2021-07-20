@@ -106,7 +106,7 @@ namespace TnR_SS.Domain.Supervisor
                         }
 
                         var fishType = await _unitOfWork.FishTypes.FindAsync(data.FishTypeID);
-                        if (fishType == null /*|| fishType.PondOwnerID != purchase.PondOwnerID*/)
+                        if (fishType == null || fishType.PurchaseID != data.PurchaseId/*|| fishType.PondOwnerID != purchase.PondOwnerID*/)
                         {
                             throw new Exception("Giá cá không tồn tại !!!");
                         }
@@ -117,7 +117,7 @@ namespace TnR_SS.Domain.Supervisor
                             throw new Exception("Loại rổ không tồn tại !!!");
                         }
 
-                        if(basket.Weight >= data.Weight)
+                        if (basket.Weight >= data.Weight)
                         {
                             throw new Exception("Cân nặng mã cân phải lớn hơn cân nặng của rổ !!!");
                         }

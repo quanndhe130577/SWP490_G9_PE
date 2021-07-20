@@ -68,10 +68,11 @@ namespace TnR_SS.Domain.Supervisor
             //return _unitOfWork.FishTypes.GetAll(x => x.Date.Date == date.Date && x.TraderID == traderId && x.PondOwnerID == poId).Select(x => _mapper.Map<FishType, FishTypeApiModel>(x)).ToList();
         }
 
-        public async Task CreateListFishTypeAsync(List<FishTypeApiModel> listType, int traderId)
+        public async Task CreateListFishTypeAsync(ListFishTypeModel listType, int traderId)
         {
-            foreach (var obj in listType)
+            foreach (var obj in listType.ListFishType)
             {
+                obj.PurchaseID = listType.PurchaseId;
                 var fishType = _mapper.Map<FishTypeApiModel, FishType>(obj);
                 fishType.TraderID = traderId;
                 if (fishType.MinWeight <= 0 || fishType.MaxWeight <= 0)
@@ -147,6 +148,7 @@ namespace TnR_SS.Domain.Supervisor
                     {
                         foreach (var item in listFishType.ListFishType)
                         {
+                            item.PurchaseID = listFishType.PurchaseId;
                             await UpdateFishTypeAsync(item, traderId);
                         }
 
@@ -183,9 +185,10 @@ namespace TnR_SS.Domain.Supervisor
                 throw new Exception("Đơn mua không tồn tại hoặc đã bị xóa !!!");
             }
 
-            var listPurchaseDetail = await GetAllPurchaseDetailAsync(purchaseId);
+            /*var listPurchaseDetail = await GetAllPurchaseDetailAsync(purchaseId);
 
-            var listFishTypeId = listPurchaseDetail.Select(x => x.FishType.ID).Distinct();
+            var listFishTypeId = listPurchaseDetail.Select(x => x.FishType.ID).Distinct();*/
+            var listFishTypeId = _unitOfWork.FishTypes.GetAll(x => x.PurchaseID == purchaseId && x.TraderID == traderId);
             List<FishTypeApiModel> listFishType = new List<FishTypeApiModel>();
             foreach (var item in listFishTypeId)
             {

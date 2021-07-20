@@ -29,7 +29,7 @@ namespace TnR_SS.API.Controllers
         public async Task<ResponseModel> CreateFishTypeAsync(ListFishTypeModel listType)
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
-            await _tnrssSupervisor.CreateListFishTypeAsync(listType.ListFishType, traderId);
+            await _tnrssSupervisor.CreateListFishTypeAsync(listType, traderId);
             return new ResponseBuilder().Success("Tạo giá cá thành công").ResponseModel;
         }
 
