@@ -46,7 +46,7 @@ namespace TnR_SS.Domain.Supervisor
         public bool CheckPhoneOTPExists(string phoneNumber)
         {
             List<OTP> otps = _unitOfWork.OTPs.GetByPhoneNumber(phoneNumber);
-            var rs = otps.FirstOrDefault(x => x.ExpiredDate >= DateTime.Now);
+            var rs = otps.FirstOrDefault(x => x.ExpiredDate >= DateTime.Now && x.Status == OTPStatus.Waiting.ToString());
             return rs is not null;
         }
 
