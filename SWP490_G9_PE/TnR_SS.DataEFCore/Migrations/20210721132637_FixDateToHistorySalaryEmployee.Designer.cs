@@ -123,41 +123,6 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("TnR_SS.Domain.Entities.AdvanceSalary", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<double>("Debt")
-                        .HasColumnType("float");
-
-                    b.Property<int>("EmpId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("EmployeeID")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Paid")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("EmployeeID");
-
-                    b.ToTable("AdvanceSalary");
-                });
-
             modelBuilder.Entity("TnR_SS.Domain.Entities.BaseSalaryEmp", b =>
                 {
                     b.Property<int>("ID")
@@ -1057,14 +1022,6 @@ namespace TnR_SS.DataEFCore.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TnR_SS.Domain.Entities.AdvanceSalary", b =>
-                {
-                    b.HasOne("TnR_SS.Domain.Entities.Employee", "Employee")
-                        .WithMany("AdvanceSalaries")
-                        .HasForeignKey("EmployeeID");
-
-                    b.Navigation("Employee");
-                });
 
             modelBuilder.Entity("TnR_SS.Domain.Entities.BaseSalaryEmp", b =>
                 {
@@ -1365,7 +1322,6 @@ namespace TnR_SS.DataEFCore.Migrations
 
             modelBuilder.Entity("TnR_SS.Domain.Entities.Employee", b =>
                 {
-                    b.Navigation("AdvanceSalaries");
 
                     b.Navigation("BaseSalaryEmps");
 
