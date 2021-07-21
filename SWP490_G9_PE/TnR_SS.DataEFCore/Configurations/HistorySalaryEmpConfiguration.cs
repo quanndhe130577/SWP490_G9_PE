@@ -25,11 +25,14 @@ namespace TnR_SS.DataEFCore.Configurations
                 .HasForeignKey(p => p.EmpId)
                 .HasConstraintName("FK_HistorySalaryEmp_Employee");
 
-            entity.Property(e => e.Month)
-                .IsRequired();
+            // entity.Property(e => e.Month)
+            //     .IsRequired();
 
-            entity.Property(e => e.Year)
-                .IsRequired();
+            // entity.Property(e => e.Year)
+            //     .IsRequired();
+
+            entity.Property(e => e.DateStart).IsRequired();
+            entity.Property(e => e.DateEnd);
 
             entity.Property(e => e.Salary)
                 .IsRequired();

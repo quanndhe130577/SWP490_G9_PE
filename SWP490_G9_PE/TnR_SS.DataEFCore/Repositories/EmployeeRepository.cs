@@ -20,6 +20,62 @@ namespace TnR_SS.DataEFCore.Repositories
             return rs;
         }
 
+        public HistorySalaryEmp GetEmployeeSalary(int employeeId, DateTime date)
+        {
+            List<HistorySalaryEmp> historySalaryEmps = _context.HistorySalaryEmp.Where(hse => hse.DateStart < date && hse.DateEnd == null || hse.DateEnd > date).ToList();
+            if (historySalaryEmps.Count > 0)
+            {
+                return historySalaryEmps[0];
+            }
+            return null;
+        }
+
+        public List<EmployeeSalaryDetailApiModel> GetAllEmployeeSalaryDetailByTraderId(int employeeId, DateTime date)
+        {
+            List<EmployeeSalaryDetailApiModel> employeeSalaryDetails = new List<EmployeeSalaryDetailApiModel>();
+            List<Employee> employees = _context.Employees.Where(e => e.StartDate < date && e.EndDate == null || e.EndDate > date).ToList();
+            foreach (Employee employee in employees)
+            {
+                HistorySalaryEmp historySalaryEmp = GetEmployeeSalary(employeeId, date);
+                if (historySalaryEmp != null)
+                {
+                    double? salary = GetEmployeeSalary(employeeId, date).Salary, paid = 0, notpaid = 0; ;
+                    List<TimeKeeping> timeKeepings = _context.TimeKeepings.Where(tk => tk.WorkDay.Month == date.Month && tk.WorkDay.Year == date.Year && tk.EmpId == employeeId).ToList();
+                    foreach (TimeKeeping timeKeeping in timeKeepings)
+                    {
+                        if (timeKeeping.Note == TimeKeepingNote.IsPaid)
+                        {
+                            paid += salary;
+                        }
+                        else
+                        {
+                            notpaid += salary;
+                        }
+                    }
+                    employeeSalaryDetails.Add(new EmployeeSalaryDetailApiModel()
+                    {
+                        ID = employee.ID,
+                        Name = employee.Name,
+                        Salary = salary,
+                        Paid = paid,
+                        NotPaid = notpaid,
+                    });
+                }
+                else
+                {
+                    employeeSalaryDetails.Add(new EmployeeSalaryDetailApiModel()
+                    {
+                        ID = employee.ID,
+                        Name = employee.Name,
+                        Salary = null,
+                        Paid = null,
+                        NotPaid = null,
+                    });
+                }
+            }
+            return null;
+        }
+
         /*public List<EmployeeApiModel> GetAllEmployeeByStatus(int status, int traderId)
         {
             var list = _context.Employees.AsEnumerable().Where(x => x.TraderId == traderId)
