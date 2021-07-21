@@ -22,7 +22,9 @@ namespace TnR_SS.DataEFCore.Repositories
 
         public HistorySalaryEmp GetEmployeeSalary(int employeeId, DateTime date)
         {
-            List<HistorySalaryEmp> historySalaryEmps = _context.HistorySalaryEmp.Where(hse => hse.DateStart < date && hse.DateEnd == null || hse.DateEnd > date).ToList();
+            List<HistorySalaryEmp> historySalaryEmps = _context.HistorySalaryEmp
+            .Where(hse => hse.DateStart < date && (hse.DateEnd == null || hse.DateEnd > date) && hse.EmpId == employeeId)
+            .OrderByDescending(hse => hse.ID).ToList();
             if (historySalaryEmps.Count > 0)
             {
                 return historySalaryEmps[0];
@@ -30,26 +32,26 @@ namespace TnR_SS.DataEFCore.Repositories
             return null;
         }
 
-        public List<EmployeeSalaryDetailApiModel> GetAllEmployeeSalaryDetailByTraderId(int employeeId, DateTime date)
+        public List<EmployeeSalaryDetailApiModel> GetAllEmployeeSalaryDetailByTraderId(int traderId, DateTime date)
         {
             List<EmployeeSalaryDetailApiModel> employeeSalaryDetails = new List<EmployeeSalaryDetailApiModel>();
             List<Employee> employees = _context.Employees.Where(e => e.StartDate < date && e.EndDate == null || e.EndDate > date).ToList();
             foreach (Employee employee in employees)
             {
-                HistorySalaryEmp historySalaryEmp = GetEmployeeSalary(employeeId, date);
+                HistorySalaryEmp historySalaryEmp = GetEmployeeSalary(employee.ID, date);
                 if (historySalaryEmp != null)
                 {
-                    double? salary = GetEmployeeSalary(employeeId, date).Salary, paid = 0, notpaid = 0; ;
-                    List<TimeKeeping> timeKeepings = _context.TimeKeepings.Where(tk => tk.WorkDay.Month == date.Month && tk.WorkDay.Year == date.Year && tk.EmpId == employeeId).ToList();
+                    double? salary = historySalaryEmp.Salary, paid = 0, notpaid = 0; ;
+                    List<TimeKeeping> timeKeepings = _context.TimeKeepings.Where(tk => tk.WorkDay.Month == date.Month && tk.WorkDay.Year == date.Year && tk.EmpId == employee.ID).ToList();
                     foreach (TimeKeeping timeKeeping in timeKeepings)
                     {
                         if (timeKeeping.Note == TimeKeepingNote.IsPaid)
                         {
-                            paid += salary;
+                            paid += salary * timeKeeping.Status;
                         }
                         else
                         {
-                            notpaid += salary;
+                            notpaid += salary * timeKeeping.Status;
                         }
                     }
                     employeeSalaryDetails.Add(new EmployeeSalaryDetailApiModel()
@@ -73,7 +75,7 @@ namespace TnR_SS.DataEFCore.Repositories
                     });
                 }
             }
-            return null;
+            return employeeSalaryDetails;
         }
 
         /*public List<EmployeeApiModel> GetAllEmployeeByStatus(int status, int traderId)

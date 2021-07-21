@@ -21,8 +21,6 @@ namespace TnR_SS.Domain.Entities
         [Required]
         public double Status { get; set; }
 
-        public double Money { get; set; }
-
         public TimeKeepingNote Note { get; set; }
 
         [Required]

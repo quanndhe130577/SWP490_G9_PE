@@ -70,5 +70,12 @@ namespace TnR_SS.API.Controllers
             var detail = _tnrssSupervisor.GetDetailEmployee(traderId, empId);
             return new ResponseBuilder<EmployeeApiModel>().Success("Lấy thông tin nhân viên thành công").WithData(detail).ResponseModel;
         }
+        [HttpGet("salaryDetail/{date}")]
+        public ResponseModel SalaryDetailEmployee(DateTime date)
+        {
+            var traderId = TokenManagement.GetUserIdInToken(HttpContext);
+            var detail = _tnrssSupervisor.GetAllEmployeeSalaryDetailByTraderId(traderId, date);
+            return new ResponseBuilder<List<EmployeeSalaryDetailApiModel>>().Success("Lấy thông tin lương nhân viên thành công").WithData(detail).ResponseModel;
+        }
     }
 }
