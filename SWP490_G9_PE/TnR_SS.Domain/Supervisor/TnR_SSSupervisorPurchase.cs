@@ -186,6 +186,7 @@ namespace TnR_SS.Domain.Supervisor
                                     }
                                 }
 
+                                _unitOfWork.FishTypes.RemoveFishTypeByPurchaseId(purchaseId);
                                 _unitOfWork.Purchases.DeleteById(purchaseId);
                                 await _unitOfWork.SaveChangeAsync();
 

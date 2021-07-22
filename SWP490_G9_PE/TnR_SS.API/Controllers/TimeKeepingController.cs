@@ -31,6 +31,7 @@ namespace TnR_SS.API.Controller
             var rs = _tnrssSupervisor.GetListTimeKeepingByTraderIdWithDate(traderId, date);
             return new ResponseBuilder<List<TimeKeepingApiModel>>().Success("Lấy thông tin chấm công thành công").WithData(rs).ResponseModel;
         }
+
         [HttpGet]
         [Route("getByTrader/month/{month}")]
         public ResponseModel GetByTraderIdWithMoth(DateTime month)

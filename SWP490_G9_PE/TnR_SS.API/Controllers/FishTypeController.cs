@@ -29,7 +29,7 @@ namespace TnR_SS.API.Controllers
         public async Task<ResponseModel> CreateFishTypeAsync(ListFishTypeModel listType)
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
-            await _tnrssSupervisor.CreateListFishTypeAsync(listType.ListFishType, traderId);
+            await _tnrssSupervisor.CreateListFishTypeAsync(listType, traderId);
             return new ResponseBuilder().Success("Tạo giá cá thành công").ResponseModel;
         }
 
@@ -95,7 +95,12 @@ namespace TnR_SS.API.Controllers
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
             await _tnrssSupervisor.UpdateListFishTypeAsync(listFishType, traderId);
-            return new ResponseBuilder().Success("Cập nhật giá cá thành công").ResponseModel;
+            foreach (var item in listFishType.ListFishType)
+            {
+                item.PurchaseID = listFishType.PurchaseId;
+            }
+
+            return new ResponseBuilder<List<FishTypeApiModel>>().Success("Cập nhật giá cá thành công").WithData(listFishType.ListFishType).ResponseModel;
         }
 
         [HttpPost("delete/{fishTypeId}")]

@@ -43,12 +43,12 @@ namespace TnR_SS.API.Controller
             }
 
             //var otpId = await _tnrssSupervisor.SendOTPByStringee(token, phoneNumber);
-            var otpCode = TwilioAPI.SendOtpRequest(phoneNumber);
+            /*var otpCode = TwilioAPI.SendOtpRequest(phoneNumber);
             if (otpCode is null)
             {
                 return new ResponseBuilder().Error("Nếu không nhận được OTP, hãy nhận lại sau 60s").ResponseModel;
-            }
-
+            }*/
+            var otpCode = "123456";
             var otpId = await _tnrssSupervisor.AddOTPAsync(otpCode, phoneNumber);
 
             return new ResponseBuilder<Object>().Success("Success").WithData(new { OTPID = otpId }).ResponseModel;
@@ -63,8 +63,8 @@ namespace TnR_SS.API.Controller
                 return new ResponseBuilder().Success("OTP thành công").ResponseModel;
             }
 
-            return new ResponseBuilder().Success("OTP Thành công").ResponseModel;
-            //return new ResponseBuilder().Error("Invalid OTP").ResponseModel;
+            //return new ResponseBuilder().Success("OTP Thành công").ResponseModel;
+            return new ResponseBuilder().Error("Invalid OTP").ResponseModel;
         }
         #endregion
 

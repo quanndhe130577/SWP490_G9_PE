@@ -11,5 +11,6 @@ namespace TnR_SS.Domain.Repositories
     {
         List<FishType> GetAllLastByTraderIdAndPondOwnerId(int traderId);
         List<FishType> GetAllByTraderId(int traderId);
+        void RemoveFishTypeByPurchaseId(int purchaseId);
     }
 }

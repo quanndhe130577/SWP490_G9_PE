@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TnR_SS.DataEFCore;
 
 namespace TnR_SS.DataEFCore.Migrations
 {
     [DbContext(typeof(TnR_SSContext))]
-    partial class TnR_SSContextModelSnapshot : ModelSnapshot
+    [Migration("20210720172543_addPurchaseIdToFishtype")]
+    partial class addPurchaseIdToFishtype
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -126,27 +128,32 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("ID")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<double>("Amount")
-                        .HasColumnType("float");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime2");
+
+                    b.Property<double>("Debt")
+                        .HasColumnType("float");
 
                     b.Property<int>("EmpId")
                         .HasColumnType("int");
+
+                    b.Property<int?>("EmployeeID")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Paid")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("EmpId");
+                    b.HasIndex("EmployeeID");
 
                     b.ToTable("AdvanceSalary");
                 });
@@ -440,13 +447,10 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime");
 
-                    b.Property<DateTime?>("DateEnd")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateStart")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("EmpId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Month")
                         .HasColumnType("int");
 
                     b.Property<double>("Salary")
@@ -454,6 +458,9 @@ namespace TnR_SS.DataEFCore.Migrations
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime");
+
+                    b.Property<int>("Year")
+                        .HasColumnType("int");
 
                     b.HasKey("ID");
 
@@ -726,6 +733,9 @@ namespace TnR_SS.DataEFCore.Migrations
 
                     b.Property<int>("EmpId")
                         .HasColumnType("int");
+
+                    b.Property<double>("Money")
+                        .HasColumnType("float");
 
                     b.Property<int>("Note")
                         .HasMaxLength(50)
@@ -1051,10 +1061,7 @@ namespace TnR_SS.DataEFCore.Migrations
                 {
                     b.HasOne("TnR_SS.Domain.Entities.Employee", "Employee")
                         .WithMany("AdvanceSalaries")
-                        .HasForeignKey("EmpId")
-                        .HasConstraintName("FK_AdvanceSalary_Employee")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("EmployeeID");
 
                     b.Navigation("Employee");
                 });
