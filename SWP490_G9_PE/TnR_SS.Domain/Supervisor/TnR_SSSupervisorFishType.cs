@@ -95,6 +95,7 @@ namespace TnR_SS.Domain.Supervisor
         {
             var map = _mapper.Map<FishTypeApiModel, FishType>(fishType);
             map.TraderID = traderId;
+
             if (map.MinWeight <= 0 || map.MaxWeight <= 0)
             {
                 throw new Exception("Cân nặng phải lớn hơn 0");
@@ -102,6 +103,10 @@ namespace TnR_SS.Domain.Supervisor
             else if (map.MaxWeight - map.MinWeight < 0)
             {
                 throw new Exception("Cân nặng không hợp lệ");
+            }
+            else if(CheckDuplicateFishType(map, traderId) == false)
+            {
+                throw new Exception("Đã có loại cá này");
             }
             else
             {
@@ -196,6 +201,19 @@ namespace TnR_SS.Domain.Supervisor
             }
 
             return listFishType;
+        }
+
+        private bool CheckDuplicateFishType(FishType model, int traderId)
+        {
+            var listFish = GetAllFishTypeByTraderIdAsync(traderId);
+            foreach(var fish in listFish)
+            {
+                if(model.FishName == fish.FishName && model.Date.ToString("yyyy/MM/DD") == fish.Date.ToString("yyyy/MM/DD"))
+                {
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }
