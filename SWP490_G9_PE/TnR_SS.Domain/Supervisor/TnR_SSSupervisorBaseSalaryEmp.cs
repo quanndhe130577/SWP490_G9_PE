@@ -14,7 +14,7 @@ namespace TnR_SS.Domain.Supervisor
         {
             var listSalary = _unitOfWork.BaseSalaryEmps.GetAllSalaryByEmpId(empId);
             List<BaseSalaryEmpApiModel> listSalaryApi = new();
-            foreach(var item in listSalary)
+            foreach (var item in listSalary)
             {
                 listSalaryApi.Add(_mapper.Map<BaseSalaryEmp, BaseSalaryEmpApiModel>(item));
             }
@@ -33,7 +33,7 @@ namespace TnR_SS.Domain.Supervisor
         {
             var salaryUpdate = await _unitOfWork.BaseSalaryEmps.FindAsync(salaryApi.Id);
             salaryUpdate = _mapper.Map<BaseSalaryEmpApiModel, BaseSalaryEmp>(salaryApi, salaryUpdate);
-            if(salaryUpdate.EmpId == empId)
+            if (salaryUpdate.EmpId == empId)
             {
                 _unitOfWork.BaseSalaryEmps.Update(salaryUpdate);
                 await _unitOfWork.SaveChangeAsync();
@@ -79,10 +79,10 @@ namespace TnR_SS.Domain.Supervisor
         public BaseSalaryEmpApiModel GetSalaryByDate(DateTime date, int empId)
         {
             var listSalary = _unitOfWork.BaseSalaryEmps.GetAllSalaryByEmpId(empId)
-                .Select(x => _mapper.Map<BaseSalaryEmp, BaseSalaryEmpApiModel>(x))
                 .Where(x => x.StartDate <= date && x.EndDate >= date)
                 .OrderByDescending(x => x.StartDate)
-                .First();
+                .Select(x => _mapper.Map<BaseSalaryEmp, BaseSalaryEmpApiModel>(x))
+                .FirstOrDefault();
             return listSalary;
         }
     }

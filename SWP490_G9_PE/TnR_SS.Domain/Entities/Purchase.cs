@@ -43,6 +43,7 @@ namespace TnR_SS.Domain.Entities
         public UserInfor UserInfor { get; set; }
 
         public List<PurchaseDetail> PurchaseDetails { get; set; } = new List<PurchaseDetail>();
+        public List<FishType> FishTypes { get; set; }
     }
 
     public enum PurchaseStatus

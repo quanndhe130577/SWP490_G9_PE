@@ -32,8 +32,11 @@ namespace TnR_SS.Domain.Entities
         public int TraderID { get; set; }
         public UserInfor Trader { get; set; }
 
-       /* public int? PondOwnerID { get; set; }
-        public PondOwner PondOwner { get; set; }*/
+        public int? PurchaseID { get; set; }
+        public Purchase Purchase { get; set; }
+
+        /* public int? PondOwnerID { get; set; }
+         public PondOwner PondOwner { get; set; }*/
 
         public List<PurchaseDetail> PurchaseDetails { get; set; }
         public List<TransactionDetail> TransactionDetails { get; set; }
