@@ -56,7 +56,7 @@ namespace TnR_SS.Domain.Supervisor
             return list.OrderBy(a => a.Status).ToList();
         }
 
-        public async Task CreateEmployeesAsync(EmployeeApiModel employee, int traderId)
+        public async Task<EmployeeApiModel> CreateEmployeesAsync(EmployeeApiModel employee, int traderId)
         {
             Employee obj = _mapper.Map<EmployeeApiModel, Employee>(employee);
             obj.TraderId = traderId;
@@ -72,19 +72,20 @@ namespace TnR_SS.Domain.Supervisor
             {
                 await _unitOfWork.Employees.CreateAsync(obj);
                 await _unitOfWork.SaveChangeAsync();
-                if (employee.Salary != null)
-                {
-                    HistorySalaryEmp historySalaryEmp = new HistorySalaryEmp()
-                    {
-                        ID = 0,
-                        EmpId = obj.ID,
-                        DateStart = obj.StartDate,
-                        DateEnd = null,
-                        Salary = (double)employee.Salary,
-                    };
-                    await _unitOfWork.HistorySalaryEmps.CreateAsync(historySalaryEmp);
-                }
-                await _unitOfWork.SaveChangeAsync();
+                return _mapper.Map<Employee, EmployeeApiModel>(obj);
+                // if (employee.Salary != null)
+                // {
+                //     HistorySalaryEmp historySalaryEmp = new HistorySalaryEmp()
+                //     {
+                //         ID = 0,
+                //         EmpId = obj.ID,
+                //         DateStart = obj.StartDate,
+                //         DateEnd = null,
+                //         Salary = (double)employee.Salary,
+                //     };
+                //     await _unitOfWork.HistorySalaryEmps.CreateAsync(historySalaryEmp);
+                // }
+                // await _unitOfWork.SaveChangeAsync();
             }
         }
 

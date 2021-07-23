@@ -79,7 +79,7 @@ namespace TnR_SS.Domain.Supervisor
         public BaseSalaryEmpApiModel GetSalaryByDate(DateTime date, int empId)
         {
             var listSalary = _unitOfWork.BaseSalaryEmps.GetAllSalaryByEmpId(empId)
-                .Where(x => x.StartDate <= date && x.EndDate >= date)
+                .Where(x => x.StartDate <= date && (x.EndDate == null || x.EndDate >= date))
                 .OrderByDescending(x => x.StartDate)
                 .Select(x => _mapper.Map<BaseSalaryEmp, BaseSalaryEmpApiModel>(x))
                 .FirstOrDefault();
