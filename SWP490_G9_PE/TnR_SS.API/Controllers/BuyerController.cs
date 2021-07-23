@@ -32,8 +32,8 @@ namespace TnR_SS.API.Controllers
         [HttpGet("getall")]
         public ResponseModel GetAllBuyer()
         {
-            var wcId = TokenManagement.GetUserIdInToken(HttpContext);
-            List<BuyerApiModel> list = _tnrssSupervisor.GetAllBuyerByWCId(wcId);
+            var userId = TokenManagement.GetUserIdInToken(HttpContext);
+            List<BuyerApiModel> list = _tnrssSupervisor.GetAllBuyerByWCId(userId);
             return new ResponseBuilder<List<BuyerApiModel>>().Success("Lấy dữ liệu người mua thành công").WithData(list).ResponseModel;
         }
 

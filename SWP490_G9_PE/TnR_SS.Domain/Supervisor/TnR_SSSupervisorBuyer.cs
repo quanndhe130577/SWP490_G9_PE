@@ -11,9 +11,9 @@ namespace TnR_SS.Domain.Supervisor
 {
     public partial class TnR_SSSupervisor
     {
-        public List<BuyerApiModel> GetAllBuyerByWCId(int wcId)
+        public List<BuyerApiModel> GetAllBuyerByWCId(int userId)
         {
-            return _unitOfWork.Buyers.GetAll(x => x.SellerId == wcId).Select(x => _mapper.Map<Buyer, BuyerApiModel>(x)).ToList();
+            return _unitOfWork.Buyers.GetAll(x => x.SellerId == userId).Select(x => _mapper.Map<Buyer, BuyerApiModel>(x)).ToList();
             /*List<BuyerApiModel> buyers = new();
             foreach (var item in listBuyer)
             {
@@ -73,7 +73,7 @@ namespace TnR_SS.Domain.Supervisor
         public List<BuyerApiModel> GetBuyerByNameOrPhone(string input, int wcId)
         {
             return _unitOfWork.Buyers.GetAll(x => x.SellerId == wcId)
-                .Where(x => x.Name == input || x.PhoneNumber == input)
+                .Where(x => x.Name == input || x.PhoneNumber == input).Take(5)
                 .Select(x => _mapper.Map<Buyer, BuyerApiModel>(x)).ToList();
         }
     }

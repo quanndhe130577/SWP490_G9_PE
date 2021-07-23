@@ -56,6 +56,7 @@ namespace TnR_SS.Domain.ApiModels
             #region FishType
             CreateMap<FishType, FishTypeApiModel>().ReverseMap();
             CreateMap<FishType, FishTypeResModel>().ReverseMap();
+            CreateMap<FishType, WeightRecorderGetAllFishtypeResModel>().ReverseMap();
             #endregion
 
             #region Purchase
@@ -109,6 +110,7 @@ namespace TnR_SS.Domain.ApiModels
 
             #region Transaction Detail
             CreateMap<CreateTransactionDetailReqModel, TransactionDetail>();
+            CreateMap<CreateTransactionDetailReqModelV2, TransactionDetail>();
             CreateMap<TransactionDetail, GetAllTransactionDetailResModel>();
             #endregion
 

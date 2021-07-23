@@ -45,7 +45,25 @@ namespace TnR_SS.Domain.Supervisor
             }
 
             return list;
+        }
 
+        public List<WeightRecorderGetAllFishtypeResModel> WeightRecorderGetAllFishTypeByTraderIdAsync(int traderId, DateTime date)
+        {
+            if (date.Hour < 12)
+            {
+                date.AddDays(-1);
+            }
+
+            var listType = _unitOfWork.FishTypes.GetAll(X => X.TraderID == traderId && X.Date.Date == date.Date).Distinct();
+            List<WeightRecorderGetAllFishtypeResModel> list = new List<WeightRecorderGetAllFishtypeResModel>();
+            foreach (var type in listType)
+            {
+                WeightRecorderGetAllFishtypeResModel newFish = _mapper.Map<FishType, WeightRecorderGetAllFishtypeResModel>(type);
+                //newFish.PondOwner = _mapper.Map<PondOwner, PondOwnerApiModel>(await _unitOfWork.PondOwners.FindAsync(newFish.PondOwnerID));
+                list.Add(newFish);
+            }
+
+            return list;
         }
 
         public async Task<List<FishTypeApiModel>> GetFishTypesByPondOwnerIdAndDate(int traderId, int poId, DateTime date)

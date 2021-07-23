@@ -33,6 +33,14 @@ namespace TnR_SS.API.Controllers
             return new ResponseBuilder().Success("Tạo đơn bán thành công").ResponseModel;
         }
 
+        [Route("createv2")]
+        public async Task<ResponseModel> CreateV2(CreateTransactionDetailReqModelV2 model)
+        {
+            var userId = TokenManagement.GetUserIdInToken(HttpContext);
+            await _tnrssSupervisor.CreateTransactionDetailV2Async(model, userId);
+            return new ResponseBuilder().Success("Tạo đơn bán thành công").ResponseModel;
+        }
+
         [Route("getall/{date_str?}")]
         public async Task<ResponseModel> GetAll(string date_str = null)
         {
