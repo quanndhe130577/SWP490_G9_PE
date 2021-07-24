@@ -141,8 +141,17 @@ namespace TnR_SS.Domain.Supervisor
 
         public async Task<List<FindTraderByPhoneApiModel>> SuggestTradersByPhoneAsync(string phoneNumber)
         {
-            var rs = await _unitOfWork.UserInfors.FindTradersByPhoneAsync(phoneNumber);
-            return rs.Select(x => _mapper.Map<UserInfor, FindTraderByPhoneApiModel>(x)).ToList();
+            if (phoneNumber != null)
+            {
+                var rs = await _unitOfWork.UserInfors.FindTradersByPhoneAsync(phoneNumber);
+                return rs.Select(x => _mapper.Map<UserInfor, FindTraderByPhoneApiModel>(x)).ToList();
+            }
+            else
+            {
+                var rs = _unitOfWork.UserInfors.GetAll(x => x.PhoneNumber.Contains(phoneNumber)).Take(5);
+                return rs.Select(x => _mapper.Map<UserInfor, FindTraderByPhoneApiModel>(x)).ToList();
+            }
+
         }
 
         public async Task<FindTraderByPhoneApiModel> FindTraderByPhoneAsync(string phoneNumber)
@@ -166,7 +175,7 @@ namespace TnR_SS.Domain.Supervisor
             }
 
             var rs = _unitOfWork.TraderOfWeightRecorders.GetAll(x => x.TraderId == traderId && x.WeightRecorderId == weightRecorderId).ToList();
-            if ( rs.Count() != 0)
+            if (rs.Count() != 0)
             {
                 throw new Exception("Thương lái đã được thêm !!!");
             }
