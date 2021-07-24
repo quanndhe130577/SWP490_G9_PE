@@ -30,7 +30,7 @@ namespace TnR_SS.API.Controllers
         public async Task<ResponseModel> GetTradersByPhone(string phoneNumber)
         {
             var weightRecorderId = TokenManagement.GetUserIdInToken(HttpContext);
-            var trader = await _tnrssSupervisor.SuggestTradersByPhoneAsync(phoneNumber);
+            var trader = await _tnrssSupervisor.SuggestTradersByPhoneAsync(phoneNumber, weightRecorderId);
             return new ResponseBuilder<List<FindTraderByPhoneApiModel>>().Success("Tìm thương lái thành công").WithData(trader).ResponseModel;
         }
 
