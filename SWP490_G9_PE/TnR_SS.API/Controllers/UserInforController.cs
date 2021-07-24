@@ -26,8 +26,8 @@ namespace TnR_SS.API.Controllers
             _tnrssSupervisor = tnrssSupervisor;
         }
 
-        [HttpGet("wc/suggest-traders-by-phone/{phoneNumber}")]
-        public async Task<ResponseModel> GetTradersByPhone(string phoneNumber)
+        [HttpGet("wc/suggest-traders-by-phone/{phoneNumber?}")]
+        public async Task<ResponseModel> GetTradersByPhone(string phoneNumber = null)
         {
             var weightRecorderId = TokenManagement.GetUserIdInToken(HttpContext);
             var trader = await _tnrssSupervisor.SuggestTradersByPhoneAsync(phoneNumber, weightRecorderId);
