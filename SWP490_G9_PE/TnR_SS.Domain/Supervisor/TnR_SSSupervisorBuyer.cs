@@ -70,11 +70,20 @@ namespace TnR_SS.Domain.Supervisor
 
         }
 
-        public List<BuyerApiModel> GetBuyerByNameOrPhone(string input, int wcId)
+        public List<BuyerApiModel> GetTop5BuyerByNameOrPhone(string input, int wcId)
         {
-            return _unitOfWork.Buyers.GetAll(x => x.SellerId == wcId)
-                .Where(x => x.Name == input || x.PhoneNumber == input).Take(5)
+            if(input == null || input.Trim() == "")
+            {
+                return _unitOfWork.Buyers.GetAll(x => x.SellerId == wcId)
+                .Take(5)
                 .Select(x => _mapper.Map<Buyer, BuyerApiModel>(x)).ToList();
+            }
+            else
+            {
+                return _unitOfWork.Buyers.GetAll(x => x.SellerId == wcId)
+                .Where(x => x.Name.Contains(input) || x.PhoneNumber == input).Take(5)
+                .Select(x => _mapper.Map<Buyer, BuyerApiModel>(x)).ToList();
+            }
         }
     }
 }

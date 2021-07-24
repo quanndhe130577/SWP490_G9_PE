@@ -61,11 +61,11 @@ namespace TnR_SS.API.Controllers
             return new ResponseBuilder<BuyerApiModel>().Success("Lấy thông tin người mua thành công").WithData(buyerDetail).ResponseModel;
         }
 
-        [HttpGet("getbuyers/{input}")]
+        [HttpGet("getbuyers/{input?}")]
         public ResponseModel GetBuyesByNameOrPhone(string input)
         {
             var wcId = TokenManagement.GetUserIdInToken(HttpContext);
-            List<BuyerApiModel> list = _tnrssSupervisor.GetBuyerByNameOrPhone(input, wcId);
+            List<BuyerApiModel> list = _tnrssSupervisor.GetTop5BuyerByNameOrPhone(input, wcId);
             return new ResponseBuilder<List<BuyerApiModel>>().Success("Lấy dữ liệu người mua thành công").WithData(list).ResponseModel;
         }
     }
