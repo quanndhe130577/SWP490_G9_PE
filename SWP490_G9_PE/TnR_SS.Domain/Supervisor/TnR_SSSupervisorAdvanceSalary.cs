@@ -12,7 +12,11 @@ namespace TnR_SS.Domain.Supervisor
 {
     public partial class TnR_SSSupervisor
     {
-        public async Task<AdvanceSalary> GetEmpDebt(int id)
+        public async Task<AdvanceSalary> GetSalaryDetail(int id, DateTime date)
+        {
+            return await _unitOfWork.AdvanceSalaries.FindAsync(id);
+        }
+        public async Task<AdvanceSalary> GetAdvanceSalary(int id)
         {
             return await _unitOfWork.AdvanceSalaries.FindAsync(id);
         }
@@ -30,9 +34,8 @@ namespace TnR_SS.Domain.Supervisor
         {
             AdvanceSalary advanceSalary = await _unitOfWork.AdvanceSalaries.FindAsync(apiModel.ID);
             advanceSalary.Date = apiModel.Date;
-            advanceSalary.Debt = apiModel.Debt;
+            advanceSalary.Amount = apiModel.Amount;
             advanceSalary.EmpId = apiModel.EmpId;
-            advanceSalary.Paid = apiModel.Paid;
             _unitOfWork.AdvanceSalaries.Update(advanceSalary);
             await _unitOfWork.SaveChangeAsync();
         }

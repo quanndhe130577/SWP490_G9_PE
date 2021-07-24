@@ -126,32 +126,27 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
+                        .HasColumnName("ID")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<double>("Amount")
+                        .HasColumnType("float");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<double>("Debt")
-                        .HasColumnType("float");
+                        .HasColumnType("datetime");
 
                     b.Property<int>("EmpId")
                         .HasColumnType("int");
-
-                    b.Property<int?>("EmployeeID")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Paid")
-                        .HasColumnType("bit");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("EmployeeID");
+                    b.HasIndex("EmpId");
 
                     b.ToTable("AdvanceSalary");
                 });
@@ -445,10 +440,13 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime");
 
-                    b.Property<int>("EmpId")
-                        .HasColumnType("int");
+                    b.Property<DateTime?>("DateEnd")
+                        .HasColumnType("datetime2");
 
-                    b.Property<int>("Month")
+                    b.Property<DateTime>("DateStart")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("EmpId")
                         .HasColumnType("int");
 
                     b.Property<double>("Salary")
@@ -456,9 +454,6 @@ namespace TnR_SS.DataEFCore.Migrations
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime");
-
-                    b.Property<int>("Year")
-                        .HasColumnType("int");
 
                     b.HasKey("ID");
 
@@ -731,9 +726,6 @@ namespace TnR_SS.DataEFCore.Migrations
 
                     b.Property<int>("EmpId")
                         .HasColumnType("int");
-
-                    b.Property<double>("Money")
-                        .HasColumnType("float");
 
                     b.Property<int>("Note")
                         .HasMaxLength(50)
@@ -1059,7 +1051,10 @@ namespace TnR_SS.DataEFCore.Migrations
                 {
                     b.HasOne("TnR_SS.Domain.Entities.Employee", "Employee")
                         .WithMany("AdvanceSalaries")
-                        .HasForeignKey("EmployeeID");
+                        .HasForeignKey("EmpId")
+                        .HasConstraintName("FK_AdvanceSalary_Employee")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Employee");
                 });

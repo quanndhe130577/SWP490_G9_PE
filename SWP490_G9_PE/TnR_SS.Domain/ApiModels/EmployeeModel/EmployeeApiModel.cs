@@ -31,6 +31,8 @@ namespace TnR_SS.Domain.ApiModels.EmployeeModel
 
         public string Status { get; set; } = "Available";
 
+        public double? Salary { get; set; }
+
     }
 
     public enum EmployeeStatus

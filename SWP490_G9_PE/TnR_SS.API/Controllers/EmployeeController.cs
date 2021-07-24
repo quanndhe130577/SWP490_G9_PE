@@ -43,8 +43,8 @@ namespace TnR_SS.API.Controllers
         public async Task<ResponseModel> CreateEmployeeAsync(EmployeeApiModel employee)
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
-            await _tnrssSupervisor.CreateEmployeesAsync(employee, traderId);
-            return new ResponseBuilder().Success("Tạo nhân viên thành công").ResponseModel;
+            EmployeeApiModel employeeApiModel = await _tnrssSupervisor.CreateEmployeesAsync(employee, traderId);
+            return new ResponseBuilder<EmployeeApiModel>().Success("Tạo nhân viên thành công").WithData(employeeApiModel).ResponseModel;
         }
 
         [HttpPost("update")]
@@ -69,6 +69,13 @@ namespace TnR_SS.API.Controllers
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
             var detail = _tnrssSupervisor.GetDetailEmployee(traderId, empId);
             return new ResponseBuilder<EmployeeApiModel>().Success("Lấy thông tin nhân viên thành công").WithData(detail).ResponseModel;
+        }
+        [HttpGet("salaryDetail/{date}")]
+        public ResponseModel SalaryDetailEmployee(DateTime date)
+        {
+            var traderId = TokenManagement.GetUserIdInToken(HttpContext);
+            var detail = _tnrssSupervisor.GetAllEmployeeSalaryDetailByTraderId(traderId, date);
+            return new ResponseBuilder<List<EmployeeSalaryDetailApiModel>>().Success("Lấy thông tin lương nhân viên thành công").WithData(detail).ResponseModel;
         }
     }
 }

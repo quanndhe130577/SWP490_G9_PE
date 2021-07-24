@@ -10,8 +10,8 @@ using TnR_SS.DataEFCore;
 namespace TnR_SS.DataEFCore.Migrations
 {
     [DbContext(typeof(TnR_SSContext))]
-    [Migration("20210719152112_renameTableHistorySalaryEmpToBaseSalaryEmp")]
-    partial class renameTableHistorySalaryEmpToBaseSalaryEmp
+    [Migration("20210721131050_AddDateToHistorySalaryEmployee")]
+    partial class AddDateToHistorySalaryEmployee
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -380,6 +380,9 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
+                    b.Property<int?>("PurchaseID")
+                        .HasColumnType("int");
+
                     b.Property<int>("TraderID")
                         .HasColumnType("int");
 
@@ -391,9 +394,41 @@ namespace TnR_SS.DataEFCore.Migrations
 
                     b.HasKey("ID");
 
+                    b.HasIndex("PurchaseID");
+
                     b.HasIndex("TraderID");
 
                     b.ToTable("FishType");
+                });
+
+            modelBuilder.Entity("TnR_SS.Domain.Entities.HistorySalaryEmp", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("ID")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("EmpId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Salary")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("EmpId");
+
+                    b.ToTable("HistorySalaryEmp");
                 });
 
             modelBuilder.Entity("TnR_SS.Domain.Entities.LK_PurchaseDeatil_Drum", b =>
@@ -618,32 +653,32 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "35c6bd64-4078-4fd4-befc-8b380c58511f",
+                            ConcurrencyStamp = "7d2b87f3-2655-4645-a48f-e0227cdbb4c6",
                             CreatedAt = new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Chủ bến",
                             Name = "WeightRecorder",
                             NormalizedName = "WEIGHTRECORDER",
-                            UpdatedAt = new DateTime(2021, 7, 19, 22, 21, 11, 624, DateTimeKind.Local).AddTicks(8660)
+                            UpdatedAt = new DateTime(2021, 7, 21, 20, 10, 50, 105, DateTimeKind.Local).AddTicks(9610)
                         },
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "7fafe50c-2b11-4451-9255-fa3e4755fdb9",
+                            ConcurrencyStamp = "6fe01118-9bab-439c-ad9f-97acae3c3697",
                             CreatedAt = new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Thương lái",
                             Name = "Trader",
                             NormalizedName = "TRADER",
-                            UpdatedAt = new DateTime(2021, 7, 19, 22, 21, 11, 627, DateTimeKind.Local).AddTicks(500)
+                            UpdatedAt = new DateTime(2021, 7, 21, 20, 10, 50, 120, DateTimeKind.Local).AddTicks(5240)
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "f52083e6-aec2-41cb-a1c9-cf7a9f77fb0a",
+                            ConcurrencyStamp = "ebe8bbc0-c719-4857-860c-ea0a63fd1814",
                             CreatedAt = new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Admin",
                             Name = "Admin",
                             NormalizedName = "ADMIN",
-                            UpdatedAt = new DateTime(2021, 7, 19, 22, 21, 11, 627, DateTimeKind.Local).AddTicks(564)
+                            UpdatedAt = new DateTime(2021, 7, 21, 20, 10, 50, 120, DateTimeKind.Local).AddTicks(5310)
                         });
                 });
 
@@ -987,7 +1022,7 @@ namespace TnR_SS.DataEFCore.Migrations
             modelBuilder.Entity("TnR_SS.Domain.Entities.BaseSalaryEmp", b =>
                 {
                     b.HasOne("TnR_SS.Domain.Entities.Employee", "Employee")
-                        .WithMany("HistorySalaryEmps")
+                        .WithMany("BaseSalaryEmps")
                         .HasForeignKey("EmpId")
                         .HasConstraintName("FK_BaseSalaryEmp_Employee")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1058,6 +1093,12 @@ namespace TnR_SS.DataEFCore.Migrations
 
             modelBuilder.Entity("TnR_SS.Domain.Entities.FishType", b =>
                 {
+                    b.HasOne("TnR_SS.Domain.Entities.Purchase", "Purchase")
+                        .WithMany("FishTypes")
+                        .HasForeignKey("PurchaseID")
+                        .HasConstraintName("FK_FishType_Purchase")
+                        .OnDelete(DeleteBehavior.ClientNoAction);
+
                     b.HasOne("TnR_SS.Domain.Entities.UserInfor", "Trader")
                         .WithMany("FishTypes")
                         .HasForeignKey("TraderID")
@@ -1065,7 +1106,21 @@ namespace TnR_SS.DataEFCore.Migrations
                         .OnDelete(DeleteBehavior.ClientNoAction)
                         .IsRequired();
 
+                    b.Navigation("Purchase");
+
                     b.Navigation("Trader");
+                });
+
+            modelBuilder.Entity("TnR_SS.Domain.Entities.HistorySalaryEmp", b =>
+                {
+                    b.HasOne("TnR_SS.Domain.Entities.Employee", "Employee")
+                        .WithMany("HistorySalaryEmps")
+                        .HasForeignKey("EmpId")
+                        .HasConstraintName("FK_HistorySalaryEmp_Employee")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("TnR_SS.Domain.Entities.LK_PurchaseDeatil_Drum", b =>
@@ -1275,6 +1330,8 @@ namespace TnR_SS.DataEFCore.Migrations
 
             modelBuilder.Entity("TnR_SS.Domain.Entities.Purchase", b =>
                 {
+                    b.Navigation("FishTypes");
+
                     b.Navigation("PurchaseDetails");
                 });
 

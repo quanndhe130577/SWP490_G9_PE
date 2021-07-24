@@ -24,7 +24,6 @@ namespace TnR_SS.DataEFCore.Repositories
                          EmpId = timeKeeping.EmpId,
                          EmpName = employee.Name,
                          Status = timeKeeping.Status,
-                         Money = timeKeeping.Money,
                          Note = timeKeeping.Note,
                          WorkDay = timeKeeping.WorkDay,
                      };
@@ -43,7 +42,6 @@ namespace TnR_SS.DataEFCore.Repositories
                          EmpId = timeKeeping.EmpId,
                          EmpName = employee.Name,
                          Status = timeKeeping.Status,
-                         Money = timeKeeping.Money,
                          Note = timeKeeping.Note,
                          WorkDay = timeKeeping.WorkDay,
                      };
@@ -60,7 +58,6 @@ namespace TnR_SS.DataEFCore.Repositories
                          EmpId = timeKeeping.EmpId,
                          EmpName = employee.Name,
                          Status = timeKeeping.Status,
-                         Money = timeKeeping.Money,
                          Note = timeKeeping.Note,
                          WorkDay = timeKeeping.WorkDay,
                      };

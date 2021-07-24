@@ -17,10 +17,19 @@ namespace TnR_SS.Domain.Supervisor
             if (status.ToLower() == EmployeeStatus.available.ToString()
                 || status.ToLower() == EmployeeStatus.unavailable.ToString())
             {
+                foreach (EmployeeApiModel employeeApi in listEmpApi)
+                {
+                    employeeApi.Salary = _unitOfWork.Employees.GetEmployeeSalary(employeeApi.ID, DateTime.Now).Salary;
+                }
                 return listEmpApi.Where(x => x.Status == status.ToLower()).ToList();
             }
             else if (status.ToLower() == EmployeeStatus.all.ToString())
             {
+                foreach (EmployeeApiModel employeeApi in listEmpApi)
+                {
+                    HistorySalaryEmp historySalaryEmp = _unitOfWork.Employees.GetEmployeeSalary(employeeApi.ID, DateTime.Now);
+                    employeeApi.Salary = historySalaryEmp == null ? null : historySalaryEmp.Salary;
+                }
                 return listEmpApi;
             }
             else
@@ -35,15 +44,21 @@ namespace TnR_SS.Domain.Supervisor
             List<EmployeeApiModel> list = new();
             foreach (var type in listEmp)
             {
-                list.Add(_mapper.Map<Employee, EmployeeApiModel>(type));
+                EmployeeApiModel employee = _mapper.Map<Employee, EmployeeApiModel>(type);
+                list.Add(employee);
                 list = AddStatusToEmployee(traderId);
+                foreach (EmployeeApiModel employeeApi in list)
+                {
+                    HistorySalaryEmp historySalaryEmp = _unitOfWork.Employees.GetEmployeeSalary(employeeApi.ID, DateTime.Now);
+                    employeeApi.Salary = historySalaryEmp == null ? null : historySalaryEmp.Salary;
+                }
             }
             return list.OrderBy(a => a.Status).ToList();
         }
 
-        public async Task CreateEmployeesAsync(EmployeeApiModel employee, int traderId)
+        public async Task<EmployeeApiModel> CreateEmployeesAsync(EmployeeApiModel employee, int traderId)
         {
-            var obj = _mapper.Map<EmployeeApiModel, Employee>(employee);
+            Employee obj = _mapper.Map<EmployeeApiModel, Employee>(employee);
             obj.TraderId = traderId;
             if (!CheckEmployeeExist(traderId, employee))
             {
@@ -53,14 +68,24 @@ namespace TnR_SS.Domain.Supervisor
             {
                 throw new Exception("Thông tin ngày sinh không hợp lệ");
             }
-            /*else if (obj.StartDate >= obj.EndDate)
-            {
-                throw new Exception("Start Date can not sooner than End Date");
-            }*/
             else
             {
                 await _unitOfWork.Employees.CreateAsync(obj);
                 await _unitOfWork.SaveChangeAsync();
+                return _mapper.Map<Employee, EmployeeApiModel>(obj);
+                // if (employee.Salary != null)
+                // {
+                //     HistorySalaryEmp historySalaryEmp = new HistorySalaryEmp()
+                //     {
+                //         ID = 0,
+                //         EmpId = obj.ID,
+                //         DateStart = obj.StartDate,
+                //         DateEnd = null,
+                //         Salary = (double)employee.Salary,
+                //     };
+                //     await _unitOfWork.HistorySalaryEmps.CreateAsync(historySalaryEmp);
+                // }
+                // await _unitOfWork.SaveChangeAsync();
             }
         }
 
@@ -85,6 +110,40 @@ namespace TnR_SS.Domain.Supervisor
                 else
                 {
                     _unitOfWork.Employees.Update(empEdit);
+                    HistorySalaryEmp historySalaryEmp = _unitOfWork.Employees.GetEmployeeSalary(employee.ID, DateTime.Now);
+                    if (historySalaryEmp == null)
+                    {
+                        if (employee.Salary != null)
+                        {
+                            HistorySalaryEmp newHistorySalaryEmp = new HistorySalaryEmp()
+                            {
+                                ID = 0,
+                                EmpId = employee.ID,
+                                DateStart = employee.StartDate,
+                                DateEnd = null,
+                                Salary = (double)employee.Salary,
+                            };
+                            await _unitOfWork.HistorySalaryEmps.CreateAsync(newHistorySalaryEmp);
+                        }
+                    }
+                    else
+                    {
+                        if (historySalaryEmp.Salary != employee.Salary)
+                        {
+                            historySalaryEmp.DateEnd = DateTime.Now;
+                            HistorySalaryEmp newHistorySalaryEmp = new HistorySalaryEmp()
+                            {
+                                ID = 0,
+                                EmpId = employee.ID,
+                                DateStart = employee.StartDate,
+                                DateEnd = null,
+                                Salary = (double)employee.Salary,
+                            };
+                            await _unitOfWork.HistorySalaryEmps.CreateAsync(newHistorySalaryEmp);
+                            _unitOfWork.HistorySalaryEmps.Update(historySalaryEmp);
+
+                        }
+                    }
                     await _unitOfWork.SaveChangeAsync();
                 }
             }
@@ -152,6 +211,11 @@ namespace TnR_SS.Domain.Supervisor
                 listEmpApi.Add(empMap);
             }
             return listEmpApi;
+        }
+
+        public List<EmployeeSalaryDetailApiModel> GetAllEmployeeSalaryDetailByTraderId(int traderId, DateTime date)
+        {
+            return _unitOfWork.Employees.GetAllEmployeeSalaryDetailByTraderId(traderId, date);
         }
     }
 }

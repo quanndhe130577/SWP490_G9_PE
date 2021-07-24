@@ -29,11 +29,8 @@ namespace TnR_SS.DataEFCore.Configurations
                 .IsRequired()
                 .HasColumnType("datetime");
 
-            entity.Property(e => e.Debt)
+            entity.Property(e => e.Amount)
                 .IsRequired();
-
-            entity.Property(e => e.Paid)
-           .IsRequired().HasDefaultValue(false);
         }
     }
 }

@@ -3,65 +3,65 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TnR_SS.DataEFCore.Migrations
 {
-    public partial class AddEmployeeDebtPaid : Migration
+    public partial class DeleteMoneyTimeKeeping : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<bool>(
-                name: "Paid",
-                table: "EmployeeDebt",
-                type: "bit",
-                nullable: false,
-                defaultValue: false);
+            migrationBuilder.DropColumn(
+                name: "Money",
+                table: "TimeKeeping");
 
             migrationBuilder.UpdateData(
                 table: "RoleUser",
                 keyColumn: "Id",
                 keyValue: 1,
                 columns: new[] { "ConcurrencyStamp", "UpdatedAt" },
-                values: new object[] { "2c21961b-264a-460a-ae5d-19fc52618850", new DateTime(2021, 7, 16, 20, 39, 3, 64, DateTimeKind.Local).AddTicks(7130) });
+                values: new object[] { "914520a1-9974-4c31-92d0-3d56c2a7260c", new DateTime(2021, 7, 21, 23, 15, 40, 112, DateTimeKind.Local).AddTicks(100) });
 
             migrationBuilder.UpdateData(
                 table: "RoleUser",
                 keyColumn: "Id",
                 keyValue: 2,
                 columns: new[] { "ConcurrencyStamp", "UpdatedAt" },
-                values: new object[] { "f627206a-e86b-4482-bfaa-433b51f4394d", new DateTime(2021, 7, 16, 20, 39, 3, 64, DateTimeKind.Local).AddTicks(7170) });
+                values: new object[] { "c8b02a36-4c86-4fba-987b-afdf0cca5a33", new DateTime(2021, 7, 21, 23, 15, 40, 112, DateTimeKind.Local).AddTicks(150) });
 
             migrationBuilder.UpdateData(
                 table: "RoleUser",
                 keyColumn: "Id",
                 keyValue: 3,
                 columns: new[] { "ConcurrencyStamp", "UpdatedAt" },
-                values: new object[] { "0091eac6-3f46-4d42-a352-d83e80112505", new DateTime(2021, 7, 16, 20, 39, 3, 50, DateTimeKind.Local).AddTicks(5230) });
+                values: new object[] { "d93ced62-d720-4894-b1af-e9923812e1b5", new DateTime(2021, 7, 21, 23, 15, 40, 95, DateTimeKind.Local).AddTicks(1320) });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "Paid",
-                table: "EmployeeDebt");
+            migrationBuilder.AddColumn<double>(
+                name: "Money",
+                table: "TimeKeeping",
+                type: "float",
+                nullable: false,
+                defaultValue: 0.0);
 
             migrationBuilder.UpdateData(
                 table: "RoleUser",
                 keyColumn: "Id",
                 keyValue: 1,
                 columns: new[] { "ConcurrencyStamp", "UpdatedAt" },
-                values: new object[] { "e58811d1-e19e-421f-af62-10a3c778e6ae", new DateTime(2021, 7, 16, 20, 26, 14, 829, DateTimeKind.Local).AddTicks(9570) });
+                values: new object[] { "371e5193-a7f3-4d98-b665-9b915cdfd986", new DateTime(2021, 7, 21, 20, 26, 36, 926, DateTimeKind.Local).AddTicks(9780) });
 
             migrationBuilder.UpdateData(
                 table: "RoleUser",
                 keyColumn: "Id",
                 keyValue: 2,
                 columns: new[] { "ConcurrencyStamp", "UpdatedAt" },
-                values: new object[] { "a0225550-7155-4752-af9e-6c74df481223", new DateTime(2021, 7, 16, 20, 26, 14, 829, DateTimeKind.Local).AddTicks(9650) });
+                values: new object[] { "91431f4f-d06b-4d38-b26d-3e1133cf1d4f", new DateTime(2021, 7, 21, 20, 26, 36, 926, DateTimeKind.Local).AddTicks(9830) });
 
             migrationBuilder.UpdateData(
                 table: "RoleUser",
                 keyColumn: "Id",
                 keyValue: 3,
                 columns: new[] { "ConcurrencyStamp", "UpdatedAt" },
-                values: new object[] { "d72b6215-397e-4d6b-bab0-06b81ebfb03b", new DateTime(2021, 7, 16, 20, 26, 14, 816, DateTimeKind.Local).AddTicks(3400) });
+                values: new object[] { "c1e6bb96-9878-4646-a88d-87d0dbc0d639", new DateTime(2021, 7, 21, 20, 26, 36, 913, DateTimeKind.Local).AddTicks(2250) });
         }
     }
 }
