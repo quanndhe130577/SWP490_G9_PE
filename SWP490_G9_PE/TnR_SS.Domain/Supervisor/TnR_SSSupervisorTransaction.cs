@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,29 +11,70 @@ namespace TnR_SS.Domain.Supervisor
 {
     public partial class TnR_SSSupervisor
     {
+        private async Task<Transaction> CreateTransactionAsync(int traderId, int wcId, DateTime date)
+        {
+            // check role trader in transaction
+            var listRole = await _unitOfWork.UserInfors.GetRolesAsync(traderId);
+            if (listRole.Contains(RoleName.Trader))
+            {
+                Transaction tran = new Transaction()
+                {
+                    TraderId = traderId,
+                    WeightRecorderId = wcId,
+                    Date = date
+                };
+
+                await _unitOfWork.Transactions.CreateAsync(tran);
+
+                await _unitOfWork.SaveChangeAsync();
+
+                return tran;
+            }
+            else
+            {
+                throw new Exception("Thông tin thương lái chưa chính xác !!!");
+            }
+        }
+
         public async Task CreateListTransactionAsync(CreateListTransactionReqModel apiModel, int wcId)
         {
-            foreach (var item in apiModel.ListTraderId)
+            var strategy = _unitOfWork.CreateExecutionStrategy();
+
+            await strategy.ExecuteAsync(async () =>
             {
-                // check role trader in transaction
-                var listRole = await _unitOfWork.UserInfors.GetRolesAsync(item);
-                if (listRole.Contains(RoleName.Trader))
+                using (var dbTransaction = _unitOfWork.BeginTransaction())
                 {
-                    await _unitOfWork.Transactions.CreateAsync(new Transaction()
+                    try
                     {
-                        TraderId = item,
-                        WeightRecorderId = wcId,
-                        Date = apiModel.Date
-                    });
-                }
-                else
-                {
-                    throw new Exception("Thông tin thương lái chưa chính xác !!!");
-                }
+                        foreach (var item in apiModel.ListTraderId)
+                        {
+                            await CreateTransactionAsync(item, wcId, apiModel.Date);
+                            /*// check role trader in transaction
+                            var listRole = await _unitOfWork.UserInfors.GetRolesAsync(item);
+                            if (listRole.Contains(RoleName.Trader))
+                            {
+                                await _unitOfWork.Transactions.CreateAsync(new Transaction()
+                                {
+                                    TraderId = item,
+                                    WeightRecorderId = wcId,
+                                    Date = apiModel.Date
+                                });
+                            }
+                            else
+                            {
+                                throw new Exception("Thông tin thương lái chưa chính xác !!!");
+                            }*/
 
-            }
-
-            await _unitOfWork.SaveChangeAsync();
+                        }
+                    }
+                    catch
+                    {
+                        await dbTransaction.RollbackAsync();
+                        throw;
+                        //throw new Exception("Đã có lỗi xay ra, hãy thử lại sau");
+                    }
+                }
+            });
         }
 
         public async Task<List<TransactionResModel>> GetAllTransactionAsync(int wcId, DateTime? date)

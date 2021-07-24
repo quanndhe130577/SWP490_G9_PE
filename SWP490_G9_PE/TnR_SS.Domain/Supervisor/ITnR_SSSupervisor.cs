@@ -78,6 +78,7 @@ namespace TnR_SS.Domain.Supervisor
         Task DeleteFishTypeAsync(int empId, int traderId);
         Task<List<FishTypeApiModel>> GetListFishTypeByPurchaseIdAsync(int purchaseId, int traderId);
         Task UpdateListFishTypeAsync(ListFishTypeModel listFishType, int traderId);
+        List<WeightRecorderGetAllFishtypeResModel> WeightRecorderGetAllFishTypeByTraderIdAsync(int traderId, DateTime date);
         #endregion
 
         #region Basket
@@ -160,7 +161,7 @@ namespace TnR_SS.Domain.Supervisor
         #endregion
 
         #region Buyer
-        List<BuyerApiModel> GetAllBuyerByWCId(int wcId);
+        List<BuyerApiModel> GetAllBuyerByWCId(int userId);
         Task CreateBuyerAsync(BuyerApiModel buyerModel, int wcId);
         Task UpdateBuyerAsync(BuyerApiModel buyerModel, int wcId);
         Task DeleteBuyerAsync(int buyerId, int wcId);
@@ -184,6 +185,7 @@ namespace TnR_SS.Domain.Supervisor
 
         #region Transaction Detail
         Task CreateTransactionDetailAsync(CreateTransactionDetailReqModel apiModel, int userId);
+        Task CreateTransactionDetailV2Async(CreateTransactionDetailReqModelV2 apiModel, int userId);
         Task<List<GetAllTransactionDetailResModel>> GetAllTransactionDetailAsync(int userId, DateTime? date);
         #endregion
 
