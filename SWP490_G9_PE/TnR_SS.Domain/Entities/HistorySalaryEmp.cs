@@ -16,10 +16,14 @@ namespace TnR_SS.Domain.Entities
         public int ID { get; set; }
 
         [Required]
-        public int Month { get; set; }
+        public DateTime DateStart { get; set; }
+        public DateTime? DateEnd { get; set; }
 
-        [Required]
-        public int Year { get; set; }
+        // [Required]
+        // public int Month { get; set; }
+
+        // [Required]
+        // public int Year { get; set; }
 
         [Required]
         public double Salary { get; set; }

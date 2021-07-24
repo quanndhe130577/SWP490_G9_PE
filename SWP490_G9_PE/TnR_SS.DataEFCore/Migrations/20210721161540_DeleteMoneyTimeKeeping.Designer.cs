@@ -10,8 +10,8 @@ using TnR_SS.DataEFCore;
 namespace TnR_SS.DataEFCore.Migrations
 {
     [DbContext(typeof(TnR_SSContext))]
-    [Migration("20210719132218_AddAdvanceSalary")]
-    partial class AddAdvanceSalary
+    [Migration("20210721161540_DeleteMoneyTimeKeeping")]
+    partial class DeleteMoneyTimeKeeping
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -128,34 +128,62 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
+                        .HasColumnName("ID")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<double>("Amount")
+                        .HasColumnType("float");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<double>("Debt")
-                        .HasColumnType("float");
+                        .HasColumnType("datetime");
 
                     b.Property<int>("EmpId")
                         .HasColumnType("int");
-
-                    b.Property<int?>("EmployeeID")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Paid")
-                        .HasColumnType("bit");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("EmployeeID");
+                    b.HasIndex("EmpId");
 
                     b.ToTable("AdvanceSalary");
+                });
+
+            modelBuilder.Entity("TnR_SS.Domain.Entities.BaseSalaryEmp", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("ID")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime");
+
+                    b.Property<int>("EmpId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<double>("Salary")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("EmpId");
+
+                    b.ToTable("BaseSalaryEmp");
                 });
 
             modelBuilder.Entity("TnR_SS.Domain.Entities.Basket", b =>
@@ -409,17 +437,17 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime");
 
+                    b.Property<DateTime?>("DateEnd")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateStart")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("EmpId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("EndDate")
-                        .HasColumnType("datetime");
-
                     b.Property<double>("Salary")
                         .HasColumnType("float");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime");
@@ -653,32 +681,32 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "d877cf18-be09-4bf5-ade9-196578c1275e",
+                            ConcurrencyStamp = "d93ced62-d720-4894-b1af-e9923812e1b5",
                             CreatedAt = new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Chủ bến",
                             Name = "WeightRecorder",
                             NormalizedName = "WEIGHTRECORDER",
-                            UpdatedAt = new DateTime(2021, 7, 19, 20, 22, 18, 17, DateTimeKind.Local).AddTicks(5710)
+                            UpdatedAt = new DateTime(2021, 7, 21, 23, 15, 40, 95, DateTimeKind.Local).AddTicks(1320)
                         },
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "70672d4d-6818-42b5-afe7-11cf8a9baf48",
+                            ConcurrencyStamp = "914520a1-9974-4c31-92d0-3d56c2a7260c",
                             CreatedAt = new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Thương lái",
                             Name = "Trader",
                             NormalizedName = "TRADER",
-                            UpdatedAt = new DateTime(2021, 7, 19, 20, 22, 18, 31, DateTimeKind.Local).AddTicks(6620)
+                            UpdatedAt = new DateTime(2021, 7, 21, 23, 15, 40, 112, DateTimeKind.Local).AddTicks(100)
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "efc40775-6697-4904-96ad-7ceba51dd8dc",
+                            ConcurrencyStamp = "c8b02a36-4c86-4fba-987b-afdf0cca5a33",
                             CreatedAt = new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Admin",
                             Name = "Admin",
                             NormalizedName = "ADMIN",
-                            UpdatedAt = new DateTime(2021, 7, 19, 20, 22, 18, 31, DateTimeKind.Local).AddTicks(6690)
+                            UpdatedAt = new DateTime(2021, 7, 21, 23, 15, 40, 112, DateTimeKind.Local).AddTicks(150)
                         });
                 });
 
@@ -695,9 +723,6 @@ namespace TnR_SS.DataEFCore.Migrations
 
                     b.Property<int>("EmpId")
                         .HasColumnType("int");
-
-                    b.Property<double>("Money")
-                        .HasColumnType("float");
 
                     b.Property<int>("Note")
                         .HasMaxLength(50)
@@ -1023,7 +1048,22 @@ namespace TnR_SS.DataEFCore.Migrations
                 {
                     b.HasOne("TnR_SS.Domain.Entities.Employee", "Employee")
                         .WithMany("AdvanceSalaries")
-                        .HasForeignKey("EmployeeID");
+                        .HasForeignKey("EmpId")
+                        .HasConstraintName("FK_AdvanceSalary_Employee")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("TnR_SS.Domain.Entities.BaseSalaryEmp", b =>
+                {
+                    b.HasOne("TnR_SS.Domain.Entities.Employee", "Employee")
+                        .WithMany("BaseSalaryEmps")
+                        .HasForeignKey("EmpId")
+                        .HasConstraintName("FK_BaseSalaryEmp_Employee")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Employee");
                 });
@@ -1308,6 +1348,8 @@ namespace TnR_SS.DataEFCore.Migrations
             modelBuilder.Entity("TnR_SS.Domain.Entities.Employee", b =>
                 {
                     b.Navigation("AdvanceSalaries");
+
+                    b.Navigation("BaseSalaryEmps");
 
                     b.Navigation("HistorySalaryEmps");
 

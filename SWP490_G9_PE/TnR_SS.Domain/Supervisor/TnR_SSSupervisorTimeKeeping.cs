@@ -29,7 +29,6 @@ namespace TnR_SS.Domain.Supervisor
             TimeKeeping tk = await _unitOfWork.TimeKeepings.FindAsync(timeKeeping.ID);
             tk.WorkDay = timeKeeping.WorkDay;
             tk.Status = timeKeeping.Status;
-            tk.Money = timeKeeping.Money;
             tk.Note = timeKeeping.Note;
             tk.EmpId = timeKeeping.EmpId;
             tk.UpdatedAt = DateTime.Now;

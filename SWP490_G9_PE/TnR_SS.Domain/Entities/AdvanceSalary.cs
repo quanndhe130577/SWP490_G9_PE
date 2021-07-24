@@ -19,13 +19,11 @@ namespace TnR_SS.Domain.Entities
         public DateTime Date { get; set; }
 
         [Required]
-        public double Debt { get; set; }
+        public double Amount { get; set; }
 
         [Required]
         public int EmpId { get; set; }
 
         public Employee Employee { get; set; }
-
-        public bool Paid { get; set; }
     }
 }
