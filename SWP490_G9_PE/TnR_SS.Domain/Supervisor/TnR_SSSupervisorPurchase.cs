@@ -206,7 +206,7 @@ namespace TnR_SS.Domain.Supervisor
                     throw new Exception("Đơn mua không hợp lệ !!!");
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 throw;
             }
