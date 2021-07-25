@@ -84,12 +84,29 @@ namespace TnR_SS.Domain.Supervisor
 
         public async Task<PurchaseResModel> CreatePurchaseAsync(PurchaseCreateReqModel purchaseModel)
         {
+            var pondOwner = await _unitOfWork.PondOwners.FindAsync(purchaseModel.PondOwnerID);
+            if (pondOwner is null)
+            {
+                throw new Exception("Không tìm thấy chủ ao !!!");
+            }
+
+            var trader = await _unitOfWork.UserInfors.FindAsync(purchaseModel.TraderID);
+            if (trader is null)
+            {
+                throw new Exception("Không tìm thấy thương lái !!!");
+            }
+
+            var roles = await _unitOfWork.UserInfors.GetRolesAsync(purchaseModel.TraderID);
+            if (!roles.Contains(RoleName.Trader))
+            {
+                throw new Exception("Không tìm thấy thương lái !!!");
+            }
+
             var purchase = _mapper.Map<PurchaseCreateReqModel, Purchase>(purchaseModel);
             await _unitOfWork.Purchases.CreateAsync(purchase);
             await _unitOfWork.SaveChangeAsync();
 
             PurchaseResModel newPurchase = _mapper.Map<Purchase, PurchaseResModel>(purchase);
-            var pondOwner = await _unitOfWork.PondOwners.FindAsync(purchaseModel.PondOwnerID);
             newPurchase.PondOwnerName = pondOwner.Name;
             newPurchase.PondOwnerId = pondOwner.ID;
             newPurchase.Status = PurchaseStatus.Pending.ToString();
