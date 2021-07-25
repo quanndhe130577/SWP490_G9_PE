@@ -110,10 +110,10 @@ namespace TnR_SS.DataEFCore.Repositories
             return (List<UserInfor>)await _userManager.GetUsersInRoleAsync(roleName);
         }
 
-        public async Task<List<UserInfor>> FindTradersByPhoneAsync(string phoneNumberStr)
+        public async Task<IEnumerable<UserInfor>> FindTradersByPhoneAsync(string phoneNumberStr)
         {
             var listTrader = await _userManager.GetUsersInRoleAsync(RoleName.Trader);
-            return listTrader.Where(x => x.PhoneNumber.Contains(phoneNumberStr)).Take(10).ToList();
+            return listTrader.Where(x => x.PhoneNumber.Contains(phoneNumberStr))/*.Take(10).ToList()*/;
         }
     }
 }

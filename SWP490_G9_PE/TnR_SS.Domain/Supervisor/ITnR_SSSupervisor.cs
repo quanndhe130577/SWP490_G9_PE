@@ -63,7 +63,7 @@ namespace TnR_SS.Domain.Supervisor
         Task<bool> CheckUserPassword(int userId, string password);
         Task<UserResModel> GetUserResModelByIdAsync(int id);
         Task<FindTraderByPhoneApiModel> FindTraderByPhoneAsync(string phoneNumber);
-        Task<List<FindTraderByPhoneApiModel>> SuggestTradersByPhoneAsync(string phoneNumber);
+        Task<List<FindTraderByPhoneApiModel>> SuggestTradersByPhoneAsync(string phoneNumber, int wcId);
         List<FindTraderByPhoneApiModel> FindTradersOfWeightRecorder(int weightRecorderId);
         Task WeightRecorderAddTrader(int traderId, int weightRecorderId);
         #endregion
@@ -166,7 +166,7 @@ namespace TnR_SS.Domain.Supervisor
         Task UpdateBuyerAsync(BuyerApiModel buyerModel, int wcId);
         Task DeleteBuyerAsync(int buyerId, int wcId);
         Task<BuyerApiModel> GetDetailBuyerAsync(int buyerId, int wcId);
-        List<BuyerApiModel> GetBuyerByNameOrPhone(string input, int wcId);
+        List<BuyerApiModel> GetTop5BuyerByNameOrPhone(string input, int wcId);
         #endregion
 
         #region HistorySalaryEmp
@@ -190,7 +190,9 @@ namespace TnR_SS.Domain.Supervisor
         #endregion
 
         #region Debt
-        List<DebtApiModel> GetAllDebtTrader(int traderId);
+        Task<List<DebtApiModel>> GetAllDebtTraderAsync(int traderId);
+        Task<List<DebtApiModel>> GetAllDebtWRAsync(int userId, DateTime? date);
+        Task<List<DebtApiModel>> GetDebtAsync(int userId, DateTime? date);
         #endregion
 
         #region Advance Salary

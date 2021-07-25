@@ -139,10 +139,22 @@ namespace TnR_SS.Domain.Supervisor
             return await _unitOfWork.UserInfors.UpdateIdentityAsync(user);
         }
 
-        public async Task<List<FindTraderByPhoneApiModel>> SuggestTradersByPhoneAsync(string phoneNumber)
+        public async Task<List<FindTraderByPhoneApiModel>> SuggestTradersByPhoneAsync(string phoneNumber, int wcId)
         {
-            var rs = await _unitOfWork.UserInfors.FindTradersByPhoneAsync(phoneNumber);
-            return rs.Select(x => _mapper.Map<UserInfor, FindTraderByPhoneApiModel>(x)).ToList();
+            if (phoneNumber != null)
+            {
+                var rs = await _unitOfWork.UserInfors.FindTradersByPhoneAsync(phoneNumber);
+                var listTraderid = _unitOfWork.TraderOfWeightRecorders.GetAll(x => x.WeightRecorderId == wcId).Select(x => x.TraderId);
+                return rs.Where(x => !listTraderid.Contains(x.Id)).Take(5).Select(x => _mapper.Map<UserInfor, FindTraderByPhoneApiModel>(x)).ToList();
+            }
+            else
+            {
+                /* var listTraderId = _unitOfWork.TraderOfWeightRecorders.GetAll(x => x.WeightRecorderId == wcId).Select(x => x.TraderId).Take(5);
+                 var ListTrader = _unitOfWork.UserInfors.GetAll(x => listTraderId.Contains(x.Id));*/
+                var ListTrader = await _unitOfWork.UserInfors.GetUserByRoleAsync(RoleName.Trader);
+                var listTraderid = _unitOfWork.TraderOfWeightRecorders.GetAll(x => x.WeightRecorderId == wcId).Select(x => x.TraderId);
+                return ListTrader.Where(x => !listTraderid.Contains(x.Id)).Take(5).Select(x => _mapper.Map<UserInfor, FindTraderByPhoneApiModel>(x)).ToList();
+            }
         }
 
         public async Task<FindTraderByPhoneApiModel> FindTraderByPhoneAsync(string phoneNumber)
@@ -166,7 +178,7 @@ namespace TnR_SS.Domain.Supervisor
             }
 
             var rs = _unitOfWork.TraderOfWeightRecorders.GetAll(x => x.TraderId == traderId && x.WeightRecorderId == weightRecorderId).ToList();
-            if ( rs.Count() != 0)
+            if (rs.Count() != 0)
             {
                 throw new Exception("Thương lái đã được thêm !!!");
             }

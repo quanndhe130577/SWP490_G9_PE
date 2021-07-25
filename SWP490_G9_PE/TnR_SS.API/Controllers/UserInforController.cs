@@ -26,11 +26,11 @@ namespace TnR_SS.API.Controllers
             _tnrssSupervisor = tnrssSupervisor;
         }
 
-        [HttpGet("wc/suggest-traders-by-phone/{phoneNumber}")]
-        public async Task<ResponseModel> GetTradersByPhone(string phoneNumber)
+        [HttpGet("wc/suggest-traders-by-phone/{phoneNumber?}")]
+        public async Task<ResponseModel> GetTradersByPhone(string phoneNumber = null)
         {
             var weightRecorderId = TokenManagement.GetUserIdInToken(HttpContext);
-            var trader = await _tnrssSupervisor.SuggestTradersByPhoneAsync(phoneNumber);
+            var trader = await _tnrssSupervisor.SuggestTradersByPhoneAsync(phoneNumber, weightRecorderId);
             return new ResponseBuilder<List<FindTraderByPhoneApiModel>>().Success("Tìm thương lái thành công").WithData(trader).ResponseModel;
         }
 
