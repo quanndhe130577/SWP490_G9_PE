@@ -14,14 +14,14 @@ namespace TnR_SS.DataEFCore.Repositories
         public List<FishType> GetAllLastByTraderIdAndPondOwnerId(int traderId)
         {
             var rs = _context.FishTypes.AsEnumerable().Where(x => x.TraderID == traderId)
-                .OrderByDescending(x => x.Date).ThenBy(x => x.ID).GroupBy(x => x.FishName)
+                .OrderByDescending(x => x.Date).ThenByDescending(x => x.ID).GroupBy(x => x.FishName)
                 .Select(x => x.First()).ToList();
             return rs;
         }
 
         public List<FishType> GetAllByTraderId(int traderId)
         {
-            var rs = _context.FishTypes.AsEnumerable().Where(x => x.TraderID == traderId && x.PurchaseID != null)
+            var rs = _context.FishTypes.AsEnumerable().Where(x => x.TraderID == traderId && ( x.PurchaseID != null || x.Date.Date >= DateTime.Now.AddDays(7)))
                 .OrderByDescending(x => x.Date).ToList();
             return rs;
         }

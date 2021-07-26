@@ -63,9 +63,10 @@ namespace TnR_SS.Domain.Supervisor
                             else
                             {
                                 throw new Exception("Thông tin thương lái chưa chính xác !!!");
-                            }*/
-
+                            }*/ 
                         }
+
+                        await dbTransaction.CommitAsync();
                     }
                     catch
                     {
@@ -96,7 +97,7 @@ namespace TnR_SS.Domain.Supervisor
 
             if (date != null)
             {
-                listTran = listTran.Where(x => x.Date == date.Value).ToList();
+                listTran = listTran.Where(x => x.Date.Date == date.Value.Date).ToList();
             }
 
             List<TransactionResModel> list = new();
