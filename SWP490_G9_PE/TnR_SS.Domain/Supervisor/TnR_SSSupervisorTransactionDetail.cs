@@ -16,6 +16,11 @@ namespace TnR_SS.Domain.Supervisor
     {
         private async Task WeightRecorderCreateTransactionDetailAsync(CreateTransactionDetailReqModel apiModel, int wcId)
         {
+            if (apiModel.IsPaid && apiModel.BuyerId is null)
+            {
+                throw new Exception("Không có thông tin người mua thì ko thể ghi nợ !!!");
+            }
+
             var trans = await _unitOfWork.Transactions.FindAsync(apiModel.TransId);
             if (trans == null || trans.WeightRecorderId != wcId)
             {
@@ -44,6 +49,11 @@ namespace TnR_SS.Domain.Supervisor
 
         private async Task WeightRecorderCreateTransactionDetailV2Async(CreateTransactionDetailReqModelV2 apiModel, int wcId)
         {
+            if (apiModel.IsPaid && apiModel.BuyerId is null)
+            {
+                throw new Exception("Không có thông tin người mua thì ko thể ghi nợ !!!");
+            }
+
             var fishType = await _unitOfWork.FishTypes.FindAsync(apiModel.FishTypeId);
             if (fishType == null)
             {
@@ -73,6 +83,11 @@ namespace TnR_SS.Domain.Supervisor
 
         private async Task TraderCreateTransactionDetailAsync(CreateTransactionDetailReqModel apiModel, int traderId)
         {
+            if (!apiModel.IsPaid && apiModel.BuyerId is null)
+            {
+                throw new Exception("Không có thông tin người mua thì ko thể ghi nợ !!!");
+            }
+
             var strategy = _unitOfWork.CreateExecutionStrategy();
 
             await strategy.ExecuteAsync(async () =>
@@ -118,6 +133,11 @@ namespace TnR_SS.Domain.Supervisor
 
         private async Task TraderCreateTransactionDetailV2Async(CreateTransactionDetailReqModelV2 apiModel, int traderId)
         {
+            if (apiModel.IsPaid && apiModel.BuyerId is null)
+            {
+                throw new Exception("Không có thông tin người mua thì ko thể ghi nợ !!!");
+            }
+
             var strategy = _unitOfWork.CreateExecutionStrategy();
 
             await strategy.ExecuteAsync(async () =>
@@ -162,6 +182,11 @@ namespace TnR_SS.Domain.Supervisor
 
         public async Task CreateTransactionDetailAsync(CreateTransactionDetailReqModel apiModel, int userId)
         {
+            if(apiModel.IsPaid && apiModel.BuyerId is null)
+            {
+                throw new Exception("Không có thông tin người mua thì ko thể ghi nợ !!!");
+            }
+
             var roleUser = await _unitOfWork.UserInfors.GetRolesAsync(userId);
             if (roleUser.Contains(RoleName.WeightRecorder))
             {
@@ -179,6 +204,11 @@ namespace TnR_SS.Domain.Supervisor
 
         public async Task CreateTransactionDetailV2Async(CreateTransactionDetailReqModelV2 apiModel, int userId)
         {
+            if (apiModel.IsPaid && apiModel.BuyerId is null)
+            {
+                throw new Exception("Không có thông tin người mua thì ko thể ghi nợ !!!");
+            }
+
             var roleUser = await _unitOfWork.UserInfors.GetRolesAsync(userId);
             if (roleUser.Contains(RoleName.WeightRecorder))
             {

@@ -12,7 +12,7 @@ namespace TnR_SS.Domain.ApiModels.TransactionDetailModel
         public int FishTypeId { get; set; }
         public int TransId { get; set; }
         public int? BuyerId { get; set; }
-        public bool IsPaid { get; set; } = false;
+        public bool IsPaid { get; set; } = true;
 
         [Range(0, Double.MaxValue, ErrorMessage = "Giá tiền phải lớn hơn 0")]
         public double SellPrice { get; set; }

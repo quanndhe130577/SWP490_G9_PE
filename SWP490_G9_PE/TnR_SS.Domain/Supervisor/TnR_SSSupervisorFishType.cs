@@ -35,7 +35,9 @@ namespace TnR_SS.Domain.Supervisor
 
         public List<FishTypeResModel> GetAllFishTypeByTraderIdAsync(int traderId)
         {
-            var listType = _unitOfWork.FishTypes.GetAllByTraderId(traderId);
+            //var listType = _unitOfWork.FishTypes.GetAllByTraderId(traderId);
+            var listType = _unitOfWork.FishTypes.GetAll(x => x.TraderID == traderId && (x.PurchaseID != null || x.Date.Date >= DateTime.Now.AddDays(-7)))
+                .OrderByDescending(x => x.Date);
             List<FishTypeResModel> list = new List<FishTypeResModel>();
             foreach (var type in listType)
             {
@@ -122,7 +124,7 @@ namespace TnR_SS.Domain.Supervisor
             {
                 throw new Exception("Cân nặng không hợp lệ");
             }
-            else if(CheckDuplicateFishType(map, traderId) == false)
+            else if (CheckDuplicateFishType(map, traderId) == false)
             {
                 throw new Exception("Đã có loại cá này");
             }
@@ -224,9 +226,9 @@ namespace TnR_SS.Domain.Supervisor
         private bool CheckDuplicateFishType(FishType model, int traderId)
         {
             var listFish = GetAllFishTypeByTraderIdAsync(traderId);
-            foreach(var fish in listFish)
+            foreach (var fish in listFish)
             {
-                if(model.FishName == fish.FishName && model.Date.ToString("yyyy/MM/DD") == fish.Date.ToString("yyyy/MM/DD"))
+                if (model.FishName == fish.FishName && model.Date.ToString("yyyy/MM/DD") == fish.Date.ToString("yyyy/MM/DD"))
                 {
                     return false;
                 }

@@ -96,7 +96,7 @@ namespace TnR_SS.Domain.Supervisor
 
             if (date != null)
             {
-                listTran = listTran.Where(x => x.Date == date.Value).ToList();
+                listTran = listTran.Where(x => x.Date.Date == date.Value.Date).ToList();
             }
 
             List<TransactionResModel> list = new();

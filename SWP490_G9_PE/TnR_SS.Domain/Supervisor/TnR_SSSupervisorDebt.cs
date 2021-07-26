@@ -19,7 +19,7 @@ namespace TnR_SS.Domain.Supervisor
         {
             PondOwner pondOwner = new();
             List<DebtApiModel> list = new();
-            
+
             var listPurchase = _unitOfWork.Purchases.GetAll(x => x.TraderID == traderId)
                 .Where(x => x.isCompleted == Entities.PurchaseStatus.Completed && x.isPaid == false)
                 .OrderByDescending(x => x.Date).ThenByDescending(x => x.ID);
@@ -57,13 +57,14 @@ namespace TnR_SS.Domain.Supervisor
                 throw new Exception("Người mua không tồn tại !!");
             }
             var user = await _unitOfWork.UserInfors.FindAsync(userId);
-            
+
             foreach (var td in listTranDe)
             {
                 DebtApiModel model = new();
 
                 model.Creditors = user.Lastname + " " + user.FirstName;
-                model.Debtor = _mapper.Map<Buyer, BuyerApiModel>(await _unitOfWork.Buyers.FindAsync(td.BuyerId)).Name;
+                var buyer = await _unitOfWork.Buyers.FindAsync(td.BuyerId);
+                model.Debtor = buyer != null ? _mapper.Map<Buyer, BuyerApiModel>(buyer).Name : null;
                 model.DebtMoney = td.SellPrice;
                 model.Date = _mapper.Map<Transaction, TransactionResModel>(await _unitOfWork.Transactions.FindAsync(td.TransId)).Date;
 
@@ -87,4 +88,3 @@ namespace TnR_SS.Domain.Supervisor
         }
     }
 }
- 

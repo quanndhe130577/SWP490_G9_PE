@@ -27,7 +27,7 @@ namespace TnR_SS.Domain.Repositories
         Task<bool> CheckPasswordAsync(UserInfor user, string password);
         Task<IdentityResult> UpdateIdentityAsync(UserInfor user);
         Task<UserInfor> FindTraderByPhoneAsync(string phoneNumber);
-        Task<List<UserInfor>> FindTradersByPhoneAsync(string phoneNumberStr);
+        Task<IEnumerable<UserInfor>> FindTradersByPhoneAsync(string phoneNumberStr);
         Task<List<UserInfor>> GetUserByRoleAsync(string roleName);
     }
 }
