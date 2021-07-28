@@ -63,9 +63,10 @@ namespace TnR_SS.Domain.Supervisor
                             else
                             {
                                 throw new Exception("Thông tin thương lái chưa chính xác !!!");
-                            }*/
-
+                            }*/ 
                         }
+
+                        await dbTransaction.CommitAsync();
                     }
                     catch
                     {

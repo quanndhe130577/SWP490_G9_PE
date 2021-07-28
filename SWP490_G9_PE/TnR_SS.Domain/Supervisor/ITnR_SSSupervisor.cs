@@ -79,6 +79,8 @@ namespace TnR_SS.Domain.Supervisor
         Task<List<FishTypeApiModel>> GetListFishTypeByPurchaseIdAsync(int purchaseId, int traderId);
         Task UpdateListFishTypeAsync(ListFishTypeModel listFishType, int traderId);
         List<WeightRecorderGetAllFishtypeResModel> WeightRecorderGetAllFishTypeByTraderIdAsync(int traderId, DateTime date);
+
+        Task<FishTypeApiModel> GetNewFishTypeAsync(int traderId, DateTime? date);
         #endregion
 
         #region Basket
