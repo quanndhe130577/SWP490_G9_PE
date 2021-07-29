@@ -193,8 +193,15 @@ namespace TnR_SS.Domain.Supervisor
             var fishtypeEdit = await _unitOfWork.FishTypes.FindAsync(fishTypeId);
             if (fishtypeEdit.TraderID == traderId)
             {
-                _unitOfWork.FishTypes.Delete(fishtypeEdit);
-                await _unitOfWork.SaveChangeAsync();
+                try
+                {
+                    _unitOfWork.FishTypes.Delete(fishtypeEdit);
+                    await _unitOfWork.SaveChangeAsync();
+                }
+                catch
+                {
+                    throw new Exception("Loại cá này đã được thanh toán trong hóa đơn mua, không thể xóa !!!");
+                }
             }
             else
             {
@@ -234,6 +241,25 @@ namespace TnR_SS.Domain.Supervisor
                 }
             }
             return true;
+        }
+
+        public async Task<FishTypeApiModel> GetNewFishTypeAsync(int traderId, DateTime? date)
+        {
+            var roleUser = await _unitOfWork.UserInfors.GetRolesAsync(traderId);
+            if (!roleUser.Contains(RoleName.Trader))
+            {
+                throw new Exception("Tài khoản không phù hợp !!!");
+            }
+
+            FishType newFish = new FishType();
+            newFish.TraderID = traderId;
+            newFish.Date = date == null ? DateTime.Now : date.Value;
+            newFish.FishName = "";
+
+            await _unitOfWork.FishTypes.CreateAsync(newFish);
+            await _unitOfWork.SaveChangeAsync();
+
+            return _mapper.Map<FishType, FishTypeApiModel>(newFish);
         }
     }
 }

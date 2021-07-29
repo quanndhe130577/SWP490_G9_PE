@@ -45,6 +45,35 @@ namespace TnR_SS.API.Controllers
         }
 
         [Authorize(Roles = RoleName.Trader)]
+        [HttpPost("getnew/{date_str?}")]
+        public async Task<ResponseModel> GetNew(string date_str = null)
+        {
+            var traderId = TokenManagement.GetUserIdInToken(HttpContext);
+            DateTime? date = DateTime.Now;
+
+            if (date_str == null)
+            {
+                date = null;
+            }
+            else
+            {
+                CultureInfo enUS = new CultureInfo("en-US");
+                DateTime newDate = DateTime.Now;
+                if (DateTime.TryParseExact(date_str, "ddMMyyyy", enUS, DateTimeStyles.None, out newDate))
+                {
+                    date = newDate;
+                }
+                else
+                {
+                    return new ResponseBuilder().Error("Lỗi format date !!!").ResponseModel;
+                }
+            }
+
+            var newFish = await _tnrssSupervisor.GetNewFishTypeAsync(traderId, date);
+            return new ResponseBuilder<FishTypeApiModel>().Success("Tạo giá cá thành công").WithData(newFish).ResponseModel;
+        }
+
+        [Authorize(Roles = RoleName.Trader)]
         [HttpGet("getlastall")]
         public async Task<ResponseModel> GetLastAllFishType()
         {
@@ -123,7 +152,7 @@ namespace TnR_SS.API.Controllers
 
         // lấy loại cá theo traderId để cho weight recorder
         [Authorize(Roles = RoleName.WeightRecorder)]
-        [HttpGet("wc/getall/traderId")]
+        [HttpGet("wc/getall/{traderId}")]
         public ResponseModel WeightRecorderGetAllFishType(int traderId)
         {
             var wcId = TokenManagement.GetUserIdInToken(HttpContext);

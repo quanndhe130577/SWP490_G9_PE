@@ -12,7 +12,7 @@ namespace TnR_SS.Domain.ApiModels.TransactionModel
 
     public class TraderInformation
     {
-        /*public int ID { get; set; }*/
+        public int ID { get; set; }
 
         [MaxLength(12)]
         [MinLength(10)]
