@@ -179,6 +179,11 @@ namespace TnR_SS.Domain.Supervisor
                     try
                     {
                         var purchaseDetail = await _unitOfWork.PurchaseDetails.FindAsync(data.Id);
+                        if(purchaseDetail is null)
+                        {
+                            throw new Exception("Không tìm thấy đơn mua !!!");
+                        }
+
                         var purchase = await _unitOfWork.Purchases.FindAsync(purchaseDetail.PurchaseId);
                         if (purchase.isCompleted.Equals(PurchaseStatus.Completed))
                         {

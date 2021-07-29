@@ -7,7 +7,7 @@ namespace TnR_SS.Domain.ApiModels.AccountModel.RequestModel
         public string AvatarBase64 { get; set; }
 
         [Required]
-        [MinLength(8)]
+        [MinLength(8, ErrorMessage = "Mật khẩu phải có ít nhất 8 kí tự")]
         public string Password { get; set; }
 
         [Required]
