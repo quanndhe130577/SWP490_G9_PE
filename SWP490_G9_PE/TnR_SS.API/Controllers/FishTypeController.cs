@@ -152,7 +152,7 @@ namespace TnR_SS.API.Controllers
 
         // lấy loại cá theo traderId để cho weight recorder
         [Authorize(Roles = RoleName.WeightRecorder)]
-        [HttpGet("wc/getall/traderId")]
+        [HttpGet("wc/getall/{traderId}")]
         public ResponseModel WeightRecorderGetAllFishType(int traderId)
         {
             var wcId = TokenManagement.GetUserIdInToken(HttpContext);

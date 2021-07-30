@@ -11,7 +11,7 @@ namespace TnR_SS.Domain.Repositories
     public interface IEmployeeRepository : IRepositoryBase<Employee>
     {
         List<Employee> GetAllEmployeeByTraderId(int traderId);
-        HistorySalaryEmp GetEmployeeSalary(int employeeId, DateTime date);
+        BaseSalaryEmp GetEmployeeSalary(int employeeId, DateTime date);
         List<EmployeeSalaryDetailApiModel> GetAllEmployeeSalaryDetailByTraderId(int employeeId, DateTime date);
 
         //List<EmployeeApiModel> GetAllEmployeeByStatus(int status);

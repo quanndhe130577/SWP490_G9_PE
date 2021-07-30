@@ -20,10 +20,10 @@ namespace TnR_SS.DataEFCore.Repositories
             return rs;
         }
 
-        public HistorySalaryEmp GetEmployeeSalary(int employeeId, DateTime date)
+        public BaseSalaryEmp GetEmployeeSalary(int employeeId, DateTime date)
         {
-            List<HistorySalaryEmp> historySalaryEmps = _context.HistorySalaryEmp
-            .Where(hse => hse.DateStart < date && (hse.DateEnd == null || hse.DateEnd > date) && hse.EmpId == employeeId)
+            List<BaseSalaryEmp> historySalaryEmps = _context.BaseSalaryEmp
+            .Where(hse => hse.StartDate < date && (hse.EndDate == null || hse.EndDate > date) && hse.EmpId == employeeId)
             .OrderByDescending(hse => hse.ID).ToList();
             if (historySalaryEmps.Count > 0)
             {
@@ -38,7 +38,7 @@ namespace TnR_SS.DataEFCore.Repositories
             List<Employee> employees = _context.Employees.Where(e => e.StartDate < date && e.EndDate == null || e.EndDate > date).ToList();
             foreach (Employee employee in employees)
             {
-                HistorySalaryEmp historySalaryEmp = GetEmployeeSalary(employee.ID, date);
+                BaseSalaryEmp historySalaryEmp = GetEmployeeSalary(employee.ID, date);
                 if (historySalaryEmp != null)
                 {
                     double? salary = historySalaryEmp.Salary, paid = 0, notpaid = 0; ;
@@ -77,19 +77,5 @@ namespace TnR_SS.DataEFCore.Repositories
             }
             return employeeSalaryDetails;
         }
-
-        /*public List<EmployeeApiModel> GetAllEmployeeByStatus(int status, int traderId)
-        {
-            var list = _context.Employees.AsEnumerable().Where(x => x.TraderId == traderId)
-                .OrderByDescending(x => x.Name).ToList();
-
-            foreach(var emp in list)
-            {
-                if(emp.EndDate == null)
-                {
-                 
-                }
-            }
-        }*/
     }
 }

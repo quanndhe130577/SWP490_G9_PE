@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TnR_SS.API.Common.Response;
+using TnR_SS.API.Common.Token;
 using TnR_SS.Domain.ApiModels.HistorySalaryEmpModel;
 using TnR_SS.Domain.Supervisor;
 
@@ -20,6 +21,20 @@ namespace TnR_SS.API.Controllers
         public BaseSalaryController(ITnR_SSSupervisor tnrssSupervisor)
         {
             _tnrssSupervisor = tnrssSupervisor;
+        }
+
+        [HttpGet("getallByTrader")]
+        public ResponseModel GetAllBaseSalaryByTraderId()
+        {
+            var traderId = TokenManagement.GetUserIdInToken(HttpContext);
+            var listEmp = _tnrssSupervisor.GetAllEmployeeByTraderId(traderId);
+            List<List<BaseSalaryEmpApiModel>> rs = new List<List<BaseSalaryEmpApiModel>>();
+            foreach (var emp in listEmp)
+            {
+                var listSalary = _tnrssSupervisor.GetAllSalaryByEmpId(emp.ID);
+                rs.Add(listSalary);
+            }
+            return new ResponseBuilder<List<List<BaseSalaryEmpApiModel>>>().Success("Lấy thông tin lương nhân viên thành công").WithData(rs).ResponseModel;
         }
 
         [HttpPost("create/{empId}")]
