@@ -81,7 +81,7 @@ namespace TnR_SS.Domain.Supervisor
             else
             {
                 return _unitOfWork.Buyers.GetAll(x => x.SellerId == wcId)
-                .Where(x => x.Name.Contains(input) || x.PhoneNumber == input).Take(5)
+                .Where(x => x.Name.Contains(input, StringComparison.InvariantCultureIgnoreCase) || x.PhoneNumber.Contains(input)).Take(5)
                 .Select(x => _mapper.Map<Buyer, BuyerApiModel>(x)).ToList();
             }
         }

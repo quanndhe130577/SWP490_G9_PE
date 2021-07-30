@@ -27,7 +27,7 @@ namespace TnR_SS.Domain.Supervisor
             {
                 foreach (EmployeeApiModel employeeApi in listEmpApi)
                 {
-                    HistorySalaryEmp historySalaryEmp = _unitOfWork.Employees.GetEmployeeSalary(employeeApi.ID, DateTime.Now);
+                    BaseSalaryEmp historySalaryEmp = _unitOfWork.Employees.GetEmployeeSalary(employeeApi.ID, DateTime.Now);
                     employeeApi.Salary = historySalaryEmp == null ? null : historySalaryEmp.Salary;
                 }
                 return listEmpApi;
@@ -49,7 +49,7 @@ namespace TnR_SS.Domain.Supervisor
                 list = AddStatusToEmployee(traderId);
                 foreach (EmployeeApiModel employeeApi in list)
                 {
-                    HistorySalaryEmp historySalaryEmp = _unitOfWork.Employees.GetEmployeeSalary(employeeApi.ID, DateTime.Now);
+                    BaseSalaryEmp historySalaryEmp = _unitOfWork.Employees.GetEmployeeSalary(employeeApi.ID, DateTime.Now);
                     employeeApi.Salary = historySalaryEmp == null ? null : historySalaryEmp.Salary;
                 }
             }
@@ -72,20 +72,20 @@ namespace TnR_SS.Domain.Supervisor
             {
                 await _unitOfWork.Employees.CreateAsync(obj);
                 await _unitOfWork.SaveChangeAsync();
+                if (employee.Salary != null)
+                {
+                    HistorySalaryEmp historySalaryEmp = new HistorySalaryEmp()
+                    {
+                        ID = 0,
+                        EmpId = obj.ID,
+                        DateStart = obj.StartDate,
+                        DateEnd = null,
+                        Salary = (double)employee.Salary,
+                    };
+                    await _unitOfWork.HistorySalaryEmps.CreateAsync(historySalaryEmp);
+                }
+                await _unitOfWork.SaveChangeAsync();
                 return _mapper.Map<Employee, EmployeeApiModel>(obj);
-                // if (employee.Salary != null)
-                // {
-                //     HistorySalaryEmp historySalaryEmp = new HistorySalaryEmp()
-                //     {
-                //         ID = 0,
-                //         EmpId = obj.ID,
-                //         DateStart = obj.StartDate,
-                //         DateEnd = null,
-                //         Salary = (double)employee.Salary,
-                //     };
-                //     await _unitOfWork.HistorySalaryEmps.CreateAsync(historySalaryEmp);
-                // }
-                // await _unitOfWork.SaveChangeAsync();
             }
         }
 
@@ -110,37 +110,37 @@ namespace TnR_SS.Domain.Supervisor
                 else
                 {
                     _unitOfWork.Employees.Update(empEdit);
-                    HistorySalaryEmp historySalaryEmp = _unitOfWork.Employees.GetEmployeeSalary(employee.ID, DateTime.Now);
+                    BaseSalaryEmp historySalaryEmp = _unitOfWork.Employees.GetEmployeeSalary(employee.ID, DateTime.Now);
                     if (historySalaryEmp == null)
                     {
                         if (employee.Salary != null)
                         {
-                            HistorySalaryEmp newHistorySalaryEmp = new HistorySalaryEmp()
+                            BaseSalaryEmp newHistorySalaryEmp = new BaseSalaryEmp()
                             {
                                 ID = 0,
                                 EmpId = employee.ID,
-                                DateStart = employee.StartDate,
-                                DateEnd = null,
+                                StartDate = employee.StartDate,
+                                EndDate = null,
                                 Salary = (double)employee.Salary,
                             };
-                            await _unitOfWork.HistorySalaryEmps.CreateAsync(newHistorySalaryEmp);
+                            await _unitOfWork.BaseSalaryEmps.CreateAsync(newHistorySalaryEmp);
                         }
                     }
                     else
                     {
                         if (historySalaryEmp.Salary != employee.Salary)
                         {
-                            historySalaryEmp.DateEnd = DateTime.Now;
-                            HistorySalaryEmp newHistorySalaryEmp = new HistorySalaryEmp()
+                            historySalaryEmp.EndDate = DateTime.Now;
+                            BaseSalaryEmp newHistorySalaryEmp = new BaseSalaryEmp()
                             {
                                 ID = 0,
                                 EmpId = employee.ID,
-                                DateStart = employee.StartDate,
-                                DateEnd = null,
+                                StartDate = employee.StartDate,
+                                EndDate = null,
                                 Salary = (double)employee.Salary,
                             };
-                            await _unitOfWork.HistorySalaryEmps.CreateAsync(newHistorySalaryEmp);
-                            _unitOfWork.HistorySalaryEmps.Update(historySalaryEmp);
+                            await _unitOfWork.BaseSalaryEmps.CreateAsync(newHistorySalaryEmp);
+                            _unitOfWork.BaseSalaryEmps.Update(historySalaryEmp);
 
                         }
                     }
