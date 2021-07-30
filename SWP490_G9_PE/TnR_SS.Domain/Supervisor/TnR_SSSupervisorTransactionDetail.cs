@@ -182,7 +182,7 @@ namespace TnR_SS.Domain.Supervisor
 
         public async Task CreateTransactionDetailAsync(CreateTransactionDetailReqModel apiModel, int userId)
         {
-            if(apiModel.IsPaid && apiModel.BuyerId is null)
+            if(!apiModel.IsPaid && apiModel.BuyerId is null)
             {
                 throw new Exception("Không có thông tin người mua thì ko thể ghi nợ !!!");
             }
