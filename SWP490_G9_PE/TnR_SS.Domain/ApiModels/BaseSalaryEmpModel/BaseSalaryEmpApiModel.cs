@@ -13,5 +13,6 @@ namespace TnR_SS.Domain.ApiModels.HistorySalaryEmpModel
         public DateTime? EndDate { get; set; }
         public double Salary { get; set; }
         public int EmpId { get; set; }
+        public string EmpName { get; set; }
     }
 }
