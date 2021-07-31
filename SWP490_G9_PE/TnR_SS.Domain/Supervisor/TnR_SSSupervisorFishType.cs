@@ -255,7 +255,7 @@ namespace TnR_SS.Domain.Supervisor
             FishType newFish = new FishType();
             newFish.TraderID = traderId;
             newFish.Date = date == null ? DateTime.Now : date.Value;
-            newFish.FishName = "";
+            newFish.FishName = "Cá mới";
 
             await _unitOfWork.FishTypes.CreateAsync(newFish);
             await _unitOfWork.SaveChangeAsync();
