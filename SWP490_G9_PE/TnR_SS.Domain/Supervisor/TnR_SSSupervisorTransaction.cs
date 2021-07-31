@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TnR_SS.Domain.ApiModels.BuyerModel;
+using TnR_SS.Domain.ApiModels.FishTypeModel;
 using TnR_SS.Domain.ApiModels.TransactionModel;
 using TnR_SS.Domain.Entities;
 
@@ -48,25 +50,36 @@ namespace TnR_SS.Domain.Supervisor
                     {
                         foreach (var item in apiModel.ListTraderId)
                         {
-                            await CreateTransactionAsync(item, wcId, apiModel.Date);
-                            /*// check role trader in transaction
-                            var listRole = await _unitOfWork.UserInfors.GetRolesAsync(item);
-                            if (listRole.Contains(RoleName.Trader))
+                            // nếu date là buổi sáng ngày hôm sau thì chuyển thành buổi chiều ngày hôm trước
+                            if (apiModel.Date.Hour < 12/* && apiModel.Date.Hour + apiModel.Date.Minute + apiModel.Date.Second > 0*/)
                             {
-                                await _unitOfWork.Transactions.CreateAsync(new Transaction()
-                                {
-                                    TraderId = item,
-                                    WeightRecorderId = wcId,
-                                    Date = apiModel.Date
-                                });
+                                apiModel.Date.AddHours(-12);
                             }
-                            else
+
+                            var tran = _unitOfWork.Transactions.GetAll(x => x.TraderId == item && x.WeightRecorderId == wcId && x.Date.Date == apiModel.Date.Date).FirstOrDefault();
+                            if (tran == null)
                             {
-                                throw new Exception("Thông tin thương lái chưa chính xác !!!");
-                            }*/ 
+                                await CreateTransactionAsync(item, wcId, apiModel.Date);
+                                /*// check role trader in transaction
+                                var listRole = await _unitOfWork.UserInfors.GetRolesAsync(item);
+                                if (listRole.Contains(RoleName.Trader))
+                                {
+                                    await _unitOfWork.Transactions.CreateAsync(new Transaction()
+                                    {
+                                        TraderId = item,
+                                        WeightRecorderId = wcId,
+                                        Date = apiModel.Date
+                                    });
+                                }
+                                else
+                                {
+                                    throw new Exception("Thông tin thương lái chưa chính xác !!!");
+                                }*/
+                            }
+
+                            await dbTransaction.CommitAsync();
                         }
 
-                        await dbTransaction.CommitAsync();
                     }
                     catch
                     {
@@ -78,18 +91,18 @@ namespace TnR_SS.Domain.Supervisor
             });
         }
 
-        public async Task<List<TransactionResModel>> GetAllTransactionAsync(int wcId, DateTime? date)
+        public async Task<List<TransactionResModel>> GetAllTransactionAsync(int userId, DateTime? date)
         {
-            var roleUser = await _unitOfWork.UserInfors.GetRolesAsync(wcId);
+            var roleUser = await _unitOfWork.UserInfors.GetRolesAsync(userId);
             var listTran = new List<Transaction>();
             if (roleUser.Contains(RoleName.WeightRecorder))
             {
-                listTran = _unitOfWork.Transactions.GetAll(x => x.WeightRecorderId == wcId).OrderByDescending(x => x.Date).ToList();
+                listTran = _unitOfWork.Transactions.GetAll(x => x.WeightRecorderId == userId).OrderByDescending(x => x.Date).ToList();
             }
-            /*else if (roleUser.Contains(RoleName.Trader))
+            else if (roleUser.Contains(RoleName.Trader))
             {
                 listTran = _unitOfWork.Transactions.GetAll(x => x.TraderId == userId).OrderByDescending(x => x.Date).ToList();
-            }*/
+            }
             else
             {
                 throw new Exception("Tài khoản không hợp lệ");
@@ -107,8 +120,25 @@ namespace TnR_SS.Domain.Supervisor
                 tran.ID = item.ID;
                 tran.Date = item.Date;
                 tran.Trader = _mapper.Map<UserInfor, TraderInformation>(await _unitOfWork.UserInfors.FindAsync(item.TraderId));
+                tran.TransactionDetails = await GetListTransactionDetailModelAsync(item.ID);
 
                 list.Add(tran);
+            }
+
+            return list;
+        }
+
+        private async Task<List<TransactionDetailInformation>> GetListTransactionDetailModelAsync(int tranId)
+        {
+            List<TransactionDetailInformation> list = new List<TransactionDetailInformation>();
+
+            var listTranDe = _unitOfWork.TransactionDetails.GetAll(x => x.TransId == tranId);
+            foreach (var tran in listTranDe)
+            {
+                TransactionDetailInformation apiModel = _mapper.Map<TransactionDetail, TransactionDetailInformation>(tran);
+                apiModel.FishType = _mapper.Map<FishType, FishTypeApiModel>(await _unitOfWork.FishTypes.FindAsync(tran.FishTypeId));
+                apiModel.Buyer = _mapper.Map<Buyer, BuyerApiModel>(await _unitOfWork.Buyers.FindAsync(tran.BuyerId));
+                list.Add(apiModel);
             }
 
             return list;

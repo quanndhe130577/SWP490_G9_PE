@@ -112,6 +112,7 @@ namespace TnR_SS.Domain.ApiModels
             CreateMap<CreateTransactionDetailReqModel, TransactionDetail>();
             CreateMap<CreateTransactionDetailReqModelV2, TransactionDetail>();
             CreateMap<TransactionDetail, GetAllTransactionDetailResModel>();
+            CreateMap<TransactionDetail, TransactionDetailInformation>();
             #endregion
 
 
