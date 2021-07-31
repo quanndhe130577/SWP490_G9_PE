@@ -20,7 +20,7 @@ namespace TnR_SS.Domain.ApiModels.UserInforModel
         public string FirstName { get; set; }
 
         [Required]
-        public string Lastname { get; set; }
+        public string LastName { get; set; }
 
     }
 }

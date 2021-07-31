@@ -46,7 +46,7 @@ namespace TnR_SS.DataEFCore.Migrations
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Lastname = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     PhoneNumber = table.Column<string>(type: "varchar(12)", unicode: false, maxLength: 12, nullable: false),
                     DOB = table.Column<DateTime>(type: "date", nullable: false),
                     IdentifyCode = table.Column<string>(type: "varchar(20)", unicode: false, maxLength: 20, nullable: true),
