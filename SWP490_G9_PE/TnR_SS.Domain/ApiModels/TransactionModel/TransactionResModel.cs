@@ -27,7 +27,7 @@ namespace TnR_SS.Domain.ApiModels.TransactionModel
         public string FirstName { get; set; }
 
         [Required]
-        public string Lastname { get; set; }
+        public string LastName { get; set; }
     }
 
     public class TransactionDetailInformation
