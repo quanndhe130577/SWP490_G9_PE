@@ -132,7 +132,7 @@ namespace TnR_SS.Domain.Supervisor
         {
             List<TransactionDetailInformation> list = new List<TransactionDetailInformation>();
 
-            var listTranDe = _unitOfWork.TransactionDetails.GetAll(x => x.TransId == tranId);
+            var listTranDe = _unitOfWork.TransactionDetails.GetAll(x => x.TransId == tranId).OrderByDescending(x => x.ID);
             foreach (var tran in listTranDe)
             {
                 TransactionDetailInformation apiModel = _mapper.Map<TransactionDetail, TransactionDetailInformation>(tran);
