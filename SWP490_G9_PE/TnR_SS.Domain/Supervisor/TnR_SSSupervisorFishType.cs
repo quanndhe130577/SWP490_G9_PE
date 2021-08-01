@@ -54,7 +54,7 @@ namespace TnR_SS.Domain.Supervisor
         {
             if (date.Hour < 12)
             {
-                date.AddDays(-1);
+                date = date.AddDays(-1);
             }
 
             var listType = _unitOfWork.FishTypes.GetAll(X => X.TraderID == traderId && X.Date.Date == date.Date).Distinct();

@@ -53,7 +53,7 @@ namespace TnR_SS.Domain.Supervisor
                             // nếu date là buổi sáng ngày hôm sau thì chuyển thành buổi chiều ngày hôm trước
                             if (apiModel.Date.Hour < 12/* && apiModel.Date.Hour + apiModel.Date.Minute + apiModel.Date.Second > 0*/)
                             {
-                                apiModel.Date.AddHours(-12);
+                                apiModel.Date = apiModel.Date.AddHours(-12);
                             }
 
                             var tran = _unitOfWork.Transactions.GetAll(x => x.TraderId == item && x.WeightRecorderId == wcId && x.Date.Date == apiModel.Date.Date).FirstOrDefault();

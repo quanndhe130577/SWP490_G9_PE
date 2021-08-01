@@ -98,6 +98,7 @@ namespace TnR_SS.Domain.Supervisor
         Task UpdatePurchaseAsync(PurchaseApiModel models, int traderId);
         Task DeletePurchaseAsync(int purchaseId, int traderId);
         Task<PurchaseResModel> ChotSoAsync(ChotSoApiModel data, int traderId);
+        Task UpdatePondOwnerInPurchaseAsync(PurchaseUpdatePondOwnerModel apiModel, int traderId);
         #endregion
 
         #region PondOwner
