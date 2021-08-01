@@ -11,7 +11,7 @@ namespace TnR_SS.Domain.ApiModels.AccountModel
 
         [Required]
         [MaxLength(50)]
-        public string LastName { get; set; }
+        public string Lastname { get; set; }
 
 
         [Required]

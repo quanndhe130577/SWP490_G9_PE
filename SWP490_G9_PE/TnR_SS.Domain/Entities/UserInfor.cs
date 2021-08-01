@@ -15,7 +15,7 @@ namespace TnR_SS.Domain.Entities
         public string FirstName { get; set; }
 
         [Required]
-        public string LastName { get; set; }
+        public string Lastname { get; set; }
 
         [Required]
         public override string PhoneNumber { get; set; }

@@ -29,7 +29,7 @@ namespace TnR_SS.Domain.Supervisor
                 DebtApiModel model = new();
                 pondOwner = await _unitOfWork.PondOwners.FindAsync(purchase.PondOwnerID);
                 model.Creditors = pondOwner.Name;
-                model.Debtor = user.LastName + " " + user.FirstName;
+                model.Debtor = user.Lastname + " " + user.FirstName;
                 model.DebtMoney = purchase.PayForPondOwner;
                 model.Date = purchase.Date;
 
@@ -62,7 +62,7 @@ namespace TnR_SS.Domain.Supervisor
             {
                 DebtApiModel model = new();
 
-                model.Creditors = user.LastName + " " + user.FirstName;
+                model.Creditors = user.Lastname + " " + user.FirstName;
                 var buyer = await _unitOfWork.Buyers.FindAsync(td.BuyerId);
                 model.Debtor = buyer != null ? _mapper.Map<Buyer, BuyerApiModel>(buyer).Name : null;
                 model.DebtMoney = td.SellPrice;

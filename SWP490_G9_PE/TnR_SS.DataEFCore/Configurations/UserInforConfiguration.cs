@@ -42,7 +42,7 @@ namespace TnR_SS.DataEFCore.Configurations
                 .HasMaxLength(20)
                 .IsUnicode(false);
 
-            entity.Property(e => e.LastName)
+            entity.Property(e => e.Lastname)
                 .IsRequired()
                 .HasMaxLength(50);
 
