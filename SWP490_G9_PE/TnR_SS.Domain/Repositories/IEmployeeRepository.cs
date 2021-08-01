@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TnR_SS.Domain.ApiModels.EmployeeModel;
+using TnR_SS.Domain.ApiModels.HistorySalaryEmpModel;
 using TnR_SS.Domain.Entities;
 
 namespace TnR_SS.Domain.Repositories
@@ -13,6 +14,7 @@ namespace TnR_SS.Domain.Repositories
         List<Employee> GetAllEmployeeByTraderId(int traderId);
         BaseSalaryEmp GetEmployeeSalary(int employeeId, DateTime date);
         List<EmployeeSalaryDetailApiModel> GetAllEmployeeSalaryDetailByTraderId(int employeeId, DateTime date);
+        double GetEmployeeAdvanceSalary(int employeeId, DateTime date);
 
         //List<EmployeeApiModel> GetAllEmployeeByStatus(int status);
     }

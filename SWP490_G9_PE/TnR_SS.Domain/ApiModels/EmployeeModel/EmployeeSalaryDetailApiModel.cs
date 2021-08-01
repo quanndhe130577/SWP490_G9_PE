@@ -13,11 +13,13 @@ namespace TnR_SS.Domain.ApiModels.EmployeeModel
         [Required]
         public string Name { get; set; }
 
-        public double? Paid { get; set; }
-
-        public double? NotPaid { get; set; }
+        public double Status { get; set; }
 
         public double? Salary { get; set; }
+
+        public double? BaseSalary { get; set; }
+
+        public double? AdvanceSalary { get; set; }
 
     }
 

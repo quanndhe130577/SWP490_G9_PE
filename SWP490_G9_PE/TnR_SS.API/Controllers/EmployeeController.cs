@@ -1,13 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using TnR_SS.API.Common.Response;
 using TnR_SS.API.Common.Token;
 using TnR_SS.Domain.ApiModels.EmployeeModel;
-using TnR_SS.Domain.ApiModels.EmployeeModel.ResponseModel;
-using TnR_SS.Domain.ApiModels.FishTypeModel.ResponseModel;
+using TnR_SS.Domain.ApiModels.HistorySalaryEmpModel;
 using TnR_SS.Domain.Supervisor;
 
 namespace TnR_SS.API.Controllers
@@ -70,12 +68,21 @@ namespace TnR_SS.API.Controllers
             var detail = _tnrssSupervisor.GetDetailEmployee(traderId, empId);
             return new ResponseBuilder<EmployeeApiModel>().Success("Lấy thông tin nhân viên thành công").WithData(detail).ResponseModel;
         }
+
         [HttpGet("salaryDetail/{date}")]
         public ResponseModel SalaryDetailEmployee(DateTime date)
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
+            date = new DateTime(date.Year, date.Month, 1);
             var detail = _tnrssSupervisor.GetAllEmployeeSalaryDetailByTraderId(traderId, date);
             return new ResponseBuilder<List<EmployeeSalaryDetailApiModel>>().Success("Lấy thông tin lương nhân viên thành công").WithData(detail).ResponseModel;
+        }
+
+        [HttpPost("updateBaseSalary")]
+        public async Task<ResponseModel> UpdateSalaryEmployee(BaseSalaryEmpApiModel baseSalary)
+        {
+            var detail = await _tnrssSupervisor.UpdateSalaryEmployee(baseSalary);
+            return new ResponseBuilder().Success("Cập nhật lương nhân viên thành công").ResponseModel;
         }
     }
 }

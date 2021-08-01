@@ -134,6 +134,7 @@ namespace TnR_SS.Domain.Supervisor
         Task DeleteEmployeeAsync(int empId, int traderId);
         EmployeeApiModel GetDetailEmployee(int traderId, int empId);
         List<EmployeeSalaryDetailApiModel> GetAllEmployeeSalaryDetailByTraderId(int traderId, DateTime date);
+        Task<int> UpdateSalaryEmployee(BaseSalaryEmpApiModel salaryEmpApiModel);
         #endregion
 
         #region TimeKeeping
