@@ -25,6 +25,7 @@ namespace TnR_SS.Domain.Supervisor
                 FishType newFish = type;
                 newFish.Date = DateTime.Now;
                 newFish.ID = 0;
+                newFish.PurchaseID = null;
                 await _unitOfWork.FishTypes.CreateAsync(newFish);
                 await _unitOfWork.SaveChangeAsync();
                 list.Add(_mapper.Map<FishType, FishTypeApiModel>(newFish));
@@ -254,7 +255,7 @@ namespace TnR_SS.Domain.Supervisor
             FishType newFish = new FishType();
             newFish.TraderID = traderId;
             newFish.Date = date == null ? DateTime.Now : date.Value;
-            newFish.FishName = "";
+            newFish.FishName = "Cá mới";
 
             await _unitOfWork.FishTypes.CreateAsync(newFish);
             await _unitOfWork.SaveChangeAsync();

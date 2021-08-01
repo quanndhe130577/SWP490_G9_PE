@@ -16,7 +16,7 @@ namespace TnR_SS.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = RoleName.WeightRecorder)]
+    [Authorize]
     public class TransactionController : ControllerBase
     {
         private readonly ITnR_SSSupervisor _tnrssSupervisor;
@@ -26,7 +26,8 @@ namespace TnR_SS.API.Controllers
             _tnrssSupervisor = tnrssSupervisor;
         }
 
-        [Route("createlist")]    
+        [Authorize(Roles = RoleName.WeightRecorder)]
+        [Route("createlist")]
         public async Task<ResponseModel> Create(CreateListTransactionReqModel createModel)
         {
             var wcId = TokenManagement.GetUserIdInToken(HttpContext);
@@ -37,7 +38,7 @@ namespace TnR_SS.API.Controllers
         [Route("getall/{date_str?}")]
         public async Task<ResponseModel> GetAll(string date_str = null)
         {
-            var wcId = TokenManagement.GetUserIdInToken(HttpContext);
+            var userId = TokenManagement.GetUserIdInToken(HttpContext);
             DateTime? date = DateTime.Now;
 
             if (date_str == null)
@@ -58,7 +59,7 @@ namespace TnR_SS.API.Controllers
                 }
             }
 
-            var rs = await _tnrssSupervisor.GetAllTransactionAsync(wcId, date);
+            var rs = await _tnrssSupervisor.GetAllTransactionAsync(userId, date);
             return new ResponseBuilder<List<TransactionResModel>>().Success("Lấy thông tin hóa đơn thành công !!").WithData(rs).ResponseModel;
 
         }

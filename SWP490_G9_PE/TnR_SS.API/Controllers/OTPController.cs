@@ -10,6 +10,7 @@ using TnR_SS.API.Common.Token;
 using TnR_SS.Domain.ApiModels.OTPModel.RequestModel;
 using TnR_SS.Domain.Supervisor;
 using TnR_SS.API.Common.TwilioAPI;
+using System.ComponentModel.DataAnnotations;
 
 namespace TnR_SS.API.Controller
 {
@@ -29,7 +30,7 @@ namespace TnR_SS.API.Controller
         #region Register OTP
         [HttpGet("register/{phoneNumber}")]
         [AllowAnonymous]
-        public async Task<ResponseModel> SendRegisterUserOTP(string phoneNumber)
+        public async Task<ResponseModel> SendRegisterUserOTP([RegularExpression(@"(84|0[3|5|7|8|9])+([0-9]{8})\b", ErrorMessage = "Số điện thoại không đúng")] string phoneNumber)
         {
             if (_tnrssSupervisor.CheckUserPhoneExists(phoneNumber))
             {

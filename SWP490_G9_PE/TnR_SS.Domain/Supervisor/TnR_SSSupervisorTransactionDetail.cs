@@ -16,7 +16,7 @@ namespace TnR_SS.Domain.Supervisor
     {
         private async Task WeightRecorderCreateTransactionDetailAsync(CreateTransactionDetailReqModel apiModel, int wcId)
         {
-            if (apiModel.IsPaid && apiModel.BuyerId is null)
+            if (!apiModel.IsPaid && apiModel.BuyerId is null)
             {
                 throw new Exception("Không có thông tin người mua thì ko thể ghi nợ !!!");
             }
@@ -49,7 +49,7 @@ namespace TnR_SS.Domain.Supervisor
 
         private async Task WeightRecorderCreateTransactionDetailV2Async(CreateTransactionDetailReqModelV2 apiModel, int wcId)
         {
-            if (apiModel.IsPaid && apiModel.BuyerId is null)
+            if (!apiModel.IsPaid && apiModel.BuyerId is null)
             {
                 throw new Exception("Không có thông tin người mua thì ko thể ghi nợ !!!");
             }
@@ -133,7 +133,7 @@ namespace TnR_SS.Domain.Supervisor
 
         private async Task TraderCreateTransactionDetailV2Async(CreateTransactionDetailReqModelV2 apiModel, int traderId)
         {
-            if (apiModel.IsPaid && apiModel.BuyerId is null)
+            if (!apiModel.IsPaid && apiModel.BuyerId is null)
             {
                 throw new Exception("Không có thông tin người mua thì ko thể ghi nợ !!!");
             }
@@ -182,7 +182,7 @@ namespace TnR_SS.Domain.Supervisor
 
         public async Task CreateTransactionDetailAsync(CreateTransactionDetailReqModel apiModel, int userId)
         {
-            if(apiModel.IsPaid && apiModel.BuyerId is null)
+            if (!apiModel.IsPaid && apiModel.BuyerId is null)
             {
                 throw new Exception("Không có thông tin người mua thì ko thể ghi nợ !!!");
             }
@@ -204,7 +204,7 @@ namespace TnR_SS.Domain.Supervisor
 
         public async Task CreateTransactionDetailV2Async(CreateTransactionDetailReqModelV2 apiModel, int userId)
         {
-            if (apiModel.IsPaid && apiModel.BuyerId is null)
+            if (!apiModel.IsPaid && apiModel.BuyerId is null)
             {
                 throw new Exception("Không có thông tin người mua thì ko thể ghi nợ !!!");
             }
@@ -253,5 +253,7 @@ namespace TnR_SS.Domain.Supervisor
 
             return list;
         }
+
+
     }
 }
