@@ -57,7 +57,7 @@ namespace TnR_SS.Domain.Supervisor
                 date = date.AddDays(-1);
             }
 
-            var listType = _unitOfWork.FishTypes.GetAll(X => X.TraderID == traderId && X.Date.Date == date.Date).Distinct();
+            var listType = _unitOfWork.FishTypes.GetAll(X => X.TraderID == traderId && X.Date.Date == date.Date && X.PurchaseID != null).Distinct();
             List<WeightRecorderGetAllFishtypeResModel> list = new List<WeightRecorderGetAllFishtypeResModel>();
             foreach (var type in listType)
             {
