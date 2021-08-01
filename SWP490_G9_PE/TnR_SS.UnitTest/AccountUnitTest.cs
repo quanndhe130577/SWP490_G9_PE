@@ -141,7 +141,7 @@ namespace TnR_SS.UnitTest
                 Avatar = null,
                 Dob = DateTime.Parse("10/21/1999"),
                 FirstName = "Quan",
-                Lastname = "Nguyen",
+                LastName = "Nguyen",
                 IdentifyCode = "123456789",
                 PhoneNumber = "0985191100"
             };
