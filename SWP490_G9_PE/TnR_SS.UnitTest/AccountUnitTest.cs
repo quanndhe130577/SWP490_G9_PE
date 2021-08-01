@@ -35,7 +35,7 @@ namespace TnR_SS.UnitTest
                           UserName = "0966848112",
                           PhoneNumber = "0966848112",
                           FirstName = "Q",
-                          Lastname = "Q"
+                          LastName = "Q"
                       }
                  };
             Mock dbContextMock = new Mock<TnR_SSContext>();
@@ -48,7 +48,7 @@ namespace TnR_SS.UnitTest
                 Avatar = null,
                 Dob = DateTime.Parse("10/21/1999"),
                 FirstName = "Quan",
-                Lastname = "Nguyen",
+                LastName = "Nguyen",
                 IdentifyCode = "123456789",
                 PhoneNumber = "0966848112",
                 UserName = "0966848112",
@@ -109,7 +109,7 @@ namespace TnR_SS.UnitTest
                           UserName = "0966848112",
                           PhoneNumber = "0966848112",
                           FirstName = "Q",
-                          Lastname = "Q"
+                          LastName = "Q"
                       }
                  };
             Mock dbContextMock = new Mock<TnR_SSContext>();
@@ -129,7 +129,7 @@ namespace TnR_SS.UnitTest
                 Avatar = null,
                 Dob = DateTime.Parse("10/21/1999"),
                 FirstName = "Quan",
-                Lastname = "Nguyen",
+                LastName = "Nguyen",
                 IdentifyCode = "123456789",
                 PhoneNumber = "0985191100",
                 UserName = "0985191100",
