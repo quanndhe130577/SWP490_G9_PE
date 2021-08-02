@@ -39,7 +39,7 @@ namespace TnR_SS.Domain.ApiModels
 
             CreateMap<UpdateUserReqModel, UserInfor>().ReverseMap();
             CreateMap<FindTraderByPhoneApiModel, UserInfor>().ReverseMap();
-            CreateMap<TraderInformation, UserInfor>().ReverseMap();
+            CreateMap<UserInformation, UserInfor>().ReverseMap();
             CreateMap<UserInfor, UserResModel>().ForMember(destination => destination.UserID, options => options.MapFrom(source => source.Id)).ReverseMap();
             #endregion
 
