@@ -153,7 +153,7 @@ namespace TnR_SS.API.Controllers
         // lấy loại cá theo traderId để cho weight recorder
         //[Authorize(Roles = RoleName.WeightRecorder)]
         [HttpGet("wc/getall/{traderId?}")]
-        public async Task<ResponseModel> WeightRecorderGetAllFishType(int? traderId)
+        public async Task<ResponseModel> GetAllFishTypeForTransactionDetail(int? traderId)
         {
             var userId = TokenManagement.GetUserIdInToken(HttpContext);
             var fishTypes = await _tnrssSupervisor.WeightRecorderGetAllFishTypeByTraderIdAsync(traderId, userId, DateTime.Now);

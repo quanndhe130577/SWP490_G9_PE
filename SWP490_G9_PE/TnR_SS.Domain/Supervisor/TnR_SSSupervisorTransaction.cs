@@ -121,7 +121,8 @@ namespace TnR_SS.Domain.Supervisor
                 TransactionResModel tran = new TransactionResModel();
                 tran.ID = item.ID;
                 tran.Date = item.Date;
-                tran.Trader = _mapper.Map<UserInfor, TraderInformation>(await _unitOfWork.UserInfors.FindAsync(item.TraderId));
+                tran.Trader = _mapper.Map<UserInfor, UserInformation>(await _unitOfWork.UserInfors.FindAsync(item.TraderId));
+                tran.WeightRecorder = item.WeightRecorderId != null ? _mapper.Map<UserInfor, UserInformation>(await _unitOfWork.UserInfors.FindAsync(item.WeightRecorderId)) : null;
                 tran.TransactionDetails = await GetListTransactionDetailModelAsync(item.ID);
 
                 list.Add(tran);
@@ -145,5 +146,42 @@ namespace TnR_SS.Domain.Supervisor
 
             return list;
         }
+
+        public async Task<List<GetAllTransactionFollowDateResModel>> GetAllTransactionFollowDateAsync(int userId)
+        {
+            var roleUser = await _unitOfWork.UserInfors.GetRolesAsync(userId);
+            var listDate = new List<DateTime>();
+            if (roleUser.Contains(RoleName.WeightRecorder))
+            {
+                listDate = _unitOfWork.Transactions.GetAll(x => x.WeightRecorderId == userId).Select(x => x.Date.Date).OrderByDescending(x => x.Date).Distinct().ToList();
+            }
+            else if (roleUser.Contains(RoleName.Trader))
+            {
+                listDate = _unitOfWork.Transactions.GetAll(x => x.TraderId == userId).Select(x => x.Date.Date).OrderByDescending(x => x.Date).Distinct().ToList();
+            }
+            else
+            {
+                throw new Exception("Tài khoản không hợp lệ");
+            }
+
+            var listTran = new List<GetAllTransactionFollowDateResModel>();
+            foreach (var date in listDate)
+            {
+                GetAllTransactionFollowDateResModel newTran = new GetAllTransactionFollowDateResModel();
+                newTran.Date = date;
+                if (roleUser.Contains(RoleName.WeightRecorder))
+                {
+                    listDate = _unitOfWork.Transactions.GetAll(x => x.WeightRecorderId == userId).Select(x => x.Date.Date).OrderByDescending(x => x.Date).Distinct().ToList();
+                }
+                else if (roleUser.Contains(RoleName.Trader))
+                {
+                    newTran.ListTrader.Add(_mapper.Map<UserInfor, UserInformation>(await _unitOfWork.UserInfors.FindAsync(userId)));
+                }
+            }
+
+            return listTran;
+        }
+
+        //private List<UserInformation> GetAllTrader
     }
 }
