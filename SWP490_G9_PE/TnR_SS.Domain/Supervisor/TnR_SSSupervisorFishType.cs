@@ -68,7 +68,9 @@ namespace TnR_SS.Domain.Supervisor
             {
                 // lay ra ngay co purchase gan nhat
                 var dateGanNhat = _unitOfWork.Purchases.GetAll(x => x.TraderID == traderId).OrderByDescending(x => x.Date).Select(x => x.Date).FirstOrDefault();
+                // lấy ra purchase có ngày = ngày gần nhất
                 var listPurchaseId = _unitOfWork.Purchases.GetAll(x => x.TraderID == traderId && x.Date.Date == dateGanNhat.Date).Select(x => x.ID).ToList();
+                // lấy ra loại cá của các purchase đó
                 listType = _unitOfWork.FishTypes.GetAllFishTypeByPurchaseIds(listPurchaseId);
                 //listType = _unitOfWork.FishTypes.GetAll(X => X.TraderID == traderId.Value && X.Date.Date == date.Date && X.PurchaseID != null).Distinct().ToList();
             }

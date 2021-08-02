@@ -35,8 +35,16 @@ namespace TnR_SS.DataEFCore.Repositories
         public double GetTotalWeightOfFishType(int fishTypeId)
         {
             return _context.PurchaseDetails.Where(x => x.FishTypeID == fishTypeId)
-                .Join(_context.Baskets, pd => )
-                .Sum(x => x.Weight);
+                .Join(
+                    _context.Baskets,
+                    pd => pd.BasketId,
+                    bk => bk.ID,
+                    (pd, bk) => new
+                    {
+                        realWeight = pd.Weight - bk.Weight
+                    }
+                )
+                .Sum(x => x.realWeight);
         }
 
         public double GetSellWeightOfFishType(int fishTypeId)
