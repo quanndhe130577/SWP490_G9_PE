@@ -54,7 +54,7 @@ namespace TnR_SS.DataEFCore.Repositories
                 {
                     status += tk.Status;
                 }
-                List<HistorySalaryEmp> historySalaryEmps = _context.HistorySalaryEmp.Where(hse => hse.DateStart.Month == date.Month && hse.DateStart.Year == date.Year).ToList();
+                List<HistorySalaryEmp> historySalaryEmps = _context.HistorySalaryEmp.Where(hse => hse.DateStart.Month == date.Month && hse.DateStart.Year == date.Year && hse.EmpId == employee.ID).ToList();
                 if (baseSalaryEmp != null)
                 {
                     double? baseSalary = baseSalaryEmp.Salary;

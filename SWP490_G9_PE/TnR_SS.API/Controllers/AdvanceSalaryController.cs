@@ -46,7 +46,7 @@ namespace TnR_SS.API.Controllers
         {
             var ed = await _tnrssSupervisor.GetAdvanceSalary(empId);
             await _tnrssSupervisor.DeleteAdvanceSalary(ed);
-            return new ResponseBuilder().Success("Xóa thông tin nợ thành công").ResponseModel;
+            return new ResponseBuilder().Success("Xóa lương ứng trước thành công").ResponseModel;
         }
     }
 }
