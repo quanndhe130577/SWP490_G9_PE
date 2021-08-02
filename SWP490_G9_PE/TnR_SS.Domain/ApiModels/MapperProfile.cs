@@ -113,8 +113,8 @@ namespace TnR_SS.Domain.ApiModels
             CreateMap<CreateTransactionDetailReqModelV2, TransactionDetail>();
             CreateMap<TransactionDetail, GetAllTransactionDetailResModel>();
             CreateMap<TransactionDetail, TransactionDetailInformation>();
+            CreateMap<UpdateTransactionDetailReqModel, TransactionDetail>().ReverseMap();
             #endregion
-
 
             #region Transaction
             CreateMap<Transaction, TransactionResModel>();

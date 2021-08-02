@@ -61,11 +61,16 @@ namespace TnR_SS.Domain.Supervisor
             var userRole = await _unitOfWork.UserInfors.GetRolesAsync(userId);
             if (userRole.Contains(RoleName.Trader))
             {
+
                 listType = _unitOfWork.FishTypes.GetAll(X => X.TraderID == userId && X.Date.Date == date.Date && X.PurchaseID != null).Distinct().ToList();
             }
             else if (userRole.Contains(RoleName.WeightRecorder) && traderId != null)
             {
-                listType = _unitOfWork.FishTypes.GetAll(X => X.TraderID == traderId.Value && X.Date.Date == date.Date && X.PurchaseID != null).Distinct().ToList();
+                // lay ra ngay co purchase gan nhat
+                var dateGanNhat = _unitOfWork.Purchases.GetAll(x => x.TraderID == traderId).OrderByDescending(x => x.Date).Select(x => x.Date).FirstOrDefault();
+                var listPurchaseId = _unitOfWork.Purchases.GetAll(x => x.TraderID == traderId && x.Date.Date == dateGanNhat.Date).Select(x => x.ID).ToList();
+                listType = _unitOfWork.FishTypes.GetAllFishTypeByPurchaseIds(listPurchaseId);
+                //listType = _unitOfWork.FishTypes.GetAll(X => X.TraderID == traderId.Value && X.Date.Date == date.Date && X.PurchaseID != null).Distinct().ToList();
             }
 
             List<GetAllFishTypeForTransactionResModel> list = new List<GetAllFishTypeForTransactionResModel>();

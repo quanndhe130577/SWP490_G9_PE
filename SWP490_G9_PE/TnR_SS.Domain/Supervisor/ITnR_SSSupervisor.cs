@@ -190,6 +190,7 @@ namespace TnR_SS.Domain.Supervisor
         Task CreateTransactionDetailV2Async(CreateTransactionDetailReqModelV2 apiModel, int userId);
         Task<List<GetAllTransactionDetailResModel>> GetAllTransactionDetailAsync(int userId, DateTime? date);
         Task<List<GetGeneralTransactionFollowDateResModel>> GetAllTransactionFollowDateAsync(int userId);
+        Task UpdateTransactionDetailAsync(UpdateTransactionDetailReqModel apiModel, int userId);
         #endregion
 
         #region Debt

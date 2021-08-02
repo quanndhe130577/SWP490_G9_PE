@@ -34,12 +34,24 @@ namespace TnR_SS.DataEFCore.Repositories
 
         public double GetTotalWeightOfFishType(int fishTypeId)
         {
-            return _context.PurchaseDetails.Where(x => x.FishTypeID == fishTypeId).Sum(x => x.Weight);
+            return _context.PurchaseDetails.Where(x => x.FishTypeID == fishTypeId)
+                .Join(_context.Baskets, pd => )
+                .Sum(x => x.Weight);
         }
 
         public double GetSellWeightOfFishType(int fishTypeId)
         {
             return _context.TransactionDetails.Where(x => x.FishTypeId == fishTypeId).Sum(x => x.Weight);
+        }
+
+        public List<FishType> GetAllFishTypeByPurchaseIds(List<int> listPurchaseId)
+        {
+            return _context.FishTypes.Join(
+                    listPurchaseId,
+                    ft => ft.PurchaseID,
+                    p => p,
+                    (ft, p) => ft
+                ).ToList();
         }
     }
 }

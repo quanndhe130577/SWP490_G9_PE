@@ -14,5 +14,6 @@ namespace TnR_SS.Domain.Repositories
         void RemoveFishTypeByPurchaseId(int purchaseId);
         double GetTotalWeightOfFishType(int fishTypeId);
         double GetSellWeightOfFishType(int fishTypeId);
+        List<FishType> GetAllFishTypeByPurchaseIds(List<int> listPurchaseId);
     }
 }

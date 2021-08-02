@@ -254,6 +254,42 @@ namespace TnR_SS.Domain.Supervisor
             return list;
         }
 
+        public async Task UpdateTransactionDetailAsync(UpdateTransactionDetailReqModel apiModel, int userId)
+        {
+            var tranDe = await _unitOfWork.TransactionDetails.FindAsync(apiModel.ID);
+            if (tranDe == null)
+            {
+                throw new Exception("Không tìm thấy đơn mua !!");
+            }
 
+            var buyer = await _unitOfWork.Buyers.FindAsync(apiModel.BuyerId);
+            // nếu người mua không tồn tại hoặc người mua không phải là của người bán
+            if ((apiModel.BuyerId != null && buyer == null) || (buyer != null && buyer.SellerId != userId))
+            {
+                throw new Exception("Không tìm thấy người mua !!");
+            }
+
+            var tran = await _unitOfWork.Transactions.FindAsync(tranDe.TransId);
+            // nếu có weight recorder => userId phải là  weight recorder
+            if (tran.WeightRecorderId != null && tran.WeightRecorderId != userId)
+            {
+                throw new Exception("Không tìm thấy đơn mua !!");
+            }// nếu ko có weight recorder => userId phải là trader
+            else if (tran.WeightRecorderId == null && tran.TraderId != userId)
+            {
+                throw new Exception("Không tìm thấy đơn mua !!");
+            }
+
+            var fishType = await _unitOfWork.FishTypes.FindAsync(apiModel.FishTypeId);
+            // nếu loại cá không tồn tại hoặc loại cá không phải là của trader của transaction hoặc loại cá không phải cùng ngày với transaction
+            if (fishType == null || fishType.TraderID != tran.TraderId || fishType.Date.Date != tran.Date.Date)
+            {
+                throw new Exception("Loại cá không đúng !!");
+            }
+
+            tranDe = _mapper.Map<UpdateTransactionDetailReqModel, TransactionDetail>(apiModel, tranDe);
+            _unitOfWork.TransactionDetails.Update(tranDe);
+            await _unitOfWork.SaveChangeAsync();
+        }
     }
 }
