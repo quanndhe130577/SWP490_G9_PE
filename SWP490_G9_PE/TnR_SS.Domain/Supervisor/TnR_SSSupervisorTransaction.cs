@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using TnR_SS.Domain.ApiModels.BuyerModel;
 using TnR_SS.Domain.ApiModels.FishTypeModel;
 using TnR_SS.Domain.ApiModels.TransactionModel;
+using TnR_SS.Domain.ApiModels.UserInforModel;
 using TnR_SS.Domain.Entities;
 
 namespace TnR_SS.Domain.Supervisor
@@ -53,7 +54,7 @@ namespace TnR_SS.Domain.Supervisor
                             // nếu date là buổi sáng ngày hôm sau thì chuyển thành buổi chiều ngày hôm trước
                             if (apiModel.Date.Hour < 12/* && apiModel.Date.Hour + apiModel.Date.Minute + apiModel.Date.Second > 0*/)
                             {
-                                apiModel.Date.AddHours(-12);
+                                apiModel.Date = apiModel.Date.AddHours(-12);
                             }
 
                             var tran = _unitOfWork.Transactions.GetAll(x => x.TraderId == item && x.WeightRecorderId == wcId && x.Date.Date == apiModel.Date.Date).FirstOrDefault();
@@ -75,9 +76,10 @@ namespace TnR_SS.Domain.Supervisor
                                 {
                                     throw new Exception("Thông tin thương lái chưa chính xác !!!");
                                 }*/
+                                await dbTransaction.CommitAsync();
                             }
 
-                            await dbTransaction.CommitAsync();
+
                         }
 
                     }

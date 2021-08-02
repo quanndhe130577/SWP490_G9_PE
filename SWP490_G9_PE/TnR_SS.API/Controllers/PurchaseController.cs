@@ -93,6 +93,16 @@ namespace TnR_SS.API.Controllers
             return new ResponseBuilder().Success("Xóa đơn mua thành công").ResponseModel;
         }
         #endregion
+
+        #region Update PondOwner
+        [HttpPost("updatePO")]
+        public async Task<ResponseModel> UpdatePondOwner(PurchaseUpdatePondOwnerModel apiModel)
+        {
+            var traderId = TokenManagement.GetUserIdInToken(HttpContext);
+            await _tnrssSupervisor.UpdatePondOwnerInPurchaseAsync(apiModel, traderId);
+            return new ResponseBuilder().Success("Cập nhật chủ ao thành công").ResponseModel;
+        }
+        #endregion
     }
 }
 

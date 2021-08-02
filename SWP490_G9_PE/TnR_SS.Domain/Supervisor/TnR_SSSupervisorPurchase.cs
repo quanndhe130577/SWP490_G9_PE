@@ -228,5 +228,25 @@ namespace TnR_SS.Domain.Supervisor
                 throw;
             }
         }
+
+        public async Task UpdatePondOwnerInPurchaseAsync(PurchaseUpdatePondOwnerModel apiModel, int traderId)
+        {
+            var purchase = await _unitOfWork.Purchases.FindAsync(apiModel.PurchaseId);
+            if (purchase.TraderID != traderId)
+            {
+                throw new Exception("Đơn mua không hợp lệ !!!");
+            }
+
+            var pO = await _unitOfWork.PondOwners.FindAsync(apiModel.PondOwnerId);
+            if (pO == null)
+            {
+                throw new Exception("Chủ ao không hợp lệ !!!");
+            }
+
+            purchase.PondOwnerID = apiModel.PondOwnerId;
+
+            _unitOfWork.Purchases.Update(purchase);
+            await _unitOfWork.SaveChangeAsync();
+        }
     }
 }

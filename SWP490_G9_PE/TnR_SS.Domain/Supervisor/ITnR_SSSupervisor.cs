@@ -78,7 +78,7 @@ namespace TnR_SS.Domain.Supervisor
         Task DeleteFishTypeAsync(int empId, int traderId);
         Task<List<FishTypeApiModel>> GetListFishTypeByPurchaseIdAsync(int purchaseId, int traderId);
         Task UpdateListFishTypeAsync(ListFishTypeModel listFishType, int traderId);
-        List<WeightRecorderGetAllFishtypeResModel> WeightRecorderGetAllFishTypeByTraderIdAsync(int traderId, DateTime date);
+        Task<List<WeightRecorderGetAllFishtypeResModel>> WeightRecorderGetAllFishTypeByTraderIdAsync(int? traderId, int userId, DateTime date);
 
         Task<FishTypeApiModel> GetNewFishTypeAsync(int traderId, DateTime? date);
         #endregion
@@ -98,6 +98,7 @@ namespace TnR_SS.Domain.Supervisor
         Task UpdatePurchaseAsync(PurchaseApiModel models, int traderId);
         Task DeletePurchaseAsync(int purchaseId, int traderId);
         Task<PurchaseResModel> ChotSoAsync(ChotSoApiModel data, int traderId);
+        Task UpdatePondOwnerInPurchaseAsync(PurchaseUpdatePondOwnerModel apiModel, int traderId);
         #endregion
 
         #region PondOwner
