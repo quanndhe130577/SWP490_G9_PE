@@ -67,7 +67,7 @@ namespace TnR_SS.Domain.Supervisor
             else if (userRole.Contains(RoleName.WeightRecorder) && traderId != null)
             {
                 // lay ra ngay co purchase gan nhat
-                var dateGanNhat = _unitOfWork.Purchases.GetAll(x => x.TraderID == traderId).OrderByDescending(x => x.Date).Select(x => x.Date).FirstOrDefault();
+                var dateGanNhat = _unitOfWork.Purchases.GetAll(x => x.TraderID == traderId && x.Date.Date <= date).OrderByDescending(x => x.Date).Select(x => x.Date).FirstOrDefault();
                 // lấy ra purchase có ngày = ngày gần nhất
                 var listPurchaseId = _unitOfWork.Purchases.GetAll(x => x.TraderID == traderId && x.Date.Date == dateGanNhat.Date).Select(x => x.ID).ToList();
                 // lấy ra loại cá của các purchase đó
