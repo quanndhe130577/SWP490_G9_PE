@@ -150,11 +150,28 @@ namespace TnR_SS.API.Controllers
             return new ResponseBuilder().Success("Xóa giá cá thành công").ResponseModel;
         }
 
-        [HttpGet("wc/getall/{traderId?}")]
-        public async Task<ResponseModel> GetAllFishTypeForTransactionDetail(int? traderId)
+        [HttpGet("wc/getall/{traderId?}/{date_str?}")]
+        public async Task<ResponseModel> GetAllFishTypeForTransactionDetail(int? traderId, string date_str)
         {
             var userId = TokenManagement.GetUserIdInToken(HttpContext);
-            var fishTypes = await _tnrssSupervisor.GetAllFishTypeForTransactionAsync(traderId, userId, DateTime.Now);
+
+            DateTime date = DateTime.Now;
+
+            if (date_str != null)
+            {
+                CultureInfo enUS = new CultureInfo("en-US");
+                DateTime newDate = DateTime.Now;
+                if (DateTime.TryParseExact(date_str, "ddMMyyyy", enUS, DateTimeStyles.None, out newDate))
+                {
+                    date = newDate;
+                }
+                else
+                {
+                    return new ResponseBuilder().Error("Lỗi format date !!!").ResponseModel;
+                }
+            }
+
+            var fishTypes = await _tnrssSupervisor.GetAllFishTypeForTransactionAsync(traderId, userId, date);
             return new ResponseBuilder<List<GetAllFishTypeForTransactionResModel>>().Success("Lấy thông tin giá cá thành công").WithData(fishTypes).ResponseModel;
         }
     }
