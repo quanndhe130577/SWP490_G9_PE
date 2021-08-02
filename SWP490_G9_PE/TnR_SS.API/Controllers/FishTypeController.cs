@@ -150,14 +150,12 @@ namespace TnR_SS.API.Controllers
             return new ResponseBuilder().Success("Xóa giá cá thành công").ResponseModel;
         }
 
-        // lấy loại cá theo traderId để cho weight recorder
-        //[Authorize(Roles = RoleName.WeightRecorder)]
         [HttpGet("wc/getall/{traderId?}")]
         public async Task<ResponseModel> GetAllFishTypeForTransactionDetail(int? traderId)
         {
             var userId = TokenManagement.GetUserIdInToken(HttpContext);
-            var fishTypes = await _tnrssSupervisor.WeightRecorderGetAllFishTypeByTraderIdAsync(traderId, userId, DateTime.Now);
-            return new ResponseBuilder<List<WeightRecorderGetAllFishtypeResModel>>().Success("Lấy thông tin giá cá thành công").WithData(fishTypes).ResponseModel;
+            var fishTypes = await _tnrssSupervisor.GetAllFishTypeForTransactionAsync(traderId, userId, DateTime.Now);
+            return new ResponseBuilder<List<GetAllFishTypeForTransactionResModel>>().Success("Lấy thông tin giá cá thành công").WithData(fishTypes).ResponseModel;
         }
     }
 }

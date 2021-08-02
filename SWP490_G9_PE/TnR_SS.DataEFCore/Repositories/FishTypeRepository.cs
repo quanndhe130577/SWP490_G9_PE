@@ -21,7 +21,7 @@ namespace TnR_SS.DataEFCore.Repositories
 
         public List<FishType> GetAllByTraderId(int traderId)
         {
-            var rs = _context.FishTypes.AsEnumerable().Where(x => x.TraderID == traderId && ( x.PurchaseID != null || x.Date.Date >= DateTime.Now.AddDays(7)))
+            var rs = _context.FishTypes.AsEnumerable().Where(x => x.TraderID == traderId && (x.PurchaseID != null || x.Date.Date >= DateTime.Now.AddDays(7)))
                 .OrderByDescending(x => x.Date).ToList();
             return rs;
         }
@@ -30,6 +30,16 @@ namespace TnR_SS.DataEFCore.Repositories
         {
             var rs = _context.FishTypes.Where(x => x.PurchaseID == purchaseId);
             _context.FishTypes.RemoveRange(rs);
+        }
+
+        public double GetTotalWeightOfFishType(int fishTypeId)
+        {
+            return _context.PurchaseDetails.Where(x => x.FishTypeID == fishTypeId).Sum(x => x.Weight);
+        }
+
+        public double GetSellWeightOfFishType(int fishTypeId)
+        {
+            return _context.TransactionDetails.Where(x => x.FishTypeId == fishTypeId).Sum(x => x.Weight);
         }
     }
 }

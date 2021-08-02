@@ -50,7 +50,7 @@ namespace TnR_SS.Domain.Supervisor
             return list;
         }
 
-        public async Task<List<WeightRecorderGetAllFishtypeResModel>> WeightRecorderGetAllFishTypeByTraderIdAsync(int? traderId, int userId, DateTime date)
+        public async Task<List<GetAllFishTypeForTransactionResModel>> GetAllFishTypeForTransactionAsync(int? traderId, int userId, DateTime date)
         {
             if (date.Hour < 12)
             {
@@ -68,10 +68,11 @@ namespace TnR_SS.Domain.Supervisor
                 listType = _unitOfWork.FishTypes.GetAll(X => X.TraderID == traderId.Value && X.Date.Date == date.Date && X.PurchaseID != null).Distinct().ToList();
             }
 
-            List<WeightRecorderGetAllFishtypeResModel> list = new List<WeightRecorderGetAllFishtypeResModel>();
+            List<GetAllFishTypeForTransactionResModel> list = new List<GetAllFishTypeForTransactionResModel>();
             foreach (var type in listType)
             {
-                WeightRecorderGetAllFishtypeResModel newFish = _mapper.Map<FishType, WeightRecorderGetAllFishtypeResModel>(type);
+                GetAllFishTypeForTransactionResModel newFish = _mapper.Map<FishType, GetAllFishTypeForTransactionResModel>(type);
+                newFish.RemainWeight = (float)(_unitOfWork.FishTypes.GetTotalWeightOfFishType(type.ID) - _unitOfWork.FishTypes.GetSellWeightOfFishType(type.ID));
                 //newFish.PondOwner = _mapper.Map<PondOwner, PondOwnerApiModel>(await _unitOfWork.PondOwners.FindAsync(newFish.PondOwnerID));
                 list.Add(newFish);
             }
@@ -272,5 +273,6 @@ namespace TnR_SS.Domain.Supervisor
 
             return _mapper.Map<FishType, FishTypeApiModel>(newFish);
         }
+
     }
 }
