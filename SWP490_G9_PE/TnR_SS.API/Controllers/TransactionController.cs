@@ -61,7 +61,6 @@ namespace TnR_SS.API.Controllers
 
             var rs = await _tnrssSupervisor.GetAllTransactionAsync(userId, date);
             return new ResponseBuilder<List<TransactionResModel>>().Success("Lấy thông tin hóa đơn thành công !!").WithData(rs).ResponseModel;
-
         }
     }
 }

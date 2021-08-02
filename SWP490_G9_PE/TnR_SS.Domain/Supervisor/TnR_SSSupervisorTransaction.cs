@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using TnR_SS.Domain.ApiModels.BuyerModel;
 using TnR_SS.Domain.ApiModels.FishTypeModel;
 using TnR_SS.Domain.ApiModels.TransactionModel;
+using TnR_SS.Domain.ApiModels.UserInforModel;
 using TnR_SS.Domain.Entities;
 
 namespace TnR_SS.Domain.Supervisor
@@ -75,9 +76,10 @@ namespace TnR_SS.Domain.Supervisor
                                 {
                                     throw new Exception("Thông tin thương lái chưa chính xác !!!");
                                 }*/
+                                await dbTransaction.CommitAsync();
                             }
 
-                            await dbTransaction.CommitAsync();
+
                         }
 
                     }

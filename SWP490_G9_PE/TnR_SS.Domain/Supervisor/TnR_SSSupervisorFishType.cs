@@ -50,14 +50,24 @@ namespace TnR_SS.Domain.Supervisor
             return list;
         }
 
-        public List<WeightRecorderGetAllFishtypeResModel> WeightRecorderGetAllFishTypeByTraderIdAsync(int traderId, DateTime date)
+        public async Task<List<WeightRecorderGetAllFishtypeResModel>> WeightRecorderGetAllFishTypeByTraderIdAsync(int? traderId, int userId, DateTime date)
         {
             if (date.Hour < 12)
             {
                 date = date.AddDays(-1);
             }
 
-            var listType = _unitOfWork.FishTypes.GetAll(X => X.TraderID == traderId && X.Date.Date == date.Date && X.PurchaseID != null).Distinct();
+            List<FishType> listType = new List<FishType>();
+            var userRole = await _unitOfWork.UserInfors.GetRolesAsync(userId);
+            if (userRole.Contains(RoleName.Trader))
+            {
+                listType = _unitOfWork.FishTypes.GetAll(X => X.TraderID == userId && X.Date.Date == date.Date && X.PurchaseID != null).Distinct().ToList();
+            }
+            else if (userRole.Contains(RoleName.WeightRecorder) && traderId != null)
+            {
+                listType = _unitOfWork.FishTypes.GetAll(X => X.TraderID == traderId.Value && X.Date.Date == date.Date && X.PurchaseID != null).Distinct().ToList();
+            }
+
             List<WeightRecorderGetAllFishtypeResModel> list = new List<WeightRecorderGetAllFishtypeResModel>();
             foreach (var type in listType)
             {
