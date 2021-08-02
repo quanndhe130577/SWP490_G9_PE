@@ -42,6 +42,10 @@ namespace TnR_SS.DataEFCore.Configurations
 
             entity.Property(e => e.UpdatedAt)
                 .HasColumnType("datetime");
+
+            entity.Property(e => e.Bonus);
+
+            entity.Property(e => e.Punish);
         }
     }
 }
