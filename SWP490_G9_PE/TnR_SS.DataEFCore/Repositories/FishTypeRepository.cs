@@ -54,7 +54,7 @@ namespace TnR_SS.DataEFCore.Repositories
 
         public List<FishType> GetAllFishTypeByPurchaseIds(List<int> listPurchaseId)
         {
-            return _context.FishTypes.Join(
+            return _context.FishTypes.AsEnumerable().Join(
                     listPurchaseId,
                     ft => ft.PurchaseID,
                     p => p,
