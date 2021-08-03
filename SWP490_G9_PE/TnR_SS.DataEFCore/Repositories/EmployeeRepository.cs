@@ -45,7 +45,8 @@ namespace TnR_SS.DataEFCore.Repositories
         public List<EmployeeSalaryDetailApiModel> GetAllEmployeeSalaryDetailByTraderId(int traderId, DateTime date)
         {
             List<EmployeeSalaryDetailApiModel> employeeSalaryDetails = new List<EmployeeSalaryDetailApiModel>();
-            List<Employee> employees = _context.Employees.Where(e => e.StartDate < date && e.EndDate == null || e.EndDate > date).ToList();
+            List<Employee> employees = _context.Employees.Where(e => (e.StartDate.Year < date.Year || (e.StartDate.Year == date.Year && e.StartDate.Month <= date.Month))
+            && (e.EndDate == null || e.EndDate > date)).ToList();
             foreach (Employee employee in employees)
             {
                 BaseSalaryEmp baseSalaryEmp = GetEmployeeSalary(employee.ID, date);
