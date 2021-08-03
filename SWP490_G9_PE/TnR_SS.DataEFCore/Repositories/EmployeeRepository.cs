@@ -63,6 +63,8 @@ namespace TnR_SS.DataEFCore.Repositories
                         ID = employee.ID,
                         Name = employee.Name,
                         BaseSalary = baseSalary,
+                        Bonus = historySalaryEmps.Count > 0 ? historySalaryEmps[0].Bonus : 0,
+                        Punish = historySalaryEmps.Count > 0 ? historySalaryEmps[0].Punish : 0,
                         Salary = historySalaryEmps.Count > 0 ? historySalaryEmps[0].Salary : null,
                         Status = status,
                         AdvanceSalary = GetEmployeeAdvanceSalary(employee.ID, date)

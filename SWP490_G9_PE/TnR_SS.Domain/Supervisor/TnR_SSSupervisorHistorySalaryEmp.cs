@@ -26,6 +26,19 @@ namespace TnR_SS.Domain.Supervisor
             Select(item => _mapper.Map<HistorySalaryEmp, CreateHistorySalaryEmpModel>(item)).
             ToList();
         }
+        public async Task UpdateHistorySalaryAsync(HistorySalaryEmp historySalaryEmp, CreateHistorySalaryEmpModel salaryApi, int traderId)
+        {
+            var model = await _unitOfWork.Employees.FindAsync(salaryApi.EmpId);
+            if (model == null || model.TraderId != traderId)
+            {
+                throw new Exception("Nhân viên không tồn tại");
+            }
+            historySalaryEmp.Salary = salaryApi.Salary;
+            historySalaryEmp.Bonus = salaryApi.Bonus;
+            historySalaryEmp.Punish = salaryApi.Punish;
+            _unitOfWork.HistorySalaryEmps.Update(historySalaryEmp);
+            await _unitOfWork.SaveChangeAsync();
+        }
         public async Task CreateHistorySalaryAsync(CreateHistorySalaryEmpModel salaryApi, int traderId)
         {
             var model = await _unitOfWork.Employees.FindAsync(salaryApi.EmpId);

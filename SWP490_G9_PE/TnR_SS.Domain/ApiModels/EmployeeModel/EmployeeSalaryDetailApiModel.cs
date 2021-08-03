@@ -14,6 +14,8 @@ namespace TnR_SS.Domain.ApiModels.EmployeeModel
         public string Name { get; set; }
 
         public double Status { get; set; }
+        public double Bonus { get; set; }
+        public double Punish { get; set; }
 
         public double? Salary { get; set; }
 

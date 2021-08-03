@@ -211,6 +211,7 @@ namespace TnR_SS.Domain.Supervisor
         #endregion
 
         Task CreateHistorySalaryAsync(CreateHistorySalaryEmpModel salaryApi, int traderId);
+        Task UpdateHistorySalaryAsync(HistorySalaryEmp historySalaryEmp, CreateHistorySalaryEmpModel salaryApi, int traderId);
         HistorySalaryEmp GetHistoryEmpSalary(DateTime date, int empId);
         List<CreateHistorySalaryEmpModel> GetAllHistoryEmpSalary(int empId);
     }

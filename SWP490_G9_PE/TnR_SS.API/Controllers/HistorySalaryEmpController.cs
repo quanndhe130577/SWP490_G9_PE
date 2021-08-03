@@ -40,6 +40,10 @@ namespace TnR_SS.API.Controllers
                 {
                     await _tnrssSupervisor.CreateHistorySalaryAsync(salary, traderId);
                 }
+                else
+                {
+                    await _tnrssSupervisor.UpdateHistorySalaryAsync(historySalaryEmp, salary, traderId);
+                }
             }
             return new ResponseBuilder().Success("Tạo lương cho nhân viên thành công").ResponseModel;
         }
