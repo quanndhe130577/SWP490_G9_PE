@@ -22,7 +22,7 @@ namespace TnR_SS.Domain.ApiModels.PurchaseDetailModel
 
         [Required]
         [Range(0.0, Double.MaxValue, ErrorMessage = "Số lượng cân phải lớn hơn {1}.")]
-        public double Weight { get; set; }
+        public double Weight { get; set; } // bao gồm cả rổ
 
         //[Required]
         //public List<LK_PurchaseDetail_DrumApiModel> ListDrum { get; set; } = new List<LK_PurchaseDetail_DrumApiModel>();

@@ -54,8 +54,9 @@ namespace TnR_SS.Domain.Supervisor
             var purchaseDetail = await _unitOfWork.PurchaseDetails.FindAsync(purchaseDetailId);
             var fishType = await _unitOfWork.FishTypes.FindAsync(purchaseDetail.FishTypeID);
             var basket = await _unitOfWork.Baskets.FindAsync(purchaseDetail.BasketId);
-            //var listDrum = _unitOfWork.LK_PurchaseDeatil_Drums.GetAll(x => x.PurchaseDetailID == purchaseDetailId);
-            double totalFishWeight = purchaseDetail.Weight - basket.Weight;
+            //double totalFishWeight = purchaseDetail.Weight - basket.Weight;
+            // cá trong db không bao gồm cân rổ
+            double totalFishWeight = purchaseDetail.Weight;
             return totalFishWeight > 0 ? fishType.Price * totalFishWeight : 0;
             //return 0;
         }
@@ -64,17 +65,18 @@ namespace TnR_SS.Domain.Supervisor
         {
             var fishType = await _unitOfWork.FishTypes.FindAsync(purchaseDetail.FishTypeID);
             var basket = await _unitOfWork.Baskets.FindAsync(purchaseDetail.BasketId);
-            //var listDrum = _unitOfWork.LK_PurchaseDeatil_Drums.GetAll(x => x.PurchaseDetailID == purchaseDetailId);
-            double totalFishWeight = purchaseDetail.Weight - basket.Weight;
+            //double totalFishWeight = purchaseDetail.Weight - basket.Weight;
+            //cá trong db không bao gồm cân rổ
+            double totalFishWeight = purchaseDetail.Weight;
             return totalFishWeight > 0 ? fishType.Price * totalFishWeight : 0;
             //return 0;
         }
 
-        private double GetPurchaseDetailPrice(double fishTypePrice, double basketWeight, double totalWeight)
+        /*private double GetPurchaseDetailPrice(double fishTypePrice, double basketWeight, double totalWeight)
         {
             double totalFishWeight = totalWeight - basketWeight;
             return totalFishWeight > 0 ? fishTypePrice * totalFishWeight : 0;
-        }
+        }*/
 
         #endregion
 
@@ -123,9 +125,8 @@ namespace TnR_SS.Domain.Supervisor
                         }
 
                         var purchaseDetail = _mapper.Map<PurchaseDetailReqModel, PurchaseDetail>(data);
-                        //double totalFishWeight = data.ListDrum.Sum(x => x.Weight) - basket.Weight;
-                        //purchaseDetail.BuyPrice = fishType.Price * totalFishWeight;
-                        //purchaseDetail.Weight = data.Weight;
+                        // cân cá trong db không bao gồm rổ
+                        purchaseDetail.Weight = purchaseDetail.Weight - basket.Weight;
                         await _unitOfWork.PurchaseDetails.CreateAsync(purchaseDetail);
                         await _unitOfWork.SaveChangeAsync();
                         //create lk
@@ -154,8 +155,10 @@ namespace TnR_SS.Domain.Supervisor
             {
                 PurchaseDetailResModel data = _mapper.Map<PurchaseDetail, PurchaseDetailResModel>(item);
                 data.Basket = _mapper.Map<Basket, BasketApiModel>(await _unitOfWork.Baskets.FindAsync(item.BasketId));
+                // cân cá response bao gồm cả cần rổ
+                data.Weight += data.Basket.Weight;
                 data.FishType = _mapper.Map<FishType, FishTypeApiModel>(await _unitOfWork.FishTypes.FindAsync(item.FishTypeID));
-                data.Price = GetPurchaseDetailPrice(data.FishType.Price, data.Basket.Weight, data.Weight);
+                data.Price = (data.Weight - data.Basket.Weight) * data.FishType.Price;
                 data.ListDrum = GetListDrumByPurchaseDetail(item);
                 if (data.ListDrum.Count > 0)
                 {
@@ -179,7 +182,7 @@ namespace TnR_SS.Domain.Supervisor
                     try
                     {
                         var purchaseDetail = await _unitOfWork.PurchaseDetails.FindAsync(data.Id);
-                        if(purchaseDetail is null)
+                        if (purchaseDetail is null)
                         {
                             throw new Exception("Không tìm thấy đơn mua !!!");
                         }
@@ -190,7 +193,21 @@ namespace TnR_SS.Domain.Supervisor
                             throw new Exception("Đơn mua đã được chốt, không thế thay đổi !!!");
                         }
 
+                        var basket = await _unitOfWork.Baskets.FindAsync(data.BasketId);
+                        if (basket == null)
+                        {
+                            throw new Exception("Hãy chọn rổ !!!");
+                        }
+
+                        if (purchaseDetail.Weight <= basket.Weight)
+                        {
+                            throw new Exception("Cân nặng mã cân phải lớn hơn cân nặng của rổ !!!");
+                        }
+
                         purchaseDetail = _mapper.Map<PurchaseDetailReqModel, PurchaseDetail>(data, purchaseDetail);
+                        // cá trong db ko bao gồm cân rổ
+                        purchaseDetail.Weight -= basket.Weight;
+                        
 
                         // delete current LK
                         _unitOfWork.LK_PurchaseDetail_Drums.DeleteMany(x => x.PurchaseDetailID == data.Id);

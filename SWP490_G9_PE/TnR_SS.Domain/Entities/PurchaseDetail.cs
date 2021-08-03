@@ -21,7 +21,7 @@ namespace TnR_SS.Domain.Entities
         /*[Required]
         public double BuyPrice { get; set; }*/
         [Required]
-        public double Weight { get; set; }
+        public double Weight { get; set; } // không bao gồm rổ
 
 
         [Required]

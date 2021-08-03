@@ -14,7 +14,8 @@ namespace TnR_SS.Domain.Supervisor
         #region Private function
         private double GetTotalWeightPurchase(int purchaseId)
         {
-            return _unitOfWork.PurchaseDetails.GetAll(x => x.PurchaseId == purchaseId).Sum(x => x.Weight);
+            //return _unitOfWork.PurchaseDetails.GetAll(x => x.PurchaseId == purchaseId).Sum(x => x.Weight);
+            return _unitOfWork.Purchases.GetTotalWeight(purchaseId);
         }
 
         private async Task<double> GetTotalAmountPurchaseAsync(int purchaseId)
