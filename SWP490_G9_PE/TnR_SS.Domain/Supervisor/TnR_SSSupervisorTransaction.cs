@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using TnR_SS.Domain.ApiModels.BuyerModel;
 using TnR_SS.Domain.ApiModels.FishTypeModel;
 using TnR_SS.Domain.ApiModels.TransactionModel;
+using TnR_SS.Domain.ApiModels.UserInforModel;
 using TnR_SS.Domain.Entities;
 
 namespace TnR_SS.Domain.Supervisor
@@ -53,7 +54,7 @@ namespace TnR_SS.Domain.Supervisor
                             // nếu date là buổi sáng ngày hôm sau thì chuyển thành buổi chiều ngày hôm trước
                             if (apiModel.Date.Hour < 12/* && apiModel.Date.Hour + apiModel.Date.Minute + apiModel.Date.Second > 0*/)
                             {
-                                apiModel.Date.AddHours(-12);
+                                apiModel.Date = apiModel.Date.AddHours(-12);
                             }
 
                             var tran = _unitOfWork.Transactions.GetAll(x => x.TraderId == item && x.WeightRecorderId == wcId && x.Date.Date == apiModel.Date.Date).FirstOrDefault();
@@ -75,9 +76,10 @@ namespace TnR_SS.Domain.Supervisor
                                 {
                                     throw new Exception("Thông tin thương lái chưa chính xác !!!");
                                 }*/
+                                await dbTransaction.CommitAsync();
                             }
 
-                            await dbTransaction.CommitAsync();
+
                         }
 
                     }
@@ -119,7 +121,8 @@ namespace TnR_SS.Domain.Supervisor
                 TransactionResModel tran = new TransactionResModel();
                 tran.ID = item.ID;
                 tran.Date = item.Date;
-                tran.Trader = _mapper.Map<UserInfor, TraderInformation>(await _unitOfWork.UserInfors.FindAsync(item.TraderId));
+                tran.Trader = _mapper.Map<UserInfor, UserInformation>(await _unitOfWork.UserInfors.FindAsync(item.TraderId));
+                tran.WeightRecorder = item.WeightRecorderId != null ? _mapper.Map<UserInfor, UserInformation>(await _unitOfWork.UserInfors.FindAsync(item.WeightRecorderId)) : null;
                 tran.TransactionDetails = await GetListTransactionDetailModelAsync(item.ID);
 
                 list.Add(tran);
@@ -142,6 +145,94 @@ namespace TnR_SS.Domain.Supervisor
             }
 
             return list;
+        }
+
+        public async Task<List<GetGeneralTransactionFollowDateResModel>> GetAllTransactionFollowDateAsync(int userId)
+        {
+            var roleUser = await _unitOfWork.UserInfors.GetRolesAsync(userId);
+            var listDate = new List<DateTime>();
+            if (roleUser.Contains(RoleName.WeightRecorder))
+            {
+                listDate = _unitOfWork.Transactions.GetAll(x => x.WeightRecorderId == userId).Select(x => x.Date.Date).OrderByDescending(x => x.Date).Distinct().ToList();
+            }
+            else if (roleUser.Contains(RoleName.Trader))
+            {
+                listDate = _unitOfWork.Transactions.GetAll(x => x.TraderId == userId).Select(x => x.Date.Date).OrderByDescending(x => x.Date).Distinct().ToList();
+            }
+            else
+            {
+                throw new Exception("Tài khoản không hợp lệ");
+            }
+
+            var listTran = new List<GetGeneralTransactionFollowDateResModel>();
+            foreach (var date in listDate)
+            {
+                GetGeneralTransactionFollowDateResModel newGeneral = new GetGeneralTransactionFollowDateResModel();
+                newGeneral.Date = date;
+
+                // add trader
+                if (roleUser.Contains(RoleName.WeightRecorder))
+                {
+                    newGeneral.ListTrader = await WeightRecordGetAllTraderInDate(userId, date);
+                }
+                else if (roleUser.Contains(RoleName.Trader))
+                {
+                    newGeneral.ListTrader.Add(_mapper.Map<UserInfor, UserInformation>(await _unitOfWork.UserInfors.FindAsync(userId)));
+                }
+                newGeneral.TotalWeight = await GetTotalWeightForGeneral(userId, date);
+                newGeneral.TotalMoney = await GetTotalMoneyForGeneral(userId, date);
+                newGeneral.TotalDebt = await GetTotalDebtForGeneral(userId, date);
+
+                listTran.Add(newGeneral);
+            }
+
+            return listTran;
+        }
+
+        private async Task<List<UserInformation>> WeightRecordGetAllTraderInDate(int wcId, DateTime date)
+        {
+            var listTraderId = _unitOfWork.Transactions.GetAll(x => x.WeightRecorderId == wcId && x.Date.Date == date.Date).Select(x => x.TraderId).Distinct();
+            List<UserInformation> listTrader = new List<UserInformation>();
+            foreach (var item in listTraderId)
+            {
+                listTrader.Add(_mapper.Map<UserInfor, UserInformation>(await _unitOfWork.UserInfors.FindAsync(item)));
+            }
+
+            return listTrader;
+        }
+
+        private async Task<double> GetTotalWeightForGeneral(int wcId, DateTime date)
+        {
+            var listTran = _unitOfWork.Transactions.GetAll(x => x.WeightRecorderId == wcId && x.Date.Date == date.Date);
+            double totalWeight = 0.0;
+            foreach (var tran in listTran)
+            {
+                totalWeight += await _unitOfWork.Transactions.GetTotalWeightAsync(tran.ID);
+            }
+
+            return totalWeight;
+        }
+        private async Task<double> GetTotalMoneyForGeneral(int wcId, DateTime date)
+        {
+            var listTran = _unitOfWork.Transactions.GetAll(x => x.WeightRecorderId == wcId && x.Date.Date == date.Date);
+            double totalWeight = 0.0;
+            foreach (var tran in listTran)
+            {
+                totalWeight += await _unitOfWork.Transactions.GetTotalMoneyAsync(tran.ID);
+            }
+
+            return totalWeight;
+        }
+        private async Task<double> GetTotalDebtForGeneral(int wcId, DateTime date)
+        {
+            var listTran = _unitOfWork.Transactions.GetAll(x => x.WeightRecorderId == wcId && x.Date.Date == date.Date);
+            double totalWeight = 0.0;
+            foreach (var tran in listTran)
+            {
+                totalWeight += await _unitOfWork.Transactions.GetTotalDebtAsync(tran.ID);
+            }
+
+            return totalWeight;
         }
     }
 }

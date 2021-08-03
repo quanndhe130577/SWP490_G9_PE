@@ -39,7 +39,7 @@ namespace TnR_SS.Domain.ApiModels
 
             CreateMap<UpdateUserReqModel, UserInfor>().ReverseMap();
             CreateMap<FindTraderByPhoneApiModel, UserInfor>().ReverseMap();
-            CreateMap<TraderInformation, UserInfor>().ReverseMap();
+            CreateMap<UserInformation, UserInfor>().ReverseMap();
             CreateMap<UserInfor, UserResModel>().ForMember(destination => destination.UserID, options => options.MapFrom(source => source.Id)).ReverseMap();
             #endregion
 
@@ -56,7 +56,7 @@ namespace TnR_SS.Domain.ApiModels
             #region FishType
             CreateMap<FishType, FishTypeApiModel>().ReverseMap();
             CreateMap<FishType, FishTypeResModel>().ReverseMap();
-            CreateMap<FishType, WeightRecorderGetAllFishtypeResModel>().ReverseMap();
+            CreateMap<FishType, GetAllFishTypeForTransactionResModel>().ReverseMap();
             #endregion
 
             #region Purchase
@@ -113,8 +113,8 @@ namespace TnR_SS.Domain.ApiModels
             CreateMap<CreateTransactionDetailReqModelV2, TransactionDetail>();
             CreateMap<TransactionDetail, GetAllTransactionDetailResModel>();
             CreateMap<TransactionDetail, TransactionDetailInformation>();
+            CreateMap<UpdateTransactionDetailReqModel, TransactionDetail>().ReverseMap();
             #endregion
-
 
             #region Transaction
             CreateMap<Transaction, TransactionResModel>();

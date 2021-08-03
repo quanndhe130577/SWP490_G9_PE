@@ -42,6 +42,7 @@ namespace TnR_SS.API.Controllers
         }
 
         [Route("getall/{date_str?}")]
+        [HttpGet]
         public async Task<ResponseModel> GetAll(string date_str = null)
         {
             var userId = TokenManagement.GetUserIdInToken(HttpContext);
@@ -67,6 +68,15 @@ namespace TnR_SS.API.Controllers
 
             var rs = await _tnrssSupervisor.GetAllTransactionDetailAsync(userId, date);
             return new ResponseBuilder<List<GetAllTransactionDetailResModel>>().Success("Lấy thông tin hóa đơn thành công !!").WithData(rs).ResponseModel;
+        }
+
+        [Route("update")]
+        [HttpPost]
+        public async Task<ResponseModel> Update(UpdateTransactionDetailReqModel apiModel)
+        {
+            var userId = TokenManagement.GetUserIdInToken(HttpContext);
+            await _tnrssSupervisor.UpdateTransactionDetailAsync(apiModel, userId);
+            return new ResponseBuilder().Success("Cập nhật thông tin hóa đơn thành công !!").ResponseModel;
         }
     }
 }
