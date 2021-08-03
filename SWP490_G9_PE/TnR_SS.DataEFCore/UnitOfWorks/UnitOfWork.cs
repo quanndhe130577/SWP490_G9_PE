@@ -36,6 +36,7 @@ namespace TnR_SS.DataEFCore.UnitOfWorks
             Transactions = new TransactionRepository(_context);
             TransactionDetails = new TransactionDetailRepository(_context);
             AdvanceSalaries = new AdvanceSalaryRepository(_context);
+            ClosePurchaseDetails = new ClosePurchaseDetailRepository(_context);
         }
 
         public IOTPRepository OTPs { get; private set; }
@@ -59,6 +60,7 @@ namespace TnR_SS.DataEFCore.UnitOfWorks
         public IBaseSalaryEmpRepository BaseSalaryEmps { get; private set; }
         public IHistorySalaryEmpRepository HistorySalaryEmps { get; private set; }
         public IAdvanceSalaryRepository AdvanceSalaries { get; private set; }
+        public IClosePurchaseDetailRepository ClosePurchaseDetails { get; private set; }
 
         public async Task<int> SaveChangeAsync()
         {

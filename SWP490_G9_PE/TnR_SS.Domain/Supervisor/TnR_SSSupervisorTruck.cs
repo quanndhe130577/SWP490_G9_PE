@@ -41,6 +41,13 @@ namespace TnR_SS.Domain.Supervisor
 
         public async Task<int> DeleteTruck(Truck truck)
         {
+            var listDrumId = _unitOfWork.Drums.GetAll(x => x.TruckID == truck.ID).Select(x => x.ID).ToList();
+            var rs = _unitOfWork.LK_PurchaseDetail_Drums.GetAll(x => listDrumId.Contains(x.DrumID)).ToList();
+            if (rs.Count() != 0)
+            {
+                throw new Exception("Lồ của xe này đang được sử dụng, không thể xóa !!!");
+            }
+
             _unitOfWork.Trucks.Delete(truck);
             return await _unitOfWork.SaveChangeAsync();
         }

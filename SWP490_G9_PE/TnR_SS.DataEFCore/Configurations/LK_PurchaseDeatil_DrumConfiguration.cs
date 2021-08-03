@@ -28,13 +28,14 @@ namespace TnR_SS.DataEFCore.Configurations
             entity.HasOne(p => p.Drum)
                .WithMany(b => b.LK_PurchaseDeatil_Drums)
                .HasForeignKey(p => p.DrumID)
-               .OnDelete(DeleteBehavior.ClientNoAction)
+               .OnDelete(DeleteBehavior.Cascade)
                .HasConstraintName("FK_LKPurchaseDrum_Drum");
 
             entity.HasOne(p => p.PurchaseDetail)
                .WithMany(b => b.LK_PurchaseDeatil_Drums)
                .HasForeignKey(p => p.PurchaseDetailID)
-               .OnDelete(DeleteBehavior.ClientNoAction)
+               //.OnDelete(DeleteBehavior.ClientNoAction)
+               .OnDelete(DeleteBehavior.Cascade)
                .HasConstraintName("FK_LKPurchaseDrum_PurchaseDetail");
         }
     }

@@ -146,26 +146,56 @@ namespace TnR_SS.Domain.Supervisor
 
         public async Task<List<PurchaseDetailResModel>> GetAllPurchaseDetailAsync(int purchaseId)
         {
-            var listPurchaseDetail = _unitOfWork.PurchaseDetails.GetAll(x => x.PurchaseId == purchaseId)
-                .OrderByDescending(x => x.ID);
-
-            List<PurchaseDetailResModel> list = new List<PurchaseDetailResModel>();
-            foreach (var item in listPurchaseDetail)
+            var purchase = await _unitOfWork.Purchases.FindAsync(purchaseId);
+            var lackOfData = false;
+            if (purchase.isCompleted == PurchaseStatus.Completed)
             {
-                PurchaseDetailResModel data = _mapper.Map<PurchaseDetail, PurchaseDetailResModel>(item);
-                data.Basket = _mapper.Map<Basket, BasketApiModel>(await _unitOfWork.Baskets.FindAsync(item.BasketId));
-                data.FishType = _mapper.Map<FishType, FishTypeApiModel>(await _unitOfWork.FishTypes.FindAsync(item.FishTypeID));
-                data.Price = GetPurchaseDetailPrice(data.FishType.Price, data.Basket.Weight, data.Weight);
-                data.ListDrum = GetListDrumByPurchaseDetail(item);
-                if (data.ListDrum.Count > 0)
+                var listClosePD = _unitOfWork.ClosePurchaseDetails.GetAllByPurchase(purchase);
+                if (listClosePD.Count == 0)
                 {
-                    data.Truck = _mapper.Map<Truck, TruckApiModel>(await _unitOfWork.Trucks.FindAsync(data.ListDrum.FirstOrDefault().TruckId));
+                    lackOfData = true;
                 }
+                else
+                {
+                    List<PurchaseDetailResModel> list = new List<PurchaseDetailResModel>();
+                    foreach (var item in listClosePD)
+                    {
+                        PurchaseDetailResModel data = _mapper.Map<ClosePurchaseDetail, PurchaseDetailResModel>(item);
+                        data.ListDrum = GetListDrumByPurchaseDetail(await _unitOfWork.PurchaseDetails.FindAsync(item.PurchaseDetailId));
+                        if (data.ListDrum.Count > 0)
+                        {
+                            data.Truck = _mapper.Map<Truck, TruckApiModel>(await _unitOfWork.Trucks.FindAsync(data.ListDrum.FirstOrDefault().TruckId));
+                        }
 
-                list.Add(data);
+                        list.Add(data);
+                    }
+                    return list;
+                }
             }
 
-            return list;
+            if (purchase.isCompleted == PurchaseStatus.Pending || lackOfData)
+            {
+                var listPurchaseDetail = _unitOfWork.PurchaseDetails.GetAll(x => x.PurchaseId == purchaseId).OrderByDescending(x => x.ID);
+                List<PurchaseDetailResModel> list = new List<PurchaseDetailResModel>();
+                foreach (var item in listPurchaseDetail)
+                {
+                    PurchaseDetailResModel data = _mapper.Map<PurchaseDetail, PurchaseDetailResModel>(item);
+                    data.Basket = _mapper.Map<Basket, BasketApiModel>(await _unitOfWork.Baskets.FindAsync(item.BasketId));
+                    data.FishType = _mapper.Map<FishType, FishTypeApiModel>(await _unitOfWork.FishTypes.FindAsync(item.FishTypeID));
+                    data.Price = GetPurchaseDetailPrice(data.FishType.Price, data.Basket.Weight, data.Weight);
+                    data.ListDrum = GetListDrumByPurchaseDetail(item);
+                    if (data.ListDrum.Count > 0)
+                    {
+                        data.Truck = _mapper.Map<Truck, TruckApiModel>(await _unitOfWork.Trucks.FindAsync(data.ListDrum.FirstOrDefault().TruckId));
+                    }
+
+                    list.Add(data);
+                }
+                return list;
+            }
+
+            return null;
+
         }
 
         public async Task UpdatePurchaseDetailAsync(PurchaseDetailReqModel data)
@@ -179,7 +209,7 @@ namespace TnR_SS.Domain.Supervisor
                     try
                     {
                         var purchaseDetail = await _unitOfWork.PurchaseDetails.FindAsync(data.Id);
-                        if(purchaseDetail is null)
+                        if (purchaseDetail is null)
                         {
                             throw new Exception("Không tìm thấy đơn mua !!!");
                         }
