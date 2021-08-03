@@ -24,7 +24,7 @@ namespace TnR_SS.Domain.Supervisor
             var trans = await _unitOfWork.Transactions.FindAsync(apiModel.TransId);
             if (trans == null || trans.WeightRecorderId != wcId)
             {
-                throw new Exception("Hóa đơn không tồn tại !!");
+                throw new Exception("Hãy tạo hóa đơn trước !!");
             }
 
             var fishType = await _unitOfWork.FishTypes.FindAsync(apiModel.FishTypeId);

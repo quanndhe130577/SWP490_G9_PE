@@ -52,35 +52,18 @@ namespace TnR_SS.Domain.Supervisor
                         foreach (var item in apiModel.ListTraderId)
                         {
                             // nếu date là buổi sáng ngày hôm sau thì chuyển thành buổi chiều ngày hôm trước
-                            if (apiModel.Date.Hour < 12/* && apiModel.Date.Hour + apiModel.Date.Minute + apiModel.Date.Second > 0*/)
+                            /*if (apiModel.Date.Hour < 12*//* && apiModel.Date.Hour + apiModel.Date.Minute + apiModel.Date.Second > 0*//*)
                             {
                                 apiModel.Date = apiModel.Date.AddHours(-12);
-                            }
+                            }*/
 
                             var tran = _unitOfWork.Transactions.GetAll(x => x.TraderId == item && x.WeightRecorderId == wcId && x.Date.Date == apiModel.Date.Date).FirstOrDefault();
                             if (tran == null)
                             {
                                 await CreateTransactionAsync(item, wcId, apiModel.Date);
-                                /*// check role trader in transaction
-                                var listRole = await _unitOfWork.UserInfors.GetRolesAsync(item);
-                                if (listRole.Contains(RoleName.Trader))
-                                {
-                                    await _unitOfWork.Transactions.CreateAsync(new Transaction()
-                                    {
-                                        TraderId = item,
-                                        WeightRecorderId = wcId,
-                                        Date = apiModel.Date
-                                    });
-                                }
-                                else
-                                {
-                                    throw new Exception("Thông tin thương lái chưa chính xác !!!");
-                                }*/
-                                await dbTransaction.CommitAsync();
                             }
-
-
                         }
+                        await dbTransaction.CommitAsync();
 
                     }
                     catch
