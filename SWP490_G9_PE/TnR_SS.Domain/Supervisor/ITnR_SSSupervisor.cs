@@ -78,8 +78,7 @@ namespace TnR_SS.Domain.Supervisor
         Task DeleteFishTypeAsync(int empId, int traderId);
         Task<List<FishTypeApiModel>> GetListFishTypeByPurchaseIdAsync(int purchaseId, int traderId);
         Task UpdateListFishTypeAsync(ListFishTypeModel listFishType, int traderId);
-        Task<List<WeightRecorderGetAllFishtypeResModel>> WeightRecorderGetAllFishTypeByTraderIdAsync(int? traderId, int userId, DateTime date);
-
+        Task<List<GetAllFishTypeForTransactionResModel>> GetAllFishTypeForTransactionAsync(int? traderId, int userId, DateTime date);
         Task<FishTypeApiModel> GetNewFishTypeAsync(int traderId, DateTime? date);
         #endregion
 
@@ -192,6 +191,7 @@ namespace TnR_SS.Domain.Supervisor
         Task CreateTransactionDetailV2Async(CreateTransactionDetailReqModelV2 apiModel, int userId);
         Task<List<GetAllTransactionDetailResModel>> GetAllTransactionDetailAsync(int userId, DateTime? date);
         Task<List<GetGeneralTransactionFollowDateResModel>> GetAllTransactionFollowDateAsync(int userId);
+        Task UpdateTransactionDetailAsync(UpdateTransactionDetailReqModel apiModel, int userId);
         #endregion
 
         #region Debt
