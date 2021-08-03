@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TnR_SS.Domain.ApiModels.EmployeeModel;
+using TnR_SS.Domain.ApiModels.HistorySalaryEmpModel;
 using TnR_SS.Domain.Entities;
 
 namespace TnR_SS.Domain.Supervisor
@@ -110,40 +111,6 @@ namespace TnR_SS.Domain.Supervisor
                 else
                 {
                     _unitOfWork.Employees.Update(empEdit);
-                    BaseSalaryEmp historySalaryEmp = _unitOfWork.Employees.GetEmployeeSalary(employee.ID, DateTime.Now);
-                    if (historySalaryEmp == null)
-                    {
-                        if (employee.Salary != null)
-                        {
-                            BaseSalaryEmp newHistorySalaryEmp = new BaseSalaryEmp()
-                            {
-                                ID = 0,
-                                EmpId = employee.ID,
-                                StartDate = employee.StartDate,
-                                EndDate = null,
-                                Salary = (double)employee.Salary,
-                            };
-                            await _unitOfWork.BaseSalaryEmps.CreateAsync(newHistorySalaryEmp);
-                        }
-                    }
-                    else
-                    {
-                        if (historySalaryEmp.Salary != employee.Salary)
-                        {
-                            historySalaryEmp.EndDate = DateTime.Now;
-                            BaseSalaryEmp newHistorySalaryEmp = new BaseSalaryEmp()
-                            {
-                                ID = 0,
-                                EmpId = employee.ID,
-                                StartDate = employee.StartDate,
-                                EndDate = null,
-                                Salary = (double)employee.Salary,
-                            };
-                            await _unitOfWork.BaseSalaryEmps.CreateAsync(newHistorySalaryEmp);
-                            _unitOfWork.BaseSalaryEmps.Update(historySalaryEmp);
-
-                        }
-                    }
                     await _unitOfWork.SaveChangeAsync();
                 }
             }
@@ -216,6 +183,36 @@ namespace TnR_SS.Domain.Supervisor
         public List<EmployeeSalaryDetailApiModel> GetAllEmployeeSalaryDetailByTraderId(int traderId, DateTime date)
         {
             return _unitOfWork.Employees.GetAllEmployeeSalaryDetailByTraderId(traderId, date);
+        }
+        public async Task<int> UpdateSalaryEmployee(BaseSalaryEmpApiModel salaryEmpApiModel)
+        {
+            BaseSalaryEmp baseSalaryEmp = _unitOfWork.Employees.GetEmployeeSalary(salaryEmpApiModel.EmpId, DateTime.Now);
+            if (baseSalaryEmp == null)
+            {
+                Employee employee = await _unitOfWork.Employees.FindAsync(salaryEmpApiModel.EmpId);
+                await _unitOfWork.BaseSalaryEmps.CreateAsync(new BaseSalaryEmp()
+                {
+                    ID = 0,
+                    EmpId = salaryEmpApiModel.EmpId,
+                    Salary = salaryEmpApiModel.Salary,
+                    StartDate = new DateTime(employee.StartDate.Year, employee.StartDate.Month, 1),
+                    EndDate = null
+                });
+            }
+            else
+            {
+                baseSalaryEmp.EndDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                _unitOfWork.BaseSalaryEmps.Update(baseSalaryEmp);
+                await _unitOfWork.BaseSalaryEmps.CreateAsync(new BaseSalaryEmp()
+                {
+                    ID = 0,
+                    EmpId = salaryEmpApiModel.EmpId,
+                    Salary = salaryEmpApiModel.Salary,
+                    StartDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1),
+                    EndDate = null
+                });
+            }
+            return await _unitOfWork.SaveChangeAsync();
         }
     }
 }
