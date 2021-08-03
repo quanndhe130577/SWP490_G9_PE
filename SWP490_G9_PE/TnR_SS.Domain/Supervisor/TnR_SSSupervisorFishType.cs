@@ -52,10 +52,10 @@ namespace TnR_SS.Domain.Supervisor
 
         public async Task<List<GetAllFishTypeForTransactionResModel>> GetAllFishTypeForTransactionAsync(int? traderId, int userId, DateTime date)
         {
-            if (date.Hour < 12)
-            {
-                date = date.AddDays(-1);
-            }
+            // if (date.Hour < 12)
+            // {
+            //     date = date.AddDays(-1);
+            // }
 
             List<FishType> listType = new List<FishType>();
             var userRole = await _unitOfWork.UserInfors.GetRolesAsync(userId);
