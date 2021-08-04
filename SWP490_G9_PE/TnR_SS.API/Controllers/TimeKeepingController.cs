@@ -63,6 +63,7 @@ namespace TnR_SS.API.Controller
             if (valid.IsValid)
             {
                 await _tnrssSupervisor.AddTimeKeeping(timeKeeping);
+                await _tnrssSupervisor.UpsertHistorySalary(timeKeeping.WorkDay, timeKeeping.EmpId);
                 return new ResponseBuilder().Success("Thêm thành công").ResponseModel;
             }
             else
@@ -84,6 +85,7 @@ namespace TnR_SS.API.Controller
             if (valid.IsValid)
             {
                 await _tnrssSupervisor.EditTimeKeeping(timeKeeping);
+                await _tnrssSupervisor.UpsertHistorySalary(timeKeeping.WorkDay, timeKeeping.EmpId);
                 return new ResponseBuilder().Success("Cập nhật thành công").ResponseModel;
             }
             else
@@ -110,6 +112,7 @@ namespace TnR_SS.API.Controller
                 return new ResponseBuilder().Error("Không tìm thấy lịch làm việc").ResponseModel;
             }
             int count = await _tnrssSupervisor.DeleteTimeKeeping(timeKeeping);
+            await _tnrssSupervisor.UpsertHistorySalary(timeKeeping.WorkDay, timeKeeping.EmpId);
             if (count > 0)
             {
                 return new ResponseBuilder().Success("Xoá thành công").ResponseModel;
