@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using System;
 using TnR_SS.Domain.ApiModels.AccountModel.RequestModel;
 using TnR_SS.Domain.ApiModels.AccountModel.ResponseModel;
 using TnR_SS.Domain.ApiModels.AdvanceSalaryModel;
@@ -31,16 +32,103 @@ namespace TnR_SS.Domain.ApiModels
         public MapperProfile()
         {
             #region UserInfor
-            CreateMap<RegisterUserReqModel, UserInfor>().ForMember(destination => destination.UserName, options => options.MapFrom(source => source.PhoneNumber)).ReverseMap();
-            /*.AfterMap((source, destination) =>
+            CreateMap<RegisterUserReqModel, UserInfor>().ForMember(destination => destination.UserName, options => options.MapFrom(source => source.PhoneNumber))
+            .AfterMap((source, destination) =>
             {
-                destination.CreatedDate = DateTime.Now;
-            });*/
+                var rs = source.FirstName.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
+                destination.FirstName = "";
+                foreach (var item in rs)
+                {
+                    destination.FirstName += item.Trim() + " ";
+                }
+                destination.FirstName = destination.FirstName.Trim();
 
-            CreateMap<UpdateUserReqModel, UserInfor>().ReverseMap();
-            CreateMap<FindTraderByPhoneApiModel, UserInfor>().ReverseMap();
-            CreateMap<UserInformation, UserInfor>().ReverseMap();
-            CreateMap<UserInfor, UserResModel>().ForMember(destination => destination.UserID, options => options.MapFrom(source => source.Id)).ReverseMap();
+                var rs2 = source.LastName.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
+                destination.LastName = "";
+                foreach (var item in rs2)
+                {
+                    destination.LastName += item.Trim() + " ";
+                }
+                destination.LastName = destination.LastName.Trim();
+
+            }).ReverseMap();
+
+            CreateMap<UpdateUserReqModel, UserInfor>()
+            .AfterMap((source, destination) =>
+            {
+                var rs = source.FirstName.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
+                destination.FirstName = "";
+                foreach (var item in rs)
+                {
+                    destination.FirstName += item.Trim() + " ";
+                }
+                destination.FirstName = destination.FirstName.Trim();
+
+                var rs2 = source.LastName.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
+                destination.LastName = "";
+                foreach (var item in rs2)
+                {
+                    destination.LastName += item.Trim() + " ";
+                }
+                destination.LastName = destination.LastName.Trim();
+            }).ReverseMap();
+            CreateMap<FindTraderByPhoneApiModel, UserInfor>()
+            .AfterMap((source, destination) =>
+            {
+                var rs = source.FirstName.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
+                destination.FirstName = "";
+                foreach (var item in rs)
+                {
+                    destination.FirstName += item.Trim() + " ";
+                }
+                destination.FirstName = destination.FirstName.Trim();
+
+                var rs2 = source.LastName.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
+                destination.LastName = "";
+                foreach (var item in rs2)
+                {
+                    destination.LastName += item.Trim() + " ";
+                }
+                destination.LastName = destination.LastName.Trim();
+            }).ReverseMap();
+            CreateMap<UserInformation, UserInfor>()
+            .AfterMap((source, destination) =>
+            {
+                var rs = source.FirstName.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
+                destination.FirstName = "";
+                foreach (var item in rs)
+                {
+                    destination.FirstName += item.Trim() + " ";
+                }
+                destination.FirstName = destination.FirstName.Trim();
+
+                var rs2 = source.LastName.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
+                destination.LastName = "";
+                foreach (var item in rs2)
+                {
+                    destination.LastName += item.Trim() + " ";
+                }
+                destination.LastName = destination.LastName.Trim();
+            }).ReverseMap();
+            CreateMap<UserInfor, UserResModel>().ForMember(destination => destination.UserID, options => options.MapFrom(source => source.Id))
+            .AfterMap((source, destination) =>
+            {
+                var rs = source.FirstName.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
+                destination.FirstName = "";
+                foreach (var item in rs)
+                {
+                    destination.FirstName += item.Trim() + " ";
+                }
+                destination.FirstName = destination.FirstName.Trim();
+
+                var rs2 = source.LastName.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
+                destination.LastName = "";
+                foreach (var item in rs2)
+                {
+                    destination.LastName += item.Trim() + " ";
+                }
+                destination.LastName = destination.LastName.Trim();
+            }).ReverseMap();
             #endregion
 
             #region Role
