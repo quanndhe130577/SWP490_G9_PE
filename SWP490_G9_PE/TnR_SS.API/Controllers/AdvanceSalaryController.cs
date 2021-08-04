@@ -31,6 +31,7 @@ namespace TnR_SS.API.Controllers
         public async Task<ResponseModel> CreateAdvanceSalaryAsync(AdvanceSalaryApiModel employee)
         {
             await _tnrssSupervisor.CreateAdvanceSalary(employee);
+            await _tnrssSupervisor.UpsertHistorySalary(employee.Date, employee.EmpId);
             return new ResponseBuilder().Success("Tạo ứng trước thành công").ResponseModel;
         }
 
@@ -38,6 +39,7 @@ namespace TnR_SS.API.Controllers
         public async Task<ResponseModel> UpdateAdvanceSalaryAsync(AdvanceSalaryApiModel employee)
         {
             await _tnrssSupervisor.UpdateAdvanceSalary(employee);
+            await _tnrssSupervisor.UpsertHistorySalary(employee.Date, employee.EmpId);
             return new ResponseBuilder().Success("Cập nhật thông ứng trước lương").ResponseModel;
         }
 
@@ -46,6 +48,7 @@ namespace TnR_SS.API.Controllers
         {
             var ed = await _tnrssSupervisor.GetAdvanceSalary(empId);
             await _tnrssSupervisor.DeleteAdvanceSalary(ed);
+            await _tnrssSupervisor.UpsertHistorySalary(ed.Date, ed.EmpId);
             return new ResponseBuilder().Success("Xóa lương ứng trước thành công").ResponseModel;
         }
     }
