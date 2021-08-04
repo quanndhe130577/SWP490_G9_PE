@@ -102,6 +102,12 @@ namespace TnR_SS.Domain.Supervisor
                 throw new Exception("Không tìm thấy thương lái !!!");
             }
 
+            var checkPurchase = _unitOfWork.Purchases.GetAll(x => x.TraderID == purchaseModel.TraderID && x.Date.Date == purchaseModel.Date.Date && x.PondOwnerID == purchaseModel.PondOwnerID).FirstOrDefault();
+            if (checkPurchase != null)
+            {
+                throw new Exception("Đơn mua với chủ ao trong ngày " + purchaseModel.Date.ToString("dd/MM/yyyy") + " đã có!!!");
+            }
+
             var purchase = _mapper.Map<PurchaseCreateReqModel, Purchase>(purchaseModel);
             await _unitOfWork.Purchases.CreateAsync(purchase);
             await _unitOfWork.SaveChangeAsync();
@@ -132,6 +138,12 @@ namespace TnR_SS.Domain.Supervisor
             if (pondOwner == null || pondOwner.TraderID != traderId)
             {
                 throw new Exception("Chủ ao không hợp lệ");
+            }
+
+            var checkPurchase = _unitOfWork.Purchases.GetAll(x => x.TraderID == traderId && x.Date.Date == model.Date.Date && x.PondOwnerID == model.PondOwnerID).FirstOrDefault();
+            if (checkPurchase != null)
+            {
+                throw new Exception("Đơn mua với chủ ao trong ngày " + model.Date.ToString("dd/MM/yyyy") + " đã có!!!");
             }
 
             purchase = _mapper.Map<PurchaseApiModel, Purchase>(model, purchase);
@@ -287,6 +299,12 @@ namespace TnR_SS.Domain.Supervisor
             if (pO == null)
             {
                 throw new Exception("Chủ ao không hợp lệ !!!");
+            }
+
+            var checkPurchase = _unitOfWork.Purchases.GetAll(x => x.TraderID == traderId && x.Date.Date == purchase.Date.Date && x.PondOwnerID == apiModel.PondOwnerId).FirstOrDefault();
+            if (checkPurchase != null)
+            {
+                throw new Exception("Đơn mua với chủ ao trong ngày " + purchase.Date.ToString("dd/MM/yyyy") + " đã có!!!");
             }
 
             purchase.PondOwnerID = apiModel.PondOwnerId;
