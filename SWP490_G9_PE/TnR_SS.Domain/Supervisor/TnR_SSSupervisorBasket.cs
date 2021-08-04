@@ -46,15 +46,22 @@ namespace TnR_SS.Domain.Supervisor
 
         public async Task DeleteBasketAsync(int basketId, int traderId)
         {
-            var basketEdit = await _unitOfWork.Baskets.FindAsync(basketId);
-            if (basketEdit.TraderID == traderId)
+            try
             {
-                _unitOfWork.Baskets.Delete(basketEdit);
-                await _unitOfWork.SaveChangeAsync();
+                var basketEdit = await _unitOfWork.Baskets.FindAsync(basketId);
+                if (basketEdit.TraderID == traderId)
+                {
+                    _unitOfWork.Baskets.Delete(basketEdit);
+                    await _unitOfWork.SaveChangeAsync();
+                }
+                else
+                {
+                    throw new Exception("Thông tin rổ không đúng");
+                }
             }
-            else
+            catch
             {
-                throw new Exception("Thông tin rổ không đúng");
+                throw new Exception("Thông tin rổ đang được sử dụng, không thể xóa !!!");
             }
         }
     }

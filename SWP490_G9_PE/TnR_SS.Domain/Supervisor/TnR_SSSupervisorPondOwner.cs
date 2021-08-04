@@ -45,8 +45,16 @@ namespace TnR_SS.Domain.Supervisor
 
         public async Task<int> DeletePondOwner(PondOwner pondOwner)
         {
-            _unitOfWork.PondOwners.Delete(pondOwner);
-            return await _unitOfWork.SaveChangeAsync();
+            try
+            {
+                _unitOfWork.PondOwners.Delete(pondOwner);
+                return await _unitOfWork.SaveChangeAsync();
+            }
+            catch
+            {
+                throw new Exception("Thông tin của chủ ao đang được sử dụng, không thể xóa");
+            }
+
         }
     }
 }

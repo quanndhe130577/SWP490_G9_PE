@@ -90,6 +90,28 @@ namespace TnR_SS.Domain.ApiModels
             #region PurchaseDetail
             CreateMap<PurchaseDetail, PurchaseDetailReqModel>().ReverseMap();
             CreateMap<PurchaseDetail, PurchaseDetailResModel>().ReverseMap();
+            CreateMap<ClosePurchaseDetail, PurchaseDetailResModel>().AfterMap((source, destination) =>
+            {
+                destination.ID = source.PurchaseDetailId;
+                destination.Price = source.Price;
+                destination.Weight = source.Weight;
+                destination.Basket = new BasketApiModel()
+                {
+                    ID = source.BasketId,
+                    Type = source.BasketType,
+                    Weight = source.BasketWeight
+                };
+                destination.FishType = new FishTypeApiModel()
+                {
+                    ID = source.FishTypeId,
+                    FishName = source.FishName,
+                    Description = source.FishTypeDescription,
+                    MinWeight = source.FishTypeMinWeight,
+                    MaxWeight = source.FishTypeMaxWeight,
+                    Price = source.FishTypePrice,
+                    TransactionPrice = source.FishTypeTransactionPrice,
+                };
+            });
             #endregion
 
             #region LK_PurchaseDeatil_Drum
@@ -110,7 +132,6 @@ namespace TnR_SS.Domain.ApiModels
 
             #region Transaction Detail
             CreateMap<CreateTransactionDetailReqModel, TransactionDetail>();
-            CreateMap<CreateTransactionDetailReqModelV2, TransactionDetail>();
             CreateMap<TransactionDetail, GetAllTransactionDetailResModel>();
             CreateMap<TransactionDetail, TransactionDetailInformation>();
             CreateMap<UpdateTransactionDetailReqModel, TransactionDetail>().ReverseMap();
