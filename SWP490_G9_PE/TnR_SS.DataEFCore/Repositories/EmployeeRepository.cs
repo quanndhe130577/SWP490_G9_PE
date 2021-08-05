@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using TnR_SS.Domain.ApiModels.EmployeeModel;
+using TnR_SS.Domain.ApiModels.HistorySalaryEmpModel;
 using TnR_SS.Domain.Entities;
 using TnR_SS.Domain.Repositories;
 
@@ -22,45 +22,53 @@ namespace TnR_SS.DataEFCore.Repositories
 
         public BaseSalaryEmp GetEmployeeSalary(int employeeId, DateTime date)
         {
-            List<BaseSalaryEmp> historySalaryEmps = _context.BaseSalaryEmp
-            .Where(hse => hse.StartDate < date && (hse.EndDate == null || hse.EndDate > date) && hse.EmpId == employeeId)
+            List<BaseSalaryEmp> baseSalaryEmps = _context.BaseSalaryEmp
+            .Where(hse => hse.StartDate <= date && (hse.EndDate == null || hse.EndDate >= date) && hse.EmpId == employeeId)
             .OrderByDescending(hse => hse.ID).ToList();
-            if (historySalaryEmps.Count > 0)
+            if (baseSalaryEmps.Count > 0)
             {
-                return historySalaryEmps[0];
+                return baseSalaryEmps[0];
             }
             return null;
         }
 
+        public double GetEmployeeAdvanceSalary(int employeeId, DateTime date)
+        {
+            double salary = 0;
+            foreach (AdvanceSalary advanceSalary in _context.AdvanceSalaries
+             .Where(hse => hse.Date.Month == date.Month && hse.Date.Year == date.Year && hse.EmpId == employeeId))
+            {
+                salary += advanceSalary.Amount;
+            }
+            return salary;
+        }
         public List<EmployeeSalaryDetailApiModel> GetAllEmployeeSalaryDetailByTraderId(int traderId, DateTime date)
         {
             List<EmployeeSalaryDetailApiModel> employeeSalaryDetails = new List<EmployeeSalaryDetailApiModel>();
-            List<Employee> employees = _context.Employees.Where(e => e.StartDate < date && e.EndDate == null || e.EndDate > date).ToList();
+            List<Employee> employees = _context.Employees.Where(e => (e.StartDate.Year < date.Year || (e.StartDate.Year == date.Year && e.StartDate.Month <= date.Month))
+            && (e.EndDate == null || e.EndDate > date)).ToList();
             foreach (Employee employee in employees)
             {
-                BaseSalaryEmp historySalaryEmp = GetEmployeeSalary(employee.ID, date);
-                if (historySalaryEmp != null)
+                BaseSalaryEmp baseSalaryEmp = GetEmployeeSalary(employee.ID, date);
+                double status = 0;
+                foreach (TimeKeeping tk in _context.TimeKeepings.Where(tk => tk.WorkDay.Month == date.Month && tk.WorkDay.Year == date.Year && tk.EmpId == employee.ID))
                 {
-                    double? salary = historySalaryEmp.Salary, paid = 0, notpaid = 0; ;
-                    List<TimeKeeping> timeKeepings = _context.TimeKeepings.Where(tk => tk.WorkDay.Month == date.Month && tk.WorkDay.Year == date.Year && tk.EmpId == employee.ID).ToList();
-                    foreach (TimeKeeping timeKeeping in timeKeepings)
-                    {
-                        if (timeKeeping.Note == TimeKeepingNote.IsPaid)
-                        {
-                            paid += salary * timeKeeping.Status;
-                        }
-                        else
-                        {
-                            notpaid += salary * timeKeeping.Status;
-                        }
-                    }
+                    status += tk.Status;
+                }
+                List<HistorySalaryEmp> historySalaryEmps = _context.HistorySalaryEmp.Where(hse => hse.DateStart.Month == date.Month && hse.DateStart.Year == date.Year && hse.EmpId == employee.ID).ToList();
+                if (baseSalaryEmp != null)
+                {
+                    double? baseSalary = baseSalaryEmp.Salary;
                     employeeSalaryDetails.Add(new EmployeeSalaryDetailApiModel()
                     {
                         ID = employee.ID,
                         Name = employee.Name,
-                        Salary = salary,
-                        Paid = paid,
-                        NotPaid = notpaid,
+                        BaseSalary = baseSalary,
+                        Bonus = historySalaryEmps.Count > 0 ? historySalaryEmps[0].Bonus : 0,
+                        Punish = historySalaryEmps.Count > 0 ? historySalaryEmps[0].Punish : 0,
+                        Salary = historySalaryEmps.Count > 0 ? historySalaryEmps[0].Salary : null,
+                        Status = status,
+                        AdvanceSalary = GetEmployeeAdvanceSalary(employee.ID, date)
                     });
                 }
                 else
@@ -69,9 +77,10 @@ namespace TnR_SS.DataEFCore.Repositories
                     {
                         ID = employee.ID,
                         Name = employee.Name,
-                        Salary = null,
-                        Paid = null,
-                        NotPaid = null,
+                        BaseSalary = null,
+                        Salary = historySalaryEmps.Count > 0 ? historySalaryEmps[0].Salary : null,
+                        Status = status,
+                        AdvanceSalary = GetEmployeeAdvanceSalary(employee.ID, date)
                     });
                 }
             }

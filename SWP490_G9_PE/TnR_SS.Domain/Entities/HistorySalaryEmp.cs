@@ -14,7 +14,6 @@ namespace TnR_SS.Domain.Entities
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
-
         [Required]
         public DateTime DateStart { get; set; }
         public DateTime? DateEnd { get; set; }
@@ -27,10 +26,10 @@ namespace TnR_SS.Domain.Entities
 
         [Required]
         public double Salary { get; set; }
-
+        public double Bonus { get; set; }
+        public double Punish { get; set; }
         [Required]
         public int EmpId { get; set; }
-
         public Employee Employee { get; set; }
     }
 }

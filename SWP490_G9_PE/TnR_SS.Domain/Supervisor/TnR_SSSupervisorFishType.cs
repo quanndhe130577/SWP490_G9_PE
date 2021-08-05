@@ -61,8 +61,12 @@ namespace TnR_SS.Domain.Supervisor
             var userRole = await _unitOfWork.UserInfors.GetRolesAsync(userId);
             if (userRole.Contains(RoleName.Trader))
             {
-
-                listType = _unitOfWork.FishTypes.GetAll(X => X.TraderID == userId && X.Date.Date == date.Date && X.PurchaseID != null).Distinct().ToList();
+                // lay ra ngay co purchase gan nhat
+                var dateGanNhat = _unitOfWork.Purchases.GetAll(x => x.TraderID == userId && x.Date.Date <= date).OrderByDescending(x => x.Date).Select(x => x.Date).FirstOrDefault();
+                // lấy ra purchase có ngày = ngày gần nhất
+                var listPurchaseId = _unitOfWork.Purchases.GetAll(x => x.TraderID == userId && x.Date.Date == dateGanNhat.Date).Select(x => x.ID).ToList();
+                listType = _unitOfWork.FishTypes.GetAllFishTypeByPurchaseIds(listPurchaseId);
+                //listType = _unitOfWork.FishTypes.GetAll(X => X.TraderID == userId && X.Date.Date == date.Date && X.PurchaseID != null).Distinct().ToList();
             }
             else if (userRole.Contains(RoleName.WeightRecorder) && traderId != null)
             {

@@ -134,6 +134,7 @@ namespace TnR_SS.Domain.Supervisor
         Task DeleteEmployeeAsync(int empId, int traderId);
         EmployeeApiModel GetDetailEmployee(int traderId, int empId);
         List<EmployeeSalaryDetailApiModel> GetAllEmployeeSalaryDetailByTraderId(int traderId, DateTime date);
+        Task<int> UpdateSalaryEmployee(BaseSalaryEmpApiModel salaryEmpApiModel);
         #endregion
 
         #region TimeKeeping
@@ -187,7 +188,6 @@ namespace TnR_SS.Domain.Supervisor
 
         #region Transaction Detail
         Task CreateTransactionDetailAsync(CreateTransactionDetailReqModel apiModel, int userId);
-        Task CreateTransactionDetailV2Async(CreateTransactionDetailReqModelV2 apiModel, int userId);
         Task<List<GetAllTransactionDetailResModel>> GetAllTransactionDetailAsync(int userId, DateTime? date);
         Task<List<GetGeneralTransactionFollowDateResModel>> GetAllTransactionFollowDateAsync(int userId);
         Task UpdateTransactionDetailAsync(UpdateTransactionDetailReqModel apiModel, int userId);
@@ -210,5 +210,9 @@ namespace TnR_SS.Domain.Supervisor
         #endregion
 
         Task CreateHistorySalaryAsync(CreateHistorySalaryEmpModel salaryApi, int traderId);
+        Task UpdateHistorySalaryAsync(HistorySalaryEmp historySalaryEmp, CreateHistorySalaryEmpModel salaryApi, int traderId);
+        HistorySalaryEmp GetHistoryEmpSalary(DateTime date, int empId);
+        List<CreateHistorySalaryEmpModel> GetAllHistoryEmpSalary(int empId);
+        Task<int> UpsertHistorySalary(DateTime date, int empId);
     }
 }

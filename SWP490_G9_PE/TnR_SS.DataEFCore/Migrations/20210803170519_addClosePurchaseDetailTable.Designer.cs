@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TnR_SS.DataEFCore;
 
 namespace TnR_SS.DataEFCore.Migrations
 {
     [DbContext(typeof(TnR_SSContext))]
-    partial class TnR_SSContextModelSnapshot : ModelSnapshot
+    [Migration("20210803170519_addClosePurchaseDetailTable")]
+    partial class addClosePurchaseDetailTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -751,32 +753,32 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "4199701e-3afe-4beb-abd7-c19a8401e874",
+                            ConcurrencyStamp = "dfec2232-5fd1-4788-8a00-375aef4827fb",
                             CreatedAt = new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Chủ bến",
                             Name = "WeightRecorder",
                             NormalizedName = "WEIGHTRECORDER",
-                            UpdatedAt = new DateTime(2021, 8, 4, 0, 31, 22, 562, DateTimeKind.Local).AddTicks(8363)
+                            UpdatedAt = new DateTime(2021, 8, 4, 0, 5, 18, 141, DateTimeKind.Local).AddTicks(9406)
                         },
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "e3a5bedc-91d9-4b00-86ef-aa5f42ade350",
+                            ConcurrencyStamp = "8001de94-66d8-4e9e-b39f-579349930c4f",
                             CreatedAt = new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Thương lái",
                             Name = "Trader",
                             NormalizedName = "TRADER",
-                            UpdatedAt = new DateTime(2021, 8, 4, 0, 31, 22, 565, DateTimeKind.Local).AddTicks(2333)
+                            UpdatedAt = new DateTime(2021, 8, 4, 0, 5, 18, 143, DateTimeKind.Local).AddTicks(7889)
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "ec3ae8b5-f6ee-4902-81d4-0457a0c85343",
+                            ConcurrencyStamp = "75d877c8-dd09-4ce8-9e82-9f6b55a212ad",
                             CreatedAt = new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Admin",
                             Name = "Admin",
                             NormalizedName = "ADMIN",
-                            UpdatedAt = new DateTime(2021, 8, 4, 0, 31, 22, 565, DateTimeKind.Local).AddTicks(2407)
+                            UpdatedAt = new DateTime(2021, 8, 4, 0, 5, 18, 143, DateTimeKind.Local).AddTicks(7937)
                         });
                 });
 
@@ -1167,7 +1169,7 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.HasOne("TnR_SS.Domain.Entities.PurchaseDetail", "PurchaseDetail")
                         .WithOne("ClosePurchaseDetail")
                         .HasForeignKey("TnR_SS.Domain.Entities.ClosePurchaseDetail", "PurchaseDetailId")
-                        .HasConstraintName("FK_ClosePurchaseDetail_PurchaseDetail")
+                        .HasConstraintName("FK_Buyer_UserInfor")
                         .OnDelete(DeleteBehavior.ClientNoAction)
                         .IsRequired();
 
@@ -1248,14 +1250,14 @@ namespace TnR_SS.DataEFCore.Migrations
                         .WithMany("LK_PurchaseDeatil_Drums")
                         .HasForeignKey("DrumID")
                         .HasConstraintName("FK_LKPurchaseDrum_Drum")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.ClientNoAction)
                         .IsRequired();
 
                     b.HasOne("TnR_SS.Domain.Entities.PurchaseDetail", "PurchaseDetail")
                         .WithMany("LK_PurchaseDeatil_Drums")
                         .HasForeignKey("PurchaseDetailID")
                         .HasConstraintName("FK_LKPurchaseDrum_PurchaseDetail")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.ClientNoAction)
                         .IsRequired();
 
                     b.Navigation("Drum");

@@ -41,6 +41,7 @@ namespace TnR_SS.DataEFCore
         public virtual DbSet<Transaction> Transactions { get; set; }
         public virtual DbSet<TransactionDetail> TransactionDetails { get; set; }
         public virtual DbSet<TraderOfWeightRecorder> TraderOfWeightRecorders { get; set; }
+        public virtual DbSet<ClosePurchaseDetail> ClosePurchaseDetails { get; set; }
 
         /*protected override void OnConfiguring(DbContextOptionsBuilder options)
     => options.UseSqlServer("Server=localhost;Database=TnR_SS;Trusted_Connection=True;");*/
@@ -78,6 +79,7 @@ namespace TnR_SS.DataEFCore
             new TransactionDetailConfiguration(modelBuilder.Entity<TransactionDetail>());
             new TraderOfWeightRecorderConfiguration(modelBuilder.Entity<TraderOfWeightRecorder>());
             new AdvanceSalaryConfiguration(modelBuilder.Entity<AdvanceSalary>());
+            new ClosePurchaseDetailConfiguration(modelBuilder.Entity<ClosePurchaseDetail>());
 
             OnModelCreatingPartial(modelBuilder);
         }

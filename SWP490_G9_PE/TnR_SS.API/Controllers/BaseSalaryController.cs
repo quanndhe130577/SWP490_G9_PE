@@ -11,7 +11,7 @@ using TnR_SS.Domain.Supervisor;
 
 namespace TnR_SS.API.Controllers
 {
-    [Route("api/salary")]
+    [Route("api/baseSalary")]
     [ApiController]
     [Authorize]
     public class BaseSalaryController : ControllerBase
