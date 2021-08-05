@@ -50,5 +50,12 @@ namespace TnR_SS.DataEFCore.Repositories
 
             return rs.Select(x => x.tranDe).ToList();
         }
+
+        public async Task DeleteByTransactionIdAsync(int tranId)
+        {
+            var list = _context.TransactionDetails.Where(x => x.TransId == tranId);
+            _context.TransactionDetails.RemoveRange(list);
+            await _context.SaveChangesAsync();
+        }
     }
 }

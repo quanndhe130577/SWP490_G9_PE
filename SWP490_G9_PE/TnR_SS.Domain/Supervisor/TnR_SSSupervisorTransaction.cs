@@ -172,6 +172,40 @@ namespace TnR_SS.Domain.Supervisor
             return listTran;
         }
 
+        public async Task DeleteTransactionAsync(int tranId, int userId)
+        {
+            var strategy = _unitOfWork.CreateExecutionStrategy();
+
+            await strategy.ExecuteAsync(async () =>
+            {
+                using (var dbTransaction = _unitOfWork.BeginTransaction())
+                {
+                    try
+                    {
+                        var tran = await _unitOfWork.Transactions.FindAsync(tranId);
+                        if (tran == null || (tran.WeightRecorderId != null && tran.WeightRecorderId != userId) || (tran.WeightRecorderId == null && tran.TraderId != userId))
+                        {
+                            throw new Exception("Đơn mua này không tồn tại hoặc đã bị xóa !!!");
+                        }
+
+                        await _unitOfWork.TransactionDetails.DeleteByTransactionIdAsync(tranId);
+                        _unitOfWork.Transactions.Delete(tran);
+                        await _unitOfWork.SaveChangeAsync();
+
+                        await dbTransaction.CommitAsync();
+                    }
+                    catch
+                    {
+                        await dbTransaction.RollbackAsync();
+                        throw;
+                        //throw new Exception("Đã có lỗi xay ra, hãy thử lại sau");
+                    }
+
+                }
+            });
+
+        }
+
         private async Task<List<UserInformation>> WeightRecordGetAllTraderInDate(int wcId, DateTime date)
         {
             var listTraderId = _unitOfWork.Transactions.GetAll(x => x.WeightRecorderId == wcId && x.Date.Date == date.Date).Select(x => x.TraderId).Distinct();
