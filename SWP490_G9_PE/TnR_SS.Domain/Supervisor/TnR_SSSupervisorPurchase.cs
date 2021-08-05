@@ -12,21 +12,45 @@ namespace TnR_SS.Domain.Supervisor
     public partial class TnR_SSSupervisor
     {
         #region Private function
-        private double GetTotalWeightPurchase(int purchaseId)
+        private double GetTotalWeightPurchase(Purchase purchase)
         {
-            return _unitOfWork.PurchaseDetails.GetAll(x => x.PurchaseId == purchaseId).Sum(x => x.Weight);
+            if (purchase.isCompleted == PurchaseStatus.Pending)
+            {
+                return _unitOfWork.PurchaseDetails.GetAll(x => x.PurchaseId == purchase.ID).Sum(x => x.Weight);
+            }
+            else // nếu đơn đã được chốt sổ
+            {
+                var listClosePD = _unitOfWork.ClosePurchaseDetails.GetAllByPurchase(purchase);
+                return listClosePD.Sum(x => x.Weight);
+            }
         }
 
         private async Task<double> GetTotalAmountPurchaseAsync(int purchaseId)
         {
-            var totalAmount = 0.0;
-            var listPD = _unitOfWork.PurchaseDetails.GetAll(x => x.PurchaseId == purchaseId).ToList();
-            foreach (var item in listPD)
+            var purchase = await _unitOfWork.Purchases.FindAsync(purchaseId);
+            if (purchase.isCompleted == PurchaseStatus.Pending)
             {
-                totalAmount += await GetPurchaseDetailPriceAsync(item);
+                var totalAmount = 0.0;
+                var listPD = _unitOfWork.PurchaseDetails.GetAll(x => x.PurchaseId == purchaseId).ToList();
+                foreach (var item in listPD)
+                {
+                    totalAmount += await GetPurchaseDetailPriceAsync(item);
+                }
+
+                return totalAmount;
+            }
+            else // nếu đơn đã được chốt sổ
+            {
+                var totalAmount = 0.0;
+                var listPD = _unitOfWork.ClosePurchaseDetails.GetAllByPurchase(purchase);
+                foreach (var item in listPD)
+                {
+                    totalAmount += (item.Weight - item.BasketWeight) * item.FishTypePrice;
+                }
+
+                return totalAmount;
             }
 
-            return totalAmount;
         }
 
         private async Task<PurchaseResModel> MapPurchaseResModelAsync(Purchase purchase)
@@ -34,7 +58,7 @@ namespace TnR_SS.Domain.Supervisor
             PurchaseResModel newPurchase = _mapper.Map<Purchase, PurchaseResModel>(purchase);
             var pondOwner = await _unitOfWork.PondOwners.FindAsync(purchase.PondOwnerID);
             newPurchase.PondOwnerName = pondOwner.Name;
-            newPurchase.TotalWeight = GetTotalWeightPurchase(purchase.ID);
+            newPurchase.TotalWeight = GetTotalWeightPurchase(purchase);
             newPurchase.TotalAmount = await GetTotalAmountPurchaseAsync(purchase.ID);
             newPurchase.Status = purchase.isCompleted.ToString();
 
@@ -102,6 +126,12 @@ namespace TnR_SS.Domain.Supervisor
                 throw new Exception("Không tìm thấy thương lái !!!");
             }
 
+            var checkPurchase = _unitOfWork.Purchases.GetAll(x => x.TraderID == purchaseModel.TraderID && x.Date.Date == purchaseModel.Date.Date && x.PondOwnerID == purchaseModel.PondOwnerID).FirstOrDefault();
+            if (checkPurchase != null)
+            {
+                throw new Exception("Đơn mua với chủ ao trong ngày " + purchaseModel.Date.ToString("dd/MM/yyyy") + " đã có!!!");
+            }
+
             var purchase = _mapper.Map<PurchaseCreateReqModel, Purchase>(purchaseModel);
             await _unitOfWork.Purchases.CreateAsync(purchase);
             await _unitOfWork.SaveChangeAsync();
@@ -132,6 +162,12 @@ namespace TnR_SS.Domain.Supervisor
             if (pondOwner == null || pondOwner.TraderID != traderId)
             {
                 throw new Exception("Chủ ao không hợp lệ");
+            }
+
+            var checkPurchase = _unitOfWork.Purchases.GetAll(x => x.TraderID == traderId && x.Date.Date == model.Date.Date && x.PondOwnerID == model.PondOwnerID).FirstOrDefault();
+            if (checkPurchase != null)
+            {
+                throw new Exception("Đơn mua với chủ ao trong ngày " + model.Date.ToString("dd/MM/yyyy") + " đã có!!!");
             }
 
             purchase = _mapper.Map<PurchaseApiModel, Purchase>(model, purchase);
@@ -165,10 +201,7 @@ namespace TnR_SS.Domain.Supervisor
 
                         if (purchase.isCompleted.Equals(PurchaseStatus.Completed))
                         {
-                            if (purchase.isCompleted == PurchaseStatus.Completed)
-                            {
-                                throw new Exception("Đơn mua này đã được chốt !!");
-                            }
+                            throw new Exception("Đơn mua này đã được chốt !!");
                         }
 
                         var totalAmount = await GetTotalAmountPurchaseAsync(data.ID);
@@ -245,6 +278,7 @@ namespace TnR_SS.Domain.Supervisor
                                     foreach (var item in purchaseDetail)
                                     {
                                         _unitOfWork.LK_PurchaseDetail_Drums.RemoveLKByPurchaseDetailId(item.ID);
+                                        await _unitOfWork.ClosePurchaseDetails.DeleteByPurchaseDetailIdAsync(item.ID);
                                         _unitOfWork.PurchaseDetails.Delete(item);
                                     }
                                 }
@@ -287,6 +321,12 @@ namespace TnR_SS.Domain.Supervisor
             if (pO == null)
             {
                 throw new Exception("Chủ ao không hợp lệ !!!");
+            }
+
+            var checkPurchase = _unitOfWork.Purchases.GetAll(x => x.TraderID == traderId && x.Date.Date == purchase.Date.Date && x.PondOwnerID == apiModel.PondOwnerId).FirstOrDefault();
+            if (checkPurchase != null)
+            {
+                throw new Exception("Đơn mua với chủ ao trong ngày " + purchase.Date.ToString("dd/MM/yyyy") + " đã có!!!");
             }
 
             purchase.PondOwnerID = apiModel.PondOwnerId;

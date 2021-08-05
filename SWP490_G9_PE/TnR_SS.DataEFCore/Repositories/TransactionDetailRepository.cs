@@ -11,7 +11,7 @@ namespace TnR_SS.DataEFCore.Repositories
     public class TransactionDetailRepository : RepositoryBase<TransactionDetail>, ITransactionDetailRepository
     {
         public TransactionDetailRepository(TnR_SSContext context) : base(context) { }
-        public List<TransactionDetail> GetAllTransactionByWcIDAndDate(int wcId, DateTime? date)
+        public List<TransactionDetail> GetAllByWcIDAndDate(int wcId, DateTime? date)
         {
             var rs = _context.Transactions.Join(
                         _context.TransactionDetails,
@@ -31,7 +31,7 @@ namespace TnR_SS.DataEFCore.Repositories
             return rs.Select(x => x.tranDe).ToList();
         }
 
-        public List<TransactionDetail> GetAllTransactionByTraderIdAndDate(int traderId, DateTime? date)
+        public List<TransactionDetail> GetAllByTraderIdAndDate(int traderId, DateTime? date)
         {
             var rs = _context.Transactions.Join(
                         _context.TransactionDetails,
@@ -49,6 +49,13 @@ namespace TnR_SS.DataEFCore.Repositories
             }
 
             return rs.Select(x => x.tranDe).ToList();
+        }
+
+        public async Task DeleteByTransactionIdAsync(int tranId)
+        {
+            var list = _context.TransactionDetails.Where(x => x.TransId == tranId);
+            _context.TransactionDetails.RemoveRange(list);
+            await _context.SaveChangesAsync();
         }
     }
 }

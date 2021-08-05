@@ -106,7 +106,8 @@ namespace TnR_SS.Domain.Supervisor
                 tran.Date = item.Date;
                 tran.Trader = _mapper.Map<UserInfor, UserInformation>(await _unitOfWork.UserInfors.FindAsync(item.TraderId));
                 tran.WeightRecorder = item.WeightRecorderId != null ? _mapper.Map<UserInfor, UserInformation>(await _unitOfWork.UserInfors.FindAsync(item.WeightRecorderId)) : null;
-                tran.TransactionDetails = await GetListTransactionDetailModelAsync(item.ID);
+                tran.TransactionDetails = await GetListTransactionDetailModelAsync(item);
+                tran.Status = item.isCompleted.ToString();
 
                 list.Add(tran);
             }
@@ -114,17 +115,37 @@ namespace TnR_SS.Domain.Supervisor
             return list;
         }
 
-        private async Task<List<TransactionDetailInformation>> GetListTransactionDetailModelAsync(int tranId)
+        private async Task<List<TransactionDetailInformation>> GetListTransactionDetailModelAsync(Transaction tran)
         {
             List<TransactionDetailInformation> list = new List<TransactionDetailInformation>();
-
-            var listTranDe = _unitOfWork.TransactionDetails.GetAll(x => x.TransId == tranId).OrderByDescending(x => x.ID);
-            foreach (var tran in listTranDe)
+            bool checkLackOfDate = false;
+            if (tran.isCompleted == TransactionStatus.Completed)
             {
-                TransactionDetailInformation apiModel = _mapper.Map<TransactionDetail, TransactionDetailInformation>(tran);
-                apiModel.FishType = _mapper.Map<FishType, FishTypeApiModel>(await _unitOfWork.FishTypes.FindAsync(tran.FishTypeId));
-                apiModel.Buyer = _mapper.Map<Buyer, BuyerApiModel>(await _unitOfWork.Buyers.FindAsync(tran.BuyerId));
-                list.Add(apiModel);
+                var listCloseTD = _unitOfWork.CloseTransactionDetails.GetAll(x => x.TransactionId == tran.ID);
+                if (listCloseTD == null || listCloseTD.Count() == 0)
+                {
+                    checkLackOfDate = true;
+                }
+                else
+                {
+                    foreach (var tranDe in listCloseTD)
+                    {
+                        TransactionDetailInformation apiModel = _mapper.Map<CloseTransactionDetail, TransactionDetailInformation>(tranDe);
+                        list.Add(apiModel);
+                    }
+                }
+            }
+
+            if (checkLackOfDate || tran.isCompleted == TransactionStatus.Pending)
+            {
+                var listTranDe = _unitOfWork.TransactionDetails.GetAll(x => x.TransId == tran.ID).OrderByDescending(x => x.ID);
+                foreach (var tranDe in listTranDe)
+                {
+                    TransactionDetailInformation apiModel = _mapper.Map<TransactionDetail, TransactionDetailInformation>(tranDe);
+                    apiModel.FishType = _mapper.Map<FishType, FishTypeApiModel>(await _unitOfWork.FishTypes.FindAsync(tranDe.FishTypeId));
+                    apiModel.Buyer = _mapper.Map<Buyer, BuyerApiModel>(await _unitOfWork.Buyers.FindAsync(tranDe.BuyerId));
+                    list.Add(apiModel);
+                }
             }
 
             return list;
@@ -170,6 +191,111 @@ namespace TnR_SS.Domain.Supervisor
             }
 
             return listTran;
+        }
+
+        public async Task DeleteTransactionAsync(int tranId, int userId)
+        {
+            var strategy = _unitOfWork.CreateExecutionStrategy();
+
+            await strategy.ExecuteAsync(async () =>
+            {
+                using (var dbTransaction = _unitOfWork.BeginTransaction())
+                {
+                    try
+                    {
+                        var tran = await _unitOfWork.Transactions.FindAsync(tranId);
+                        if (tran == null || (tran.WeightRecorderId != null && tran.WeightRecorderId != userId) || (tran.WeightRecorderId == null && tran.TraderId != userId))
+                        {
+                            throw new Exception("Đơn mua này không tồn tại hoặc đã bị xóa !!!");
+                        }
+
+                        await _unitOfWork.TransactionDetails.DeleteByTransactionIdAsync(tranId);
+                        _unitOfWork.Transactions.Delete(tran);
+                        await _unitOfWork.SaveChangeAsync();
+
+                        await dbTransaction.CommitAsync();
+                    }
+                    catch
+                    {
+                        await dbTransaction.RollbackAsync();
+                        throw;
+                        //throw new Exception("Đã có lỗi xay ra, hãy thử lại sau");
+                    }
+
+                }
+            });
+
+        }
+
+        public async Task ChotSoTransactionAsync(List<int> listTranId, int userId)
+        {
+            var strategy = _unitOfWork.CreateExecutionStrategy();
+
+            await strategy.ExecuteAsync(async () =>
+            {
+                using (var dbTransaction = _unitOfWork.BeginTransaction())
+                {
+                    try
+                    {
+                        foreach (var tranId in listTranId)
+                        {
+                            var tran = await _unitOfWork.Transactions.FindAsync(tranId);
+                            if (tran == null || (tran.WeightRecorderId != null && tran.WeightRecorderId != userId) || (tran.WeightRecorderId == null && tran.TraderId != userId))
+                            {
+                                throw new Exception("Có đơn mua không tồn tại hoặc đã bị xóa !!!");
+                            }
+
+                            if (tran.isCompleted.Equals(TransactionStatus.Completed))
+                            {
+                                throw new Exception("Có đơn mua đã đã được chốt !!");
+                            }
+
+                            tran.isCompleted = TransactionStatus.Completed;
+                            _unitOfWork.Transactions.Update(tran);
+                            await _unitOfWork.SaveChangeAsync();
+
+                            var listTranDe = _unitOfWork.TransactionDetails.GetAll(x => x.TransId == tranId);
+                            foreach (var trandDe in listTranDe)
+                            {
+                                CloseTransactionDetail closeTD = new CloseTransactionDetail();
+                                closeTD.SellPrice = trandDe.SellPrice;
+                                closeTD.Weight = trandDe.Weight;
+                                closeTD.TransactionId = tran.ID;
+                                closeTD.IsPaid = trandDe.IsPaid;
+
+                                FishType ft = await _unitOfWork.FishTypes.FindAsync(trandDe.FishTypeId);
+                                closeTD.FishTypeId = ft.ID;
+                                closeTD.FishName = ft.FishName;
+                                closeTD.FishTypeDescription = ft.Description;
+                                closeTD.FishTypeMinWeight = ft.MinWeight;
+                                closeTD.FishTypeMaxWeight = ft.MaxWeight;
+                                closeTD.FishTypePrice = (float)ft.Price;
+
+                                if (trandDe.BuyerId != null)
+                                {
+                                    var buyer = await _unitOfWork.Buyers.FindAsync(trandDe.BuyerId);
+                                    closeTD.BuyerId = buyer.ID;
+                                    closeTD.BuyerName = buyer.Name;
+                                    closeTD.BuyerAddress = buyer.Address;
+                                    closeTD.BuyerPhoneNumber = buyer.PhoneNumber;
+                                }
+
+                                await _unitOfWork.CloseTransactionDetails.CreateAsync(closeTD);
+                                await _unitOfWork.SaveChangeAsync();
+                            }
+                        }
+
+                        await dbTransaction.CommitAsync();
+                    }
+                    catch
+                    {
+                        await dbTransaction.RollbackAsync();
+                        throw;
+                        //throw new Exception("Đã có lỗi xay ra, hãy thử lại sau");
+                    }
+
+                }
+            });
         }
 
         private async Task<List<UserInformation>> WeightRecordGetAllTraderInDate(int wcId, DateTime date)

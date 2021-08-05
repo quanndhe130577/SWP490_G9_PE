@@ -78,5 +78,16 @@ namespace TnR_SS.API.Controllers
             await _tnrssSupervisor.UpdateTransactionDetailAsync(apiModel, userId);
             return new ResponseBuilder().Success("Cập nhật thông tin hóa đơn thành công !!").ResponseModel;
         }
+
+        [Route("delete")]
+        [HttpPost]
+        public async Task<ResponseModel> Delete(TransactionIdModel apiModel)
+        {
+            var userId = TokenManagement.GetUserIdInToken(HttpContext);
+            await _tnrssSupervisor.DeleteTransactionDetailAsync(apiModel.TransactionDetailId, userId);
+            return new ResponseBuilder().Success("Xóa mã cân thành công !!").ResponseModel;
+        }
     }
+
+    
 }
