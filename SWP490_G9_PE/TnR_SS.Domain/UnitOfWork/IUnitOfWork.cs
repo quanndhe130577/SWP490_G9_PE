@@ -32,6 +32,7 @@ namespace TnR_SS.Domain.UnitOfWork
         ITransactionDetailRepository TransactionDetails { get; }
         IAdvanceSalaryRepository AdvanceSalaries { get; }
         IClosePurchaseDetailRepository ClosePurchaseDetails { get; }
+        ICloseTransactionDetailRepository CloseTransactionDetails { get; }
         Task<int> SaveChangeAsync();
         IDbContextTransaction BeginTransaction();
         IExecutionStrategy CreateExecutionStrategy();
