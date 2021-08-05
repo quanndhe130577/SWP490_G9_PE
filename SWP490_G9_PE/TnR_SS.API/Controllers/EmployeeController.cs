@@ -82,6 +82,7 @@ namespace TnR_SS.API.Controllers
         public async Task<ResponseModel> UpdateSalaryEmployee(BaseSalaryEmpApiModel baseSalary)
         {
             var detail = await _tnrssSupervisor.UpdateSalaryEmployee(baseSalary);
+            await _tnrssSupervisor.UpsertHistorySalary(DateTime.Now, baseSalary.EmpId);
             return new ResponseBuilder().Success("Cập nhật lương nhân viên thành công").ResponseModel;
         }
     }
