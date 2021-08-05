@@ -32,7 +32,5 @@ namespace TnR_SS.Domain.Entities
 
         [Range(0, Double.MaxValue, ErrorMessage = "Cân nặng phải lớn hơn 0")]
         public double Weight { get; set; } // ko bao gồm cân bì, cân của rổ
-
-        public CloseTransactionDetail CloseTransactionDetail { get; set; }
     }
 }

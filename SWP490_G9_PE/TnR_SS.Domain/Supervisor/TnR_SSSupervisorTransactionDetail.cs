@@ -151,11 +151,11 @@ namespace TnR_SS.Domain.Supervisor
             List<TransactionDetail> listTranDe = new List<TransactionDetail>();
             if (roleUser.Contains(RoleName.WeightRecorder))
             {
-                listTranDe = _unitOfWork.TransactionDetails.GetAllTransactionByWcIDAndDate(userId, date);
+                listTranDe = _unitOfWork.TransactionDetails.GetAllByWcIDAndDate(userId, date);
             }
             else if (roleUser.Contains(RoleName.Trader))
             {
-                listTranDe = _unitOfWork.TransactionDetails.GetAllTransactionByTraderIdAndDate(userId, date);
+                listTranDe = _unitOfWork.TransactionDetails.GetAllByTraderIdAndDate(userId, date);
             }
             else
             {

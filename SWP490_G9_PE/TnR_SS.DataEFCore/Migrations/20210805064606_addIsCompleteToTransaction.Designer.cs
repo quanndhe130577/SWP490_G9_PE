@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TnR_SS.DataEFCore;
 
 namespace TnR_SS.DataEFCore.Migrations
 {
     [DbContext(typeof(TnR_SSContext))]
-    partial class TnR_SSContextModelSnapshot : ModelSnapshot
+    [Migration("20210805064606_addIsCompleteToTransaction")]
+    partial class addIsCompleteToTransaction
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -351,13 +353,10 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.Property<float>("FishTypeMinWeight")
                         .HasColumnType("real");
 
-                    b.Property<bool>("IsPaid")
-                        .HasColumnType("bit");
-
                     b.Property<double>("SellPrice")
                         .HasColumnType("float");
 
-                    b.Property<int>("TransactionId")
+                    b.Property<int>("TransactionDetailId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -368,7 +367,8 @@ namespace TnR_SS.DataEFCore.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("TransactionId");
+                    b.HasIndex("TransactionDetailId")
+                        .IsUnique();
 
                     b.ToTable("CloseTransactionDetails");
                 });
@@ -811,32 +811,32 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "da6b1313-ba57-44da-9f21-503a8a65895f",
+                            ConcurrencyStamp = "850dbc9e-e2ef-4f63-a8c7-e8d377301179",
                             CreatedAt = new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Chủ bến",
                             Name = "WeightRecorder",
                             NormalizedName = "WEIGHTRECORDER",
-                            UpdatedAt = new DateTime(2021, 8, 5, 14, 44, 58, 664, DateTimeKind.Local).AddTicks(5886)
+                            UpdatedAt = new DateTime(2021, 8, 5, 13, 46, 5, 927, DateTimeKind.Local).AddTicks(3036)
                         },
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "100f65de-7926-4c8a-9154-f30ee10d4ec6",
+                            ConcurrencyStamp = "16ca4425-fb4a-4569-a0f2-cc2a942a9a49",
                             CreatedAt = new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Thương lái",
                             Name = "Trader",
                             NormalizedName = "TRADER",
-                            UpdatedAt = new DateTime(2021, 8, 5, 14, 44, 58, 666, DateTimeKind.Local).AddTicks(9906)
+                            UpdatedAt = new DateTime(2021, 8, 5, 13, 46, 5, 930, DateTimeKind.Local).AddTicks(2718)
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "4ac87ecf-f202-4f2f-be3a-f699529c8df7",
+                            ConcurrencyStamp = "a5033901-e57c-4121-9755-a15815608f1b",
                             CreatedAt = new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Admin",
                             Name = "Admin",
                             NormalizedName = "ADMIN",
-                            UpdatedAt = new DateTime(2021, 8, 5, 14, 44, 58, 666, DateTimeKind.Local).AddTicks(9954)
+                            UpdatedAt = new DateTime(2021, 8, 5, 13, 46, 5, 930, DateTimeKind.Local).AddTicks(2810)
                         });
                 });
 
@@ -1239,14 +1239,14 @@ namespace TnR_SS.DataEFCore.Migrations
 
             modelBuilder.Entity("TnR_SS.Domain.Entities.CloseTransactionDetail", b =>
                 {
-                    b.HasOne("TnR_SS.Domain.Entities.Transaction", "Transaction")
-                        .WithMany("CloseTransactionDetails")
-                        .HasForeignKey("TransactionId")
-                        .HasConstraintName("FK_CloseTransactionDetail_Transaction")
+                    b.HasOne("TnR_SS.Domain.Entities.TransactionDetail", "TransactionDetail")
+                        .WithOne("CloseTransactionDetail")
+                        .HasForeignKey("TnR_SS.Domain.Entities.CloseTransactionDetail", "TransactionDetailId")
+                        .HasConstraintName("FK_CloseTransactionDetail_TransactionDetail")
                         .OnDelete(DeleteBehavior.ClientNoAction)
                         .IsRequired();
 
-                    b.Navigation("Transaction");
+                    b.Navigation("TransactionDetail");
                 });
 
             modelBuilder.Entity("TnR_SS.Domain.Entities.CostIncurred", b =>
@@ -1549,9 +1549,12 @@ namespace TnR_SS.DataEFCore.Migrations
 
             modelBuilder.Entity("TnR_SS.Domain.Entities.Transaction", b =>
                 {
-                    b.Navigation("CloseTransactionDetails");
-
                     b.Navigation("TransactionDetails");
+                });
+
+            modelBuilder.Entity("TnR_SS.Domain.Entities.TransactionDetail", b =>
+                {
+                    b.Navigation("CloseTransactionDetail");
                 });
 
             modelBuilder.Entity("TnR_SS.Domain.Entities.Truck", b =>

@@ -46,11 +46,11 @@ namespace TnR_SS.Domain.Supervisor
             List<TransactionDetail> listTranDe = new List<TransactionDetail>();
             if (roleUser.Contains(RoleName.WeightRecorder))
             {
-                listTranDe = _unitOfWork.TransactionDetails.GetAllTransactionByWcIDAndDate(userId, date).Where(x => x.IsPaid == false).ToList();
+                listTranDe = _unitOfWork.TransactionDetails.GetAllByWcIDAndDate(userId, date).Where(x => x.IsPaid == false).ToList();
             }
             else if (roleUser.Contains(RoleName.Trader))
             {
-                listTranDe = _unitOfWork.TransactionDetails.GetAllTransactionByTraderIdAndDate(userId, date).Where(x => x.IsPaid == false).ToList();
+                listTranDe = _unitOfWork.TransactionDetails.GetAllByTraderIdAndDate(userId, date).Where(x => x.IsPaid == false).ToList();
             }
             else
             {

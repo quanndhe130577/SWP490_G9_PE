@@ -30,11 +30,11 @@ namespace TnR_SS.DataEFCore.Configurations
                .HasColumnType("datetime");
 
 
-            entity.HasOne(p => p.TransactionDetail)
-                .WithOne(b => b.CloseTransactionDetail)
-                .HasForeignKey<CloseTransactionDetail>(p => p.TransactionDetailId)
+            entity.HasOne(p => p.Transaction)
+                .WithMany(b => b.CloseTransactionDetails)
+                .HasForeignKey(p => p.TransactionId)
                 .OnDelete(DeleteBehavior.ClientNoAction)
-                .HasConstraintName("FK_CloseTransactionDetail_TransactionDetail");
+                .HasConstraintName("FK_CloseTransactionDetail_Transaction");
         }
     }
 }
