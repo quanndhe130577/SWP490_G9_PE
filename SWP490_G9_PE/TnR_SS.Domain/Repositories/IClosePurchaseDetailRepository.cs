@@ -10,5 +10,6 @@ namespace TnR_SS.Domain.Repositories
     public interface IClosePurchaseDetailRepository : IRepositoryBase<ClosePurchaseDetail>
     {
         List<ClosePurchaseDetail> GetAllByPurchase(Purchase purchase);
+        Task DeleteByPurchaseDetailIdAsync(int purchaseDetailId);
     }
 }

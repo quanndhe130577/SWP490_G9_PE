@@ -23,5 +23,12 @@ namespace TnR_SS.DataEFCore.Repositories
                 ).ToList();
             return rs;
         }
+
+        public async Task DeleteByPurchaseDetailIdAsync(int purchaseDetailId)
+        {
+            var list = _context.ClosePurchaseDetails.Where(x => x.PurchaseDetailId == purchaseDetailId);
+            _context.ClosePurchaseDetails.RemoveRange(list);
+            await _context.SaveChangesAsync();
+        }
     }
 }

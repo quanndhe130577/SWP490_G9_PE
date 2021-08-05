@@ -257,6 +257,7 @@ namespace TnR_SS.Domain.Supervisor
                                     foreach (var item in purchaseDetail)
                                     {
                                         _unitOfWork.LK_PurchaseDetail_Drums.RemoveLKByPurchaseDetailId(item.ID);
+                                        await _unitOfWork.ClosePurchaseDetails.DeleteByPurchaseDetailIdAsync(item.ID);
                                         _unitOfWork.PurchaseDetails.Delete(item);
                                     }
                                 }

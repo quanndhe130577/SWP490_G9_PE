@@ -50,7 +50,6 @@ namespace TnR_SS.Domain.ApiModels
                     destination.LastName += item.Trim() + " ";
                 }
                 destination.LastName = destination.LastName.Trim();
-
             }).ReverseMap();
 
             CreateMap<UpdateUserReqModel, UserInfor>()
