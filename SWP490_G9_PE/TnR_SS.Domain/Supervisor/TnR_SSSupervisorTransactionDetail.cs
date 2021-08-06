@@ -27,6 +27,11 @@ namespace TnR_SS.Domain.Supervisor
                 throw new Exception("Hãy tạo hóa đơn trước !!");
             }
 
+            if(trans.isCompleted == TransactionStatus.Completed)
+            {
+                throw new Exception("Đã chốt sổ với thương lái này, không thể tạo thêm !!");
+            }
+
             var fishType = await _unitOfWork.FishTypes.FindAsync(apiModel.FishTypeId);
             if (fishType == null)
             {
@@ -101,6 +106,11 @@ namespace TnR_SS.Domain.Supervisor
 
                             await _unitOfWork.Transactions.CreateAsync(transaction);
                             await _unitOfWork.SaveChangeAsync();
+                        }
+
+                        if (transaction.isCompleted == TransactionStatus.Completed)
+                        {
+                            throw new Exception("Thông tin đơn bán đã được chốt, không thể tạo thêm !!");
                         }
 
                         var transactionDetail = _mapper.Map<CreateTransactionDetailReqModel, TransactionDetail>(apiModel);

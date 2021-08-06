@@ -272,6 +272,12 @@ namespace TnR_SS.Domain.Supervisor
                         {
                             try
                             {
+                                var checkFish = _unitOfWork.FishTypes.CheckFishTypeOfPurchaseInUse(purchaseId);
+                                if (checkFish)
+                                {
+                                    throw new Exception("Cá đang được bán, không thể xóa !!!");
+                                }
+
                                 var purchaseDetail = _unitOfWork.PurchaseDetails.GetAll(x => x.PurchaseId == purchaseId);
                                 if (purchaseDetail != null && purchaseDetail.Count() > 0)
                                 {
@@ -326,7 +332,7 @@ namespace TnR_SS.Domain.Supervisor
             var checkPurchase = _unitOfWork.Purchases.GetAll(x => x.TraderID == traderId && x.Date.Date == purchase.Date.Date && x.PondOwnerID == apiModel.PondOwnerId).FirstOrDefault();
             if (checkPurchase != null)
             {
-                throw new Exception("Đơn mua với chủ ao trong ngày " + purchase.Date.ToString("dd/MM/yyyy") + " đã có!!!");
+                throw new Exception("Đơn mua với chủ ao " + pO.Name + " trong ngày " + purchase.Date.ToString("dd/MM/yyyy") + " đã có!!!");
             }
 
             purchase.PondOwnerID = apiModel.PondOwnerId;

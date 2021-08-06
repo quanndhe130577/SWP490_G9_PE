@@ -49,6 +49,11 @@ namespace TnR_SS.Domain.Supervisor
                 {
                     try
                     {
+                        if(apiModel.ListTraderId == null || apiModel.ListTraderId.Count == 0)
+                        {
+                            throw new Exception("Hãy chọn ít nhất 1 thương lái !!!");
+                        }
+
                         foreach (var item in apiModel.ListTraderId)
                         {
                             // nếu date là buổi sáng ngày hôm sau thì chuyển thành buổi chiều ngày hôm trước
