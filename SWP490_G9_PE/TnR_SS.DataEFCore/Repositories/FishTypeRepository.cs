@@ -64,7 +64,6 @@ namespace TnR_SS.DataEFCore.Repositories
 
         public bool CheckFishTypeOfPurchaseInUse(int purchaseId)
         {
-            //var fishTypeId = _context.FishTypes.Where(x => x.PurchaseID == purchase.ID);
             var rs = _context.Transactions.Where(x => x.isCompleted == TransactionStatus.Pending).Join(
                     _context.TransactionDetails,
                     t => t.ID,
