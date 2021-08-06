@@ -209,6 +209,11 @@ namespace TnR_SS.Domain.Supervisor
                             throw new Exception("Đơn mua này không tồn tại hoặc đã bị xóa !!!");
                         }
 
+                        if(tran.isCompleted == TransactionStatus.Completed)
+                        {
+                            throw new Exception("Đơn bán đã được chốt sổ không thể xóa !!!");
+                        }
+
                         await _unitOfWork.TransactionDetails.DeleteByTransactionIdAsync(tranId);
                         _unitOfWork.Transactions.Delete(tran);
                         await _unitOfWork.SaveChangeAsync();
@@ -227,7 +232,7 @@ namespace TnR_SS.Domain.Supervisor
 
         }
 
-        public async Task ChotSoTransactionAsync(List<int> listTranId, int userId)
+        public async Task ChotSoTransactionAsync(ChotSoTransactionReqModal chotSoApi, int userId)
         {
             var strategy = _unitOfWork.CreateExecutionStrategy();
 
@@ -237,7 +242,7 @@ namespace TnR_SS.Domain.Supervisor
                 {
                     try
                     {
-                        foreach (var tranId in listTranId)
+                        foreach (var tranId in chotSoApi.listTranId)
                         {
                             var tran = await _unitOfWork.Transactions.FindAsync(tranId);
                             if (tran == null || (tran.WeightRecorderId != null && tran.WeightRecorderId != userId) || (tran.WeightRecorderId == null && tran.TraderId != userId))
@@ -251,6 +256,7 @@ namespace TnR_SS.Domain.Supervisor
                             }
 
                             tran.isCompleted = TransactionStatus.Completed;
+                            tran.CommissionUnit = chotSoApi.CommissionUnit;
                             _unitOfWork.Transactions.Update(tran);
                             await _unitOfWork.SaveChangeAsync();
 

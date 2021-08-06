@@ -72,7 +72,7 @@ namespace TnR_SS.Domain.Supervisor
 
         public List<BuyerApiModel> GetTop5BuyerByNameOrPhone(string input, int wcId)
         {
-            if(input == null || input.Trim() == "")
+            if (input == null || input.Trim() == "")
             {
                 return _unitOfWork.Buyers.GetAll(x => x.SellerId == wcId)
                 .Take(5)
@@ -80,9 +80,10 @@ namespace TnR_SS.Domain.Supervisor
             }
             else
             {
-                return _unitOfWork.Buyers.GetAll(x => x.SellerId == wcId)
-                .Where(x => x.Name.Contains(input, StringComparison.InvariantCultureIgnoreCase) || x.PhoneNumber.Contains(input)).Take(5)
+                var rs = _unitOfWork.Buyers.GetAll(x => x.SellerId == wcId)
+                .Where(x => x.Name.Contains(input, StringComparison.CurrentCultureIgnoreCase) || x.PhoneNumber.Contains(input)).Take(5)
                 .Select(x => _mapper.Map<Buyer, BuyerApiModel>(x)).ToList();
+                return rs;
             }
         }
     }
