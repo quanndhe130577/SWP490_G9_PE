@@ -201,16 +201,24 @@ namespace TnR_SS.Domain.Supervisor
             }
             else
             {
-                baseSalaryEmp.EndDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-                _unitOfWork.BaseSalaryEmps.Update(baseSalaryEmp);
-                await _unitOfWork.BaseSalaryEmps.CreateAsync(new BaseSalaryEmp()
+                if (baseSalaryEmp.StartDate.Month == DateTime.Now.Month && baseSalaryEmp.StartDate.Year == DateTime.Now.Year)
                 {
-                    ID = 0,
-                    EmpId = salaryEmpApiModel.EmpId,
-                    Salary = salaryEmpApiModel.Salary,
-                    StartDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1),
-                    EndDate = null
-                });
+                    baseSalaryEmp.Salary = salaryEmpApiModel.Salary;
+                    _unitOfWork.BaseSalaryEmps.Update(baseSalaryEmp);
+                }
+                else
+                {
+                    baseSalaryEmp.EndDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                    _unitOfWork.BaseSalaryEmps.Update(baseSalaryEmp);
+                    await _unitOfWork.BaseSalaryEmps.CreateAsync(new BaseSalaryEmp()
+                    {
+                        ID = 0,
+                        EmpId = salaryEmpApiModel.EmpId,
+                        Salary = salaryEmpApiModel.Salary,
+                        StartDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1),
+                        EndDate = null
+                    });
+                }
             }
             return await _unitOfWork.SaveChangeAsync();
         }

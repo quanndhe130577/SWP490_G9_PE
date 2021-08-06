@@ -214,6 +214,111 @@ namespace TnR_SS.Domain.Supervisor
                             throw new Exception("Đơn mua này không tồn tại hoặc đã bị xóa !!!");
                         }
 
+                        await _unitOfWork.TransactionDetails.DeleteByTransactionIdAsync(tranId);
+                        _unitOfWork.Transactions.Delete(tran);
+                        await _unitOfWork.SaveChangeAsync();
+
+                        await dbTransaction.CommitAsync();
+                    }
+                    catch
+                    {
+                        await dbTransaction.RollbackAsync();
+                        throw;
+                        //throw new Exception("Đã có lỗi xay ra, hãy thử lại sau");
+                    }
+
+                }
+            });
+
+        }
+
+        public async Task ChotSoTransactionAsync(List<int> listTranId, int userId)
+        {
+            var strategy = _unitOfWork.CreateExecutionStrategy();
+
+            await strategy.ExecuteAsync(async () =>
+            {
+                using (var dbTransaction = _unitOfWork.BeginTransaction())
+                {
+                    try
+                    {
+                        foreach (var tranId in listTranId)
+                        {
+                            var tran = await _unitOfWork.Transactions.FindAsync(tranId);
+                            if (tran == null || (tran.WeightRecorderId != null && tran.WeightRecorderId != userId) || (tran.WeightRecorderId == null && tran.TraderId != userId))
+                            {
+                                throw new Exception("Có đơn mua không tồn tại hoặc đã bị xóa !!!");
+                            }
+
+                            if (tran.isCompleted.Equals(TransactionStatus.Completed))
+                            {
+                                throw new Exception("Có đơn mua đã đã được chốt !!");
+                            }
+
+                            tran.isCompleted = TransactionStatus.Completed;
+                            _unitOfWork.Transactions.Update(tran);
+                            await _unitOfWork.SaveChangeAsync();
+
+                            var listTranDe = _unitOfWork.TransactionDetails.GetAll(x => x.TransId == tranId);
+                            foreach (var trandDe in listTranDe)
+                            {
+                                CloseTransactionDetail closeTD = new CloseTransactionDetail();
+                                closeTD.SellPrice = trandDe.SellPrice;
+                                closeTD.Weight = trandDe.Weight;
+                                closeTD.TransactionId = tran.ID;
+                                closeTD.IsPaid = trandDe.IsPaid;
+
+                                FishType ft = await _unitOfWork.FishTypes.FindAsync(trandDe.FishTypeId);
+                                closeTD.FishTypeId = ft.ID;
+                                closeTD.FishName = ft.FishName;
+                                closeTD.FishTypeDescription = ft.Description;
+                                closeTD.FishTypeMinWeight = ft.MinWeight;
+                                closeTD.FishTypeMaxWeight = ft.MaxWeight;
+                                closeTD.FishTypePrice = (float)ft.Price;
+
+                                if (trandDe.BuyerId != null)
+                                {
+                                    var buyer = await _unitOfWork.Buyers.FindAsync(trandDe.BuyerId);
+                                    closeTD.BuyerId = buyer.ID;
+                                    closeTD.BuyerName = buyer.Name;
+                                    closeTD.BuyerAddress = buyer.Address;
+                                    closeTD.BuyerPhoneNumber = buyer.PhoneNumber;
+                                }
+
+                                await _unitOfWork.CloseTransactionDetails.CreateAsync(closeTD);
+                                await _unitOfWork.SaveChangeAsync();
+                            }
+                        }
+
+                        await dbTransaction.CommitAsync();
+                    }
+                    catch
+                    {
+                        await dbTransaction.RollbackAsync();
+                        throw;
+                        //throw new Exception("Đã có lỗi xay ra, hãy thử lại sau");
+                    }
+
+                }
+            });
+        }
+
+        public async Task DeleteTransactionAsync(int tranId, int userId)
+        {
+            var strategy = _unitOfWork.CreateExecutionStrategy();
+
+            await strategy.ExecuteAsync(async () =>
+            {
+                using (var dbTransaction = _unitOfWork.BeginTransaction())
+                {
+                    try
+                    {
+                        var tran = await _unitOfWork.Transactions.FindAsync(tranId);
+                        if (tran == null || (tran.WeightRecorderId != null && tran.WeightRecorderId != userId) || (tran.WeightRecorderId == null && tran.TraderId != userId))
+                        {
+                            throw new Exception("Đơn mua này không tồn tại hoặc đã bị xóa !!!");
+                        }
+
                         if (tran.isCompleted == TransactionStatus.Completed)
                         {
                             throw new Exception("Đơn bán đã được chốt sổ không thể xóa !!!");

@@ -351,9 +351,6 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.Property<float>("FishTypeMinWeight")
                         .HasColumnType("real");
 
-                    b.Property<float>("FishTypePrice")
-                        .HasColumnType("real");
-
                     b.Property<bool>("IsPaid")
                         .HasColumnType("bit");
 
@@ -814,32 +811,32 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "c5df0b7b-a988-4a0c-8a76-7f5e6b535e3e",
+                            ConcurrencyStamp = "da6b1313-ba57-44da-9f21-503a8a65895f",
                             CreatedAt = new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Chủ bến",
                             Name = "WeightRecorder",
                             NormalizedName = "WEIGHTRECORDER",
-                            UpdatedAt = new DateTime(2021, 8, 5, 15, 23, 27, 189, DateTimeKind.Local).AddTicks(3947)
+                            UpdatedAt = new DateTime(2021, 8, 5, 14, 44, 58, 664, DateTimeKind.Local).AddTicks(5886)
                         },
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "2cdaa15d-21c4-49fe-b62a-4b77490d38bb",
+                            ConcurrencyStamp = "100f65de-7926-4c8a-9154-f30ee10d4ec6",
                             CreatedAt = new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Thương lái",
                             Name = "Trader",
                             NormalizedName = "TRADER",
-                            UpdatedAt = new DateTime(2021, 8, 5, 15, 23, 27, 191, DateTimeKind.Local).AddTicks(4872)
+                            UpdatedAt = new DateTime(2021, 8, 5, 14, 44, 58, 666, DateTimeKind.Local).AddTicks(9906)
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "8592b189-f595-4845-a072-617d481b0c46",
+                            ConcurrencyStamp = "4ac87ecf-f202-4f2f-be3a-f699529c8df7",
                             CreatedAt = new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Admin",
                             Name = "Admin",
                             NormalizedName = "ADMIN",
-                            UpdatedAt = new DateTime(2021, 8, 5, 15, 23, 27, 191, DateTimeKind.Local).AddTicks(4911)
+                            UpdatedAt = new DateTime(2021, 8, 5, 14, 44, 58, 666, DateTimeKind.Local).AddTicks(9954)
                         });
                 });
 
