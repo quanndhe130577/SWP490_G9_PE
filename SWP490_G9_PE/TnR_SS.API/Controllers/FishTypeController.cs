@@ -151,7 +151,7 @@ namespace TnR_SS.API.Controllers
         }
 
         [HttpGet("wc/getall/{traderId?}/{date_str?}")]
-        public async Task<ResponseModel> GetAllFishTypeForTransactionDetail(int? traderId, string date_str)
+        public ResponseModel GetAllFishTypeForTransactionDetail(int? traderId, string date_str)
         {
             var userId = TokenManagement.GetUserIdInToken(HttpContext);
 
@@ -171,7 +171,7 @@ namespace TnR_SS.API.Controllers
                 }
             }
 
-            var fishTypes = await _tnrssSupervisor.GetAllFishTypeForTransactionAsync(traderId, userId, date);
+            var fishTypes = _tnrssSupervisor.GetAllFishTypeForTransaction(traderId, userId, date);
             return new ResponseBuilder<List<GetAllFishTypeForTransactionResModel>>().Success("Lấy thông tin giá cá thành công").WithData(fishTypes).ResponseModel;
         }
     }

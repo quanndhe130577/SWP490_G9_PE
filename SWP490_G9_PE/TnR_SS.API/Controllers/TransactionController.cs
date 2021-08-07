@@ -35,6 +35,7 @@ namespace TnR_SS.API.Controllers
             return new ResponseBuilder().Success("Tạo hóa đơn thành công !!").ResponseModel;
         }
 
+        // get data for page transaction detail
         [Route("getall/{date_str?}")]
         [HttpGet]
         public async Task<ResponseModel> GetAll(string date_str = null)
@@ -64,6 +65,7 @@ namespace TnR_SS.API.Controllers
             return new ResponseBuilder<List<TransactionResModel>>().Success("Lấy thông tin hóa đơn thành công !!").WithData(rs).ResponseModel;
         }
 
+        // get data for page transaction
         [Route("getgeneral")]
         [HttpGet]
         public async Task<ResponseModel> GetGeneralTransactionFollowDate()

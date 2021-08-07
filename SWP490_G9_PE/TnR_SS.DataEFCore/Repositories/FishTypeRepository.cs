@@ -86,6 +86,43 @@ namespace TnR_SS.DataEFCore.Repositories
 
             return true;
         }
+
+        public List<FishType> GetAllFishTypeForTransaction(int? traderId, int userId, DateTime date)
+        {
+            var userRole = _context.UserRoles.Where(x => x.UserId == userId).Join(
+                    _context.RoleUsers,
+                    ur => ur.RoleId,
+                    ru => ru.Id,
+                    (ur, ru) => ru.NormalizedName);
+
+            DateTime startDate = DateTime.MinValue;
+            DateTime endDate = DateTime.MaxValue;
+
+            // nếu là ngày hiện tại và < 18 giờ thì là bán tiếp => lấy dữ liệu từ 18h hôm trc -> 18h hôm nay
+            if (date.Date == DateTime.Now.Date && DateTime.Now.Hour < 18)
+            {
+                startDate = new DateTime(date.Year, date.Month, date.Day - 1, 18, 0, 0); // 18 h ngày hôm trước
+                endDate = new DateTime(date.Year, date.Month, date.Day, 18, 0, 0); // 18 h ngày hôm nay
+            }
+            else // lấy dữ liệu từ 18h hôm đó -> 18h hôm sau
+            {
+                startDate = new DateTime(date.Year, date.Month, date.Day, 18, 0, 0); // 18 h ngày hôm đó
+                endDate = new DateTime(date.Year, date.Month, date.Day + 1, 18, 0, 0); // 18 h ngày hôm sau
+
+            }
+
+            List<int> listPurchaseId = new();
+            if (userRole.Contains(RoleName.Trader))
+            {
+                listPurchaseId = _context.Purchases.Where(x => x.TraderID == userId && x.Date.Date <= endDate && x.Date.Date >= startDate).Select(x => x.ID).ToList();
+            }
+            else if (userRole.Contains(RoleName.WeightRecorder) && traderId != null)
+            {
+                listPurchaseId = _context.Purchases.Where(x => x.TraderID == traderId && x.Date.Date <= endDate && x.Date.Date >= startDate).Select(x => x.ID).ToList();
+            }
+
+            return GetAllFishTypeByPurchaseIds(listPurchaseId);
+        }
     }
 }
 

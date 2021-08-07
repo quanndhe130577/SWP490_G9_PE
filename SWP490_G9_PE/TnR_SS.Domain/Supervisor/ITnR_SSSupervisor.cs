@@ -78,7 +78,7 @@ namespace TnR_SS.Domain.Supervisor
         Task DeleteFishTypeAsync(int empId, int traderId);
         Task<List<FishTypeApiModel>> GetListFishTypeByPurchaseIdAsync(int purchaseId, int traderId);
         Task UpdateListFishTypeAsync(ListFishTypeModel listFishType, int traderId);
-        Task<List<GetAllFishTypeForTransactionResModel>> GetAllFishTypeForTransactionAsync(int? traderId, int userId, DateTime date);
+        List<GetAllFishTypeForTransactionResModel> GetAllFishTypeForTransaction(int? traderId, int userId, DateTime date);
         Task<FishTypeApiModel> GetNewFishTypeAsync(int traderId, DateTime? date);
         #endregion
 

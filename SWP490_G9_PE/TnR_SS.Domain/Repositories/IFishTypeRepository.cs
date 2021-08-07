@@ -16,5 +16,6 @@ namespace TnR_SS.Domain.Repositories
         double GetSellWeightOfFishType(int fishTypeId);
         List<FishType> GetAllFishTypeByPurchaseIds(List<int> listPurchaseId);
         bool CheckFishTypeOfPurchaseInUse(int purchaseId);
+        List<FishType> GetAllFishTypeForTransaction(int? traderId, int userId, DateTime date);
     }
 }

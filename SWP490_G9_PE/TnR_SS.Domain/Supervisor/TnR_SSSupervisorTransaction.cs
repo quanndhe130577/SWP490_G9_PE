@@ -49,11 +49,12 @@ namespace TnR_SS.Domain.Supervisor
                 {
                     try
                     {
-                        if(apiModel.ListTraderId == null || apiModel.ListTraderId.Count == 0)
+                        if (apiModel.ListTraderId == null || apiModel.ListTraderId.Count == 0)
                         {
                             throw new Exception("Hãy chọn ít nhất 1 thương lái !!!");
                         }
 
+                        var listTran = _unitOfWork.Transactions.GetAllTransactionsByDate(wcId, apiModel.Date);
                         foreach (var item in apiModel.ListTraderId)
                         {
                             // nếu date là buổi sáng ngày hôm sau thì chuyển thành buổi chiều ngày hôm trước
@@ -62,7 +63,9 @@ namespace TnR_SS.Domain.Supervisor
                                 apiModel.Date = apiModel.Date.AddHours(-12);
                             }*/
 
-                            var tran = _unitOfWork.Transactions.GetAll(x => x.TraderId == item && x.WeightRecorderId == wcId && x.Date.Date == apiModel.Date.Date).FirstOrDefault();
+                            //var tran = _unitOfWork.Transactions.GetAll(x => x.TraderId == item && x.WeightRecorderId == wcId && x.Date.Date == apiModel.Date.Date).FirstOrDefault();
+                            var tran = listTran.Where(x => x.TraderId == item).FirstOrDefault();
+
                             if (tran == null)
                             {
                                 await CreateTransactionAsync(item, wcId, apiModel.Date);
@@ -81,9 +84,11 @@ namespace TnR_SS.Domain.Supervisor
             });
         }
 
+        // get transaction detail
         public async Task<List<TransactionResModel>> GetAllTransactionAsync(int userId, DateTime? date)
         {
-            var roleUser = await _unitOfWork.UserInfors.GetRolesAsync(userId);
+
+            /*var roleUser = await _unitOfWork.UserInfors.GetRolesAsync(userId);
             var listTran = new List<Transaction>();
             if (roleUser.Contains(RoleName.WeightRecorder))
             {
@@ -100,15 +105,28 @@ namespace TnR_SS.Domain.Supervisor
 
             if (date != null)
             {
-                listTran = listTran.Where(x => x.Date.Date == date.Value.Date).ToList();
-            }
+                // nếu là ngày hiện tại và < 18 giờ thì là bán tiếp => lấy dữ liệu từ 18h hôm trc -> 18h hôm nay
+                if (date.Value.Date == DateTime.Now.Date && DateTime.Now.Hour < 18)
+                {
+                    var startDate = new DateTime(date.Value.Year, date.Value.Month, date.Value.Day - 1, 18, 0, 0); // 18 h ngày hôm trước
+                    var endDate = new DateTime(date.Value.Year, date.Value.Month, date.Value.Day, 18, 0, 0); // 18 h ngày hôm nay
+                    listTran = listTran.Where(x => x.Date >= startDate && x.Date <= endDate).ToList();
+                }
+                else // lấy dữ liệu từ 18h hôm đó -> 18h hôm sau
+                {
+                    var startDate = new DateTime(date.Value.Year, date.Value.Month, date.Value.Day, 18, 0, 0); // 18 h ngày hôm đó
+                    var endDate = new DateTime(date.Value.Year, date.Value.Month, date.Value.Day + 1, 18, 0, 0); // 18 h ngày hôm sau
+                    listTran = listTran.Where(x => x.Date >= startDate && x.Date <= endDate).ToList();
+                }
+            }*/
+            var listTran = _unitOfWork.Transactions.GetAllTransactionsByDate(userId, date);
 
             List<TransactionResModel> list = new();
             foreach (var item in listTran)
             {
                 TransactionResModel tran = new TransactionResModel();
                 tran.ID = item.ID;
-                tran.Date = item.Date;
+                tran.Date = date.Value;
                 tran.Trader = _mapper.Map<UserInfor, UserInformation>(await _unitOfWork.UserInfors.FindAsync(item.TraderId));
                 tran.WeightRecorder = item.WeightRecorderId != null ? _mapper.Map<UserInfor, UserInformation>(await _unitOfWork.UserInfors.FindAsync(item.WeightRecorderId)) : null;
                 tran.TransactionDetails = await GetListTransactionDetailModelAsync(item);
@@ -156,46 +174,57 @@ namespace TnR_SS.Domain.Supervisor
             return list;
         }
 
+
+        //get transaction general
         public async Task<List<GetGeneralTransactionFollowDateResModel>> GetAllTransactionFollowDateAsync(int userId)
         {
             var roleUser = await _unitOfWork.UserInfors.GetRolesAsync(userId);
             var listDate = new List<DateTime>();
             if (roleUser.Contains(RoleName.WeightRecorder))
             {
-                listDate = _unitOfWork.Transactions.GetAll(x => x.WeightRecorderId == userId).Select(x => x.Date.Date).OrderByDescending(x => x.Date).Distinct().ToList();
+                listDate = _unitOfWork.Transactions.GetAll(x => x.WeightRecorderId == userId).Select(x => /*x.Date.Date*/
+                {
+                    if (x.Date.Hour < 18) return x.Date.Date.AddDays(-1);
+                    else return x.Date.Date;
+                }).OrderByDescending(x => x.Date).Distinct().ToList();
             }
             else if (roleUser.Contains(RoleName.Trader))
             {
-                listDate = _unitOfWork.Transactions.GetAll(x => x.TraderId == userId).Select(x => x.Date.Date).OrderByDescending(x => x.Date).Distinct().ToList();
+                listDate = _unitOfWork.Transactions.GetAll(x => x.TraderId == userId).Select(x => /*x.Date.Date*/
+                {
+                    if (x.Date.Hour < 18) return x.Date.Date.AddDays(-1);
+                    else return x.Date.Date;
+                }).OrderByDescending(x => x.Date).Distinct().ToList();
             }
             else
             {
                 throw new Exception("Tài khoản không hợp lệ");
             }
 
-            var listTran = new List<GetGeneralTransactionFollowDateResModel>();
+            var listGeTran = new List<GetGeneralTransactionFollowDateResModel>();
             foreach (var date in listDate)
             {
                 GetGeneralTransactionFollowDateResModel newGeneral = new GetGeneralTransactionFollowDateResModel();
                 newGeneral.Date = date;
+                var listTran = _unitOfWork.Transactions.GetAllTransactionsByDate(userId, date);
 
                 // add trader
                 if (roleUser.Contains(RoleName.WeightRecorder))
                 {
-                    newGeneral.ListTrader = await WeightRecordGetAllTraderInDate(userId, date);
+                    newGeneral.ListTrader = await WeightRecordGetAllTraderInDate(userId, listTran);
                 }
                 else if (roleUser.Contains(RoleName.Trader))
                 {
                     newGeneral.ListTrader.Add(_mapper.Map<UserInfor, UserInformation>(await _unitOfWork.UserInfors.FindAsync(userId)));
                 }
-                newGeneral.TotalWeight = await GetTotalWeightForGeneral(userId, date);
-                newGeneral.TotalMoney = await GetTotalMoneyForGeneral(userId, date);
-                newGeneral.TotalDebt = await GetTotalDebtForGeneral(userId, date);
+                newGeneral.TotalWeight = await GetTotalWeightForGeneral(userId, listTran);
+                newGeneral.TotalMoney = await GetTotalMoneyForGeneral(userId, listTran);
+                newGeneral.TotalDebt = await GetTotalDebtForGeneral(userId, listTran);
 
-                listTran.Add(newGeneral);
+                listGeTran.Add(newGeneral);
             }
 
-            return listTran;
+            return listGeTran;
         }
 
         public async Task DeleteTransactionAsync(int tranId, int userId)
@@ -309,9 +338,9 @@ namespace TnR_SS.Domain.Supervisor
             });
         }
 
-        private async Task<List<UserInformation>> WeightRecordGetAllTraderInDate(int wcId, DateTime date)
+        private async Task<List<UserInformation>> WeightRecordGetAllTraderInDate(int wcId, List<Transaction> listTran)
         {
-            var listTraderId = _unitOfWork.Transactions.GetAll(x => x.WeightRecorderId == wcId && x.Date.Date == date.Date).Select(x => x.TraderId).Distinct();
+            var listTraderId = listTran.Select(x => x.TraderId).Distinct();
             List<UserInformation> listTrader = new List<UserInformation>();
             foreach (var item in listTraderId)
             {
@@ -321,9 +350,8 @@ namespace TnR_SS.Domain.Supervisor
             return listTrader;
         }
 
-        private async Task<double> GetTotalWeightForGeneral(int userId, DateTime date)
+        private async Task<double> GetTotalWeightForGeneral(int userId, List<Transaction> listTran)
         {
-            var listTran = _unitOfWork.Transactions.GetAll(x => (x.WeightRecorderId == userId || x.TraderId == userId) && x.Date.Date == date.Date);
             double totalWeight = 0.0;
             foreach (var tran in listTran)
             {
@@ -332,9 +360,8 @@ namespace TnR_SS.Domain.Supervisor
 
             return totalWeight;
         }
-        private async Task<double> GetTotalMoneyForGeneral(int userId, DateTime date)
+        private async Task<double> GetTotalMoneyForGeneral(int userId, List<Transaction> listTran)
         {
-            var listTran = _unitOfWork.Transactions.GetAll(x => (x.WeightRecorderId == userId || x.TraderId == userId) && x.Date.Date == date.Date);
             double totalWeight = 0.0;
             foreach (var tran in listTran)
             {
@@ -343,9 +370,8 @@ namespace TnR_SS.Domain.Supervisor
 
             return totalWeight;
         }
-        private async Task<double> GetTotalDebtForGeneral(int userId, DateTime date)
+        private async Task<double> GetTotalDebtForGeneral(int userId, List<Transaction> listTran)
         {
-            var listTran = _unitOfWork.Transactions.GetAll(x => (x.WeightRecorderId == userId || x.TraderId == userId) && x.Date.Date == date.Date);
             double totalWeight = 0.0;
             foreach (var tran in listTran)
             {
