@@ -213,11 +213,14 @@ namespace TnR_SS.Domain.Supervisor
                 if (roleUser.Contains(RoleName.WeightRecorder))
                 {
                     newGeneral.ListTrader = await WeightRecordGetAllTraderInDate(userId, listTran);
+                    newGeneral.ListWeightRecorder.Add(_mapper.Map<UserInfor, UserInformation>(await _unitOfWork.UserInfors.FindAsync(userId)));
                 }
                 else if (roleUser.Contains(RoleName.Trader))
                 {
                     newGeneral.ListTrader.Add(_mapper.Map<UserInfor, UserInformation>(await _unitOfWork.UserInfors.FindAsync(userId)));
+                    newGeneral.ListWeightRecorder = await TraderGetAllWeightRecorderInDate(userId, listTran);
                 }
+
                 newGeneral.TotalWeight = await GetTotalWeightForGeneral(userId, listTran);
                 newGeneral.TotalMoney = await GetTotalMoneyForGeneral(userId, listTran);
                 newGeneral.TotalDebt = await GetTotalDebtForGeneral(userId, listTran);
@@ -344,6 +347,18 @@ namespace TnR_SS.Domain.Supervisor
             var listTraderId = listTran.Select(x => x.TraderId).Distinct();
             List<UserInformation> listTrader = new List<UserInformation>();
             foreach (var item in listTraderId)
+            {
+                listTrader.Add(_mapper.Map<UserInfor, UserInformation>(await _unitOfWork.UserInfors.FindAsync(item)));
+            }
+
+            return listTrader;
+        }
+
+        private async Task<List<UserInformation>> TraderGetAllWeightRecorderInDate(int traderId, List<Transaction> listTran)
+        {
+            var listWeightRecorderId = listTran.Where(x => x.WeightRecorderId != null).Select(x => x.WeightRecorderId).Distinct();
+            List<UserInformation> listTrader = new List<UserInformation>();
+            foreach (var item in listWeightRecorderId)
             {
                 listTrader.Add(_mapper.Map<UserInfor, UserInformation>(await _unitOfWork.UserInfors.FindAsync(item)));
             }
