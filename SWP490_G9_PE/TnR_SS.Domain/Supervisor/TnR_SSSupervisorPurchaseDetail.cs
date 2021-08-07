@@ -264,6 +264,8 @@ namespace TnR_SS.Domain.Supervisor
                         try
                         {
                             _unitOfWork.LK_PurchaseDetail_Drums.RemoveLKByPurchaseDetailId(purchaseDetailId);
+                            // remove close purchase detail
+                            await _unitOfWork.ClosePurchaseDetails.DeleteByPurchaseDetailIdAsync(purchaseDetailId);
                             _unitOfWork.PurchaseDetails.DeleteById(purchaseDetailId);
                             await _unitOfWork.SaveChangeAsync();
 

@@ -12,5 +12,6 @@ namespace TnR_SS.Domain.Repositories
         Task<double> GetTotalWeightAsync(int transId);
         Task<double> GetTotalMoneyAsync(int transId);
         Task<double> GetTotalDebtAsync(int transId);
+        List<Transaction> GetAllTransactionsByDate(int userId, DateTime? date);
     }
 }

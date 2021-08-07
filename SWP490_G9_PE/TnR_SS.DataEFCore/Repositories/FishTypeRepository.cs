@@ -61,5 +61,68 @@ namespace TnR_SS.DataEFCore.Repositories
                     (ft, p) => ft
                 ).ToList();
         }
+
+        public bool CheckFishTypeOfPurchaseInUse(int purchaseId)
+        {
+            var rs = _context.Transactions.Where(x => x.isCompleted == TransactionStatus.Pending).Join(
+                    _context.TransactionDetails,
+                    t => t.ID,
+                    td => td.TransId,
+                    (t, td) => new
+                    {
+                        fishTypeId = td.FishTypeId
+                    }).Distinct().Join(
+                        _context.FishTypes,
+                        fti => fti.fishTypeId,
+                        ft => ft.ID,
+                        (fti, ft) => ft.PurchaseID
+                    ).Where(x => x == purchaseId);
+
+            if (rs == null || rs.Count() == 0)
+            {
+                // chưa được dùng
+                return false;
+            }
+
+            return true;
+        }
+
+        public List<FishType> GetAllFishTypeForTransaction(int? traderId, int userId, DateTime date)
+        {
+            var userRole = _context.UserRoles.Where(x => x.UserId == userId).Join(
+                    _context.RoleUsers,
+                    ur => ur.RoleId,
+                    ru => ru.Id,
+                    (ur, ru) => ru.NormalizedName);
+
+            DateTime startDate = DateTime.MinValue;
+            DateTime endDate = DateTime.MaxValue;
+
+            // nếu là ngày hiện tại và < 18 giờ thì là bán tiếp => lấy dữ liệu từ 18h hôm trc -> 18h hôm nay
+            if (date.Date == DateTime.Now.Date && DateTime.Now.Hour < 18)
+            {
+                startDate = new DateTime(date.Year, date.Month, date.Day - 1, 18, 0, 0); // 18 h ngày hôm trước
+                endDate = new DateTime(date.Year, date.Month, date.Day, 18, 0, 0); // 18 h ngày hôm nay
+            }
+            else // lấy dữ liệu từ 18h hôm đó -> 18h hôm sau
+            {
+                startDate = new DateTime(date.Year, date.Month, date.Day, 18, 0, 0); // 18 h ngày hôm đó
+                endDate = new DateTime(date.Year, date.Month, date.Day + 1, 18, 0, 0); // 18 h ngày hôm sau
+
+            }
+
+            List<int> listPurchaseId = new();
+            if (userRole.Contains(RoleName.Trader))
+            {
+                listPurchaseId = _context.Purchases.Where(x => x.TraderID == userId && x.Date <= endDate && x.Date >= startDate).Select(x => x.ID).ToList();
+            }
+            else if (userRole.Contains(RoleName.WeightRecorder) && traderId != null)
+            {
+                listPurchaseId = _context.Purchases.Where(x => x.TraderID == traderId && x.Date <= endDate && x.Date >= startDate).Select(x => x.ID).ToList();
+            }
+
+            return GetAllFishTypeByPurchaseIds(listPurchaseId);
+        }
     }
 }
+

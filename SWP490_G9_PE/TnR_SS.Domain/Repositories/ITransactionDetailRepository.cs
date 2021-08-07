@@ -9,7 +9,8 @@ namespace TnR_SS.Domain.Repositories
 {
     public interface ITransactionDetailRepository : IRepositoryBase<TransactionDetail>
     {
-        List<TransactionDetail> GetAllTransactionByWcIDAndDate(int userId, DateTime? date);
-        List<TransactionDetail> GetAllTransactionByTraderIdAndDate(int traderId, DateTime? date);
+        List<TransactionDetail> GetAllByWcIDAndDate(int userId, DateTime? date);
+        List<TransactionDetail> GetAllByTraderIdAndDate(int traderId, DateTime? date);
+        Task DeleteByTransactionIdAsync(int tranId);
     }
 }

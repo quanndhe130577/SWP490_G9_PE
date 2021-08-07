@@ -27,6 +27,11 @@ namespace TnR_SS.Domain.Supervisor
                 throw new Exception("Hãy tạo hóa đơn trước !!");
             }
 
+            if(trans.isCompleted == TransactionStatus.Completed)
+            {
+                throw new Exception("Đã chốt sổ với thương lái này, không thể tạo thêm !!");
+            }
+
             var fishType = await _unitOfWork.FishTypes.FindAsync(apiModel.FishTypeId);
             if (fishType == null)
             {
@@ -103,6 +108,11 @@ namespace TnR_SS.Domain.Supervisor
                             await _unitOfWork.SaveChangeAsync();
                         }
 
+                        if (transaction.isCompleted == TransactionStatus.Completed)
+                        {
+                            throw new Exception("Thông tin đơn bán đã được chốt, không thể tạo thêm !!");
+                        }
+
                         var transactionDetail = _mapper.Map<CreateTransactionDetailReqModel, TransactionDetail>(apiModel);
                         transactionDetail.TransId = transaction.ID;
                         // create transaction detail                   
@@ -151,11 +161,11 @@ namespace TnR_SS.Domain.Supervisor
             List<TransactionDetail> listTranDe = new List<TransactionDetail>();
             if (roleUser.Contains(RoleName.WeightRecorder))
             {
-                listTranDe = _unitOfWork.TransactionDetails.GetAllTransactionByWcIDAndDate(userId, date);
+                listTranDe = _unitOfWork.TransactionDetails.GetAllByWcIDAndDate(userId, date);
             }
             else if (roleUser.Contains(RoleName.Trader))
             {
-                listTranDe = _unitOfWork.TransactionDetails.GetAllTransactionByTraderIdAndDate(userId, date);
+                listTranDe = _unitOfWork.TransactionDetails.GetAllByTraderIdAndDate(userId, date);
             }
             else
             {
@@ -211,6 +221,46 @@ namespace TnR_SS.Domain.Supervisor
             tranDe = _mapper.Map<UpdateTransactionDetailReqModel, TransactionDetail>(apiModel, tranDe);
             _unitOfWork.TransactionDetails.Update(tranDe);
             await _unitOfWork.SaveChangeAsync();
+        }
+
+        public async Task DeleteTransactionDetailAsync(int tranDtId, int userId)
+        {
+            var strategy = _unitOfWork.CreateExecutionStrategy();
+
+            await strategy.ExecuteAsync(async () =>
+            {
+                using (var dbTransaction = _unitOfWork.BeginTransaction())
+                {
+                    try
+                    {
+
+                        var tranDt = await _unitOfWork.TransactionDetails.FindAsync(tranDtId);
+                        if (tranDt == null)
+                        {
+                            throw new Exception("Mã cân này không tồn tại hoặc đã bị xóa !!!");
+                        }
+
+                        var tran = await _unitOfWork.Transactions.FindAsync(tranDt.TransId);
+                        if (tran == null || (tran.WeightRecorderId != null && tran.WeightRecorderId != userId) || (tran.WeightRecorderId == null && tran.TraderId != userId))
+                        {
+                            throw new Exception("Mã cân này không tồn tại hoặc đã bị xóa !!!");
+                        }
+
+                        _unitOfWork.TransactionDetails.Delete(tranDt);
+                        await _unitOfWork.SaveChangeAsync();
+
+                        await dbTransaction.CommitAsync();
+                    }
+                    catch
+                    {
+                        await dbTransaction.RollbackAsync();
+                        throw;
+                        //throw new Exception("Đã có lỗi xay ra, hãy thử lại sau");
+                    }
+
+                }
+            });
+
         }
     }
 }

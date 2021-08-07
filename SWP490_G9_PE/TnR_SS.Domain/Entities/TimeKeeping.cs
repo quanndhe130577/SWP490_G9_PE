@@ -27,6 +27,5 @@ namespace TnR_SS.Domain.Entities
         public int EmpId { get; set; }
         public Employee Employee { get; set; }
 
-
     }
 }

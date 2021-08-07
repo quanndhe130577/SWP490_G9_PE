@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TnR_SS.DataEFCore;
 
 namespace TnR_SS.DataEFCore.Migrations
 {
     [DbContext(typeof(TnR_SSContext))]
-    partial class TnR_SSContextModelSnapshot : ModelSnapshot
+    [Migration("20210805074459_changeFkInCloseTransactionDetailFromTranDetailToTransaction")]
+    partial class changeFkInCloseTransactionDetailFromTranDetailToTransaction
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -349,9 +351,6 @@ namespace TnR_SS.DataEFCore.Migrations
                         .HasColumnType("real");
 
                     b.Property<float>("FishTypeMinWeight")
-                        .HasColumnType("real");
-
-                    b.Property<float>("FishTypePrice")
                         .HasColumnType("real");
 
                     b.Property<bool>("IsPaid")
@@ -704,7 +703,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime2");
 
                     b.Property<double>("PayForPondOwner")
                         .HasColumnType("float");
@@ -814,32 +813,32 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "7057ec5f-2372-4243-83d9-8f16cee91ca8",
+                            ConcurrencyStamp = "da6b1313-ba57-44da-9f21-503a8a65895f",
                             CreatedAt = new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Chủ bến",
                             Name = "WeightRecorder",
                             NormalizedName = "WEIGHTRECORDER",
-                            UpdatedAt = new DateTime(2021, 8, 7, 20, 39, 35, 476, DateTimeKind.Local).AddTicks(8297)
+                            UpdatedAt = new DateTime(2021, 8, 5, 14, 44, 58, 664, DateTimeKind.Local).AddTicks(5886)
                         },
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "46f44e85-5537-4ce5-b797-0d8cc0047adb",
+                            ConcurrencyStamp = "100f65de-7926-4c8a-9154-f30ee10d4ec6",
                             CreatedAt = new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Thương lái",
                             Name = "Trader",
                             NormalizedName = "TRADER",
-                            UpdatedAt = new DateTime(2021, 8, 7, 20, 39, 35, 478, DateTimeKind.Local).AddTicks(4058)
+                            UpdatedAt = new DateTime(2021, 8, 5, 14, 44, 58, 666, DateTimeKind.Local).AddTicks(9906)
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "12cc6f72-9eb8-49e2-b868-9e5c511261b5",
+                            ConcurrencyStamp = "4ac87ecf-f202-4f2f-be3a-f699529c8df7",
                             CreatedAt = new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Admin",
                             Name = "Admin",
                             NormalizedName = "ADMIN",
-                            UpdatedAt = new DateTime(2021, 8, 7, 20, 39, 35, 478, DateTimeKind.Local).AddTicks(4095)
+                            UpdatedAt = new DateTime(2021, 8, 5, 14, 44, 58, 666, DateTimeKind.Local).AddTicks(9954)
                         });
                 });
 
@@ -925,7 +924,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("datetime");
+                        .HasColumnType("date");
 
                     b.Property<int>("TraderId")
                         .HasColumnType("int");

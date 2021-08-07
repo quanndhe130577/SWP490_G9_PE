@@ -35,6 +35,7 @@ namespace TnR_SS.API.Controllers
             return new ResponseBuilder().Success("Tạo hóa đơn thành công !!").ResponseModel;
         }
 
+        // get data for page transaction detail
         [Route("getall/{date_str?}")]
         [HttpGet]
         public async Task<ResponseModel> GetAll(string date_str = null)
@@ -64,6 +65,7 @@ namespace TnR_SS.API.Controllers
             return new ResponseBuilder<List<TransactionResModel>>().Success("Lấy thông tin hóa đơn thành công !!").WithData(rs).ResponseModel;
         }
 
+        // get data for page transaction
         [Route("getgeneral")]
         [HttpGet]
         public async Task<ResponseModel> GetGeneralTransactionFollowDate()
@@ -72,5 +74,29 @@ namespace TnR_SS.API.Controllers
             var rs = await _tnrssSupervisor.GetAllTransactionFollowDateAsync(userId);
             return new ResponseBuilder<List<GetGeneralTransactionFollowDateResModel>>().Success("Lấy thông tin hóa đơn thành công !!").WithData(rs).ResponseModel;
         }
+
+        [Route("delete")]
+        [HttpPost]
+        public async Task<ResponseModel> Delete(TransactionIdModel apiModel)
+        {
+            var userId = TokenManagement.GetUserIdInToken(HttpContext);
+            await _tnrssSupervisor.DeleteTransactionAsync(apiModel.TransactionId, userId);
+            return new ResponseBuilder().Success("Xóa mã cân thành công !!").ResponseModel;
+        }
+
+        [Route("chotso")]
+        [HttpPost]
+        public async Task<ResponseModel> ChotSoTransaction(ChotSoTransactionReqModal chotSoApi)
+        {
+            var userId = TokenManagement.GetUserIdInToken(HttpContext);
+            await _tnrssSupervisor.ChotSoTransactionAsync(chotSoApi, userId);
+            return new ResponseBuilder().Success("Chốt đơn mua thành công !!").ResponseModel;
+        }
+    }
+
+    public class TransactionIdModel
+    {
+        public int TransactionId { get; set; }
+        public int TransactionDetailId { get; set; }
     }
 }

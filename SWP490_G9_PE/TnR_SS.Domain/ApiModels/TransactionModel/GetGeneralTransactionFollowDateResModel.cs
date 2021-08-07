@@ -14,5 +14,6 @@ namespace TnR_SS.Domain.ApiModels.TransactionModel
         public double TotalMoney { get; set; }
         public double TotalDebt { get; set; }
         public List<UserInformation> ListTrader { get; set; } = new List<UserInformation>();
+        public List<UserInformation> ListWeightRecorder { get; set; } = new List<UserInformation>();
     }
 }

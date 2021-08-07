@@ -78,7 +78,7 @@ namespace TnR_SS.Domain.Supervisor
         Task DeleteFishTypeAsync(int empId, int traderId);
         Task<List<FishTypeApiModel>> GetListFishTypeByPurchaseIdAsync(int purchaseId, int traderId);
         Task UpdateListFishTypeAsync(ListFishTypeModel listFishType, int traderId);
-        Task<List<GetAllFishTypeForTransactionResModel>> GetAllFishTypeForTransactionAsync(int? traderId, int userId, DateTime date);
+        List<GetAllFishTypeForTransactionResModel> GetAllFishTypeForTransaction(int? traderId, int userId, DateTime date);
         Task<FishTypeApiModel> GetNewFishTypeAsync(int traderId, DateTime? date);
         #endregion
 
@@ -184,6 +184,8 @@ namespace TnR_SS.Domain.Supervisor
         #region Transaction
         Task CreateListTransactionAsync(CreateListTransactionReqModel apiModel, int wcId);
         Task<List<TransactionResModel>> GetAllTransactionAsync(int userId, DateTime? date);
+        Task DeleteTransactionAsync(int tranId, int userId);
+        Task ChotSoTransactionAsync(ChotSoTransactionReqModal chotSoApi, int userId);
         #endregion
 
         #region Transaction Detail
@@ -191,6 +193,7 @@ namespace TnR_SS.Domain.Supervisor
         Task<List<GetAllTransactionDetailResModel>> GetAllTransactionDetailAsync(int userId, DateTime? date);
         Task<List<GetGeneralTransactionFollowDateResModel>> GetAllTransactionFollowDateAsync(int userId);
         Task UpdateTransactionDetailAsync(UpdateTransactionDetailReqModel apiModel, int userId);
+        Task DeleteTransactionDetailAsync(int tranDtId, int userId);
         #endregion
 
         #region Debt

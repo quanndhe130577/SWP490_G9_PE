@@ -50,9 +50,7 @@ namespace TnR_SS.Domain.ApiModels
                     destination.LastName += item.Trim() + " ";
                 }
                 destination.LastName = destination.LastName.Trim();
-
             }).ReverseMap();
-
             CreateMap<UpdateUserReqModel, UserInfor>()
             .AfterMap((source, destination) =>
             {
@@ -223,6 +221,39 @@ namespace TnR_SS.Domain.ApiModels
             CreateMap<TransactionDetail, GetAllTransactionDetailResModel>();
             CreateMap<TransactionDetail, TransactionDetailInformation>();
             CreateMap<UpdateTransactionDetailReqModel, TransactionDetail>().ReverseMap();
+            CreateMap<CloseTransactionDetail, TransactionDetailInformation>().AfterMap((source, destination) =>
+            {
+                destination.ID = source.ID;
+                destination.IsPaid = source.IsPaid;
+                destination.Weight = source.Weight;
+                destination.SellPrice = source.SellPrice;
+
+                if (source.BuyerId == null || source.BuyerName == null)
+                {
+                    destination.Buyer = null;
+                }
+                else
+                {
+                    destination.Buyer = new BuyerApiModel()
+                    {
+                        ID = source.BuyerId.Value,
+                        Name = source.BuyerName,
+                        Address = source.BuyerAddress,
+                        PhoneNumber = source.BuyerPhoneNumber
+                    };
+                }
+
+                destination.FishType = new FishTypeApiModel()
+                {
+                    ID = source.FishTypeId,
+                    FishName = source.FishName,
+                    Description = source.FishTypeDescription,
+                    MinWeight = source.FishTypeMinWeight,
+                    MaxWeight = source.FishTypeMaxWeight,
+                    Price = source.FishTypePrice,
+                    TransactionPrice = source.SellPrice,
+                };
+            });
             #endregion
 
             #region Transaction

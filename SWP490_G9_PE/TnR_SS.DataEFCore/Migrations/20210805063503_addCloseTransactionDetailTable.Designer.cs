@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TnR_SS.DataEFCore;
 
 namespace TnR_SS.DataEFCore.Migrations
 {
     [DbContext(typeof(TnR_SSContext))]
-    partial class TnR_SSContextModelSnapshot : ModelSnapshot
+    [Migration("20210805063503_addCloseTransactionDetailTable")]
+    partial class addCloseTransactionDetailTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -351,16 +353,10 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.Property<float>("FishTypeMinWeight")
                         .HasColumnType("real");
 
-                    b.Property<float>("FishTypePrice")
-                        .HasColumnType("real");
-
-                    b.Property<bool>("IsPaid")
-                        .HasColumnType("bit");
-
                     b.Property<double>("SellPrice")
                         .HasColumnType("float");
 
-                    b.Property<int>("TransactionId")
+                    b.Property<int>("TransactionDetailId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -371,7 +367,8 @@ namespace TnR_SS.DataEFCore.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("TransactionId");
+                    b.HasIndex("TransactionDetailId")
+                        .IsUnique();
 
                     b.ToTable("CloseTransactionDetails");
                 });
@@ -704,7 +701,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("datetime");
+                        .HasColumnType("datetime2");
 
                     b.Property<double>("PayForPondOwner")
                         .HasColumnType("float");
@@ -814,32 +811,32 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "7057ec5f-2372-4243-83d9-8f16cee91ca8",
+                            ConcurrencyStamp = "14bd2fc3-9d88-4d38-81ea-eedf5efb366e",
                             CreatedAt = new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Chủ bến",
                             Name = "WeightRecorder",
                             NormalizedName = "WEIGHTRECORDER",
-                            UpdatedAt = new DateTime(2021, 8, 7, 20, 39, 35, 476, DateTimeKind.Local).AddTicks(8297)
+                            UpdatedAt = new DateTime(2021, 8, 5, 13, 35, 3, 27, DateTimeKind.Local).AddTicks(8452)
                         },
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "46f44e85-5537-4ce5-b797-0d8cc0047adb",
+                            ConcurrencyStamp = "bf9edf7d-17f0-4e9e-a816-2a0b4c48d335",
                             CreatedAt = new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Thương lái",
                             Name = "Trader",
                             NormalizedName = "TRADER",
-                            UpdatedAt = new DateTime(2021, 8, 7, 20, 39, 35, 478, DateTimeKind.Local).AddTicks(4058)
+                            UpdatedAt = new DateTime(2021, 8, 5, 13, 35, 3, 30, DateTimeKind.Local).AddTicks(1446)
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "12cc6f72-9eb8-49e2-b868-9e5c511261b5",
+                            ConcurrencyStamp = "e1148d50-c1b1-4b4e-833b-1c748cf24bf6",
                             CreatedAt = new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Admin",
                             Name = "Admin",
                             NormalizedName = "ADMIN",
-                            UpdatedAt = new DateTime(2021, 8, 7, 20, 39, 35, 478, DateTimeKind.Local).AddTicks(4095)
+                            UpdatedAt = new DateTime(2021, 8, 5, 13, 35, 3, 30, DateTimeKind.Local).AddTicks(1629)
                         });
                 });
 
@@ -925,7 +922,7 @@ namespace TnR_SS.DataEFCore.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("datetime");
+                        .HasColumnType("date");
 
                     b.Property<int>("TraderId")
                         .HasColumnType("int");
@@ -934,9 +931,6 @@ namespace TnR_SS.DataEFCore.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<int?>("WeightRecorderId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("isCompleted")
                         .HasColumnType("int");
 
                     b.HasKey("ID");
@@ -1242,14 +1236,14 @@ namespace TnR_SS.DataEFCore.Migrations
 
             modelBuilder.Entity("TnR_SS.Domain.Entities.CloseTransactionDetail", b =>
                 {
-                    b.HasOne("TnR_SS.Domain.Entities.Transaction", "Transaction")
-                        .WithMany("CloseTransactionDetails")
-                        .HasForeignKey("TransactionId")
-                        .HasConstraintName("FK_CloseTransactionDetail_Transaction")
+                    b.HasOne("TnR_SS.Domain.Entities.TransactionDetail", "TransactionDetail")
+                        .WithOne("CloseTransactionDetail")
+                        .HasForeignKey("TnR_SS.Domain.Entities.CloseTransactionDetail", "TransactionDetailId")
+                        .HasConstraintName("FK_CloseTransactionDetail_TransactionDetail")
                         .OnDelete(DeleteBehavior.ClientNoAction)
                         .IsRequired();
 
-                    b.Navigation("Transaction");
+                    b.Navigation("TransactionDetail");
                 });
 
             modelBuilder.Entity("TnR_SS.Domain.Entities.CostIncurred", b =>
@@ -1552,9 +1546,12 @@ namespace TnR_SS.DataEFCore.Migrations
 
             modelBuilder.Entity("TnR_SS.Domain.Entities.Transaction", b =>
                 {
-                    b.Navigation("CloseTransactionDetails");
-
                     b.Navigation("TransactionDetails");
+                });
+
+            modelBuilder.Entity("TnR_SS.Domain.Entities.TransactionDetail", b =>
+                {
+                    b.Navigation("CloseTransactionDetail");
                 });
 
             modelBuilder.Entity("TnR_SS.Domain.Entities.Truck", b =>

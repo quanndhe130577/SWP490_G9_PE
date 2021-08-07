@@ -54,6 +54,7 @@ namespace TnR_SS.Domain.Supervisor
 
         public async Task<int> UpsertHistorySalary(DateTime date, int empId)
         {
+            DateTime month = new DateTime(date.Year, date.Month, 1).AddMonths(1).AddDays(-1);
             double status = _unitOfWork.TimeKeepings.GetAll(tk => tk.EmpId == empId && tk.WorkDay.Month == date.Month && tk.WorkDay.Year == date.Year).Select(tk => tk.Status).Sum();
             BaseSalaryEmp baseSalaryEmp = _unitOfWork.Employees.GetEmployeeSalary(empId, date);
             HistorySalaryEmp historySalaryEmp = GetHistoryEmpSalary(date, empId);
@@ -68,12 +69,12 @@ namespace TnR_SS.Domain.Supervisor
                         EmpId = empId,
                         Bonus = 0,
                         Punish = 0,
-                        Salary = status * baseSalaryEmp.Salary - _unitOfWork.Employees.GetEmployeeAdvanceSalary(empId, date),
+                        Salary = (int)(baseSalaryEmp.Salary * status / month.Day) - _unitOfWork.Employees.GetEmployeeAdvanceSalary(empId, date),
                     });
                 }
                 else
                 {
-                    historySalaryEmp.Salary = status * baseSalaryEmp.Salary + historySalaryEmp.Bonus - historySalaryEmp.Punish - _unitOfWork.Employees.GetEmployeeAdvanceSalary(empId, date);
+                    historySalaryEmp.Salary = (int)(baseSalaryEmp.Salary * status / month.Day) + historySalaryEmp.Bonus - historySalaryEmp.Punish - _unitOfWork.Employees.GetEmployeeAdvanceSalary(empId, date);
                     _unitOfWork.HistorySalaryEmps.Update(historySalaryEmp);
                 }
             }

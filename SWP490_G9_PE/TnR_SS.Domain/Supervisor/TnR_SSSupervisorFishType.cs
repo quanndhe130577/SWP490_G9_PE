@@ -50,35 +50,31 @@ namespace TnR_SS.Domain.Supervisor
             return list;
         }
 
-        public async Task<List<GetAllFishTypeForTransactionResModel>> GetAllFishTypeForTransactionAsync(int? traderId, int userId, DateTime date)
+        public List<GetAllFishTypeForTransactionResModel> GetAllFishTypeForTransaction(int? traderId, int userId, DateTime date)
         {
-            // if (date.Hour < 12)
-            // {
-            //     date = date.AddDays(-1);
-            // }
-
-            List<FishType> listType = new List<FishType>();
+            /*List<FishType> listType = new List<FishType>();
             var userRole = await _unitOfWork.UserInfors.GetRolesAsync(userId);
             if (userRole.Contains(RoleName.Trader))
             {
-                // lay ra ngay co purchase gan nhat
-                var dateGanNhat = _unitOfWork.Purchases.GetAll(x => x.TraderID == userId && x.Date.Date <= date).OrderByDescending(x => x.Date).Select(x => x.Date).FirstOrDefault();
+                // lay ra ngay co purchase gan nhat tối đa 1 ngày
+                var dateGanNhat = _unitOfWork.Purchases.GetAll(x => x.TraderID == userId && x.Date.Date <= date && x.Date.Date >= date.AddDays(-1)).OrderByDescending(x => x.Date).Select(x => x.Date).FirstOrDefault();
                 // lấy ra purchase có ngày = ngày gần nhất
-                var listPurchaseId = _unitOfWork.Purchases.GetAll(x => x.TraderID == userId && x.Date.Date == dateGanNhat.Date).Select(x => x.ID).ToList();
+                var listPurchaseId = _unitOfWork.Purchases.GetAll(x => x.TraderID == userId && x.Date.Date == dateGanNhat.Date && x.Date.Date >= date.AddDays(-1)).Select(x => x.ID).ToList();
                 listType = _unitOfWork.FishTypes.GetAllFishTypeByPurchaseIds(listPurchaseId);
                 //listType = _unitOfWork.FishTypes.GetAll(X => X.TraderID == userId && X.Date.Date == date.Date && X.PurchaseID != null).Distinct().ToList();
             }
             else if (userRole.Contains(RoleName.WeightRecorder) && traderId != null)
             {
                 // lay ra ngay co purchase gan nhat
-                var dateGanNhat = _unitOfWork.Purchases.GetAll(x => x.TraderID == traderId && x.Date.Date <= date).OrderByDescending(x => x.Date).Select(x => x.Date).FirstOrDefault();
+                var dateGanNhat = _unitOfWork.Purchases.GetAll(x => x.TraderID == traderId && x.Date.Date <= date && x.Date.Date >= date.AddDays(-1)).OrderByDescending(x => x.Date).Select(x => x.Date).FirstOrDefault();
                 // lấy ra purchase có ngày = ngày gần nhất
-                var listPurchaseId = _unitOfWork.Purchases.GetAll(x => x.TraderID == traderId && x.Date.Date == dateGanNhat.Date).Select(x => x.ID).ToList();
+                var listPurchaseId = _unitOfWork.Purchases.GetAll(x => x.TraderID == traderId && x.Date.Date == dateGanNhat.Date && x.Date.Date >= date.AddDays(-1)).Select(x => x.ID).ToList();
                 // lấy ra loại cá của các purchase đó
                 listType = _unitOfWork.FishTypes.GetAllFishTypeByPurchaseIds(listPurchaseId);
                 //listType = _unitOfWork.FishTypes.GetAll(X => X.TraderID == traderId.Value && X.Date.Date == date.Date && X.PurchaseID != null).Distinct().ToList();
-            }
+            }*/
 
+            List<FishType> listType = _unitOfWork.FishTypes.GetAllFishTypeForTransaction(traderId, userId, date);
             List<GetAllFishTypeForTransactionResModel> list = new List<GetAllFishTypeForTransactionResModel>();
             foreach (var type in listType)
             {
