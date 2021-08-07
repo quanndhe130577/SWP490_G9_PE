@@ -61,5 +61,31 @@ namespace TnR_SS.DataEFCore.Repositories
                     (ft, p) => ft
                 ).ToList();
         }
+
+        public bool CheckFishTypeOfPurchaseInUse(int purchaseId)
+        {
+            var rs = _context.Transactions.Where(x => x.isCompleted == TransactionStatus.Pending).Join(
+                    _context.TransactionDetails,
+                    t => t.ID,
+                    td => td.TransId,
+                    (t, td) => new
+                    {
+                        fishTypeId = td.FishTypeId
+                    }).Distinct().Join(
+                        _context.FishTypes,
+                        fti => fti.fishTypeId,
+                        ft => ft.ID,
+                        (fti, ft) => ft.PurchaseID
+                    ).Where(x => x == purchaseId);
+
+            if (rs == null || rs.Count() == 0)
+            {
+                // chưa được dùng
+                return false;
+            }
+
+            return true;
+        }
     }
 }
+

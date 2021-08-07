@@ -49,6 +49,11 @@ namespace TnR_SS.Domain.Supervisor
                 {
                     try
                     {
+                        if(apiModel.ListTraderId == null || apiModel.ListTraderId.Count == 0)
+                        {
+                            throw new Exception("Hãy chọn ít nhất 1 thương lái !!!");
+                        }
+
                         foreach (var item in apiModel.ListTraderId)
                         {
                             // nếu date là buổi sáng ngày hôm sau thì chuyển thành buổi chiều ngày hôm trước
@@ -112,7 +117,7 @@ namespace TnR_SS.Domain.Supervisor
                 list.Add(tran);
             }
 
-            return list;
+            return list.OrderBy(x => x.Status).ToList();
         }
 
         private async Task<List<TransactionDetailInformation>> GetListTransactionDetailModelAsync(Transaction tran)
@@ -209,6 +214,11 @@ namespace TnR_SS.Domain.Supervisor
                             throw new Exception("Đơn mua này không tồn tại hoặc đã bị xóa !!!");
                         }
 
+                        if (tran.isCompleted == TransactionStatus.Completed)
+                        {
+                            throw new Exception("Đơn bán đã được chốt sổ không thể xóa !!!");
+                        }
+
                         await _unitOfWork.TransactionDetails.DeleteByTransactionIdAsync(tranId);
                         _unitOfWork.Transactions.Delete(tran);
                         await _unitOfWork.SaveChangeAsync();
@@ -227,7 +237,7 @@ namespace TnR_SS.Domain.Supervisor
 
         }
 
-        public async Task ChotSoTransactionAsync(List<int> listTranId, int userId)
+        public async Task ChotSoTransactionAsync(ChotSoTransactionReqModal chotSoApi, int userId)
         {
             var strategy = _unitOfWork.CreateExecutionStrategy();
 
@@ -237,7 +247,7 @@ namespace TnR_SS.Domain.Supervisor
                 {
                     try
                     {
-                        foreach (var tranId in listTranId)
+                        foreach (var tranId in chotSoApi.listTranId)
                         {
                             var tran = await _unitOfWork.Transactions.FindAsync(tranId);
                             if (tran == null || (tran.WeightRecorderId != null && tran.WeightRecorderId != userId) || (tran.WeightRecorderId == null && tran.TraderId != userId))
@@ -251,6 +261,7 @@ namespace TnR_SS.Domain.Supervisor
                             }
 
                             tran.isCompleted = TransactionStatus.Completed;
+                            tran.CommissionUnit = chotSoApi.CommissionUnit;
                             _unitOfWork.Transactions.Update(tran);
                             await _unitOfWork.SaveChangeAsync();
 
@@ -310,9 +321,9 @@ namespace TnR_SS.Domain.Supervisor
             return listTrader;
         }
 
-        private async Task<double> GetTotalWeightForGeneral(int wcId, DateTime date)
+        private async Task<double> GetTotalWeightForGeneral(int userId, DateTime date)
         {
-            var listTran = _unitOfWork.Transactions.GetAll(x => x.WeightRecorderId == wcId && x.Date.Date == date.Date);
+            var listTran = _unitOfWork.Transactions.GetAll(x => (x.WeightRecorderId == userId || x.TraderId == userId) && x.Date.Date == date.Date);
             double totalWeight = 0.0;
             foreach (var tran in listTran)
             {
@@ -321,9 +332,9 @@ namespace TnR_SS.Domain.Supervisor
 
             return totalWeight;
         }
-        private async Task<double> GetTotalMoneyForGeneral(int wcId, DateTime date)
+        private async Task<double> GetTotalMoneyForGeneral(int userId, DateTime date)
         {
-            var listTran = _unitOfWork.Transactions.GetAll(x => x.WeightRecorderId == wcId && x.Date.Date == date.Date);
+            var listTran = _unitOfWork.Transactions.GetAll(x => (x.WeightRecorderId == userId || x.TraderId == userId) && x.Date.Date == date.Date);
             double totalWeight = 0.0;
             foreach (var tran in listTran)
             {
@@ -332,9 +343,9 @@ namespace TnR_SS.Domain.Supervisor
 
             return totalWeight;
         }
-        private async Task<double> GetTotalDebtForGeneral(int wcId, DateTime date)
+        private async Task<double> GetTotalDebtForGeneral(int userId, DateTime date)
         {
-            var listTran = _unitOfWork.Transactions.GetAll(x => x.WeightRecorderId == wcId && x.Date.Date == date.Date);
+            var listTran = _unitOfWork.Transactions.GetAll(x => (x.WeightRecorderId == userId || x.TraderId == userId) && x.Date.Date == date.Date);
             double totalWeight = 0.0;
             foreach (var tran in listTran)
             {

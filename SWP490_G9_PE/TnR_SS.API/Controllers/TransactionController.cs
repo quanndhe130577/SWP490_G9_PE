@@ -84,10 +84,10 @@ namespace TnR_SS.API.Controllers
 
         [Route("chotso")]
         [HttpPost]
-        public async Task<ResponseModel> ChotSoTransaction([FromBody]List<int> listTranId)
+        public async Task<ResponseModel> ChotSoTransaction(ChotSoTransactionReqModal chotSoApi)
         {
             var userId = TokenManagement.GetUserIdInToken(HttpContext);
-            await _tnrssSupervisor.ChotSoTransactionAsync(listTranId, userId);
+            await _tnrssSupervisor.ChotSoTransactionAsync(chotSoApi, userId);
             return new ResponseBuilder().Success("Chốt đơn mua thành công !!").ResponseModel;
         }
     }
