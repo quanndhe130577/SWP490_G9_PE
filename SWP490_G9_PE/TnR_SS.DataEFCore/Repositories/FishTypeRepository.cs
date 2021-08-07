@@ -114,11 +114,11 @@ namespace TnR_SS.DataEFCore.Repositories
             List<int> listPurchaseId = new();
             if (userRole.Contains(RoleName.Trader))
             {
-                listPurchaseId = _context.Purchases.Where(x => x.TraderID == userId && x.Date.Date <= endDate && x.Date.Date >= startDate).Select(x => x.ID).ToList();
+                listPurchaseId = _context.Purchases.Where(x => x.TraderID == userId && x.Date <= endDate && x.Date >= startDate).Select(x => x.ID).ToList();
             }
             else if (userRole.Contains(RoleName.WeightRecorder) && traderId != null)
             {
-                listPurchaseId = _context.Purchases.Where(x => x.TraderID == traderId && x.Date.Date <= endDate && x.Date.Date >= startDate).Select(x => x.ID).ToList();
+                listPurchaseId = _context.Purchases.Where(x => x.TraderID == traderId && x.Date <= endDate && x.Date >= startDate).Select(x => x.ID).ToList();
             }
 
             return GetAllFishTypeByPurchaseIds(listPurchaseId);

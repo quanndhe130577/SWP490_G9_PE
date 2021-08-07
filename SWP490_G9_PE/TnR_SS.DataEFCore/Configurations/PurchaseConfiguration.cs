@@ -15,6 +15,10 @@ namespace TnR_SS.DataEFCore.Configurations
         {
             entity.ToTable("Purchase");
 
+            entity.Property(e => e.Date)
+                .IsRequired()
+                .HasColumnType("datetime");
+
             entity.Property(e => e.TraderID)
                 .IsRequired();
             entity.HasOne(p => p.UserInfor)

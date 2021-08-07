@@ -127,6 +127,7 @@ namespace TnR_SS.Domain.Supervisor
                 TransactionResModel tran = new TransactionResModel();
                 tran.ID = item.ID;
                 tran.Date = date.Value;
+                tran.CommissionUnit = item.CommissionUnit;
                 tran.Trader = _mapper.Map<UserInfor, UserInformation>(await _unitOfWork.UserInfors.FindAsync(item.TraderId));
                 tran.WeightRecorder = item.WeightRecorderId != null ? _mapper.Map<UserInfor, UserInformation>(await _unitOfWork.UserInfors.FindAsync(item.WeightRecorderId)) : null;
                 tran.TransactionDetails = await GetListTransactionDetailModelAsync(item);
