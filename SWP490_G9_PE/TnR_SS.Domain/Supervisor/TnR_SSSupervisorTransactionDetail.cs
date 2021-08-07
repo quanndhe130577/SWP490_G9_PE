@@ -8,6 +8,7 @@ using TnR_SS.Domain.ApiModels.BuyerModel;
 using TnR_SS.Domain.ApiModels.FishTypeModel;
 using TnR_SS.Domain.ApiModels.TransactionDetailModel;
 using TnR_SS.Domain.ApiModels.TransactionModel;
+using TnR_SS.Domain.ApiModels.UserInforModel;
 using TnR_SS.Domain.Entities;
 
 namespace TnR_SS.Domain.Supervisor
@@ -277,12 +278,17 @@ namespace TnR_SS.Domain.Supervisor
                 payments.Date = date;
                 payments.Buyer = _mapper.Map<Buyer, BuyerApiModel>(await _unitOfWork.Buyers.FindAsync(item));
                 payments.TotalWeight = listTranBuyer.Sum(x => x.Weight);
-                payments.MoneyPaid = listTranBuyer.Where(x => x.IsPaid).Sum(x => x.SellPrice);
-                payments.MoneyNotPaid = listTranBuyer.Where(x => !x.IsPaid).Sum(x => x.SellPrice);
+                payments.MoneyPaid = listTranBuyer.Where(x => x.IsPaid).Sum(x => x.SellPrice * x.Weight);
+                payments.MoneyNotPaid = listTranBuyer.Where(x => !x.IsPaid).Sum(x => x.SellPrice * x.Weight);
                 payments.TotalMoney = payments.MoneyPaid + payments.MoneyNotPaid;
                 foreach (var tran in listTranBuyer)
                 {
-                    payments.TransactionDetails.Add(_mapper.Map<TransactionDetail, TransactionDetailInformation>(tran));
+                    TransactionDetailPayment tdp = _mapper.Map<TransactionDetail, TransactionDetailPayment>(tran);
+                    tdp.FishType = _mapper.Map<FishType, FishTypeApiModel>(await _unitOfWork.FishTypes.FindAsync(tran.FishTypeId));
+                    tdp.Buyer = _mapper.Map<Buyer, BuyerApiModel>(await _unitOfWork.Buyers.FindAsync(tran.BuyerId));
+                    tdp.Trader = _mapper.Map<UserInfor, UserInformation>(await _unitOfWork.UserInfors.FindAsync(listTran.Where(x => x.ID == tran.TransId).Select(x => x.TraderId).FirstOrDefault()));
+
+                    payments.TransactionDetails.Add(tdp);
                 }
 
                 list.Add(payments);

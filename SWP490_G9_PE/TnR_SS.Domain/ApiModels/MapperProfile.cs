@@ -221,6 +221,7 @@ namespace TnR_SS.Domain.ApiModels
             CreateMap<TransactionDetail, GetAllTransactionDetailResModel>();
             CreateMap<TransactionDetail, TransactionDetailInformation>();
             CreateMap<UpdateTransactionDetailReqModel, TransactionDetail>().ReverseMap();
+            CreateMap<TransactionDetailPayment, TransactionDetail>().ReverseMap();
             CreateMap<CloseTransactionDetail, TransactionDetailInformation>().AfterMap((source, destination) =>
             {
                 destination.ID = source.ID;
