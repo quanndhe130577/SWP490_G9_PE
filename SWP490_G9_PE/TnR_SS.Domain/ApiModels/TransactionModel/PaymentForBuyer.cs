@@ -13,7 +13,8 @@ namespace TnR_SS.Domain.ApiModels.TransactionModel
         public BuyerApiModel Buyer { get; set; }
         public double MoneyPaid { get; set; }
         public double MoneyNotPaid { get; set; }
+        public double TotalMoney { get; set; }
         public double TotalWeight { get; set; }
-        public List<TransactionDetailInformation> TransactionDetails { get; set; }
+        public List<TransactionDetailInformation> TransactionDetails { get; set; } = new List<TransactionDetailInformation>();
     }
 }

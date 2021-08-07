@@ -266,8 +266,8 @@ namespace TnR_SS.Domain.Supervisor
         public async Task<List<PaymentForBuyer>> GetPaymentForBuyersAsync(int userId, DateTime date)
         {
             var listTran = _unitOfWork.Transactions.GetAllTransactionsByDate(userId, date);
-            var listTranDe = _unitOfWork.TransactionDetails.GetAllByListTransaction(listTran);
-            var listBuyerId = listTranDe.Select(x => x.BuyerId);
+            var listTranDe = _unitOfWork.TransactionDetails.GetAllByListTransaction(listTran.Select(x => x.ID).ToList());
+            var listBuyerId = listTranDe.Where(x => x.BuyerId != null).Select(x => x.BuyerId).Distinct();
 
             List<PaymentForBuyer> list = new List<PaymentForBuyer>();
             foreach (var item in listBuyerId)
@@ -279,6 +279,7 @@ namespace TnR_SS.Domain.Supervisor
                 payments.TotalWeight = listTranBuyer.Sum(x => x.Weight);
                 payments.MoneyPaid = listTranBuyer.Where(x => x.IsPaid).Sum(x => x.SellPrice);
                 payments.MoneyNotPaid = listTranBuyer.Where(x => !x.IsPaid).Sum(x => x.SellPrice);
+                payments.TotalMoney = payments.MoneyPaid + payments.MoneyNotPaid;
                 foreach (var tran in listTranBuyer)
                 {
                     payments.TransactionDetails.Add(_mapper.Map<TransactionDetail, TransactionDetailInformation>(tran));

@@ -101,13 +101,15 @@ namespace TnR_SS.DataEFCore.Repositories
             // nếu là ngày hiện tại và < 18 giờ thì là bán tiếp => lấy dữ liệu từ 18h hôm trc -> 18h hôm nay
             if (date.Date == DateTime.Now.Date && DateTime.Now.Hour < 18)
             {
-                startDate = new DateTime(date.Year, date.Month, date.Day - 1, 18, 0, 0); // 18 h ngày hôm trước
+                var temp = DateTime.Now.AddDays(-1);
+                startDate = new DateTime(temp.Year, temp.Month, temp.Day, 18, 0, 0); // 18 h ngày hôm trước
                 endDate = new DateTime(date.Year, date.Month, date.Day, 18, 0, 0); // 18 h ngày hôm nay
             }
             else // lấy dữ liệu từ 18h hôm đó -> 18h hôm sau
             {
+                var temp = DateTime.Now.AddDays(1);
                 startDate = new DateTime(date.Year, date.Month, date.Day, 18, 0, 0); // 18 h ngày hôm đó
-                endDate = new DateTime(date.Year, date.Month, date.Day + 1, 18, 0, 0); // 18 h ngày hôm sau
+                endDate = new DateTime(temp.Year, temp.Month, temp.Day, 18, 0, 0); // 18 h ngày hôm sau
 
             }
 
