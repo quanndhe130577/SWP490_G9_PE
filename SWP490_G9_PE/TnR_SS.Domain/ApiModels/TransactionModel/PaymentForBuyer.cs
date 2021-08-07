@@ -9,9 +9,10 @@ namespace TnR_SS.Domain.ApiModels.TransactionModel
 {
     public class PaymentForBuyer
     {
+        public DateTime Date { get; set; }
         public BuyerApiModel Buyer { get; set; }
-        public double Paid { get; set; }
-        public double NotPaid { get; set; }
+        public double MoneyPaid { get; set; }
+        public double MoneyNotPaid { get; set; }
         public double TotalWeight { get; set; }
         public List<TransactionDetailInformation> TransactionDetails { get; set; }
     }

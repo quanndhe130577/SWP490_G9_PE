@@ -35,6 +35,15 @@ namespace TnR_SS.API.Controllers
             return new ResponseBuilder().Success("Tạo hóa đơn thành công !!").ResponseModel;
         }
 
+        [Authorize(Roles = RoleName.Trader)]
+        [Route("create")]
+        public async Task<ResponseModel> Create(TraderCreateTransactionReqModel createModel)
+        {
+            var uerId = TokenManagement.GetUserIdInToken(HttpContext);
+            await _tnrssSupervisor.TraderCreateTransactionAsync(createModel, uerId);
+            return new ResponseBuilder().Success("Tạo hóa đơn thành công !!").ResponseModel;
+        }
+
         // get data for page transaction detail
         [Route("getall/{date_str?}")]
         [HttpGet]

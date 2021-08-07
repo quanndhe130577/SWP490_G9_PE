@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using TnR_SS.API.Common.Response;
 using TnR_SS.API.Common.Token;
 using TnR_SS.Domain.ApiModels.TransactionDetailModel;
+using TnR_SS.Domain.ApiModels.TransactionModel;
 using TnR_SS.Domain.Supervisor;
 
 namespace TnR_SS.API.Controllers
@@ -33,7 +34,7 @@ namespace TnR_SS.API.Controllers
             return new ResponseBuilder().Success("Tạo đơn bán thành công").ResponseModel;
         }
 
-        // api này chưa tính đến tính năng chốt sổ
+        // api này chưa tính đến tính năng chốt sổ // chưa dc dùng
         [Route("getall/{date_str?}")]
         [HttpGet]
         public async Task<ResponseModel> GetAll(string date_str = null)
@@ -80,7 +81,30 @@ namespace TnR_SS.API.Controllers
             await _tnrssSupervisor.DeleteTransactionDetailAsync(apiModel.TransactionDetailId, userId);
             return new ResponseBuilder().Success("Xóa mã cân thành công !!").ResponseModel;
         }
-    }
 
-    
+        [Route("payment/{date_str}")]
+        [HttpGet]
+        public async Task<ResponseModel> Delete(string date_str)
+        {
+            var userId = TokenManagement.GetUserIdInToken(HttpContext);
+            DateTime date = DateTime.Now;
+
+            if (date_str != null)
+            {
+                CultureInfo enUS = new CultureInfo("en-US");
+                DateTime newDate = DateTime.Now;
+                if (DateTime.TryParseExact(date_str, "ddMMyyyy", enUS, DateTimeStyles.None, out newDate))
+                {
+                    date = newDate;
+                }
+                else
+                {
+                    return new ResponseBuilder().Error("Lỗi format date !!!").ResponseModel;
+                }
+            }
+
+            var rs = await _tnrssSupervisor.GetPaymentForBuyersAsync(userId, date);
+            return new ResponseBuilder<List<PaymentForBuyer>>().Success("Lấy dữ liệu thanh toán thành công !!").WithData(rs).ResponseModel;
+        }
+    }
 }

@@ -18,8 +18,6 @@ namespace TnR_SS.Domain.ApiModels.TransactionModel
         public List<TransactionDetailInformation> TransactionDetails { get; set; }
     }
 
-
-
     public class TransactionDetailInformation
     {
         public int ID { get; set; }

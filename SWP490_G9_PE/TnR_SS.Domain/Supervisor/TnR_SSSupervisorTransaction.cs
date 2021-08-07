@@ -14,7 +14,7 @@ namespace TnR_SS.Domain.Supervisor
 {
     public partial class TnR_SSSupervisor
     {
-        private async Task<Transaction> CreateTransactionAsync(int traderId, int wcId, DateTime date)
+        private async Task<Transaction> CreateTransactionAsync(int traderId, int? wcId, DateTime date)
         {
             // check role trader in transaction
             var listRole = await _unitOfWork.UserInfors.GetRolesAsync(traderId);
@@ -37,6 +37,22 @@ namespace TnR_SS.Domain.Supervisor
             {
                 throw new Exception("Thông tin thương lái chưa chính xác !!!");
             }
+        }
+
+        public async Task TraderCreateTransactionAsync(TraderCreateTransactionReqModel apiModel, int userId)
+        {
+            var roleName = await _unitOfWork.UserInfors.GetRolesAsync(userId);
+            if (roleName.Contains(RoleName.Trader))
+            {
+                var tran = _unitOfWork.Transactions.GetAllTransactionsByDate(userId, apiModel.Date).Where(x => x.WeightRecorderId == null).FirstOrDefault();
+                if (tran != null)
+                {
+                    throw new Exception("Đơn bán ngày đã có sẵn, tiếp tục mua thôi <3");
+                }
+
+                await CreateTransactionAsync(userId, null, apiModel.Date);
+            }
+
         }
 
         public async Task CreateListTransactionAsync(CreateListTransactionReqModel apiModel, int wcId)

@@ -27,7 +27,7 @@ namespace TnR_SS.Domain.Supervisor
                 throw new Exception("Hãy tạo hóa đơn trước !!");
             }
 
-            if(trans.isCompleted == TransactionStatus.Completed)
+            if (trans.isCompleted == TransactionStatus.Completed)
             {
                 throw new Exception("Đã chốt sổ với thương lái này, không thể tạo thêm !!");
             }
@@ -261,6 +261,33 @@ namespace TnR_SS.Domain.Supervisor
                 }
             });
 
+        }
+
+        public async Task<List<PaymentForBuyer>> GetPaymentForBuyersAsync(int userId, DateTime date)
+        {
+            var listTran = _unitOfWork.Transactions.GetAllTransactionsByDate(userId, date);
+            var listTranDe = _unitOfWork.TransactionDetails.GetAllByListTransaction(listTran);
+            var listBuyerId = listTranDe.Select(x => x.BuyerId);
+
+            List<PaymentForBuyer> list = new List<PaymentForBuyer>();
+            foreach (var item in listBuyerId)
+            {
+                var listTranBuyer = listTranDe.Where(x => x.BuyerId == item);
+                PaymentForBuyer payments = new PaymentForBuyer();
+                payments.Date = date;
+                payments.Buyer = _mapper.Map<Buyer, BuyerApiModel>(await _unitOfWork.Buyers.FindAsync(item));
+                payments.TotalWeight = listTranBuyer.Sum(x => x.Weight);
+                payments.MoneyPaid = listTranBuyer.Where(x => x.IsPaid).Sum(x => x.SellPrice);
+                payments.MoneyNotPaid = listTranBuyer.Where(x => !x.IsPaid).Sum(x => x.SellPrice);
+                foreach (var tran in listTranBuyer)
+                {
+                    payments.TransactionDetails.Add(_mapper.Map<TransactionDetail, TransactionDetailInformation>(tran));
+                }
+
+                list.Add(payments);
+            }
+
+            return list;
         }
     }
 }

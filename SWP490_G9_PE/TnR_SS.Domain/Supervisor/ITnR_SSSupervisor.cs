@@ -183,6 +183,7 @@ namespace TnR_SS.Domain.Supervisor
 
         #region Transaction
         Task CreateListTransactionAsync(CreateListTransactionReqModel apiModel, int wcId);
+        Task TraderCreateTransactionAsync(TraderCreateTransactionReqModel apiModel, int userId);
         Task<List<TransactionResModel>> GetAllTransactionAsync(int userId, DateTime? date);
         Task DeleteTransactionAsync(int tranId, int userId);
         Task ChotSoTransactionAsync(ChotSoTransactionReqModal chotSoApi, int userId);
@@ -194,6 +195,7 @@ namespace TnR_SS.Domain.Supervisor
         Task<List<GetGeneralTransactionFollowDateResModel>> GetAllTransactionFollowDateAsync(int userId);
         Task UpdateTransactionDetailAsync(UpdateTransactionDetailReqModel apiModel, int userId);
         Task DeleteTransactionDetailAsync(int tranDtId, int userId);
+        Task<List<PaymentForBuyer>> GetPaymentForBuyersAsync(int userId, DateTime date);
         #endregion
 
         #region Debt
