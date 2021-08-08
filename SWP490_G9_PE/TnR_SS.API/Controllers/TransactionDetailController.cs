@@ -84,7 +84,7 @@ namespace TnR_SS.API.Controllers
 
         [Route("payment/{date_str}")]
         [HttpGet]
-        public async Task<ResponseModel> Delete(string date_str)
+        public async Task<ResponseModel> PaymentForBuyer(string date_str)
         {
             var userId = TokenManagement.GetUserIdInToken(HttpContext);
             DateTime date = DateTime.Now;
@@ -105,6 +105,15 @@ namespace TnR_SS.API.Controllers
 
             var rs = await _tnrssSupervisor.GetPaymentForBuyersAsync(userId, date);
             return new ResponseBuilder<List<PaymentForBuyer>>().Success("Lấy dữ liệu thanh toán thành công !!").WithData(rs).ResponseModel;
+        }
+
+        [Route("buyer/payment")]
+        [HttpPost]
+        public async Task<ResponseModel> PaymentForBuyer(FinishPaymentBuyerReqModel apiModel)
+        {
+            var userId = TokenManagement.GetUserIdInToken(HttpContext);
+            await _tnrssSupervisor.PaymentForBuyersAsync(apiModel, userId);
+            return new ResponseBuilder().Success("Thanh toán thành công !!").ResponseModel;
         }
     }
 }

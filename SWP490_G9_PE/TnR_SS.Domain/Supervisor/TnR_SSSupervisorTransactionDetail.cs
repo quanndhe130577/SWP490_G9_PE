@@ -296,5 +296,29 @@ namespace TnR_SS.Domain.Supervisor
 
             return list;
         }
+
+        public async Task PaymentForBuyersAsync(FinishPaymentBuyerReqModel apiModel, int userId)
+        {
+            var buyer = _unitOfWork.Buyers.GetAll(x => x.ID == apiModel.BuyerId && x.SellerId == userId);
+            if (buyer == null || buyer.Count() == 0)
+            {
+                throw new Exception("Không có thông tin người mua này !!!");
+            }
+
+            var listTran = _unitOfWork.Transactions.GetAllTransactionsByDate(userId, apiModel.Date.Date);
+            var listTranDe = _unitOfWork.TransactionDetails.GetAllByListTransaction(listTran.Select(x => x.ID).ToList()).Where(x => x.BuyerId == apiModel.BuyerId);
+            if (listTranDe == null || listTranDe.Count() == 0)
+            {
+                throw new Exception("Người này chưa mua gì cả !!!");
+            }
+
+            foreach (var item in listTranDe)
+            {
+                item.IsPaid = true;
+                _unitOfWork.TransactionDetails.Update(item);
+            }
+
+            await _unitOfWork.SaveChangeAsync();
+        }
     }
 }

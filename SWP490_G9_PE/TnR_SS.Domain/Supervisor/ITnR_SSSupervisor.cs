@@ -196,6 +196,7 @@ namespace TnR_SS.Domain.Supervisor
         Task UpdateTransactionDetailAsync(UpdateTransactionDetailReqModel apiModel, int userId);
         Task DeleteTransactionDetailAsync(int tranDtId, int userId);
         Task<List<PaymentForBuyer>> GetPaymentForBuyersAsync(int userId, DateTime date);
+        Task PaymentForBuyersAsync(FinishPaymentBuyerReqModel apiModel, int userId);
         #endregion
 
         #region Debt
