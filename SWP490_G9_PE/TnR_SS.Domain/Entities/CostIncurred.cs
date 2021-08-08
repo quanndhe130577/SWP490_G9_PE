@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace TnR_SS.Domain.Entities
 {
-    public class CostIncurred
+    public class CostIncurred : BaseEntity
     {
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
@@ -27,10 +27,6 @@ namespace TnR_SS.Domain.Entities
 
         [Required]
         public DateTime Date { get; set; }
-
-        public DateTime CreatedAt { get; set; }
-
-        public DateTime UpdatedAt { get; set; }
 
         public UserInfor User { get; set; }
 

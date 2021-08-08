@@ -24,6 +24,7 @@ using TnR_SS.Domain.ApiModels.TransactionModel;
 using TnR_SS.Domain.ApiModels.TransactionDetailModel;
 using TnR_SS.Domain.ApiModels.AdvanceSalaryModel;
 using TnR_SS.Domain.ApiModels.DebtModel;
+using TnR_SS.Domain.ApiModels.ReportModel;
 
 namespace TnR_SS.Domain.Supervisor
 {
@@ -220,5 +221,9 @@ namespace TnR_SS.Domain.Supervisor
         HistorySalaryEmp GetHistoryEmpSalary(DateTime date, int empId);
         List<CreateHistorySalaryEmpModel> GetAllHistoryEmpSalary(int empId);
         Task<int> UpsertHistorySalary(DateTime date, int empId);
+
+        #region Report
+        Task<ReportApiModel> GetReportAsync(DateTime date, int userId);
+        #endregion
     }
 }
