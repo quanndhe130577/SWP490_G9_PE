@@ -29,7 +29,7 @@ namespace TnR_SS.Domain.Supervisor
             var listPurchase = _unitOfWork.Purchases.GetAll(x => x.Date.Date == date.Date && x.TraderID == userId).ToList();
             if (listPurchase.Count() == 0)
             {
-                closestDate = _unitOfWork.Purchases.GetAll().Select(x => x.Date.Date).OrderByDescending(x => x.Date).FirstOrDefault();
+                closestDate = _unitOfWork.Purchases.GetAll(x=>x.Date.Date <= date.Date).Select(x => x.Date.Date).OrderByDescending(x => x.Date).FirstOrDefault();
                 listPurchase = _unitOfWork.Purchases.GetAll(x => x.Date.Date == closestDate.Date && x.TraderID == userId).ToList();
             }
 
