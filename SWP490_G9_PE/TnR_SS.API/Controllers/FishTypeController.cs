@@ -84,10 +84,10 @@ namespace TnR_SS.API.Controllers
 
         [Authorize(Roles = RoleName.Trader)]
         [HttpGet("getall")]
-        public ResponseModel GetAllFishType()
+        public async Task<ResponseModel> GetAllFishType()
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
-            var fishTypes = _tnrssSupervisor.GetAllFishTypeByTraderIdAsync(traderId);
+            var fishTypes = await _tnrssSupervisor.GetAllFishTypeByTraderIdAsync(traderId);
             return new ResponseBuilder<List<FishTypeResModel>>().Success("Lấy thông tin giá cá thành công").WithData(fishTypes).ResponseModel;
         }
 

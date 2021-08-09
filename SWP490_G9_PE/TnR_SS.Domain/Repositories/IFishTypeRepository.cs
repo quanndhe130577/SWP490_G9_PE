@@ -11,11 +11,12 @@ namespace TnR_SS.Domain.Repositories
     {
         List<FishType> GetAllLastByTraderIdAndPondOwnerId(int traderId);
         List<FishType> GetAllByTraderId(int traderId);
-        void RemoveFishTypeByPurchaseId(int purchaseId);
+        Task RemoveFishTypeByPurchaseId(int purchaseId);
         double GetTotalWeightOfFishType(int fishTypeId);
         double GetSellWeightOfFishType(int fishTypeId);
         List<FishType> GetAllFishTypeByPurchaseIds(List<int> listPurchaseId);
         bool CheckFishTypeOfPurchaseInUse(int purchaseId);
         List<FishType> GetAllFishTypeForTransaction(int? traderId, int userId, DateTime date);
+        Task ClearDataAsync();
     }
 }

@@ -34,5 +34,11 @@ namespace TnR_SS.DataEFCore.Repositories
             // return _context.PondOwners.OrderByDescending(pos => pos.CreatedAt).ToList();
 
         }
+
+        public async Task<PondOwner> GetByFishTypeAsync(FishType fishType)
+        {
+            var purchase = await _context.Purchases.FindAsync(fishType.PurchaseID);
+            return await _context.PondOwners.FindAsync(purchase.PondOwnerID);
+        }
     }
 }

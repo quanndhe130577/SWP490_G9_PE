@@ -11,5 +11,6 @@ namespace TnR_SS.Domain.Repositories
     public interface IPondOwnerRepository : IRepositoryBase<PondOwner>
     {
         List<PondOwner> GetAllByTraderId(int traderId);
+        Task<PondOwner> GetByFishTypeAsync(FishType fishType);
     }
 }

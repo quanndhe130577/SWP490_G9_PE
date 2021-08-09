@@ -131,11 +131,13 @@ namespace TnR_SS.API.Controller
             }
 
             //var otpCode = await StringeeAPI.SendOtpRequestAsync(dataModel.NewPhoneNumber);
-            var otpCode = TwilioAPI.SendOtpRequest(dataModel.NewPhoneNumber);
+            /*var otpCode = TwilioAPI.SendOtpRequest(dataModel.NewPhoneNumber);
             if (otpCode is null)
             {
                 return new ResponseBuilder().Error("Nếu không nhận được OTP, hãy gửi lại sau 60s").ResponseModel;
-            }
+            }*/
+
+            var otpCode = "123456";
 
             var otpId = await _tnrssSupervisor.AddOTPAsync(otpCode, dataModel.NewPhoneNumber);
 

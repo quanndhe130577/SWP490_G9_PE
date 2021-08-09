@@ -72,7 +72,7 @@ namespace TnR_SS.Domain.Supervisor
         #region Fishtype
         Task<List<FishTypeApiModel>> GetAllLastFishTypeWithPondOwnerId(int traderId);
         Task<List<FishTypeApiModel>> GetFishTypesByPondOwnerIdAndDate(int traderId, int poId, DateTime date);
-        List<FishTypeResModel> GetAllFishTypeByTraderIdAsync(int traderId);
+        Task<List<FishTypeResModel>> GetAllFishTypeByTraderIdAsync(int traderId);
         Task CreateListFishTypeAsync(ListFishTypeModel listFishType, int traderId);
         Task CreateFishTypeAsync(FishTypeApiModel listType, int traderId);
         Task UpdateFishTypeAsync(FishTypeApiModel fishTypeModel, int traderId);

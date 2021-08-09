@@ -34,20 +34,38 @@ namespace TnR_SS.Domain.Supervisor
             return list;
         }
 
-        public List<FishTypeResModel> GetAllFishTypeByTraderIdAsync(int traderId)
+        public async Task<List<FishTypeResModel>> GetAllFishTypeByTraderIdAsync(int traderId)
         {
-            //var listType = _unitOfWork.FishTypes.GetAllByTraderId(traderId);
-            var listType = _unitOfWork.FishTypes.GetAll(x => x.TraderID == traderId && (x.PurchaseID != null || x.Date.Date >= DateTime.Now.AddDays(-7)))
-                .OrderByDescending(x => x.Date);
-            List<FishTypeResModel> list = new List<FishTypeResModel>();
-            foreach (var type in listType)
-            {
-                FishTypeResModel newFish = _mapper.Map<FishType, FishTypeResModel>(type);
-                //newFish.PondOwner = _mapper.Map<PondOwner, PondOwnerApiModel>(await _unitOfWork.PondOwners.FindAsync(newFish.PondOwnerID));
-                list.Add(newFish);
-            }
+            var strategy = _unitOfWork.CreateExecutionStrategy();
 
-            return list;
+            return await strategy.ExecuteAsync(async () =>
+            {
+                using (var transaction = _unitOfWork.BeginTransaction())
+                {
+                    try
+                    {
+                        await _unitOfWork.FishTypes.ClearDataAsync();
+                        var listType = _unitOfWork.FishTypes.GetAll(x => x.TraderID == traderId && x.PurchaseID != null)
+                            .OrderByDescending(x => x.Date);
+                        List<FishTypeResModel> list = new List<FishTypeResModel>();
+                        foreach (var type in listType)
+                        {
+                            FishTypeResModel newFish = _mapper.Map<FishType, FishTypeResModel>(type);
+                            newFish.PondOwner = _mapper.Map<PondOwner, PondOwnerApiModel>(await _unitOfWork.PondOwners.GetByFishTypeAsync(type));
+                            newFish.TotalWeight = _unitOfWork.FishTypes.GetTotalWeightOfFishType(type.ID);
+                            list.Add(newFish);
+                        }
+
+                        await transaction.CommitAsync();
+                        return list;
+                    }
+                    catch
+                    {
+                        await transaction.RollbackAsync();
+                        throw;
+                    }
+                }
+            });
         }
 
         public List<GetAllFishTypeForTransactionResModel> GetAllFishTypeForTransaction(int? traderId, int userId, DateTime date)
@@ -143,7 +161,7 @@ namespace TnR_SS.Domain.Supervisor
             {
                 throw new Exception("Cân nặng không hợp lệ");
             }
-            else if (CheckDuplicateFishType(map, traderId) == false)
+            else if (await CheckDuplicateFishType(map, traderId) == false)
             {
                 throw new Exception("Đã có loại cá này");
             }
@@ -249,9 +267,9 @@ namespace TnR_SS.Domain.Supervisor
             return listFishType;
         }
 
-        private bool CheckDuplicateFishType(FishType model, int traderId)
+        private async Task<bool> CheckDuplicateFishType(FishType model, int traderId)
         {
-            var listFish = GetAllFishTypeByTraderIdAsync(traderId);
+            var listFish = await GetAllFishTypeByTraderIdAsync(traderId);
             foreach (var fish in listFish)
             {
                 if (model.FishName == fish.FishName && model.Date.ToString("yyyy/MM/DD") == fish.Date.ToString("yyyy/MM/DD"))

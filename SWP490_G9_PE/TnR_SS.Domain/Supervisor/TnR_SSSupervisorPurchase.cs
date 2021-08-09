@@ -275,7 +275,7 @@ namespace TnR_SS.Domain.Supervisor
                                 var checkFish = _unitOfWork.FishTypes.CheckFishTypeOfPurchaseInUse(purchaseId);
                                 if (checkFish)
                                 {
-                                    throw new Exception("Cá đang được bán, không thể xóa !!!");
+                                    throw new Exception("Cá đã được bán, không thể xóa !!!");
                                 }
 
                                 var purchaseDetail = _unitOfWork.PurchaseDetails.GetAll(x => x.PurchaseId == purchaseId);
@@ -289,7 +289,8 @@ namespace TnR_SS.Domain.Supervisor
                                     }
                                 }
 
-                                _unitOfWork.FishTypes.RemoveFishTypeByPurchaseId(purchaseId);
+                                // set purchaseid of fishtype = null
+                                await _unitOfWork.FishTypes.RemoveFishTypeByPurchaseId(purchaseId);
                                 _unitOfWork.Purchases.DeleteById(purchaseId);
                                 await _unitOfWork.SaveChangeAsync();
 

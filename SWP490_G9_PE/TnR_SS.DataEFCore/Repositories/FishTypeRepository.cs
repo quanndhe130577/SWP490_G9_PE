@@ -26,10 +26,25 @@ namespace TnR_SS.DataEFCore.Repositories
             return rs;
         }
 
-        public void RemoveFishTypeByPurchaseId(int purchaseId)
+        public async Task RemoveFishTypeByPurchaseId(int purchaseId)
         {
             var rs = _context.FishTypes.Where(x => x.PurchaseID == purchaseId);
-            _context.FishTypes.RemoveRange(rs);
+            foreach (var item in rs)
+            {
+                var tranDe = _context.TransactionDetails.Where(x => x.FishTypeId == item.ID).FirstOrDefault();
+                // nếu đã được bán
+                if (tranDe != null)
+                {
+                    item.PurchaseID = null;
+                    _context.FishTypes.UpdateRange(rs);
+                }
+                else
+                {
+                    _context.FishTypes.Remove(item);
+                }
+            }
+
+            await _context.SaveChangesAsync();
         }
 
         public double GetTotalWeightOfFishType(int fishTypeId)
@@ -60,6 +75,24 @@ namespace TnR_SS.DataEFCore.Repositories
                     p => p,
                     (ft, p) => ft
                 ).ToList();
+        }
+
+        private List<FishType> GetAllInUseByPurchaseIds(List<int> listPurchaseId)
+        {
+            return _context.FishTypes.Join(
+                   _context.PurchaseDetails,
+                   ft => ft.ID,
+                   pd => pd.FishTypeID,
+                   (ft, pd) => new
+                   {
+                       fishType = ft,
+                       purchaseDetail = pd
+                   }).AsEnumerable().Join(
+                        listPurchaseId,
+                        lk => lk.fishType.PurchaseID,
+                        pId => pId,
+                        (lk, pId) => lk.fishType
+                    ).Distinct().ToList();
         }
 
         public bool CheckFishTypeOfPurchaseInUse(int purchaseId)
@@ -95,23 +128,6 @@ namespace TnR_SS.DataEFCore.Repositories
                     ru => ru.Id,
                     (ur, ru) => ru.NormalizedName);
 
-            /* DateTime startDate = DateTime.MinValue;
-             DateTime endDate = DateTime.MaxValue;
-
-             // nếu là ngày hiện tại và < 18 giờ thì là bán tiếp => lấy dữ liệu từ 18h hôm trc -> 18h hôm nay
-             if (date.Date == DateTime.Now.Date && DateTime.Now.Hour < 18)
-             {
-                 var temp = date.AddDays(-1);
-                 startDate = new DateTime(temp.Year, temp.Month, temp.Day, 18, 0, 0); // 18 h ngày hôm trước
-                 endDate = new DateTime(date.Year, date.Month, date.Day, 18, 0, 0); // 18 h ngày hôm nay
-             }
-             else // lấy dữ liệu từ 18h hôm đó -> 18h hôm sau
-             {
-                 var temp = date.AddDays(1);
-                 startDate = new DateTime(date.Year, date.Month, date.Day, 18, 0, 0); // 18 h ngày hôm đó
-                 endDate = new DateTime(temp.Year, temp.Month, temp.Day, 18, 0, 0); // 18 h ngày hôm sau
-             }*/
-
             DateTime startDate = DateTime.MinValue;
             DateTime endDate = DateTime.MaxValue;
 
@@ -139,7 +155,26 @@ namespace TnR_SS.DataEFCore.Repositories
                 listPurchaseId = _context.Purchases.Where(x => x.TraderID == traderId && x.Date <= endDate && x.Date >= startDate).Select(x => x.ID).ToList();
             }
 
-            return GetAllFishTypeByPurchaseIds(listPurchaseId);
+            return GetAllInUseByPurchaseIds(listPurchaseId);
+        }
+
+        public async Task ClearDataAsync()
+        {
+            var listFishIdInPur = _context.PurchaseDetails.Select(x => x.FishTypeID).Distinct();
+            var listFishIdInTran = _context.TransactionDetails.Select(x => x.FishTypeId).Distinct();
+            var listRemove = _context.FishTypes.Where(x => !listFishIdInPur.Contains(x.ID) && !listFishIdInTran.Contains(x.ID) && x.Date.Date != DateTime.Now.Date);
+
+            /*var listTranDe = _context.TransactionDetails.Join(
+                    listRemove,
+                    td => td.FishTypeId,
+                    ft => ft.ID,
+                    (td, ft) => td
+                );
+
+            _context.TransactionDetails.RemoveRange(listTranDe);*/
+
+            _context.FishTypes.RemoveRange(listRemove);
+            await _context.SaveChangesAsync();
         }
     }
 }

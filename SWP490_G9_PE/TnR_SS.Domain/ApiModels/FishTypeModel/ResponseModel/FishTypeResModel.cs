@@ -9,6 +9,7 @@ namespace TnR_SS.Domain.ApiModels.FishTypeModel.ResponseModel
 {
     public class FishTypeResModel : FishTypeApiModel
     {
-        //public PondOwnerApiModel PondOwner { get; set; }
+        public PondOwnerApiModel PondOwner { get; set; }
+        public double TotalWeight { get; set; }
     }
 }
