@@ -12,5 +12,6 @@ namespace TnR_SS.Domain.Repositories
         List<TransactionDetail> GetAllByWcIDAndDate(int userId, DateTime? date);
         List<TransactionDetail> GetAllByTraderIdAndDate(int traderId, DateTime? date);
         Task DeleteByTransactionIdAsync(int tranId);
+        List<TransactionDetail> GetAllByListTransaction(List<int> listTranId);
     }
 }

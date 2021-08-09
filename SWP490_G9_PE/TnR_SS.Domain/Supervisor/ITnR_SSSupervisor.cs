@@ -24,6 +24,7 @@ using TnR_SS.Domain.ApiModels.TransactionModel;
 using TnR_SS.Domain.ApiModels.TransactionDetailModel;
 using TnR_SS.Domain.ApiModels.AdvanceSalaryModel;
 using TnR_SS.Domain.ApiModels.DebtModel;
+using TnR_SS.Domain.ApiModels.ReportModel;
 
 namespace TnR_SS.Domain.Supervisor
 {
@@ -183,6 +184,7 @@ namespace TnR_SS.Domain.Supervisor
 
         #region Transaction
         Task CreateListTransactionAsync(CreateListTransactionReqModel apiModel, int wcId);
+        Task TraderCreateTransactionAsync(TraderCreateTransactionReqModel apiModel, int userId);
         Task<List<TransactionResModel>> GetAllTransactionAsync(int userId, DateTime? date);
         Task DeleteTransactionAsync(int tranId, int userId);
         Task ChotSoTransactionAsync(ChotSoTransactionReqModal chotSoApi, int userId);
@@ -194,6 +196,8 @@ namespace TnR_SS.Domain.Supervisor
         Task<List<GetGeneralTransactionFollowDateResModel>> GetAllTransactionFollowDateAsync(int userId);
         Task UpdateTransactionDetailAsync(UpdateTransactionDetailReqModel apiModel, int userId);
         Task DeleteTransactionDetailAsync(int tranDtId, int userId);
+        Task<List<PaymentForBuyer>> GetPaymentForBuyersAsync(int userId, DateTime date);
+        Task PaymentForBuyersAsync(FinishPaymentBuyerReqModel apiModel, int userId);
         #endregion
 
         #region Debt
@@ -217,5 +221,9 @@ namespace TnR_SS.Domain.Supervisor
         HistorySalaryEmp GetHistoryEmpSalary(DateTime date, int empId);
         List<CreateHistorySalaryEmpModel> GetAllHistoryEmpSalary(int empId);
         Task<int> UpsertHistorySalary(DateTime date, int empId);
+
+        #region Report
+        Task<ReportApiModel> GetReportAsync(DateTime date, int userId);
+        #endregion
     }
 }

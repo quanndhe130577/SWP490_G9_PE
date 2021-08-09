@@ -8,6 +8,7 @@ using TnR_SS.Domain.ApiModels.BuyerModel;
 using TnR_SS.Domain.ApiModels.FishTypeModel;
 using TnR_SS.Domain.ApiModels.TransactionDetailModel;
 using TnR_SS.Domain.ApiModels.TransactionModel;
+using TnR_SS.Domain.ApiModels.UserInforModel;
 using TnR_SS.Domain.Entities;
 
 namespace TnR_SS.Domain.Supervisor
@@ -27,7 +28,7 @@ namespace TnR_SS.Domain.Supervisor
                 throw new Exception("Hãy tạo hóa đơn trước !!");
             }
 
-            if(trans.isCompleted == TransactionStatus.Completed)
+            if (trans.isCompleted == TransactionStatus.Completed)
             {
                 throw new Exception("Đã chốt sổ với thương lái này, không thể tạo thêm !!");
             }
@@ -261,6 +262,63 @@ namespace TnR_SS.Domain.Supervisor
                 }
             });
 
+        }
+
+        public async Task<List<PaymentForBuyer>> GetPaymentForBuyersAsync(int userId, DateTime date)
+        {
+            var listTran = _unitOfWork.Transactions.GetAllTransactionsByDate(userId, date);
+            var listTranDe = _unitOfWork.TransactionDetails.GetAllByListTransaction(listTran.Select(x => x.ID).ToList());
+            var listBuyerId = listTranDe.Where(x => x.BuyerId != null).Select(x => x.BuyerId).Distinct();
+
+            List<PaymentForBuyer> list = new List<PaymentForBuyer>();
+            foreach (var item in listBuyerId)
+            {
+                var listTranBuyer = listTranDe.Where(x => x.BuyerId == item);
+                PaymentForBuyer payments = new PaymentForBuyer();
+                payments.Date = date;
+                payments.Buyer = _mapper.Map<Buyer, BuyerApiModel>(await _unitOfWork.Buyers.FindAsync(item));
+                payments.TotalWeight = listTranBuyer.Sum(x => x.Weight);
+                payments.MoneyPaid = listTranBuyer.Where(x => x.IsPaid).Sum(x => x.SellPrice * x.Weight);
+                payments.MoneyNotPaid = listTranBuyer.Where(x => !x.IsPaid).Sum(x => x.SellPrice * x.Weight);
+                payments.TotalMoney = payments.MoneyPaid + payments.MoneyNotPaid;
+                foreach (var tran in listTranBuyer)
+                {
+                    TransactionDetailPayment tdp = _mapper.Map<TransactionDetail, TransactionDetailPayment>(tran);
+                    tdp.FishType = _mapper.Map<FishType, FishTypeApiModel>(await _unitOfWork.FishTypes.FindAsync(tran.FishTypeId));
+                    tdp.Buyer = _mapper.Map<Buyer, BuyerApiModel>(await _unitOfWork.Buyers.FindAsync(tran.BuyerId));
+                    tdp.Trader = _mapper.Map<UserInfor, UserInformation>(await _unitOfWork.UserInfors.FindAsync(listTran.Where(x => x.ID == tran.TransId).Select(x => x.TraderId).FirstOrDefault()));
+
+                    payments.TransactionDetails.Add(tdp);
+                }
+
+                list.Add(payments);
+            }
+
+            return list;
+        }
+
+        public async Task PaymentForBuyersAsync(FinishPaymentBuyerReqModel apiModel, int userId)
+        {
+            var buyer = _unitOfWork.Buyers.GetAll(x => x.ID == apiModel.BuyerId && x.SellerId == userId);
+            if (buyer == null || buyer.Count() == 0)
+            {
+                throw new Exception("Không có thông tin người mua này !!!");
+            }
+
+            var listTran = _unitOfWork.Transactions.GetAllTransactionsByDate(userId, apiModel.Date.Date);
+            var listTranDe = _unitOfWork.TransactionDetails.GetAllByListTransaction(listTran.Select(x => x.ID).ToList()).Where(x => x.BuyerId == apiModel.BuyerId);
+            if (listTranDe == null || listTranDe.Count() == 0)
+            {
+                throw new Exception("Người này chưa mua gì cả !!!");
+            }
+
+            foreach (var item in listTranDe)
+            {
+                item.IsPaid = true;
+                _unitOfWork.TransactionDetails.Update(item);
+            }
+
+            await _unitOfWork.SaveChangeAsync();
         }
     }
 }

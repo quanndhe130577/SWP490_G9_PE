@@ -10,7 +10,7 @@ namespace TnR_SS.Domain.ApiModels.PondOwnerModel
         public string Name { get; set; }
         public string Address { get; set; }
 
-        [RegularExpression(@"(84|0[3|5|7|8|9])+([0-9]{8})\b", ErrorMessage = "Phone Number invalid")]
+        [RegularExpression(@"(84|0[3|5|7|8|9])+([0-9]{8})\b", ErrorMessage = "Số điện thoại không hợp lệ")]
         public string PhoneNumber { get; set; }
 
         public int TraderID{ get; set; }

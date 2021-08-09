@@ -145,6 +145,27 @@ namespace TnR_SS.DataEFCore.Repositories
                 // nếu là ngày hiện tại và < 18 giờ thì là bán tiếp => lấy dữ liệu từ 18h hôm trc -> 18h hôm nay
                 if (date.Value.Date == DateTime.Now.Date && DateTime.Now.Hour < 18)
                 {
+                    var temp = date.Value.AddDays(-1);
+                    startDate = new DateTime(temp.Year, temp.Month, temp.Day, 18, 0, 0); // 18 h ngày hôm trước
+                    endDate = new DateTime(date.Value.Year, date.Value.Month, date.Value.Day, 18, 0, 0); // 18 h ngày hôm nay
+                }
+                else // lấy dữ liệu từ 18h hôm đó -> 18h hôm sau
+                {
+                    var temp = date.Value.AddDays(1);
+                    startDate = new DateTime(date.Value.Year, date.Value.Month, date.Value.Day, 18, 0, 0); // 18 h ngày hôm đó
+                    endDate = new DateTime(temp.Year, temp.Month, temp.Day, 18, 0, 0); // 18 h ngày hôm sau
+
+                }
+            }
+
+            /*DateTime startDate = DateTime.MinValue;
+            DateTime endDate = DateTime.MaxValue;
+
+            if (date != null)
+            {
+                // nếu là ngày hiện tại và < 18 giờ thì là bán tiếp => lấy dữ liệu từ 18h hôm trc -> 18h hôm nay
+                if (date.Value.Date == DateTime.Now.Date && DateTime.Now.Hour < 18)
+                {
                     startDate = new DateTime(date.Value.Year, date.Value.Month, date.Value.Day - 1, 18, 0, 0); // 18 h ngày hôm trước
                     endDate = new DateTime(date.Value.Year, date.Value.Month, date.Value.Day, 18, 0, 0); // 18 h ngày hôm nay
                 }
@@ -154,7 +175,7 @@ namespace TnR_SS.DataEFCore.Repositories
                     endDate = new DateTime(date.Value.Year, date.Value.Month, date.Value.Day + 1, 18, 0, 0); // 18 h ngày hôm sau
 
                 }
-            }
+            }*/
 
             listTran = listTran.Where(x => x.Date >= startDate && x.Date <= endDate).ToList();
 
