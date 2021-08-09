@@ -175,6 +175,8 @@ namespace TnR_SS.Domain.Supervisor
                 reportApiModel.ListCostIncurred.Add(_mapper.Map<CostIncurred, CostIncurredApiModel>(ci));
             }
 
+            reportApiModel.Date = closestDate;
+
             return reportApiModel;
         }
     }

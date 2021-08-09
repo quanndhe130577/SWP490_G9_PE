@@ -16,6 +16,7 @@ namespace TnR_SS.Domain.ApiModels.ReportModel
         public ReportPurchaseModal PurchaseTotal { get; set; }
         public ReportTransactionModal TransactionTotal { get; set; }
         public List<CostIncurredApiModel> ListCostIncurred { get; set; } = new List<CostIncurredApiModel>();
+        public DateTime Date { get; set; }
     }
 
     public class ReportPurchaseModal
