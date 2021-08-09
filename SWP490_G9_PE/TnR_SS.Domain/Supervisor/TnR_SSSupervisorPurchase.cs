@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TnR_SS.Domain.ApiModels.FishTypeModel;
 using TnR_SS.Domain.ApiModels.PurchaseModal;
 using TnR_SS.Domain.Entities;
 
@@ -14,43 +13,46 @@ namespace TnR_SS.Domain.Supervisor
         #region Private function
         private double GetTotalWeightPurchase(Purchase purchase)
         {
-            if (purchase.isCompleted == PurchaseStatus.Pending)
-            {
-                return _unitOfWork.PurchaseDetails.GetAll(x => x.PurchaseId == purchase.ID).Sum(x => x.Weight);
-            }
-            else // nếu đơn đã được chốt sổ
+            if (purchase.isCompleted == PurchaseStatus.Completed)
             {
                 var listClosePD = _unitOfWork.ClosePurchaseDetails.GetAllByPurchase(purchase);
-                return listClosePD.Sum(x => x.Weight);
+                if (listClosePD.Count() != 0)
+                {
+                    return listClosePD.Sum(x => x.Weight);
+                }
             }
+
+            return _unitOfWork.PurchaseDetails.GetAll(x => x.PurchaseId == purchase.ID).Sum(x => x.Weight);
         }
 
         private async Task<double> GetTotalAmountPurchaseAsync(int purchaseId)
         {
             var purchase = await _unitOfWork.Purchases.FindAsync(purchaseId);
-            if (purchase.isCompleted == PurchaseStatus.Pending)
+            if (purchase.isCompleted == PurchaseStatus.Completed)
             {
-                var totalAmount = 0.0;
-                var listPD = _unitOfWork.PurchaseDetails.GetAll(x => x.PurchaseId == purchaseId).ToList();
-                foreach (var item in listPD)
+                var totalAmountIf = 0.0;
+                var listPDIf = _unitOfWork.ClosePurchaseDetails.GetAllByPurchase(purchase);
+                if (listPDIf.Count() != 0)
                 {
-                    totalAmount += await GetPurchaseDetailPriceAsync(item);
+                    foreach (var item in listPDIf)
+                    {
+                        totalAmountIf += (item.Weight - item.BasketWeight) * item.FishTypePrice;
+                    }
+
+                    return totalAmountIf;
                 }
 
-                return totalAmount;
             }
-            else // nếu đơn đã được chốt sổ
+            // nếu đơn đã được chốt sổ
+
+            var totalAmount = 0.0;
+            var listPD = _unitOfWork.PurchaseDetails.GetAll(x => x.PurchaseId == purchaseId).ToList();
+            foreach (var item in listPD)
             {
-                var totalAmount = 0.0;
-                var listPD = _unitOfWork.ClosePurchaseDetails.GetAllByPurchase(purchase);
-                foreach (var item in listPD)
-                {
-                    totalAmount += (item.Weight - item.BasketWeight) * item.FishTypePrice;
-                }
-
-                return totalAmount;
+                totalAmount += await GetPurchaseDetailPriceAsync(item);
             }
 
+            return totalAmount;
         }
 
         private async Task<PurchaseResModel> MapPurchaseResModelAsync(Purchase purchase)
