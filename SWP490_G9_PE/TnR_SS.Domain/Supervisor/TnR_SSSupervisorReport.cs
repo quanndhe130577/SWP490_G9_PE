@@ -24,9 +24,15 @@ namespace TnR_SS.Domain.Supervisor
         private async Task<ReportApiModel> TraderGetReportAsync(DateTime date, int userId)
         {
             ReportApiModel reportApiModel = new ReportApiModel();
-
+            DateTime closestDate = date;
             // Purchase
             var listPurchase = _unitOfWork.Purchases.GetAll(x => x.Date.Date == date.Date && x.TraderID == userId).ToList();
+            if (listPurchase.Count() == 0)
+            {
+                closestDate = _unitOfWork.Purchases.GetAll().Select(x => x.Date.Date).OrderByDescending(x => x.Date).FirstOrDefault();
+                listPurchase = _unitOfWork.Purchases.GetAll(x => x.Date.Date == closestDate.Date && x.TraderID == userId).ToList();
+            }
+
             reportApiModel.PurchaseTotal = new ReportPurchaseModal();
             foreach (var purchase in listPurchase)
             {
@@ -93,7 +99,7 @@ namespace TnR_SS.Domain.Supervisor
             }
 
             // Transaction
-            var listTransaction = _unitOfWork.Transactions.GetAllTransactionsByDate(userId, date);
+            var listTransaction = _unitOfWork.Transactions.GetAllTransactionsByDate(userId, closestDate);
             reportApiModel.TransactionTotal = new ReportTransactionModal();
             foreach (var transaction in listTransaction)
             {
