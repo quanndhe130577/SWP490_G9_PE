@@ -75,15 +75,15 @@ namespace TnR_SS.Domain.Supervisor
                 await _unitOfWork.SaveChangeAsync();
                 if (employee.Salary != null)
                 {
-                    HistorySalaryEmp historySalaryEmp = new HistorySalaryEmp()
+                    BaseSalaryEmp historySalaryEmp = new BaseSalaryEmp()
                     {
                         ID = 0,
                         EmpId = obj.ID,
-                        DateStart = obj.StartDate,
-                        DateEnd = null,
+                        StartDate = obj.StartDate,
+                        EndDate = null,
                         Salary = (double)employee.Salary,
                     };
-                    await _unitOfWork.HistorySalaryEmps.CreateAsync(historySalaryEmp);
+                    await _unitOfWork.BaseSalaryEmps.CreateAsync(historySalaryEmp);
                 }
                 await _unitOfWork.SaveChangeAsync();
                 return _mapper.Map<Employee, EmployeeApiModel>(obj);
