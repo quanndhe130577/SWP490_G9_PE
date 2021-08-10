@@ -25,6 +25,12 @@ namespace TnR_SS.Domain.Supervisor
         public async Task CreateBuyerAsync(BuyerApiModel model, int wcId)
         {
             var buyer = _mapper.Map<BuyerApiModel, Buyer>(model);
+            var check = _unitOfWork.Buyers.GetAll(x => x.PhoneNumber == model.PhoneNumber).FirstOrDefault();
+            if (check != null)
+            {
+                throw new Exception("Người mua sử dụng số điện thoại này đã tồn tại !!!");
+            }
+
             buyer.SellerId = wcId;
             await _unitOfWork.Buyers.CreateAsync(buyer);
             await _unitOfWork.SaveChangeAsync();
@@ -38,6 +44,12 @@ namespace TnR_SS.Domain.Supervisor
                 throw new Exception("Thông tin người mua không tồn tại !!!");
             }
 
+            var check = _unitOfWork.Buyers.GetAll(x => x.PhoneNumber == model.PhoneNumber).FirstOrDefault();
+            if (check.ID == buyer.ID)
+            {
+                throw new Exception("Người mua sử dụng số điện thoại này đã tồn tại !!!");
+            }
+
             buyer = _mapper.Map<BuyerApiModel, Buyer>(model, buyer);
             _unitOfWork.Buyers.Update(buyer);
             await _unitOfWork.SaveChangeAsync();
@@ -45,15 +57,22 @@ namespace TnR_SS.Domain.Supervisor
 
         public async Task DeleteBuyerAsync(int buyerId, int wcId)
         {
-            var buyer = await _unitOfWork.Buyers.FindAsync(buyerId);
-            if (buyer != null && buyer.SellerId == wcId)
+            try
             {
-                _unitOfWork.Buyers.DeleteById(buyerId);
-                await _unitOfWork.SaveChangeAsync();
+                var buyer = await _unitOfWork.Buyers.FindAsync(buyerId);
+                if (buyer != null && buyer.SellerId == wcId)
+                {
+                    _unitOfWork.Buyers.DeleteById(buyerId);
+                    await _unitOfWork.SaveChangeAsync();
+                }
+                else
+                {
+                    throw new Exception("Thông tin người mua không tồn tại !!!");
+                }
             }
-            else
+            catch
             {
-                throw new Exception("Thông tin người mua không tồn tại !!!");
+                throw new Exception("Thông tin người dùng đang được sử dụng, không thể xóa");
             }
 
         }

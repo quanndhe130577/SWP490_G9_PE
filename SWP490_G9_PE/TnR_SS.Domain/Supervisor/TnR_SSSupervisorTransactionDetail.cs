@@ -68,39 +68,15 @@ namespace TnR_SS.Domain.Supervisor
                 {
                     try
                     {
-                        /*// create transaction if not existed
-                        var transaction = _unitOfWork.Transactions.GetAll(x => x.TraderId == traderId && x.Date.Date == apiModel.Date.Date && x.WeightRecorderId == null);
-                        var transactionDetail = _mapper.Map<CreateTransactionDetailReqModel, TransactionDetail>(apiModel);
-                        if (transaction == null)
-                        {
-                            var newTransaction = new Transaction()
-                            {
-                                TraderId = traderId,
-                                Date = apiModel.Date,
-                                CommissionUnit = 0,
-                                WeightRecorderId = null
-                            };
-
-                            await _unitOfWork.Transactions.CreateAsync(newTransaction);
-                            await _unitOfWork.SaveChangeAsync();
-
-                            transactionDetail.TransId = newTransaction.ID;
-                        }
-
-                        // create transaction detail                   
-                        await _unitOfWork.TransactionDetails.CreateAsync(transactionDetail);
-                        await _unitOfWork.SaveChangeAsync();
-
-                        await dbTransaction.CommitAsync();*/
-
                         // create transaction if not existed
-                        var transaction = _unitOfWork.Transactions.GetAll(x => x.TraderId == traderId && x.Date.Date == apiModel.Date.Date && x.WeightRecorderId == null).FirstOrDefault();
+                        //var transaction = _unitOfWork.Transactions.GetAll(x => x.TraderId == traderId && x.Date.Date == apiModel.Date.Date && x.WeightRecorderId == null).FirstOrDefault();
+                        var transaction = _unitOfWork.Transactions.GetAllTransactionsByDate(traderId, apiModel.Date.Date).Where(x => x.WeightRecorderId == null).FirstOrDefault();
                         if (transaction == null)
                         {
                             transaction = new Transaction()
                             {
                                 TraderId = traderId,
-                                Date = apiModel.Date,
+                                Date = new DateTime(apiModel.Date.Year, apiModel.Date.Month, apiModel.Date.Day, 18, 0, 1),
                                 CommissionUnit = 0,
                                 WeightRecorderId = null
                             };
@@ -214,7 +190,7 @@ namespace TnR_SS.Domain.Supervisor
 
             var fishType = await _unitOfWork.FishTypes.FindAsync(apiModel.FishTypeId);
             // nếu loại cá không tồn tại hoặc loại cá không phải là của trader của transaction hoặc loại cá không phải cùng ngày với transaction
-            if (fishType == null || fishType.TraderID != tran.TraderId || fishType.Date.Date != tran.Date.Date)
+            if (fishType == null || fishType.TraderID != tran.TraderId /*|| fishType.Date.Date != tran.Date.Date*/)
             {
                 throw new Exception("Loại cá không đúng !!");
             }
@@ -267,6 +243,12 @@ namespace TnR_SS.Domain.Supervisor
         public async Task<List<PaymentForBuyer>> GetPaymentForBuyersAsync(int userId, DateTime date)
         {
             var listTran = _unitOfWork.Transactions.GetAllTransactionsByDate(userId, date);
+            var roleUser = await _unitOfWork.UserInfors.GetRolesAsync(userId);
+            if (roleUser.Contains(RoleName.Trader))
+            {
+                listTran = listTran.Where(x => x.WeightRecorderId == null).ToList();
+            }
+
             var listTranDe = _unitOfWork.TransactionDetails.GetAllByListTransaction(listTran.Select(x => x.ID).ToList());
             var listBuyerId = listTranDe.Where(x => x.BuyerId != null).Select(x => x.BuyerId).Distinct();
 

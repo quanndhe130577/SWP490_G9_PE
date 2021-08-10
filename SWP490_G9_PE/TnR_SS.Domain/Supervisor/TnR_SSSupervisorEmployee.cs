@@ -184,6 +184,7 @@ namespace TnR_SS.Domain.Supervisor
         {
             return _unitOfWork.Employees.GetAllEmployeeSalaryDetailByTraderId(traderId, date);
         }
+
         public async Task<int> UpdateSalaryEmployee(BaseSalaryEmpApiModel salaryEmpApiModel)
         {
             BaseSalaryEmp baseSalaryEmp = _unitOfWork.Employees.GetEmployeeSalary(salaryEmpApiModel.EmpId, DateTime.Now);

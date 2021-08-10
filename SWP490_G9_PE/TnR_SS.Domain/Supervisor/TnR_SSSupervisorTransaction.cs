@@ -24,7 +24,7 @@ namespace TnR_SS.Domain.Supervisor
                 {
                     TraderId = traderId,
                     WeightRecorderId = wcId,
-                    Date = date
+                    Date = new DateTime(date.Year, date.Month, date.Day, 18, 0, 1)
                 };
 
                 await _unitOfWork.Transactions.CreateAsync(tran);
