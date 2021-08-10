@@ -28,6 +28,9 @@ namespace TnR_SS.DataEFCore.Configurations
                 .IsRequired()
                 .HasColumnType("datetime");
 
+            entity.Property(e => e.TypeOfCost)
+                .IsRequired();
+
             entity.Property(e => e.Note)
                 .HasMaxLength(50);
 

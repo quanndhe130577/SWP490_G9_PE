@@ -14,7 +14,9 @@ namespace TnR_SS.DataEFCore.Repositories
 
         public List<CostIncurred> GetAllCostIncurredByTraderId(int traderId)
         {
-            var rs = _context.CostIncurreds.AsEnumerable().Where(x => x.UserId == traderId).ToList();
+            var rs = _context.CostIncurreds.AsEnumerable().Where(x => x.UserId == traderId)
+                .OrderByDescending(x => x.Date)
+                .ToList();
             return rs;
         }
     }

@@ -30,5 +30,7 @@ namespace TnR_SS.Domain.Entities
 
         public UserInfor User { get; set; }
 
+        [Required]
+        public string TypeOfCost { get;set; }
     }
 }

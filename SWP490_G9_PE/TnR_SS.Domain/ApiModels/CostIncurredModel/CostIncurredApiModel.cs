@@ -22,5 +22,8 @@ namespace TnR_SS.Domain.ApiModels.CostIncurredModel
 
         [Required]
         public DateTime Date { get; set; }
+
+        [Required]
+        public string TypeOfCost { get; set; }
     }
 }
