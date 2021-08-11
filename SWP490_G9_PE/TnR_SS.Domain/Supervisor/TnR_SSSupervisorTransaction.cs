@@ -16,6 +16,12 @@ namespace TnR_SS.Domain.Supervisor
     {
         private async Task<Transaction> CreateTransactionAsync(int traderId, int? wcId, DateTime date)
         {
+            if(date.Date != DateTime.Now.Date)
+            {
+                DateTime temp = date.AddDays(-1);
+                date = new DateTime(date.Year, date.Month, date.Day, 18, 0, 1);
+            }
+
             // check role trader in transaction
             var listRole = await _unitOfWork.UserInfors.GetRolesAsync(traderId);
             if (listRole.Contains(RoleName.Trader))
@@ -24,7 +30,7 @@ namespace TnR_SS.Domain.Supervisor
                 {
                     TraderId = traderId,
                     WeightRecorderId = wcId,
-                    Date = new DateTime(date.Year, date.Month, date.Day, 18, 0, 1)
+                    Date = date /*new DateTime(date.Year, date.Month, date.Day, 18, 0, 1)*/
                 };
 
                 await _unitOfWork.Transactions.CreateAsync(tran);
