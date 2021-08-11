@@ -223,7 +223,7 @@ namespace TnR_SS.Domain.Supervisor
         Task<int> UpsertHistorySalary(DateTime date, int empId);
 
         #region Report
-        Task<ReportApiModel> GetReportAsync(DateTime date, int userId);
+        Task<ReportDayApiModel> GetReportAsync(DateTime date, int userId);
         #endregion
     }
 }

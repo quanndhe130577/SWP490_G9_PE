@@ -9,7 +9,7 @@ namespace TnR_SS.Domain.ApiModels.TransactionDetailModel
 {
     public class SummaryFishTypeTransactionModel
     {
-
+        public int Idx { get; set; }
         public FishTypeApiModel FishType { get; set; }
 
         public double SellPrice { get; set; }

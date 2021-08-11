@@ -45,7 +45,7 @@ namespace TnR_SS.API.Controllers
             }
 
             var rs = await _tnrssSupervisor.GetReportAsync(date, userId);
-            return new ResponseBuilder<ReportApiModel>().Success("Lấy thông tin báo cáo thành công !!").WithData(rs).ResponseModel;
+            return new ResponseBuilder<ReportDayApiModel>().Success("Lấy thông tin báo cáo thành công !!").WithData(rs).ResponseModel;
         }
     }
 }

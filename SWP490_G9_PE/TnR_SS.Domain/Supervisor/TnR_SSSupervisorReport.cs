@@ -16,21 +16,21 @@ namespace TnR_SS.Domain.Supervisor
 {
     public partial class TnR_SSSupervisor
     {
-        public async Task<ReportApiModel> GetReportAsync(DateTime date, int userId)
+        public async Task<ReportDayApiModel> GetReportAsync(DateTime date, int userId)
         {
-            return await TraderGetReportAsync(date, userId);
+            return await GetReportForDayAsync(date, userId);
         }
 
-        private async Task<ReportApiModel> TraderGetReportAsync(DateTime date, int userId)
+        private async Task<ReportDayApiModel> GetReportForDayAsync(DateTime date, int userId)
         {
-            ReportApiModel reportApiModel = new ReportApiModel();
+            ReportDayApiModel reportApiModel = new ReportDayApiModel();
             DateTime closestDate = date;
             // Purchase
-            var listPurchase = _unitOfWork.Purchases.GetAll(x => x.Date.Date == date.Date && x.TraderID == userId).ToList();
+            var listPurchase = _unitOfWork.Purchases.GetAll(x => x.Date.Date == date.Date && x.TraderID == userId);
             if (listPurchase.Count() == 0)
             {
-                closestDate = _unitOfWork.Purchases.GetAll(x=>x.Date.Date <= date.Date).Select(x => x.Date.Date).OrderByDescending(x => x.Date).FirstOrDefault();
-                listPurchase = _unitOfWork.Purchases.GetAll(x => x.Date.Date == closestDate.Date && x.TraderID == userId).ToList();
+                closestDate = _unitOfWork.Purchases.GetAll(x => x.Date.Date <= date.Date).Select(x => x.Date.Date).OrderByDescending(x => x.Date).FirstOrDefault();
+                listPurchase = _unitOfWork.Purchases.GetAll(x => x.Date.Date == closestDate.Date && x.TraderID == userId);
             }
 
             reportApiModel.PurchaseTotal = new ReportPurchaseModal();
@@ -50,7 +50,7 @@ namespace TnR_SS.Domain.Supervisor
                         x.FishTypeMinWeight,
                         x.FishTypePrice,
                         x.FishTypeTransactionPrice
-                    }).Distinct().ToList();
+                    }).Distinct();
                     foreach (var fishtype in listFishtype)
                     {
                         SummaryFishTypePurchaseModel pdM = new SummaryFishTypePurchaseModel();
@@ -77,11 +77,13 @@ namespace TnR_SS.Domain.Supervisor
                 else
                 {
                     var listPD = _unitOfWork.PurchaseDetails.GetAll(x => x.PurchaseId == purchase.ID);
-                    var listFishTypeId = listPD.Select(x => x.FishTypeID).Distinct().ToList();
+                    var listFishTypeId = listPD.Select(x => x.FishTypeID).Distinct();
+                    int count = 0;
                     foreach (var fishTypeId in listFishTypeId)
                     {
                         var fishType = await _unitOfWork.FishTypes.FindAsync(fishTypeId);
                         SummaryFishTypePurchaseModel pdM = new SummaryFishTypePurchaseModel();
+                        pdM.Idx = count++;
                         pdM.FishType = _mapper.Map<FishType, FishTypeApiModel>(fishType);
                         pdM.Weight = _unitOfWork.FishTypes.GetTotalWeightOfFishType(fishTypeId);
                         pdM.Price = fishType.Price * pdM.Weight;
@@ -109,6 +111,8 @@ namespace TnR_SS.Domain.Supervisor
                 if (transaction.isCompleted == TransactionStatus.Completed)
                 {
                     var listCTD = _unitOfWork.CloseTransactionDetails.GetAll(x => x.TransactionId == transaction.ID);
+                    // tính tổng nợ cho wr
+                    reportApiModel.TongNo += listCTD.Where(x => !x.IsPaid).Sum(x => x.SellPrice * x.Weight);
                     var listFishtype = listCTD.Select(x => new
                     {
                         x.FishName,
@@ -118,7 +122,8 @@ namespace TnR_SS.Domain.Supervisor
                         x.FishTypeMinWeight,
                         x.FishTypePrice,
                         x.SellPrice
-                    }).Distinct().ToList();
+                    }).Distinct();
+                    int count = 0;
                     foreach (var fishType in listFishtype)
                     {
                         SummaryFishTypeTransactionModel tdM = new SummaryFishTypeTransactionModel();
@@ -132,7 +137,7 @@ namespace TnR_SS.Domain.Supervisor
                             Price = fishType.FishTypePrice,
                             TransactionPrice = fishType.SellPrice
                         };
-
+                        tdM.Idx = count++;
                         tdM.Weight = listCTD.Where(x => x.FishName == fishType.FishName).Sum(x => x.Weight);
                         tdM.SellPrice = fishType.SellPrice * tdM.Weight;
 
@@ -146,7 +151,9 @@ namespace TnR_SS.Domain.Supervisor
                 else
                 {
                     var listTD = _unitOfWork.TransactionDetails.GetAll(x => x.TransId == transaction.ID);
-                    var listFishtypeId = listTD.Select(x => x.FishTypeId).Distinct().ToList();
+                    // tính tổng nợ cho wr
+                    reportApiModel.TongNo += listTD.Where(x => !x.IsPaid).Sum(x => x.SellPrice * x.Weight);
+                    var listFishtypeId = listTD.Select(x => x.FishTypeId).Distinct();
                     foreach (var fishTypeId in listFishtypeId)
                     {
                         SummaryFishTypeTransactionModel tdM = new SummaryFishTypeTransactionModel();
@@ -169,13 +176,27 @@ namespace TnR_SS.Domain.Supervisor
             }
 
             // Cost Incurred
-            var listCI = _unitOfWork.CostIncurreds.GetAll(x => x.UserId == userId);
+            var listCI = _unitOfWork.CostIncurreds.GetAll(x => x.UserId == userId && x.TypeOfCost == "day");
             foreach (var ci in listCI)
             {
                 reportApiModel.ListCostIncurred.Add(_mapper.Map<CostIncurred, CostIncurredApiModel>(ci));
             }
 
             reportApiModel.Date = closestDate;
+
+            // tính lỗ lãi
+            var role = await _unitOfWork.UserInfors.GetRolesAsync(userId);
+            if (role.Contains(RoleName.Trader))
+            {
+                reportApiModel.TongChi = (reportApiModel.PurchaseTotal != null ? reportApiModel.PurchaseTotal.SummaryMoney : 0) + reportApiModel.ListCostIncurred.Sum(x => x.Cost);
+                reportApiModel.TongThu = (reportApiModel.TransactionTotal != null ? reportApiModel.TransactionTotal.SummaryMoney : 0) - reportApiModel.TransactionTotal.SummaryCommission;
+                reportApiModel.TongNo = 0;
+            }
+            else
+            {
+                reportApiModel.TongChi = reportApiModel.ListCostIncurred.Sum(x => x.Cost);
+                reportApiModel.TongThu = reportApiModel.TransactionTotal != null ? reportApiModel.TransactionTotal.SummaryCommission : 0;
+            }
 
             return reportApiModel;
         }
