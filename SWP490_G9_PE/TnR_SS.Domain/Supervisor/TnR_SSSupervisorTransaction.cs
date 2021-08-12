@@ -63,17 +63,17 @@ namespace TnR_SS.Domain.Supervisor
                 using (var dbTransaction = _unitOfWork.BeginTransaction())
                 {
                     try
-                    { 
+                    {
                         // get closest date tran
-                        var endDate = DateTime.Now;
-                        var closestDate = _unitOfWork.Transactions.GetAll(x => x.WeightRecorderId == wcId && x.Date <= endDate).OrderByDescending(x => x.Date).Select(x => x.Date).FirstOrDefault();                      
+                        var phien = DateTime.Now.Hour < 18 ? DateTime.Now.AddDays(-1).Date : DateTime.Now.Date;
+                        var closestDate = _unitOfWork.Transactions.GetAll(x => x.WeightRecorderId == wcId && x.Date.Date < phien).OrderByDescending(x => x.Date).Select(x => x.Date).FirstOrDefault();
                         var listCloestTran = _unitOfWork.Transactions.GetAllTransactionsByDate(wcId, closestDate);
                         // check close last phiên
                         foreach (var item in listCloestTran)
                         {
                             if (item.isCompleted != TransactionStatus.Completed)
                             {
-                                throw new Exception("Hãy chốt tất cả đơn mua ngày gần nhất !!!");
+                                throw new Exception("Hãy chốt tất cả đơn bán ngày gần nhất !!!");
                             }
                         }
 
@@ -82,7 +82,7 @@ namespace TnR_SS.Domain.Supervisor
                             throw new Exception("Hãy chọn ít nhất 1 thương lái !!!");
                         }
 
-                        var phien = DateTime.Now.Hour < 18 ? DateTime.Now.AddDays(-1).Date : DateTime.Now.Date;
+
                         var listTran = _unitOfWork.Transactions.GetAllTransactionsByDate(wcId, phien);
                         foreach (var item in apiModel.ListTraderId)
                         {
@@ -288,7 +288,7 @@ namespace TnR_SS.Domain.Supervisor
                             }
 
                             var listTranDe = _unitOfWork.TransactionDetails.GetAll(x => x.TransId == tranId);
-                            if(listTranDe.Count() == 0)
+                            if (listTranDe.Count() == 0)
                             {
                                 throw new Exception("Không có đơn bán nào để chốt sổ !!");
                             }
@@ -297,7 +297,7 @@ namespace TnR_SS.Domain.Supervisor
                             tran.CommissionUnit = chotSoApi.CommissionUnit;
                             _unitOfWork.Transactions.Update(tran);
                             await _unitOfWork.SaveChangeAsync();
-                         
+
                             foreach (var trandDe in listTranDe)
                             {
                                 CloseTransactionDetail closeTD = new CloseTransactionDetail();
