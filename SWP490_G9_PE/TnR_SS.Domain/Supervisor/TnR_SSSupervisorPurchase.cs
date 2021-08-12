@@ -43,8 +43,7 @@ namespace TnR_SS.Domain.Supervisor
                 }
 
             }
-            // nếu đơn đã được chốt sổ
-
+            // nếu đơn chưa được chốt sổ
             var totalAmount = 0.0;
             var listPD = _unitOfWork.PurchaseDetails.GetAll(x => x.PurchaseId == purchaseId).ToList();
             foreach (var item in listPD)

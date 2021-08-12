@@ -66,7 +66,7 @@ namespace TnR_SS.Domain.Supervisor
                     {
                         // get closest date tran
                         var phien = DateTime.Now.Hour < 18 ? DateTime.Now.AddDays(-1).Date : DateTime.Now.Date;
-                        var closestDate = _unitOfWork.Transactions.GetAll(x => x.WeightRecorderId == wcId && x.Date.Date < phien).OrderByDescending(x => x.Date).Select(x => x.Date).FirstOrDefault();
+                        var closestDate = _unitOfWork.Transactions.GetAll(x => x.WeightRecorderId == wcId && x.Date.Date < phien.Date).OrderByDescending(x => x.Date).Select(x => x.Date).FirstOrDefault();
                         var listCloestTran = _unitOfWork.Transactions.GetAllTransactionsByDate(wcId, closestDate);
                         // check close last phiên
                         foreach (var item in listCloestTran)
@@ -81,7 +81,6 @@ namespace TnR_SS.Domain.Supervisor
                         {
                             throw new Exception("Hãy chọn ít nhất 1 thương lái !!!");
                         }
-
 
                         var listTran = _unitOfWork.Transactions.GetAllTransactionsByDate(wcId, phien);
                         foreach (var item in apiModel.ListTraderId)

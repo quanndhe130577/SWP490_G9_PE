@@ -25,7 +25,7 @@ namespace TnR_SS.API.Controllers
         }
 
         [HttpGet("getall/{date_str}")]
-        public async Task<ResponseModel> GetAll(string date_str = null)
+        public async Task<ResponseModel> GetReportDay(string date_str = null)
         {
             var userId = TokenManagement.GetUserIdInToken(HttpContext);
             DateTime date = DateTime.Now;
@@ -44,8 +44,32 @@ namespace TnR_SS.API.Controllers
                 }
             }
 
-            var rs = await _tnrssSupervisor.GetReportAsync(date, userId);
+            var rs = await _tnrssSupervisor.GetReportForDayAsync(date, userId);
             return new ResponseBuilder<ReportDayApiModel>().Success("Lấy thông tin báo cáo thành công !!").WithData(rs).ResponseModel;
+        }
+
+        [HttpGet("getall/month/{date_str}")]
+        public async Task<ResponseModel> GetReportMonth(string date_str = null)
+        {
+            var userId = TokenManagement.GetUserIdInToken(HttpContext);
+            DateTime date = DateTime.Now;
+
+            if (date_str != null)
+            {
+                CultureInfo enUS = new CultureInfo("en-US");
+                DateTime newDate = DateTime.Now;
+                if (DateTime.TryParseExact(date_str, "MMyyyy", enUS, DateTimeStyles.None, out newDate))
+                {
+                    date = newDate;
+                }
+                else
+                {
+                    return new ResponseBuilder().Error("Lỗi format date !!!").ResponseModel;
+                }
+            }
+
+            var rs = await _tnrssSupervisor.GetReportForMonthAsync(date, userId);
+            return new ResponseBuilder<ReportMonthApiModel>().Success("Lấy thông tin báo cáo thành công !!").WithData(rs).ResponseModel;
         }
     }
 }
