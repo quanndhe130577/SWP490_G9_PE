@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TnR_SS.Domain.ApiModels.AccountModel.RequestModel;
 using TnR_SS.Domain.ApiModels.AccountModel.ResponseModel;
+using TnR_SS.Domain.ApiModels.RoleUserModel;
 using TnR_SS.Domain.ApiModels.UserInforModel;
 using TnR_SS.Domain.Entities;
 
@@ -192,6 +193,44 @@ namespace TnR_SS.Domain.Supervisor
             }
 
             await _unitOfWork.TraderOfWeightRecorders.CreateAsync(new TraderOfWeightRecorder() { TraderId = traderId, WeightRecorderId = weightRecorderId });
+            await _unitOfWork.SaveChangeAsync();
+        }
+        public async Task<List<WeightRecorderModal>> TraderGetWeightRecorder(int traderId)
+        {
+            List<WeightRecorderModal> weightRecorderModals = new List<WeightRecorderModal>();
+            List<TraderOfWeightRecorder> ids = _unitOfWork.TraderOfWeightRecorders.GetAll(filter: tw => tw.TraderId == traderId).ToList();
+            foreach (var traderOfWeightRecorder in ids)
+            {
+                int count = _unitOfWork.Transactions.GetAll(t => t.TraderId == traderId && t.WeightRecorderId == traderOfWeightRecorder.WeightRecorderId).ToList().Count;
+                UserInfor wr = await _unitOfWork.UserInfors.FindAsync(traderOfWeightRecorder.WeightRecorderId);
+                WeightRecorderModal weightRecorderModal = new WeightRecorderModal()
+                {
+                    ID = traderOfWeightRecorder.ID,
+                    TraderId = traderId,
+                    WrId = traderOfWeightRecorder.WeightRecorderId,
+                    Name = wr.FirstName + " " + wr.LastName,
+                    PhoneNumber = wr.PhoneNumber,
+                    IsAccepted = traderOfWeightRecorder.IsAccepted,
+                    CanDelete = count == 0,
+                    IsDeleted = false
+                };
+                weightRecorderModals.Add(weightRecorderModal);
+            }
+            return weightRecorderModals;
+        }
+
+        public async Task TraderUpdateWeightRecorders(WeightRecorderModal weightRecorderModal)
+        {
+            if (weightRecorderModal.IsDeleted && weightRecorderModal.CanDelete)
+            {
+                _unitOfWork.TraderOfWeightRecorders.DeleteById(weightRecorderModal.ID);
+            }
+            else
+            {
+                var data = await _unitOfWork.TraderOfWeightRecorders.FindAsync(weightRecorderModal.ID);
+                data.IsAccepted = weightRecorderModal.IsAccepted;
+                _unitOfWork.TraderOfWeightRecorders.Update(data);
+            }
             await _unitOfWork.SaveChangeAsync();
         }
     }
