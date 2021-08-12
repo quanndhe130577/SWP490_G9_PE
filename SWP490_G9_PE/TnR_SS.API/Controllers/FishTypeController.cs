@@ -150,7 +150,7 @@ namespace TnR_SS.API.Controllers
             return new ResponseBuilder().Success("Xóa giá cá thành công").ResponseModel;
         }
 
-        [HttpGet("wc/getall/{traderId?}/{date_str?}")]
+        [HttpGet("getall/{traderId?}/{date_str?}")]
         public ResponseModel GetAllFishTypeForTransactionDetail(int? traderId, string date_str)
         {
             var userId = TokenManagement.GetUserIdInToken(HttpContext);

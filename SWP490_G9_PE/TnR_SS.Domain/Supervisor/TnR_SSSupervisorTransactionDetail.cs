@@ -187,6 +187,10 @@ namespace TnR_SS.Domain.Supervisor
             {
                 throw new Exception("Không tìm thấy đơn mua !!");
             }
+            else if (tran.isCompleted == TransactionStatus.Completed)
+            {
+                throw new Exception("Thông tin đơn bán đã được chốt, không thể thay đổi !!");
+            }
 
             var fishType = await _unitOfWork.FishTypes.FindAsync(apiModel.FishTypeId);
             // nếu loại cá không tồn tại hoặc loại cá không phải là của trader của transaction hoặc loại cá không phải cùng ngày với transaction
@@ -210,7 +214,6 @@ namespace TnR_SS.Domain.Supervisor
                 {
                     try
                     {
-
                         var tranDt = await _unitOfWork.TransactionDetails.FindAsync(tranDtId);
                         if (tranDt == null)
                         {
@@ -221,6 +224,10 @@ namespace TnR_SS.Domain.Supervisor
                         if (tran == null || (tran.WeightRecorderId != null && tran.WeightRecorderId != userId) || (tran.WeightRecorderId == null && tran.TraderId != userId))
                         {
                             throw new Exception("Mã cân này không tồn tại hoặc đã bị xóa !!!");
+                        }
+                        else if (tran.isCompleted == TransactionStatus.Completed)
+                        {
+                            throw new Exception("Thông tin đơn bán đã được chốt, không thể thay đổi !!");
                         }
 
                         _unitOfWork.TransactionDetails.Delete(tranDt);
@@ -242,7 +249,13 @@ namespace TnR_SS.Domain.Supervisor
 
         public async Task<List<PaymentForBuyer>> GetPaymentForBuyersAsync(int userId, DateTime date)
         {
-            var listTran = _unitOfWork.Transactions.GetAllTransactionsByDate(userId, date);
+            var phien = date.Date;
+            if (date.Date == DateTime.Now.Date)
+            {
+                phien = DateTime.Now.Hour < 18 ? DateTime.Now.AddDays(-1).Date : DateTime.Now.Date;
+            }
+
+            var listTran = _unitOfWork.Transactions.GetAllTransactionsByDate(userId, phien);
             var roleUser = await _unitOfWork.UserInfors.GetRolesAsync(userId);
             if (roleUser.Contains(RoleName.Trader))
             {
@@ -251,13 +264,12 @@ namespace TnR_SS.Domain.Supervisor
 
             var listTranDe = _unitOfWork.TransactionDetails.GetAllByListTransaction(listTran.Select(x => x.ID).ToList());
             var listBuyerId = listTranDe.Where(x => x.BuyerId != null).Select(x => x.BuyerId).Distinct();
-
             List<PaymentForBuyer> list = new List<PaymentForBuyer>();
             foreach (var item in listBuyerId)
             {
                 var listTranBuyer = listTranDe.Where(x => x.BuyerId == item);
                 PaymentForBuyer payments = new PaymentForBuyer();
-                payments.Date = date;
+                payments.Date = phien;
                 payments.Buyer = _mapper.Map<Buyer, BuyerApiModel>(await _unitOfWork.Buyers.FindAsync(item));
                 payments.TotalWeight = listTranBuyer.Sum(x => x.Weight);
                 payments.MoneyPaid = listTranBuyer.Where(x => x.IsPaid).Sum(x => x.SellPrice * x.Weight);
@@ -281,13 +293,19 @@ namespace TnR_SS.Domain.Supervisor
 
         public async Task PaymentForBuyersAsync(FinishPaymentBuyerReqModel apiModel, int userId)
         {
+            var phien = apiModel.Date;
+            if (apiModel.Date == DateTime.Now.Date)
+            {
+                phien = DateTime.Now.Hour < 18 ? DateTime.Now.AddDays(-1).Date : DateTime.Now.Date;
+            }
+
             var buyer = _unitOfWork.Buyers.GetAll(x => x.ID == apiModel.BuyerId && x.SellerId == userId);
             if (buyer == null || buyer.Count() == 0)
             {
                 throw new Exception("Không có thông tin người mua này !!!");
             }
 
-            var listTran = _unitOfWork.Transactions.GetAllTransactionsByDate(userId, apiModel.Date.Date);
+            var listTran = _unitOfWork.Transactions.GetAllTransactionsByDate(userId, phien.Date);
             var listTranDe = _unitOfWork.TransactionDetails.GetAllByListTransaction(listTran.Select(x => x.ID).ToList()).Where(x => x.BuyerId == apiModel.BuyerId);
             if (listTranDe == null || listTranDe.Count() == 0)
             {

@@ -185,7 +185,7 @@ namespace TnR_SS.Domain.Supervisor
         #region Transaction
         Task CreateListTransactionAsync(CreateListTransactionReqModel apiModel, int wcId);
         Task TraderCreateTransactionAsync(TraderCreateTransactionReqModel apiModel, int userId);
-        Task<List<TransactionResModel>> GetAllTransactionAsync(int userId, DateTime? date);
+        Task<List<TransactionResModel>> GetAllTransactionAsync(int userId, DateTime date);
         Task DeleteTransactionAsync(int tranId, int userId);
         Task ChotSoTransactionAsync(ChotSoTransactionReqModal chotSoApi, int userId);
         #endregion

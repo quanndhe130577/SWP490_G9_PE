@@ -8,6 +8,6 @@ namespace TnR_SS.Domain.ApiModels.TransactionModel
 {
     public class TraderCreateTransactionReqModel
     {
-        public DateTime Date { get; set; }
+        //public DateTime Date { get; set; }
     }
 }

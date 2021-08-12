@@ -8,7 +8,7 @@ namespace TnR_SS.Domain.ApiModels.TransactionModel
 {
     public class CreateListTransactionReqModel
     {
-        public DateTime Date { get; set; }
+        //public DateTime Date { get; set; }
         public List<int> ListTraderId { get; set; }
     }
 }

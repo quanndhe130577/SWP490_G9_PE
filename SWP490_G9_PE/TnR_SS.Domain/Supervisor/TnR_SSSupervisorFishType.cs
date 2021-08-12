@@ -91,8 +91,13 @@ namespace TnR_SS.Domain.Supervisor
                 listType = _unitOfWork.FishTypes.GetAllFishTypeByPurchaseIds(listPurchaseId);
                 //listType = _unitOfWork.FishTypes.GetAll(X => X.TraderID == traderId.Value && X.Date.Date == date.Date && X.PurchaseID != null).Distinct().ToList();
             }*/
+            var phien = date.Date;
+            if (date.Date == DateTime.Now.Date)
+            {
+                phien = DateTime.Now.Hour < 18 ? DateTime.Now.AddDays(-1).Date : DateTime.Now.Date;
+            }
 
-            List<FishType> listType = _unitOfWork.FishTypes.GetAllFishTypeForTransaction(traderId, userId, date);
+            List<FishType> listType = _unitOfWork.FishTypes.GetAllFishTypeForTransaction(traderId, userId, phien);
             List<GetAllFishTypeForTransactionResModel> list = new List<GetAllFishTypeForTransactionResModel>();
             foreach (var type in listType)
             {
@@ -107,7 +112,13 @@ namespace TnR_SS.Domain.Supervisor
 
         public async Task<List<FishTypeApiModel>> GetFishTypesByPondOwnerIdAndDate(int traderId, int poId, DateTime date)
         {
-            var purchaseList = _unitOfWork.Purchases.GetAll(x => x.TraderID == traderId && x.PondOwnerID == poId && x.Date.Date == date.Date).ToList();
+            var phien = date.Date;
+            if (date.Date == DateTime.Now.Date)
+            {
+                phien = DateTime.Now.Hour < 18 ? DateTime.Now.AddDays(-1).Date : DateTime.Now.Date;
+            }
+
+            var purchaseList = _unitOfWork.Purchases.GetAll(x => x.TraderID == traderId && x.PondOwnerID == poId && x.Date.Date == phien.Date).ToList();
             List<PurchaseDetailResModel> list = new List<PurchaseDetailResModel>();
             foreach (var item in purchaseList)
             {

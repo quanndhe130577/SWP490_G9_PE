@@ -137,6 +137,64 @@ namespace TnR_SS.DataEFCore.Repositories
                 throw new Exception("Tài khoản không hợp lệ");
             }
 
+            /*DateTime startDate = DateTime.MinValue;
+            DateTime endDate = DateTime.MaxValue;
+
+            if (date != null)
+            {
+                // nếu là ngày hiện tại và < 18 giờ thì là bán tiếp => lấy dữ liệu từ 18h hôm trc -> 18h hôm nay
+                if (date.Value.Date == DateTime.Now.Date && DateTime.Now.Hour < 18)
+                {
+                    var temp = date.Value.AddDays(-1);
+                    startDate = new DateTime(temp.Year, temp.Month, temp.Day, 18, 0, 0); // 18 h ngày hôm trước
+                    endDate = new DateTime(date.Value.Year, date.Value.Month, date.Value.Day, 18, 0, 0); // 18 h ngày hôm nay
+                }
+                else // lấy dữ liệu từ 18h hôm đó -> 18h hôm sau
+                {
+                    var temp = date.Value.AddDays(1);
+                    startDate = new DateTime(date.Value.Year, date.Value.Month, date.Value.Day, 18, 0, 0); // 18 h ngày hôm đó
+                    endDate = new DateTime(temp.Year, temp.Month, temp.Day, 18, 0, 0); // 18 h ngày hôm sau
+
+                }
+            }*/
+
+            listTran = listTran.Where(x => x.Date == date.Value.Date).ToList();
+
+            return listTran;
+        }
+
+        public bool CheckCloseAllTransactionInDate(int userId, DateTime date)
+        {
+            var roleUser = _context.UserRoles.Where(x => x.UserId == userId).Join(
+                    _context.RoleUsers,
+                    ur => ur.RoleId,
+                    ru => ru.Id,
+                    (ur, ru) => ru.NormalizedName);
+
+            List<Transaction> listTran = GetAllTransactionsByDate(userId, date);
+            foreach (var item in listTran)
+            {
+                if (item.isCompleted != TransactionStatus.Completed)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+
+            /*if (roleUser.Contains(RoleName.WeightRecorder))
+            {
+                listTran = _context.Transactions.Where(x => x.WeightRecorderId == userId).OrderByDescending(x => x.Date).ToList();
+            }
+            else if (roleUser.Contains(RoleName.Trader))
+            {
+                listTran = _context.Transactions.Where(x => x.TraderId == userId).OrderByDescending(x => x.Date).ToList();
+            }
+            else
+            {
+                throw new Exception("Tài khoản không hợp lệ");
+            }
+
             DateTime startDate = DateTime.MinValue;
             DateTime endDate = DateTime.MaxValue;
 
@@ -158,28 +216,9 @@ namespace TnR_SS.DataEFCore.Repositories
                 }
             }
 
-            /*DateTime startDate = DateTime.MinValue;
-            DateTime endDate = DateTime.MaxValue;
-
-            if (date != null)
-            {
-                // nếu là ngày hiện tại và < 18 giờ thì là bán tiếp => lấy dữ liệu từ 18h hôm trc -> 18h hôm nay
-                if (date.Value.Date == DateTime.Now.Date && DateTime.Now.Hour < 18)
-                {
-                    startDate = new DateTime(date.Value.Year, date.Value.Month, date.Value.Day - 1, 18, 0, 0); // 18 h ngày hôm trước
-                    endDate = new DateTime(date.Value.Year, date.Value.Month, date.Value.Day, 18, 0, 0); // 18 h ngày hôm nay
-                }
-                else // lấy dữ liệu từ 18h hôm đó -> 18h hôm sau
-                {
-                    startDate = new DateTime(date.Value.Year, date.Value.Month, date.Value.Day, 18, 0, 0); // 18 h ngày hôm đó
-                    endDate = new DateTime(date.Value.Year, date.Value.Month, date.Value.Day + 1, 18, 0, 0); // 18 h ngày hôm sau
-
-                }
-            }*/
-
             listTran = listTran.Where(x => x.Date >= startDate && x.Date <= endDate).ToList();
 
-            return listTran;
+            return listTran;*/
         }
     }
 }

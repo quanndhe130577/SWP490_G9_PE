@@ -28,7 +28,7 @@ namespace TnR_SS.DataEFCore.Configurations
 
             entity.Property(e => e.Date)
                 .IsRequired()
-                .HasColumnType("datetime");
+                .HasColumnType("date");
 
             entity.Property(e => e.UpdatedAt)
                 .IsRequired()

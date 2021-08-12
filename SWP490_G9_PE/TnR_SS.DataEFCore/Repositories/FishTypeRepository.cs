@@ -77,24 +77,6 @@ namespace TnR_SS.DataEFCore.Repositories
                 ).ToList();
         }
 
-        private List<FishType> GetAllInUseByPurchaseIds(List<int> listPurchaseId)
-        {
-            return _context.FishTypes.Join(
-                   _context.PurchaseDetails,
-                   ft => ft.ID,
-                   pd => pd.FishTypeID,
-                   (ft, pd) => new
-                   {
-                       fishType = ft,
-                       purchaseDetail = pd
-                   }).AsEnumerable().Join(
-                        listPurchaseId,
-                        lk => lk.fishType.PurchaseID,
-                        pId => pId,
-                        (lk, pId) => lk.fishType
-                    ).Distinct().ToList();
-        }
-
         public bool CheckFishTypeOfPurchaseInUse(int purchaseId)
         {
             var rs = _context.Transactions.Where(x => x.isCompleted == TransactionStatus.Pending).Join(
@@ -128,7 +110,7 @@ namespace TnR_SS.DataEFCore.Repositories
                     ru => ru.Id,
                     (ur, ru) => ru.NormalizedName);
 
-            DateTime startDate = DateTime.MinValue;
+            /*DateTime startDate = DateTime.MinValue;
             DateTime endDate = DateTime.MaxValue;
 
             // nếu là ngày hiện tại và < 18 giờ thì là bán tiếp => lấy dữ liệu từ 18h hôm trc -> 18h hôm nay
@@ -153,9 +135,36 @@ namespace TnR_SS.DataEFCore.Repositories
             else if (userRole.Contains(RoleName.WeightRecorder) && traderId != null)
             {
                 listPurchaseId = _context.Purchases.Where(x => x.TraderID == traderId && x.Date <= endDate && x.Date >= startDate).Select(x => x.ID).ToList();
+            }*/
+
+            List<int> listPurchaseId = new();
+            if (userRole.Contains(RoleName.Trader))
+            {
+                listPurchaseId = _context.Purchases.Where(x => x.TraderID == userId && x.Date == date).Select(x => x.ID).ToList();
+            }
+            else if (userRole.Contains(RoleName.WeightRecorder) && traderId != null)
+            {
+                listPurchaseId = _context.Purchases.Where(x => x.TraderID == traderId && x.Date == date).Select(x => x.ID).ToList();
             }
 
             return GetAllInUseByPurchaseIds(listPurchaseId);
+        }
+        private List<FishType> GetAllInUseByPurchaseIds(List<int> listPurchaseId)
+        {
+            return _context.FishTypes.Join(
+                   _context.PurchaseDetails,
+                   ft => ft.ID,
+                   pd => pd.FishTypeID,
+                   (ft, pd) => new
+                   {
+                       fishType = ft,
+                       purchaseDetail = pd
+                   }).AsEnumerable().Join(
+                        listPurchaseId,
+                        lk => lk.fishType.PurchaseID,
+                        pId => pId,
+                        (lk, pId) => lk.fishType
+                    ).Distinct().ToList();
         }
 
         public async Task ClearDataAsync()

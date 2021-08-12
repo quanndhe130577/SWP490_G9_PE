@@ -50,13 +50,9 @@ namespace TnR_SS.API.Controllers
         public async Task<ResponseModel> GetAll(string date_str = null)
         {
             var userId = TokenManagement.GetUserIdInToken(HttpContext);
-            DateTime? date = DateTime.Now;
+            DateTime date = DateTime.Now;
 
-            if (date_str == null)
-            {
-                date = null;
-            }
-            else
+            if (date_str != null)
             {
                 CultureInfo enUS = new CultureInfo("en-US");
                 DateTime newDate = DateTime.Now;

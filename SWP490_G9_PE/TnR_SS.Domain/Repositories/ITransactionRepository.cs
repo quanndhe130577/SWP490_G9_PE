@@ -13,5 +13,6 @@ namespace TnR_SS.Domain.Repositories
         Task<double> GetTotalMoneyAsync(int transId);
         Task<double> GetTotalDebtAsync(int transId);
         List<Transaction> GetAllTransactionsByDate(int userId, DateTime? date);
+        bool CheckCloseAllTransactionInDate(int userId, DateTime date);
     }
 }
