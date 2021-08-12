@@ -79,7 +79,7 @@ namespace TnR_SS.Domain.Supervisor
                     {
                         ID = 0,
                         EmpId = obj.ID,
-                        StartDate = obj.StartDate,
+                        StartDate = new DateTime(obj.StartDate.Year, obj.StartDate.Month, 1),
                         EndDate = null,
                         Salary = (double)employee.Salary,
                     };
