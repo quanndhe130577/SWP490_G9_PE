@@ -44,20 +44,27 @@ namespace TnR_SS.Domain.Supervisor
                 {
                     try
                     {
-                        await _unitOfWork.FishTypes.ClearDataAsync();
-                        var listType = _unitOfWork.FishTypes.GetAll(x => x.TraderID == traderId && x.PurchaseID != null)
-                            .OrderByDescending(x => x.Date);
                         List<FishTypeResModel> list = new List<FishTypeResModel>();
-                        foreach (var type in listType)
+                        await _unitOfWork.FishTypes.ClearDataAsync();
+                        var listPurchase = _unitOfWork.Purchases.GetAll(x => x.TraderID == traderId);
+                        foreach (var purchase in listPurchase)
                         {
-                            FishTypeResModel newFish = _mapper.Map<FishType, FishTypeResModel>(type);
-                            newFish.PondOwner = _mapper.Map<PondOwner, PondOwnerApiModel>(await _unitOfWork.PondOwners.GetByFishTypeAsync(type));
-                            newFish.TotalWeight = _unitOfWork.FishTypes.GetTotalWeightOfFishType(type.ID);
-                            list.Add(newFish);
+                            var listFishType = _unitOfWork.FishTypes.GetAll(x => x.PurchaseID == purchase.ID);
+                            foreach (var type in listFishType)
+                            {
+                                FishTypeResModel newFish = _mapper.Map<FishType, FishTypeResModel>(type);
+                                newFish.PondOwner = _mapper.Map<PondOwner, PondOwnerApiModel>(await _unitOfWork.PondOwners.GetByFishTypeAsync(type));
+                                newFish.TotalWeight = _unitOfWork.FishTypes.GetTotalWeightOfFishType(type.ID);
+                                newFish.Date = purchase.Date.Date;
+                                list.Add(newFish);
+                            }
                         }
 
+                        /*var listType = _unitOfWork.FishTypes.GetAll(x => x.TraderID == traderId && x.PurchaseID != null)
+                            .OrderByDescending(x => x.Date);*/
+
                         await transaction.CommitAsync();
-                        return list;
+                        return list.OrderByDescending(x => x.Date).ToList();
                     }
                     catch
                     {
