@@ -22,5 +22,6 @@ namespace TnR_SS.Domain.ApiModels.UserInforModel
         [Required]
         public string LastName { get; set; }
 
+        public bool IsAccepted { get; set; } = false;
     }
 }

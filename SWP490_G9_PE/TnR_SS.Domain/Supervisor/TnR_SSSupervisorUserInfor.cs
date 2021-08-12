@@ -163,10 +163,18 @@ namespace TnR_SS.Domain.Supervisor
             return _mapper.Map<UserInfor, FindTraderByPhoneApiModel>(rs);
         }
 
-        public List<FindTraderByPhoneApiModel> FindTradersOfWeightRecorder(int weightRecorderId)
+        public async Task<List<FindTraderByPhoneApiModel>> FindTradersOfWeightRecorder(int weightRecorderId)
         {
-            var listTraderId = _unitOfWork.TraderOfWeightRecorders.GetAll(x => x.WeightRecorderId == weightRecorderId).Select(x => x.TraderId).ToList();
-            return _unitOfWork.UserInfors.GetAll(x => listTraderId.Contains(x.Id)).Select(x => _mapper.Map<UserInfor, FindTraderByPhoneApiModel>(x)).ToList();
+            List<FindTraderByPhoneApiModel> list = new List<FindTraderByPhoneApiModel>();
+            var listTraderOfWR = _unitOfWork.TraderOfWeightRecorders.GetAll(x => x.WeightRecorderId == weightRecorderId).ToList();
+            foreach (var item in listTraderOfWR)
+            {
+                FindTraderByPhoneApiModel data = _mapper.Map<UserInfor, FindTraderByPhoneApiModel>(await _unitOfWork.UserInfors.FindAsync(item.TraderId));
+                data.IsAccepted = item.IsAccepted;
+                list.Add(data);
+            }
+
+            return list;
         }
 
         public async Task WeightRecorderAddTrader(int traderId, int weightRecorderId)
