@@ -73,19 +73,6 @@ namespace TnR_SS.Domain.Supervisor
             {
                 await _unitOfWork.Employees.CreateAsync(obj);
                 await _unitOfWork.SaveChangeAsync();
-                if (employee.Salary != null)
-                {
-                    BaseSalaryEmp historySalaryEmp = new BaseSalaryEmp()
-                    {
-                        ID = 0,
-                        EmpId = obj.ID,
-                        StartDate = new DateTime(obj.StartDate.Year, obj.StartDate.Month, 1),
-                        EndDate = null,
-                        Salary = (double)employee.Salary,
-                    };
-                    await _unitOfWork.BaseSalaryEmps.CreateAsync(historySalaryEmp);
-                }
-                await _unitOfWork.SaveChangeAsync();
                 return _mapper.Map<Employee, EmployeeApiModel>(obj);
             }
         }
@@ -209,7 +196,7 @@ namespace TnR_SS.Domain.Supervisor
                 }
                 else
                 {
-                    baseSalaryEmp.EndDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+                    baseSalaryEmp.EndDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month - 1, DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month - 1));
                     _unitOfWork.BaseSalaryEmps.Update(baseSalaryEmp);
                     await _unitOfWork.BaseSalaryEmps.CreateAsync(new BaseSalaryEmp()
                     {

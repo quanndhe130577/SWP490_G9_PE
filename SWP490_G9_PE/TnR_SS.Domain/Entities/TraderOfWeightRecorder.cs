@@ -17,6 +17,6 @@ namespace TnR_SS.Domain.Entities
         public UserInfor Trader { get; set; }
         public int WeightRecorderId { get; set; }
         public UserInfor WeightRecorder { get; set; }
-        public bool IsAccepted { get; set; } = true;
+        public bool IsAccepted { get; set; } = false;
     }
 }

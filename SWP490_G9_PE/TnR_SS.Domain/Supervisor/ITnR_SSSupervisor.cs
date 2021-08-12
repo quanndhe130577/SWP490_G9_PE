@@ -25,6 +25,7 @@ using TnR_SS.Domain.ApiModels.TransactionDetailModel;
 using TnR_SS.Domain.ApiModels.AdvanceSalaryModel;
 using TnR_SS.Domain.ApiModels.DebtModel;
 using TnR_SS.Domain.ApiModels.ReportModel;
+using TnR_SS.Domain.ApiModels.RoleUserModel;
 
 namespace TnR_SS.Domain.Supervisor
 {
@@ -67,6 +68,9 @@ namespace TnR_SS.Domain.Supervisor
         Task<List<FindTraderByPhoneApiModel>> SuggestTradersByPhoneAsync(string phoneNumber, int wcId);
         List<FindTraderByPhoneApiModel> FindTradersOfWeightRecorder(int weightRecorderId);
         Task WeightRecorderAddTrader(int traderId, int weightRecorderId);
+        Task<List<WeightRecorderModal>> TraderGetWeightRecorder(int traderId);
+        Task TraderUpdateWeightRecorders(WeightRecorderModal weightRecorderModals);
+
         #endregion
 
         #region Fishtype
