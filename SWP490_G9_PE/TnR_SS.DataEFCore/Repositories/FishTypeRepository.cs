@@ -140,11 +140,11 @@ namespace TnR_SS.DataEFCore.Repositories
             List<int> listPurchaseId = new();
             if (userRole.Contains(RoleName.Trader))
             {
-                listPurchaseId = _context.Purchases.Where(x => x.TraderID == userId && x.Date == date).Select(x => x.ID).ToList();
+                listPurchaseId = _context.Purchases.Where(x => x.TraderID == userId && x.Date.Date == date.Date).Select(x => x.ID).ToList();
             }
             else if (userRole.Contains(RoleName.WeightRecorder) && traderId != null)
             {
-                listPurchaseId = _context.Purchases.Where(x => x.TraderID == traderId && x.Date == date).Select(x => x.ID).ToList();
+                listPurchaseId = _context.Purchases.Where(x => x.TraderID == traderId && x.Date.Date == date.Date).Select(x => x.ID).ToList();
             }
 
             return GetAllInUseByPurchaseIds(listPurchaseId);

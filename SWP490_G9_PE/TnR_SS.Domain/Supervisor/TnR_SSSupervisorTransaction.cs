@@ -287,12 +287,17 @@ namespace TnR_SS.Domain.Supervisor
                                 throw new Exception("Có đơn mua đã đã được chốt !!");
                             }
 
+                            var listTranDe = _unitOfWork.TransactionDetails.GetAll(x => x.TransId == tranId);
+                            if(listTranDe.Count() == 0)
+                            {
+                                throw new Exception("Không có đơn bán nào để chốt sổ !!");
+                            }
+
                             tran.isCompleted = TransactionStatus.Completed;
                             tran.CommissionUnit = chotSoApi.CommissionUnit;
                             _unitOfWork.Transactions.Update(tran);
                             await _unitOfWork.SaveChangeAsync();
-
-                            var listTranDe = _unitOfWork.TransactionDetails.GetAll(x => x.TransId == tranId);
+                         
                             foreach (var trandDe in listTranDe)
                             {
                                 CloseTransactionDetail closeTD = new CloseTransactionDetail();
