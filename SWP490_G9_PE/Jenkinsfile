@@ -6,7 +6,7 @@ pipeline {
     stages {
     	stage('Restore Packages') {
             steps {
-                bat "dotnet restore"
+                bat "dotnet restore SWP490_G9_PE --configuration Release"
             }
     	}
         stage('Clean') {
@@ -19,9 +19,14 @@ pipeline {
                 bat 'dotnet build'
             }
         }   
+        stage('Update database') {
+            steps {
+                bat 'dotnet update-database'
+            }
+        }
         stage('Publish') {
             steps {
-                bat 'dotnet publish'
+                bat 'dotnet publish -p:PublishProfile=FolderProfile'
             }
         }    
     }
