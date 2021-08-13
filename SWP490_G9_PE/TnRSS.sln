@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TnR_SS.DataEFCore", "TnR_SS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TnR_SS.Domain", "TnR_SS.Domain\TnR_SS.Domain.csproj", "{98D19156-C4F9-4E32-AF26-EF6128B31AF1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TnR_SS.UnitTest", "TnR_SS.UnitTest\TnR_SS.UnitTest.csproj", "{1A98A798-C77C-49B3-B9D5-8E6CEE9204C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TnR_SS.UnitTest", "TnR_SS.UnitTest\TnR_SS.UnitTest.csproj", "{1A98A798-C77C-49B3-B9D5-8E6CEE9204C9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
