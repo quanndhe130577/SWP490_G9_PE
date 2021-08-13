@@ -217,7 +217,7 @@ namespace TnR_SS.Domain.Supervisor
             // Daily data
             DateTime startDate = date;
             DateTime endDate = date.AddMonths(1);
-            for (var item = startDate; item < endDate;)
+            for (var item = startDate; item < endDate && item <= DateTime.Now;)
             {
                 if (isTrader)
                 {
