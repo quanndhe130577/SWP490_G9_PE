@@ -14,15 +14,15 @@ pipeline {
             bat "dotnet clean"
             }
         }
+        stage('Test') {
+            steps {
+                bat 'dotnet test'
+            }
+        }
         stage('Build') {
             steps {
                 bat 'dotnet build'
             }
-        }   
-        stage('Build') {
-            steps {
-                bat 'dotnet publish'
-            }
-        }    
+        }       
     }
 }
