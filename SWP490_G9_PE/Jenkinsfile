@@ -19,7 +19,7 @@ pipeline {
                 bat 'dotnet build'
             }
         }   
-        stage('Build') {
+        stage('Publish') {
             steps {
                 bat 'dotnet publish'
             }
