@@ -68,15 +68,25 @@ namespace TnR_SS.Domain.Supervisor
                 {
                     try
                     {
+                        var phien = apiModel.Date;
+                        if (apiModel.Date == DateTime.Now.Date)
+                        {
+                            phien = DateTime.Now.Hour < 18 ? DateTime.Now.AddDays(-1).Date : DateTime.Now.Date;
+                        }
                         // create transaction if not existed
                         //var transaction = _unitOfWork.Transactions.GetAll(x => x.TraderId == traderId && x.Date.Date == apiModel.Date.Date && x.WeightRecorderId == null).FirstOrDefault();
-                        var transaction = _unitOfWork.Transactions.GetAllTransactionsByDate(traderId, apiModel.Date.Date).Where(x => x.WeightRecorderId == null).FirstOrDefault();
+                        var transaction = await _unitOfWork.Transactions.FindAsync(apiModel.TransId);
+                        if (transaction == null || transaction.TraderId != traderId)
+                        {
+                            transaction = _unitOfWork.Transactions.GetAllTransactionsByDate(traderId, phien.Date).Where(x => x.WeightRecorderId == null).FirstOrDefault();
+                        }
+
                         if (transaction == null)
                         {
                             transaction = new Transaction()
                             {
                                 TraderId = traderId,
-                                Date = new DateTime(apiModel.Date.Year, apiModel.Date.Month, apiModel.Date.Day, 18, 0, 1),
+                                Date = phien.Date,
                                 CommissionUnit = 0,
                                 WeightRecorderId = null
                             };
