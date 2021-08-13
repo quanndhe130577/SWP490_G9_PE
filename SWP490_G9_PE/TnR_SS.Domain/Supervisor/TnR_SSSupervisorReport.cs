@@ -151,6 +151,7 @@ namespace TnR_SS.Domain.Supervisor
 
                         summary.TotalWeight += tdM.Weight;
                         summary.TotalMoney += tdM.SellPrice;
+                        summary.TotalCommission += transaction.CommissionUnit * tdM.Weight;
 
                         summary.TransactionDetails.Add(tdM);
                     }
@@ -178,11 +179,12 @@ namespace TnR_SS.Domain.Supervisor
                     }
                 }
 
-                reportApiModel.TransactionTotal.ListSummaryTransactionDetail.Add(summary);
-                reportApiModel.TransactionTotal.SummaryWeight = reportApiModel.TransactionTotal.ListSummaryTransactionDetail.Sum(x => x.TotalWeight);
-                reportApiModel.TransactionTotal.SummaryMoney = reportApiModel.TransactionTotal.ListSummaryTransactionDetail.Sum(x => x.TotalMoney);
-                reportApiModel.TransactionTotal.SummaryCommission = reportApiModel.TransactionTotal.ListSummaryTransactionDetail.Sum(x => x.TotalCommission);
+                reportApiModel.TransactionTotal.ListSummaryTransactionDetail.Add(summary);             
             }
+
+            reportApiModel.TransactionTotal.SummaryWeight = reportApiModel.TransactionTotal.ListSummaryTransactionDetail.Sum(x => x.TotalWeight);
+            reportApiModel.TransactionTotal.SummaryMoney = reportApiModel.TransactionTotal.ListSummaryTransactionDetail.Sum(x => x.TotalMoney);
+            reportApiModel.TransactionTotal.SummaryCommission = reportApiModel.TransactionTotal.ListSummaryTransactionDetail.Sum(x => x.TotalCommission);
 
             // Cost Incurred
             var listCI = _unitOfWork.CostIncurreds.GetAll(x => x.UserId == userId && x.TypeOfCost == "day" && x.Date.Date == closestDate.Date);
