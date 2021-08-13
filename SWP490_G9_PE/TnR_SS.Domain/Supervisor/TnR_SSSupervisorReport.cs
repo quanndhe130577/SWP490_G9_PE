@@ -22,10 +22,21 @@ namespace TnR_SS.Domain.Supervisor
             DateTime closestDate = date;
             // Purchase
             var listPurchase = _unitOfWork.Purchases.GetAll(x => x.Date.Date == date.Date && x.TraderID == userId);
-            if (listPurchase.Count() == 0)
+            if (listPurchase == null || listPurchase.Count() == 0)
             {
                 closestDate = _unitOfWork.Purchases.GetAll(x => x.Date.Date <= date.Date).Select(x => x.Date.Date).OrderByDescending(x => x.Date).FirstOrDefault();
                 listPurchase = _unitOfWork.Purchases.GetAll(x => x.Date.Date == closestDate.Date && x.TraderID == userId);
+            }
+
+            if (listPurchase == null || listPurchase.Count() == 0)
+            {
+                closestDate = _unitOfWork.Purchases.GetAll(x => x.Date.Date >= date.Date).Select(x => x.Date.Date).OrderBy(x => x.Date).FirstOrDefault();
+                listPurchase = _unitOfWork.Purchases.GetAll(x => x.Date.Date == closestDate.Date && x.TraderID == userId);
+            }
+
+            if (listPurchase == null || listPurchase.Count() == 0)
+            {
+                throw new Exception("Bạn chưa mua bất kỳ ngày nào !!");
             }
 
             reportApiModel.PurchaseTotal = new ReportPurchaseModal();
@@ -248,7 +259,7 @@ namespace TnR_SS.Domain.Supervisor
 
                     WeightRecorderDailyData wrIncomeData = new WeightRecorderDailyData();
                     wrIncomeData.Date = item.Date.ToString("dd/MM/yyyy");
-                    wrIncomeData.Name = "Tổng thu";
+                    wrIncomeData.Name = DailyDataName.TotalIncome;
                     wrIncomeData.Value = await ReportGetTotalIncomeMonthAsync(item, userId);
                     reportApiModel.DailyData.ListWRData.Add(wrIncomeData);
                 }
