@@ -73,8 +73,8 @@ namespace TnR_SS.Domain.Supervisor
                             TransactionPrice = fishtype.FishTypeTransactionPrice
                         };
 
-                        pdM.Price = listCPD.Where(x => x.FishName == fishtype.FishName).Sum(x => x.FishTypePrice * x.Weight);
-                        pdM.Weight = listCPD.Where(x => x.FishName == fishtype.FishName).Sum(x => x.Weight);
+                        pdM.Price = listCPD.Where(x => x.FishName == fishtype.FishName).Sum(x => x.FishTypePrice * (x.Weight - x.BasketWeight));
+                        pdM.Weight = listCPD.Where(x => x.FishName == fishtype.FishName).Sum(x => x.Weight - x.BasketWeight);
 
                         summary.TotalWeight += pdM.Weight;
                         summary.TotalMoney += pdM.Price;
