@@ -73,8 +73,8 @@ namespace TnR_SS.Domain.Supervisor
                             TransactionPrice = fishtype.FishTypeTransactionPrice
                         };
 
-                        pdM.Price = listCPD.Where(x => x.FishName == fishtype.FishName).Sum(x => x.FishTypePrice * x.Weight);
-                        pdM.Weight = listCPD.Where(x => x.FishName == fishtype.FishName).Sum(x => x.Weight);
+                        pdM.Price = listCPD.Where(x => x.FishName == fishtype.FishName).Sum(x => x.FishTypePrice * (x.Weight - x.BasketWeight));
+                        pdM.Weight = listCPD.Where(x => x.FishName == fishtype.FishName).Sum(x => x.Weight - x.BasketWeight);
 
                         summary.TotalWeight += pdM.Weight;
                         summary.TotalMoney += pdM.Price;
@@ -128,13 +128,13 @@ namespace TnR_SS.Domain.Supervisor
                         x.FishTypeId,
                         x.FishTypeMaxWeight,
                         x.FishTypeMinWeight,
-                        x.FishTypePrice,
-                        x.SellPrice
+                        x.FishTypePrice
                     }).Distinct();
                     int count = 0;
                     foreach (var fishType in listFishtype)
                     {
                         SummaryFishTypeTransactionModel tdM = new SummaryFishTypeTransactionModel();
+                        var listFish = listCTD.Where(x => x.FishTypeId == fishType.FishTypeId);
                         tdM.FishType = new FishTypeApiModel()
                         {
                             ID = fishType.FishTypeId,
@@ -143,15 +143,15 @@ namespace TnR_SS.Domain.Supervisor
                             MinWeight = fishType.FishTypeMinWeight,
                             MaxWeight = fishType.FishTypeMaxWeight,
                             Price = fishType.FishTypePrice,
-                            TransactionPrice = fishType.SellPrice
+                            TransactionPrice = listFish.Sum(x => x.SellPrice) / listFish.Count()
                         };
                         tdM.Idx = count++;
-                        tdM.Weight = listCTD.Where(x => x.FishName == fishType.FishName).Sum(x => x.Weight);
-                        tdM.SellPrice = fishType.SellPrice * tdM.Weight;
-
+                        tdM.Weight = listFish.Sum(x => x.Weight);
+                        tdM.SellPrice = listFish.Sum(x => x.Weight * x.SellPrice);
 
                         summary.TotalWeight += tdM.Weight;
                         summary.TotalMoney += tdM.SellPrice;
+                        summary.TotalCommission += transaction.CommissionUnit * tdM.Weight;
 
                         summary.TransactionDetails.Add(tdM);
                     }
@@ -179,11 +179,12 @@ namespace TnR_SS.Domain.Supervisor
                     }
                 }
 
-                reportApiModel.TransactionTotal.ListSummaryTransactionDetail.Add(summary);
-                reportApiModel.TransactionTotal.SummaryWeight = reportApiModel.TransactionTotal.ListSummaryTransactionDetail.Sum(x => x.TotalWeight);
-                reportApiModel.TransactionTotal.SummaryMoney = reportApiModel.TransactionTotal.ListSummaryTransactionDetail.Sum(x => x.TotalMoney);
-                reportApiModel.TransactionTotal.SummaryCommission = reportApiModel.TransactionTotal.ListSummaryTransactionDetail.Sum(x => x.TotalCommission);
+                reportApiModel.TransactionTotal.ListSummaryTransactionDetail.Add(summary);             
             }
+
+            reportApiModel.TransactionTotal.SummaryWeight = reportApiModel.TransactionTotal.ListSummaryTransactionDetail.Sum(x => x.TotalWeight);
+            reportApiModel.TransactionTotal.SummaryMoney = reportApiModel.TransactionTotal.ListSummaryTransactionDetail.Sum(x => x.TotalMoney);
+            reportApiModel.TransactionTotal.SummaryCommission = reportApiModel.TransactionTotal.ListSummaryTransactionDetail.Sum(x => x.TotalCommission);
 
             // Cost Incurred
             var listCI = _unitOfWork.CostIncurreds.GetAll(x => x.UserId == userId && x.TypeOfCost == "day" && x.Date.Date == closestDate.Date);
@@ -241,13 +242,13 @@ namespace TnR_SS.Domain.Supervisor
                     TraderDailyData traderIncomeData = new TraderDailyData();
                     traderIncomeData.Date = item.Date.ToString("dd/MM/yyyy");
                     traderIncomeData.Name = DailyDataName.TotalIncome;
-                    traderIncomeData.Value = await ReportGetTotalIncomeMonthAsync(item, userId);
+                    traderIncomeData.Value = await ReportGetTotalIncomeDayAsync(item, userId);
                     reportApiModel.DailyData.ListTraderData.Add(traderIncomeData);
 
                     TraderDailyData traderOutcomeData = new TraderDailyData();
                     traderOutcomeData.Date = item.Date.ToString("dd/MM/yyyy");
                     traderOutcomeData.Name = DailyDataName.TotalOutcome;
-                    traderOutcomeData.Value = await ReportGetTotalOutcomeMonthAsync(item, userId);
+                    traderOutcomeData.Value = await ReportGetTotalOutcomeDayAsync(item, userId);
                     reportApiModel.DailyData.ListTraderData.Add(traderOutcomeData);
                 }
                 else
@@ -260,7 +261,7 @@ namespace TnR_SS.Domain.Supervisor
                     WeightRecorderDailyData wrIncomeData = new WeightRecorderDailyData();
                     wrIncomeData.Date = item.Date.ToString("dd/MM/yyyy");
                     wrIncomeData.Name = DailyDataName.TotalIncome;
-                    wrIncomeData.Value = await ReportGetTotalIncomeMonthAsync(item, userId);
+                    wrIncomeData.Value = await ReportGetTotalIncomeDayAsync(item, userId);
                     reportApiModel.DailyData.ListWRData.Add(wrIncomeData);
                 }
 
@@ -302,7 +303,7 @@ namespace TnR_SS.Domain.Supervisor
             return reportApiModel;
         }
 
-        private async Task<double> ReportGetTotalIncomeMonthAsync(DateTime date, int userId)
+        private async Task<double> ReportGetTotalIncomeDayAsync(DateTime date, int userId)
         {
             var role = await _unitOfWork.UserInfors.GetRolesAsync(userId);
             var listTran = _unitOfWork.Transactions.GetAllTransactionsByDate(userId, date);
@@ -343,7 +344,7 @@ namespace TnR_SS.Domain.Supervisor
             return totalIncome;
         }
 
-        private async Task<double> ReportGetTotalOutcomeMonthAsync(DateTime date, int userId)
+        private async Task<double> ReportGetTotalOutcomeDayAsync(DateTime date, int userId)
         {
             var role = await _unitOfWork.UserInfors.GetRolesAsync(userId);
             double totalOutcome = 0;
