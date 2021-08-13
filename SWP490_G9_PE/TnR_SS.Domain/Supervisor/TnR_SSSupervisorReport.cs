@@ -217,22 +217,40 @@ namespace TnR_SS.Domain.Supervisor
             // Daily data
             DateTime startDate = date;
             DateTime endDate = date.AddMonths(1);
-            for (var item = startDate; item < endDate;)
+            for (var item = startDate; item < endDate && item <= DateTime.Now;)
             {
                 if (isTrader)
                 {
-                    TraderDailyData traderDailyData = new TraderDailyData();
+                    /*TraderDailyData traderDailyData = new TraderDailyData();
                     traderDailyData.Date = item.Date;
                     traderDailyData.TotalIncome = await ReportGetTotalIncomeMonthAsync(item, userId);
                     traderDailyData.TotalOutcome = await ReportGetTotalOutcomeMonthAsync(item, userId);
-                    reportApiModel.DailyData.ListTraderData.Add(traderDailyData);
+                    reportApiModel.DailyData.ListTraderData.Add(traderDailyData);*/
+
+                    TraderDailyData traderIncomeData = new TraderDailyData();
+                    traderIncomeData.Date = item.Date.ToString("dd/MM/yyyy");
+                    traderIncomeData.Name = DailyDataName.TotalIncome;
+                    traderIncomeData.Value = await ReportGetTotalIncomeMonthAsync(item, userId);
+                    reportApiModel.DailyData.ListTraderData.Add(traderIncomeData);
+
+                    TraderDailyData traderOutcomeData = new TraderDailyData();
+                    traderOutcomeData.Date = item.Date.ToString("dd/MM/yyyy");
+                    traderOutcomeData.Name = DailyDataName.TotalOutcome;
+                    traderOutcomeData.Value = await ReportGetTotalOutcomeMonthAsync(item, userId);
+                    reportApiModel.DailyData.ListTraderData.Add(traderOutcomeData);
                 }
                 else
                 {
-                    WeightRecorderDailyData wrDailyData = new WeightRecorderDailyData();
+                    /*WeightRecorderDailyData wrDailyData = new WeightRecorderDailyData();
                     wrDailyData.Date = item.Date;
                     wrDailyData.TotalIncome = await ReportGetTotalOutcomeMonthAsync(item, userId);
-                    reportApiModel.DailyData.ListWRData.Add(wrDailyData);
+                    reportApiModel.DailyData.ListWRData.Add(wrDailyData);*/
+
+                    WeightRecorderDailyData wrIncomeData = new WeightRecorderDailyData();
+                    wrIncomeData.Date = item.Date.ToString("dd/MM/yyyy");
+                    wrIncomeData.Name = "Tổng thu";
+                    wrIncomeData.Value = await ReportGetTotalIncomeMonthAsync(item, userId);
+                    reportApiModel.DailyData.ListWRData.Add(wrIncomeData);
                 }
 
                 item = item.AddDays(1);
@@ -246,10 +264,14 @@ namespace TnR_SS.Domain.Supervisor
             }
             // Total Cost
             reportApiModel.SummaryDailyCost = _unitOfWork.CostIncurreds.GetAll(x => x.Date.Month == month && x.Date.Year == year && x.TypeOfCost == "day" && x.UserId == userId).Sum(x => x.Cost);
-            // Chi
+            /*// Chi
             reportApiModel.SummaryOutcome = (isTrader ? reportApiModel.DailyData.ListTraderData.Sum(x => x.TotalOutcome) : 0) + reportApiModel.SummaryDailyCost + reportApiModel.ListCostIncurred.Sum(x => x.Cost);
             // Thu
-            reportApiModel.SummaryIncome = isTrader ? reportApiModel.DailyData.ListTraderData.Sum(x => x.TotalIncome) : reportApiModel.DailyData.ListWRData.Sum(x => x.TotalIncome);
+            reportApiModel.SummaryIncome = isTrader ? reportApiModel.DailyData.ListTraderData.Sum(x => x.TotalIncome) : reportApiModel.DailyData.ListWRData.Sum(x => x.TotalIncome);*/
+            // Chi
+            reportApiModel.SummaryOutcome = (isTrader ? reportApiModel.DailyData.ListTraderData.Where(x => x.Name == DailyDataName.TotalOutcome).Sum(x => x.Value) : 0) + reportApiModel.SummaryDailyCost + reportApiModel.ListCostIncurred.Sum(x => x.Cost);
+            // Thu
+            reportApiModel.SummaryIncome = isTrader ? reportApiModel.DailyData.ListTraderData.Where(x => x.Name == DailyDataName.TotalIncome).Sum(x => x.Value) : reportApiModel.DailyData.ListWRData.Where(x => x.Name == DailyDataName.TotalIncome).Sum(x => x.Value);
             // Debt
             if (isTrader)
             {

@@ -24,16 +24,29 @@ namespace TnR_SS.Domain.ApiModels.ReportModel
 
     public class TraderDailyData
     {
-        public DateTime Date { get; set; }
-        public double TotalIncome { get; set; }
-        public double TotalOutcome { get; set; }
+        public string Date { get; set; }
+        public string Name { get; set; }
+        public double Value { get; set; }
+        /* public DateTime Date { get; set; }
+         public double TotalIncome { get; set; }
+         public double TotalOutcome { get; set; }*/
     }
 
 
     public class WeightRecorderDailyData
     {
-        public DateTime Date { get; set; }
-        public double TotalIncome { get; set; }
+        public string Date { get; set; }
+        public string Name { get; set; }
+        public double Value { get; set; }
+        /*public DateTime Date { get; set; }
+        public double TotalIncome { get; set; }*/
+    }
+
+    public class DailyDataName
+    {
+        public static string TotalIncome = "Tổng thu";
+        public static string TotalOutcome = "Tổng chi";
+        
     }
 }
 
