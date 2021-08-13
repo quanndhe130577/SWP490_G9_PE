@@ -26,7 +26,7 @@ pipeline {
         // }  
         // stage('Update database') {
         //     steps {
-        //         bat 'dotnet ef database -s SWP490_G9_PE/TnR_SS.API update'
+        //         bat ' dotnet ef database -s SWP490_G9_PE/TnR_SS.API update'
         //     }
         // }
         stage('Publish') {
