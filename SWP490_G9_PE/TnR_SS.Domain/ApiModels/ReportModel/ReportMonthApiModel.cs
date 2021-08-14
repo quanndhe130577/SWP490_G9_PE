@@ -46,6 +46,7 @@ namespace TnR_SS.Domain.ApiModels.ReportModel
     {
         public static string TotalIncome = "Tổng thu";
         public static string TotalOutcome = "Tổng chi";
+        public static string TotalDebt = "Tổng nợ";
         
     }
 }
