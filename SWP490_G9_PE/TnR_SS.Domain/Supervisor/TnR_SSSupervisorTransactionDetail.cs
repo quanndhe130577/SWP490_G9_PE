@@ -114,8 +114,6 @@ namespace TnR_SS.Domain.Supervisor
                         throw;
                         //throw new Exception("Đã có lỗi xay ra, hãy thử lại sau");
                     }
-
-
                 }
             });
         }

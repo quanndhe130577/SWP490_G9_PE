@@ -209,6 +209,7 @@ namespace TnR_SS.Domain.Supervisor
                         purchase.Commission = totalAmount * data.CommissionPercent / 100;
                         purchase.PayForPondOwner = totalAmount - purchase.Commission;
                         purchase.isCompleted = PurchaseStatus.Completed;
+                        purchase.isPaid = data.IsPaid;
 
                         _unitOfWork.Purchases.Update(purchase);
                         await _unitOfWork.SaveChangeAsync();
