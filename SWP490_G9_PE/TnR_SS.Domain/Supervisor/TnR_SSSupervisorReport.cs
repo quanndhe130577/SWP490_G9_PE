@@ -20,92 +20,106 @@ namespace TnR_SS.Domain.Supervisor
         {
             ReportDayApiModel reportApiModel = new ReportDayApiModel();
             DateTime closestDate = date;
+            var role = await _unitOfWork.UserInfors.GetRolesAsync(userId);
+            bool isTrader = true;
+            if (role.Contains(RoleName.Trader))
+            {
+                isTrader = true;
+            }
+            else
+            {
+                isTrader = false;
+            }
+
             // Purchase
-            var listPurchase = _unitOfWork.Purchases.GetAll(x => x.Date.Date == date.Date && x.TraderID == userId);
-            if (listPurchase == null || listPurchase.Count() == 0)
+            if (isTrader)
             {
-                closestDate = _unitOfWork.Purchases.GetAll(x => x.Date.Date <= date.Date).Select(x => x.Date.Date).OrderByDescending(x => x.Date).FirstOrDefault();
-                listPurchase = _unitOfWork.Purchases.GetAll(x => x.Date.Date == closestDate.Date && x.TraderID == userId);
-            }
-
-            if (listPurchase == null || listPurchase.Count() == 0)
-            {
-                closestDate = _unitOfWork.Purchases.GetAll(x => x.Date.Date >= date.Date).Select(x => x.Date.Date).OrderBy(x => x.Date).FirstOrDefault();
-                listPurchase = _unitOfWork.Purchases.GetAll(x => x.Date.Date == closestDate.Date && x.TraderID == userId);
-            }
-
-            if (listPurchase == null || listPurchase.Count() == 0)
-            {
-                throw new Exception("Bạn chưa mua bất kỳ ngày nào !!");
-            }
-
-            reportApiModel.PurchaseTotal = new ReportPurchaseModal();
-            foreach (var purchase in listPurchase)
-            {
-                SummaryPurchaseModal summary = new SummaryPurchaseModal();
-                summary.PondOwner = _mapper.Map<PondOwner, PondOwnerApiModel>(await _unitOfWork.PondOwners.FindAsync(purchase.PondOwnerID));
-                if (purchase.isCompleted == PurchaseStatus.Completed)
+                var listPurchase = _unitOfWork.Purchases.GetAll(x => x.Date.Date == date.Date && x.TraderID == userId);
+                if (listPurchase == null || listPurchase.Count() == 0)
                 {
-                    var listCPD = _unitOfWork.ClosePurchaseDetails.GetAllByPurchase(purchase);
-                    var listFishtype = listCPD.Select(x => new
+                    closestDate = _unitOfWork.Purchases.GetAll(x => x.Date.Date <= date.Date).Select(x => x.Date.Date).OrderByDescending(x => x.Date).FirstOrDefault();
+                    listPurchase = _unitOfWork.Purchases.GetAll(x => x.Date.Date == closestDate.Date && x.TraderID == userId);
+                }
+
+                if (listPurchase == null || listPurchase.Count() == 0)
+                {
+                    closestDate = _unitOfWork.Purchases.GetAll(x => x.Date.Date >= date.Date).Select(x => x.Date.Date).OrderBy(x => x.Date).FirstOrDefault();
+                    listPurchase = _unitOfWork.Purchases.GetAll(x => x.Date.Date == closestDate.Date && x.TraderID == userId);
+                }
+
+                if (listPurchase == null || listPurchase.Count() == 0)
+                {
+                    throw new Exception("Bạn chưa mua bất kỳ ngày nào !!");
+                }
+
+                reportApiModel.PurchaseTotal = new ReportPurchaseModal();
+                foreach (var purchase in listPurchase)
+                {
+                    SummaryPurchaseModal summary = new SummaryPurchaseModal();
+                    summary.PondOwner = _mapper.Map<PondOwner, PondOwnerApiModel>(await _unitOfWork.PondOwners.FindAsync(purchase.PondOwnerID));
+                    if (purchase.isCompleted == PurchaseStatus.Completed)
                     {
-                        x.FishName,
-                        x.FishTypeDescription,
-                        x.FishTypeId,
-                        x.FishTypeMaxWeight,
-                        x.FishTypeMinWeight,
-                        x.FishTypePrice,
-                        x.FishTypeTransactionPrice
-                    }).Distinct();
-                    int count = 0;
-                    foreach (var fishtype in listFishtype)
-                    {
-                        SummaryFishTypePurchaseModel pdM = new SummaryFishTypePurchaseModel();
-                        pdM.Idx = count++;
-                        pdM.FishType = new FishTypeApiModel()
+                        var listCPD = _unitOfWork.ClosePurchaseDetails.GetAllByPurchase(purchase);
+                        var listFishtype = listCPD.Select(x => new
                         {
-                            ID = fishtype.FishTypeId,
-                            FishName = fishtype.FishName,
-                            Description = fishtype.FishTypeDescription,
-                            MinWeight = fishtype.FishTypeMinWeight,
-                            MaxWeight = fishtype.FishTypeMaxWeight,
-                            Price = fishtype.FishTypePrice,
-                            TransactionPrice = fishtype.FishTypeTransactionPrice
-                        };
+                            x.FishName,
+                            x.FishTypeDescription,
+                            x.FishTypeId,
+                            x.FishTypeMaxWeight,
+                            x.FishTypeMinWeight,
+                            x.FishTypePrice,
+                            x.FishTypeTransactionPrice
+                        }).Distinct();
+                        int count = 0;
+                        foreach (var fishtype in listFishtype)
+                        {
+                            SummaryFishTypePurchaseModel pdM = new SummaryFishTypePurchaseModel();
+                            pdM.Idx = count++;
+                            pdM.FishType = new FishTypeApiModel()
+                            {
+                                ID = fishtype.FishTypeId,
+                                FishName = fishtype.FishName,
+                                Description = fishtype.FishTypeDescription,
+                                MinWeight = fishtype.FishTypeMinWeight,
+                                MaxWeight = fishtype.FishTypeMaxWeight,
+                                Price = fishtype.FishTypePrice,
+                                TransactionPrice = fishtype.FishTypeTransactionPrice
+                            };
 
-                        pdM.Price = listCPD.Where(x => x.FishName == fishtype.FishName).Sum(x => x.FishTypePrice * (x.Weight - x.BasketWeight));
-                        pdM.Weight = listCPD.Where(x => x.FishName == fishtype.FishName).Sum(x => x.Weight - x.BasketWeight);
+                            pdM.Price = listCPD.Where(x => x.FishName == fishtype.FishName).Sum(x => x.FishTypePrice * (x.Weight - x.BasketWeight));
+                            pdM.Weight = listCPD.Where(x => x.FishName == fishtype.FishName).Sum(x => x.Weight - x.BasketWeight);
 
-                        summary.TotalWeight += pdM.Weight;
-                        summary.TotalMoney += pdM.Price;
+                            summary.TotalWeight += pdM.Weight;
+                            summary.TotalMoney += pdM.Price;
 
-                        summary.PurchaseDetails.Add(pdM);
+                            summary.PurchaseDetails.Add(pdM);
+                        }
                     }
-                }
-                else
-                {
-                    var listPD = _unitOfWork.PurchaseDetails.GetAll(x => x.PurchaseId == purchase.ID);
-                    var listFishTypeId = listPD.Select(x => x.FishTypeID).Distinct();
-                    int count = 0;
-                    foreach (var fishTypeId in listFishTypeId)
+                    else
                     {
-                        var fishType = await _unitOfWork.FishTypes.FindAsync(fishTypeId);
-                        SummaryFishTypePurchaseModel pdM = new SummaryFishTypePurchaseModel();
-                        pdM.Idx = count++;
-                        pdM.FishType = _mapper.Map<FishType, FishTypeApiModel>(fishType);
-                        pdM.Weight = _unitOfWork.FishTypes.GetTotalWeightOfFishType(fishTypeId);
-                        pdM.Price = fishType.Price * pdM.Weight;
+                        var listPD = _unitOfWork.PurchaseDetails.GetAll(x => x.PurchaseId == purchase.ID);
+                        var listFishTypeId = listPD.Select(x => x.FishTypeID).Distinct();
+                        int count = 0;
+                        foreach (var fishTypeId in listFishTypeId)
+                        {
+                            var fishType = await _unitOfWork.FishTypes.FindAsync(fishTypeId);
+                            SummaryFishTypePurchaseModel pdM = new SummaryFishTypePurchaseModel();
+                            pdM.Idx = count++;
+                            pdM.FishType = _mapper.Map<FishType, FishTypeApiModel>(fishType);
+                            pdM.Weight = _unitOfWork.FishTypes.GetTotalWeightOfFishType(fishTypeId);
+                            pdM.Price = fishType.Price * pdM.Weight;
 
-                        summary.TotalWeight += pdM.Weight;
-                        summary.TotalMoney += pdM.Price;
+                            summary.TotalWeight += pdM.Weight;
+                            summary.TotalMoney += pdM.Price;
 
-                        summary.PurchaseDetails.Add(pdM);
+                            summary.PurchaseDetails.Add(pdM);
+                        }
                     }
-                }
 
-                reportApiModel.PurchaseTotal.ListSummaryPurchaseDetail.Add(summary);
-                reportApiModel.PurchaseTotal.SummaryWeight = reportApiModel.PurchaseTotal.ListSummaryPurchaseDetail.Sum(x => x.TotalWeight);
-                reportApiModel.PurchaseTotal.SummaryMoney = reportApiModel.PurchaseTotal.ListSummaryPurchaseDetail.Sum(x => x.TotalMoney);
+                    reportApiModel.PurchaseTotal.ListSummaryPurchaseDetail.Add(summary);
+                    reportApiModel.PurchaseTotal.SummaryWeight = reportApiModel.PurchaseTotal.ListSummaryPurchaseDetail.Sum(x => x.TotalWeight);
+                    reportApiModel.PurchaseTotal.SummaryMoney = reportApiModel.PurchaseTotal.ListSummaryPurchaseDetail.Sum(x => x.TotalMoney);
+                }
             }
 
             // Transaction
@@ -179,7 +193,7 @@ namespace TnR_SS.Domain.Supervisor
                     }
                 }
 
-                reportApiModel.TransactionTotal.ListSummaryTransactionDetail.Add(summary);             
+                reportApiModel.TransactionTotal.ListSummaryTransactionDetail.Add(summary);
             }
 
             reportApiModel.TransactionTotal.SummaryWeight = reportApiModel.TransactionTotal.ListSummaryTransactionDetail.Sum(x => x.TotalWeight);
@@ -196,8 +210,7 @@ namespace TnR_SS.Domain.Supervisor
             reportApiModel.Date = closestDate;
 
             // tính lỗ lãi
-            var role = await _unitOfWork.UserInfors.GetRolesAsync(userId);
-            if (role.Contains(RoleName.Trader))
+            if (isTrader)
             {
                 reportApiModel.TongChi = (reportApiModel.PurchaseTotal != null ? reportApiModel.PurchaseTotal.SummaryMoney : 0) + reportApiModel.ListCostIncurred.Sum(x => x.Cost);
                 reportApiModel.TongThu = (reportApiModel.TransactionTotal != null ? reportApiModel.TransactionTotal.SummaryMoney : 0) - reportApiModel.TransactionTotal.SummaryCommission;
