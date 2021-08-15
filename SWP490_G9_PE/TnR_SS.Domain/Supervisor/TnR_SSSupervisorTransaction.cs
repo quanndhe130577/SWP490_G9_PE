@@ -324,29 +324,33 @@ namespace TnR_SS.Domain.Supervisor
                             await _unitOfWork.SaveChangeAsync();
                         }
 
-                        if (chotSoApi.ListRemainFish.Count != 0)
+                        var roleUser = await _unitOfWork.UserInfors.GetRolesAsync(userId);
+                        if (roleUser.Contains(RoleName.Trader))
                         {
-                            var curretPhien = chotSoApi.Date.Date;
-                            var nextPhien = curretPhien.AddDays(1);
-                            Purchase purchase = new Purchase();
-                            purchase.TraderID = userId;
-                            purchase.Date = nextPhien;
-                            purchase.isCompleted = PurchaseStatus.Remain;
-
-                            await _unitOfWork.Purchases.CreateAsync(purchase);
-                            await _unitOfWork.SaveChangeAsync();
-
-                            foreach (var item in chotSoApi.ListRemainFish)
+                            if (chotSoApi.ListRemainFish.Count != 0)
                             {
-                                PurchaseDetail purchaseDetail = new PurchaseDetail();
-                                purchaseDetail.FishTypeID = item.ID;
-                                purchaseDetail.Weight = item.Weight;
-                                purchaseDetail.PurchaseId = purchase.ID;
+                                var curretPhien = chotSoApi.Date.Date;
+                                var nextPhien = curretPhien.AddDays(1);
+                                Purchase purchase = new Purchase();
+                                purchase.TraderID = userId;
+                                purchase.Date = nextPhien;
+                                purchase.isCompleted = PurchaseStatus.Remain;
 
-                                await _unitOfWork.PurchaseDetails.CreateAsync(purchaseDetail);
+                                await _unitOfWork.Purchases.CreateAsync(purchase);
+                                await _unitOfWork.SaveChangeAsync();
+
+                                foreach (var item in chotSoApi.ListRemainFish)
+                                {
+                                    PurchaseDetail purchaseDetail = new PurchaseDetail();
+                                    purchaseDetail.FishTypeID = item.ID;
+                                    purchaseDetail.Weight = item.Weight;
+                                    purchaseDetail.PurchaseId = purchase.ID;
+
+                                    await _unitOfWork.PurchaseDetails.CreateAsync(purchaseDetail);
+                                }
+
+                                await _unitOfWork.SaveChangeAsync();
                             }
-
-                            await _unitOfWork.SaveChangeAsync();
                         }
 
                         await dbTransaction.CommitAsync();
