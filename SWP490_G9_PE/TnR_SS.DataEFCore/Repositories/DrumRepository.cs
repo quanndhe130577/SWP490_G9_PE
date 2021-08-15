@@ -39,6 +39,18 @@ namespace TnR_SS.DataEFCore.Repositories
 
         }
 
+        public List<Drum> GetDrumsByClosePurchaseDetail(ClosePurchaseDetail data)
+        {
+            return _context.LK_PurchaseDeatil_Drums.Where(x => x.ClosePurchaseDetailID == data.ID)
+                .Join(
+                    _context.Drums,
+                    lk => lk.DrumID,
+                    dr => dr.ID,
+                    (lk, dr) => dr
+                ).ToList();
+
+        }
+
         public List<Drum> GetDrumsByPurchaseDetails(List<PurchaseDetail> purchaseDetails)
         {
             var listDrumId = purchaseDetails.Join(_context.LK_PurchaseDeatil_Drums,

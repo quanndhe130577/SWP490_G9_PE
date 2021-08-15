@@ -32,6 +32,6 @@ namespace TnR_SS.Domain.Entities
         public int PurchaseId { get; set; }
         public Purchase Purchase { get; set; }
         public List<LK_PurchaseDeatil_Drum> LK_PurchaseDeatil_Drums { get; set; }
-        public ClosePurchaseDetail ClosePurchaseDetail { get; set; }
+        //public ClosePurchaseDetail ClosePurchaseDetail { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TnR_SS.Domain.ApiModels.DrumModel;
 using TnR_SS.Domain.ApiModels.PurchaseModal;
 using TnR_SS.Domain.Entities;
 
@@ -90,6 +91,18 @@ namespace TnR_SS.Domain.Supervisor
             List<PurchaseResModel> list = new List<PurchaseResModel>();
             foreach (var purchase in listPurchase)
             {
+                if (purchase.isCompleted == PurchaseStatus.Completed)
+                {
+                    var countClosePurcase = _unitOfWork.ClosePurchaseDetails.GetAll(x => x.PurchaseId == purchase.ID).Count();
+                    var countPurchase = _unitOfWork.PurchaseDetails.GetAll(x => x.PurchaseId == purchase.ID).Count();
+                    if (countClosePurcase == 0 && countPurchase != 0)
+                    {
+                        purchase.isCompleted = PurchaseStatus.Pending;
+                        _unitOfWork.Purchases.Update(purchase);
+                        await _unitOfWork.SaveChangeAsync();
+                    }
+                }
+
                 list.Add(await MapPurchaseResModelAsync(purchase));
             }
 
@@ -218,10 +231,16 @@ namespace TnR_SS.Domain.Supervisor
                         var listPD = _unitOfWork.PurchaseDetails.GetAll(x => x.PurchaseId == purchase.ID);
                         foreach (var item in listPD)
                         {
+                            var checkCPD = _unitOfWork.ClosePurchaseDetails.GetAll(x => x.PurchaseId == purchase.ID).FirstOrDefault();
+                            if (checkCPD != null)
+                            {
+                                break;
+                            }
+
                             ClosePurchaseDetail closePD = new ClosePurchaseDetail();
                             closePD.Price = await GetPurchaseDetailPriceAsync(item.ID);
                             closePD.Weight = item.Weight;
-                            closePD.PurchaseDetailId = item.ID;
+                            closePD.PurchaseId = purchase.ID;
 
                             Basket bk = await _unitOfWork.Baskets.FindAsync(item.BasketId);
                             closePD.BasketId = bk.ID;
@@ -238,6 +257,9 @@ namespace TnR_SS.Domain.Supervisor
                             closePD.FishTypeTransactionPrice = ft.TransactionPrice;
 
                             await _unitOfWork.ClosePurchaseDetails.CreateAsync(closePD);
+                            await _unitOfWork.SaveChangeAsync();
+
+                            _unitOfWork.LK_PurchaseDetail_Drums.AddClosePurchaseDetailId(item.ID, closePD.ID);
                             await _unitOfWork.SaveChangeAsync();
                         }
 
@@ -286,10 +308,14 @@ namespace TnR_SS.Domain.Supervisor
                                     foreach (var item in purchaseDetail)
                                     {
                                         _unitOfWork.LK_PurchaseDetail_Drums.RemoveLKByPurchaseDetailId(item.ID);
-                                        await _unitOfWork.ClosePurchaseDetails.DeleteByPurchaseDetailIdAsync(item.ID);
+                                        await _unitOfWork.SaveChangeAsync();
+                                        //await _unitOfWork.ClosePurchaseDetails.DeleteByPurchaseDetailIdAsync(item.ID);
                                         _unitOfWork.PurchaseDetails.Delete(item);
                                     }
                                 }
+
+                                // remove close purchase detail
+                                await _unitOfWork.ClosePurchaseDetails.DeleteByPurchaseIdAsync(purchaseId);
 
                                 // set purchaseid of fishtype = null
                                 await _unitOfWork.FishTypes.RemoveFishTypeByPurchaseId(purchaseId);
@@ -324,6 +350,11 @@ namespace TnR_SS.Domain.Supervisor
             if (purchase.TraderID != traderId)
             {
                 throw new Exception("Đơn mua không hợp lệ !!!");
+            }
+
+            if (purchase.isCompleted == PurchaseStatus.Completed)
+            {
+                throw new Exception("Đơn mua đã được chốt không thể thay đổi !!!");
             }
 
             var pO = await _unitOfWork.PondOwners.FindAsync(apiModel.PondOwnerId);

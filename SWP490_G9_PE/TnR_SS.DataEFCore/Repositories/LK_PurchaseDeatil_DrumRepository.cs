@@ -16,8 +16,28 @@ namespace TnR_SS.DataEFCore.Repositories
 
         public void RemoveLKByPurchaseDetailId(int purchaseDetailId)
         {
-            var list = _context.LK_PurchaseDeatil_Drums.Where(x => x.PurchaseDetailID == purchaseDetailId);
+            var list = _context.LK_PurchaseDeatil_Drums.Where(x => x.PurchaseDetailID == purchaseDetailId && x.ClosePurchaseDetailID == null);
             _context.LK_PurchaseDeatil_Drums.RemoveRange(list);
+
+            var list2 = _context.LK_PurchaseDeatil_Drums.Where(x => x.PurchaseDetailID == purchaseDetailId && x.ClosePurchaseDetailID != null);
+            foreach (var item in list2)
+            {
+                item.PurchaseDetailID = null;
+            }
+
+            _context.LK_PurchaseDeatil_Drums.UpdateRange(list2);
+        }
+
+
+        public void AddClosePurchaseDetailId(int purchaseDetailId, int closePurchaseDetailId)
+        {
+            var list = _context.LK_PurchaseDeatil_Drums.Where(x => x.PurchaseDetailID == purchaseDetailId);
+            foreach (var item in list)
+            {
+                item.ClosePurchaseDetailID = closePurchaseDetailId;
+            }
+
+            _context.LK_PurchaseDeatil_Drums.UpdateRange(list);
         }
     }
 }

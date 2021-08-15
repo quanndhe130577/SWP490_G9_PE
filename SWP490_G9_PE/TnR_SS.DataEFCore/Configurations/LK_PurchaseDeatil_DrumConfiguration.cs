@@ -16,8 +16,8 @@ namespace TnR_SS.DataEFCore.Configurations
 
             entity.ToTable("LK_PurchaseDeatil_Drum");
 
-            /*entity.Property(e => e.Weight)
-                .IsRequired();*/
+            entity.Property(e => e.PurchaseDetailID)
+                .IsRequired(false);
 
             entity.Property(e => e.CreatedAt)
                 .IsRequired();
@@ -37,6 +37,13 @@ namespace TnR_SS.DataEFCore.Configurations
                //.OnDelete(DeleteBehavior.ClientNoAction)
                .OnDelete(DeleteBehavior.Cascade)
                .HasConstraintName("FK_LKPurchaseDrum_PurchaseDetail");
+
+            entity.HasOne(p => p.ClosePurchaseDetail)
+               .WithMany(b => b.LK_PurchaseDeatil_Drums)
+               .HasForeignKey(p => p.ClosePurchaseDetailID)
+               //.OnDelete(DeleteBehavior.ClientNoAction)
+               .OnDelete(DeleteBehavior.Cascade)
+               .HasConstraintName("FK_LKPurchaseDrum_ClosePurchaseDetail");
         }
     }
 }

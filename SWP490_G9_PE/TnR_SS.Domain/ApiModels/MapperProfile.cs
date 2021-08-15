@@ -177,27 +177,27 @@ namespace TnR_SS.Domain.ApiModels
             CreateMap<PurchaseDetail, PurchaseDetailReqModel>().ReverseMap();
             CreateMap<PurchaseDetail, PurchaseDetailResModel>().ReverseMap();
             CreateMap<ClosePurchaseDetail, PurchaseDetailResModel>().AfterMap((source, destination) =>
-            {
-                destination.ID = source.PurchaseDetailId;
-                destination.Price = source.Price;
-                destination.Weight = source.Weight;
-                destination.Basket = new BasketApiModel()
                 {
-                    ID = source.BasketId,
-                    Type = source.BasketType,
-                    Weight = source.BasketWeight
-                };
-                destination.FishType = new FishTypeApiModel()
-                {
-                    ID = source.FishTypeId,
-                    FishName = source.FishName,
-                    Description = source.FishTypeDescription,
-                    MinWeight = source.FishTypeMinWeight,
-                    MaxWeight = source.FishTypeMaxWeight,
-                    Price = source.FishTypePrice,
-                    TransactionPrice = source.FishTypeTransactionPrice,
-                };
-            });
+                    destination.ID = source.ID;
+                    destination.Price = source.Price;
+                    destination.Weight = source.Weight;
+                    destination.Basket = new BasketApiModel()
+                    {
+                        ID = source.BasketId,
+                        Type = source.BasketType,
+                        Weight = source.BasketWeight
+                    };
+                    destination.FishType = new FishTypeApiModel()
+                    {
+                        ID = source.FishTypeId,
+                        FishName = source.FishName,
+                        Description = source.FishTypeDescription,
+                        MinWeight = source.FishTypeMinWeight,
+                        MaxWeight = source.FishTypeMaxWeight,
+                        Price = source.FishTypePrice,
+                        TransactionPrice = source.FishTypeTransactionPrice,
+                    };
+                });
             #endregion
 
             #region LK_PurchaseDeatil_Drum
@@ -223,38 +223,38 @@ namespace TnR_SS.Domain.ApiModels
             CreateMap<UpdateTransactionDetailReqModel, TransactionDetail>().ReverseMap();
             CreateMap<TransactionDetailPayment, TransactionDetail>().ReverseMap();
             CreateMap<CloseTransactionDetail, TransactionDetailInformation>().AfterMap((source, destination) =>
-            {
-                destination.ID = source.ID;
-                destination.IsPaid = source.IsPaid;
-                destination.Weight = source.Weight;
-                destination.SellPrice = source.SellPrice;
+                {
+                    destination.ID = source.ID;
+                    destination.IsPaid = source.IsPaid;
+                    destination.Weight = source.Weight;
+                    destination.SellPrice = source.SellPrice;
 
-                if (source.BuyerId == null || source.BuyerName == null)
-                {
-                    destination.Buyer = null;
-                }
-                else
-                {
-                    destination.Buyer = new BuyerApiModel()
+                    if (source.BuyerId == null || source.BuyerName == null)
                     {
-                        ID = source.BuyerId.Value,
-                        Name = source.BuyerName,
-                        Address = source.BuyerAddress,
-                        PhoneNumber = source.BuyerPhoneNumber
-                    };
-                }
+                        destination.Buyer = null;
+                    }
+                    else
+                    {
+                        destination.Buyer = new BuyerApiModel()
+                        {
+                            ID = source.BuyerId.Value,
+                            Name = source.BuyerName,
+                            Address = source.BuyerAddress,
+                            PhoneNumber = source.BuyerPhoneNumber
+                        };
+                    }
 
-                destination.FishType = new FishTypeApiModel()
-                {
-                    ID = source.FishTypeId,
-                    FishName = source.FishName,
-                    Description = source.FishTypeDescription,
-                    MinWeight = source.FishTypeMinWeight,
-                    MaxWeight = source.FishTypeMaxWeight,
-                    Price = source.FishTypePrice,
-                    TransactionPrice = source.SellPrice,
-                };
-            });
+                    destination.FishType = new FishTypeApiModel()
+                    {
+                        ID = source.FishTypeId,
+                        FishName = source.FishName,
+                        Description = source.FishTypeDescription,
+                        MinWeight = source.FishTypeMinWeight,
+                        MaxWeight = source.FishTypeMaxWeight,
+                        Price = source.FishTypePrice,
+                        TransactionPrice = source.SellPrice,
+                    };
+                });
             #endregion
 
             #region Transaction

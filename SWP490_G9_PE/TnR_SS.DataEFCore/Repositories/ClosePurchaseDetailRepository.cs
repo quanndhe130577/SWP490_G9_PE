@@ -14,19 +14,19 @@ namespace TnR_SS.DataEFCore.Repositories
 
         public List<ClosePurchaseDetail> GetAllByPurchase(Purchase purchase)
         {
-            var rs = _context.PurchaseDetails.Where(x => x.PurchaseId == purchase.ID)
-                .Join(
-                    _context.ClosePurchaseDetails,
-                    pd => pd.ID,
-                    cpd => cpd.PurchaseDetailId,
-                    (pd, cpd) => cpd
-                ).ToList();
+            var rs = _context.ClosePurchaseDetails.Where(x => x.PurchaseId == purchase.ID).ToList();
+            /*                .Join(
+                                _context.ClosePurchaseDetails,
+                                pd => pd.ID,
+                                cpd => cpd.PurchaseDetailId,
+                                (pd, cpd) => cpd
+                            ).ToList();*/
             return rs;
         }
 
-        public async Task DeleteByPurchaseDetailIdAsync(int purchaseDetailId)
+        public async Task DeleteByPurchaseIdAsync(int purchaseId)
         {
-            var list = _context.ClosePurchaseDetails.Where(x => x.PurchaseDetailId == purchaseDetailId);
+            var list = _context.ClosePurchaseDetails.Where(x => x.PurchaseId == purchaseId);
             _context.ClosePurchaseDetails.RemoveRange(list);
             await _context.SaveChangesAsync();
         }
