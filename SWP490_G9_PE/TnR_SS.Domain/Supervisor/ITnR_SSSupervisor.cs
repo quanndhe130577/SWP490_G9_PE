@@ -208,6 +208,10 @@ namespace TnR_SS.Domain.Supervisor
         Task<List<DebtApiModel>> GetAllDebtTraderAsync(int traderId);
         Task<List<DebtApiModel>> GetAllDebtWRAsync(int userId, DateTime? date);
         Task<List<DebtApiModel>> GetDebtAsync(int userId, DateTime? date);
+        Task<List<DebtTraderApiModel>> GetAllDebtTransactionOfTrader(int id);
+        Task UpdateDebtTransationDetail(int userId, int id);
+        Task<List<DebtTraderApiModel>> GetAllDebtPurchaseOfTrader(int id);
+        Task UpdateDebtPurchaseDetail(int userId, int id);
         #endregion
 
         #region Advance Salary
