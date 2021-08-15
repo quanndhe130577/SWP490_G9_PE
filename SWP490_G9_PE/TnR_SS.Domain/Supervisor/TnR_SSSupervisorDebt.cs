@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TnR_SS.Domain.ApiModels.AccountModel.ResponseModel;
 using TnR_SS.Domain.ApiModels.BuyerModel;
 using TnR_SS.Domain.ApiModels.DebtModel;
 using TnR_SS.Domain.ApiModels.FishTypeModel;
@@ -85,6 +86,102 @@ namespace TnR_SS.Domain.Supervisor
                 return await GetAllDebtTraderAsync(userId);
             }
             return null;
+        }
+
+        public async Task<List<DebtTraderApiModel>> GetAllDebtTransactionOfTrader(int id)
+        {
+            UserResModel user = await GetUserByIdAsync(id);
+            List<TransactionDetail> transactionDetails = new List<TransactionDetail>();
+            if (user.RoleName == "Trader")
+            {
+                foreach (Transaction transaction in _unitOfWork.Transactions.GetAll(filter: t => t.TraderId == id))
+                {
+                    transactionDetails.AddRange(_unitOfWork.TransactionDetails.GetAll(td => td.TransId == transaction.ID && td.IsPaid == false));
+                }
+            }
+            else
+            {
+                foreach (Transaction transaction in _unitOfWork.Transactions.GetAll(filter: t => t.WeightRecorderId == id))
+                {
+                    transactionDetails.AddRange(_unitOfWork.TransactionDetails.GetAll(td => td.TransId == transaction.ID && td.IsPaid == false));
+                }
+            }
+            List<DebtTraderApiModel> debtTraderApiModels = new List<DebtTraderApiModel>();
+            foreach (TransactionDetail transactionDetail in transactionDetails)
+            {
+                Buyer buyer = await _unitOfWork.Buyers.FindAsync(transactionDetail.BuyerId);
+                Transaction transaction = await _unitOfWork.Transactions.FindAsync(transactionDetail.TransId);
+                debtTraderApiModels.Add(new DebtTraderApiModel()
+                {
+                    ID = transactionDetail.ID,
+                    Partner = buyer == null ? null : buyer.Name,
+                    Trader = user.FirstName + " " + user.LastName,
+                    Amount = transactionDetail.SellPrice * transactionDetail.Weight,
+                    Date = transaction.Date
+                });
+            }
+            return debtTraderApiModels;
+        }
+
+        public async Task UpdateDebtTransationDetail(int userId, int id)
+        {
+            UserResModel user = await GetUserByIdAsync(userId);
+            TransactionDetail transactionDetail = await _unitOfWork.TransactionDetails.FindAsync(id);
+            if (transactionDetail != null)
+            {
+                if (user.RoleName == "Trader")
+                {
+                    Transaction transaction = await _unitOfWork.Transactions.FindAsync(transactionDetail.TransId);
+                    if (transaction.TraderId == userId)
+                    {
+                        transactionDetail.IsPaid = true;
+                        _unitOfWork.TransactionDetails.Update(transactionDetail);
+                        await _unitOfWork.SaveChangeAsync();
+                    }
+                }
+                else
+                {
+                    Transaction transaction = await _unitOfWork.Transactions.FindAsync(transactionDetail.TransId);
+                    if (transaction.WeightRecorderId == userId)
+                    {
+                        transactionDetail.IsPaid = true;
+                        _unitOfWork.TransactionDetails.Update(transactionDetail);
+                        await _unitOfWork.SaveChangeAsync();
+                    }
+                }
+            }
+        }
+        public async Task<List<DebtTraderApiModel>> GetAllDebtPurchaseOfTrader(int id)
+        {
+            UserResModel trader = await GetUserByIdAsync(id);
+            List<DebtTraderApiModel> debtTraderApiModels = new List<DebtTraderApiModel>();
+            foreach (Purchase purchase in _unitOfWork.Purchases.GetAll(filter: p => p.TraderID == id && p.isPaid == false && p.isCompleted == PurchaseStatus.Completed))
+            {
+                PondOwner pondOwner = await _unitOfWork.PondOwners.FindAsync(purchase.PondOwnerID);
+                double amount = await CalculatePayForPondOwnerAsync(purchase.ID, purchase.Commission);
+                debtTraderApiModels.Add(new DebtTraderApiModel()
+                {
+                    ID = purchase.ID,
+                    Partner = pondOwner.Name,
+                    Trader = trader.FirstName + " " + trader.LastName,
+                    Amount = amount,
+                    Date = purchase.Date
+                });
+            }
+            return debtTraderApiModels;
+        }
+        public async Task UpdateDebtPurchaseDetail(int userId, int id)
+        {
+            Purchase purchase = await _unitOfWork.Purchases.FindAsync(id);
+            if (purchase != null)
+            {
+                if (purchase.TraderID == userId)
+                {
+                    purchase.isPaid = true;
+                    _unitOfWork.Purchases.Update(purchase);
+                    await _unitOfWork.SaveChangeAsync();
+                }
+            }
         }
     }
 }
