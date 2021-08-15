@@ -11,19 +11,21 @@ namespace TnR_SS.Domain.ApiModels.CostIncurredModel
     {
         public int ID { get; set; }
 
-        [Required]
+        //[Required(ErrorMessage = "Loại chi phí không được để trống!")]
+        public string TypeOfCost { get; set; }
+
+        //[Required(ErrorMessage = "Tên chi phí không được để trống!")]
         public string Name { get; set; }
 
-        [RegularExpression(@"^[1-9]\d*(\.\d+)?$", ErrorMessage = "Cost invalid")]
-        [Required]
+        //[RegularExpression(@"^[1-9]\d*(\.\d+)?$", ErrorMessage = "Chi phí không hợp lệ")]
+        //[Required(ErrorMessage = "Chi phí không được để trống!")]
         public double Cost { get; set; }
 
         public string Note { get; set; }
 
-        [Required]
+        //[Required(ErrorMessage = "Ngày không được để trống!")]
         public DateTime Date { get; set; }
 
-        [Required]
-        public string TypeOfCost { get; set; }
+        
     }
 }
