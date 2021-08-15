@@ -28,7 +28,8 @@ namespace TnR_SS.DataEFCore.Configurations
                .HasConstraintName("FK_Purchase_UserInfor");
 
             entity.Property(e => e.PondOwnerID)
-                .IsRequired();
+                .IsRequired(false);
+
             entity.HasOne(p => p.PondOwner)
                 .WithMany(b => b.Purchases)
                 .HasForeignKey(p => p.PondOwnerID)

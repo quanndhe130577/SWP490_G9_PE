@@ -32,10 +32,9 @@ namespace TnR_SS.Domain.Entities
 
         public double PondBackMoney { get; set; }
 
-        public PurchaseStatus isCompleted { get; set; } = PurchaseStatus.Pending; // dùng cho chốt sổ
+        public PurchaseStatus isCompleted { get; set; } = PurchaseStatus.Pending; // đã chốt sổ hay chưa
 
-        [Required]
-        public int PondOwnerID { get; set; }
+        public int? PondOwnerID { get; set; }
         public PondOwner PondOwner { get; set; }
 
         [Required]
@@ -50,6 +49,7 @@ namespace TnR_SS.Domain.Entities
     public enum PurchaseStatus
     {
         Pending,
-        Completed
+        Completed,
+        Remain
     }
 }

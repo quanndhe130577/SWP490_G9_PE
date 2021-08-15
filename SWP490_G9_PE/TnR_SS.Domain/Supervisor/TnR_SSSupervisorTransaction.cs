@@ -273,58 +273,80 @@ namespace TnR_SS.Domain.Supervisor
                 {
                     try
                     {
-                        foreach (var tranId in chotSoApi.listTranId)
+                        var tran = await _unitOfWork.Transactions.FindAsync(chotSoApi.TranId);
+                        if (tran == null || (tran.WeightRecorderId != null && tran.WeightRecorderId != userId) || (tran.WeightRecorderId == null && tran.TraderId != userId))
                         {
-                            var tran = await _unitOfWork.Transactions.FindAsync(tranId);
-                            if (tran == null || (tran.WeightRecorderId != null && tran.WeightRecorderId != userId) || (tran.WeightRecorderId == null && tran.TraderId != userId))
+                            throw new Exception("Có đơn mua không tồn tại hoặc đã bị xóa !!!");
+                        }
+
+                        if (tran.isCompleted.Equals(TransactionStatus.Completed))
+                        {
+                            throw new Exception("Có đơn mua đã đã được chốt !!");
+                        }
+
+                        var listTranDe = _unitOfWork.TransactionDetails.GetAll(x => x.TransId == chotSoApi.TranId);
+                        if (listTranDe.Count() == 0)
+                        {
+                            throw new Exception("Không có đơn bán nào để chốt sổ !!");
+                        }
+
+                        tran.isCompleted = TransactionStatus.Completed;
+                        tran.CommissionUnit = chotSoApi.CommissionUnit;
+                        _unitOfWork.Transactions.Update(tran);
+                        await _unitOfWork.SaveChangeAsync();
+
+                        foreach (var trandDe in listTranDe)
+                        {
+                            CloseTransactionDetail closeTD = new CloseTransactionDetail();
+                            closeTD.SellPrice = trandDe.SellPrice;
+                            closeTD.Weight = trandDe.Weight;
+                            closeTD.TransactionId = tran.ID;
+                            closeTD.IsPaid = trandDe.IsPaid;
+
+                            FishType ft = await _unitOfWork.FishTypes.FindAsync(trandDe.FishTypeId);
+                            closeTD.FishTypeId = ft.ID;
+                            closeTD.FishName = ft.FishName;
+                            closeTD.FishTypeDescription = ft.Description;
+                            closeTD.FishTypeMinWeight = ft.MinWeight;
+                            closeTD.FishTypeMaxWeight = ft.MaxWeight;
+                            closeTD.FishTypePrice = (float)ft.Price;
+
+                            if (trandDe.BuyerId != null)
                             {
-                                throw new Exception("Có đơn mua không tồn tại hoặc đã bị xóa !!!");
+                                var buyer = await _unitOfWork.Buyers.FindAsync(trandDe.BuyerId);
+                                closeTD.BuyerId = buyer.ID;
+                                closeTD.BuyerName = buyer.Name;
+                                closeTD.BuyerAddress = buyer.Address;
+                                closeTD.BuyerPhoneNumber = buyer.PhoneNumber;
                             }
 
-                            if (tran.isCompleted.Equals(TransactionStatus.Completed))
-                            {
-                                throw new Exception("Có đơn mua đã đã được chốt !!");
-                            }
+                            await _unitOfWork.CloseTransactionDetails.CreateAsync(closeTD);
+                            await _unitOfWork.SaveChangeAsync();
+                        }
 
-                            var listTranDe = _unitOfWork.TransactionDetails.GetAll(x => x.TransId == tranId);
-                            if (listTranDe.Count() == 0)
-                            {
-                                throw new Exception("Không có đơn bán nào để chốt sổ !!");
-                            }
+                        if (chotSoApi.ListRemainFish.Count != 0)
+                        {
+                            var curretPhien = chotSoApi.Date.Date;
+                            var nextPhien = curretPhien.AddDays(1);
+                            Purchase purchase = new Purchase();
+                            purchase.TraderID = userId;
+                            purchase.Date = nextPhien;
+                            purchase.isCompleted = PurchaseStatus.Remain;
 
-                            tran.isCompleted = TransactionStatus.Completed;
-                            tran.CommissionUnit = chotSoApi.CommissionUnit;
-                            _unitOfWork.Transactions.Update(tran);
+                            await _unitOfWork.Purchases.CreateAsync(purchase);
                             await _unitOfWork.SaveChangeAsync();
 
-                            foreach (var trandDe in listTranDe)
+                            foreach (var item in chotSoApi.ListRemainFish)
                             {
-                                CloseTransactionDetail closeTD = new CloseTransactionDetail();
-                                closeTD.SellPrice = trandDe.SellPrice;
-                                closeTD.Weight = trandDe.Weight;
-                                closeTD.TransactionId = tran.ID;
-                                closeTD.IsPaid = trandDe.IsPaid;
+                                PurchaseDetail purchaseDetail = new PurchaseDetail();
+                                purchaseDetail.FishTypeID = item.ID;
+                                purchaseDetail.Weight = item.Weight;
+                                purchaseDetail.PurchaseId = purchase.ID;
 
-                                FishType ft = await _unitOfWork.FishTypes.FindAsync(trandDe.FishTypeId);
-                                closeTD.FishTypeId = ft.ID;
-                                closeTD.FishName = ft.FishName;
-                                closeTD.FishTypeDescription = ft.Description;
-                                closeTD.FishTypeMinWeight = ft.MinWeight;
-                                closeTD.FishTypeMaxWeight = ft.MaxWeight;
-                                closeTD.FishTypePrice = (float)ft.Price;
-
-                                if (trandDe.BuyerId != null)
-                                {
-                                    var buyer = await _unitOfWork.Buyers.FindAsync(trandDe.BuyerId);
-                                    closeTD.BuyerId = buyer.ID;
-                                    closeTD.BuyerName = buyer.Name;
-                                    closeTD.BuyerAddress = buyer.Address;
-                                    closeTD.BuyerPhoneNumber = buyer.PhoneNumber;
-                                }
-
-                                await _unitOfWork.CloseTransactionDetails.CreateAsync(closeTD);
-                                await _unitOfWork.SaveChangeAsync();
+                                await _unitOfWork.PurchaseDetails.CreateAsync(purchaseDetail);
                             }
+
+                            await _unitOfWork.SaveChangeAsync();
                         }
 
                         await dbTransaction.CommitAsync();
