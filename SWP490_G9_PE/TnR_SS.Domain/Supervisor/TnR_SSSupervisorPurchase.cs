@@ -231,12 +231,6 @@ namespace TnR_SS.Domain.Supervisor
                         var listPD = _unitOfWork.PurchaseDetails.GetAll(x => x.PurchaseId == purchase.ID);
                         foreach (var item in listPD)
                         {
-                            var checkCPD = _unitOfWork.ClosePurchaseDetails.GetAll(x => x.PurchaseId == purchase.ID).FirstOrDefault();
-                            if (checkCPD != null)
-                            {
-                                break;
-                            }
-
                             ClosePurchaseDetail closePD = new ClosePurchaseDetail();
                             closePD.Price = await GetPurchaseDetailPriceAsync(item.ID);
                             closePD.Weight = item.Weight;
