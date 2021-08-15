@@ -129,7 +129,7 @@ namespace TnR_SS.Domain.Supervisor
                 list.Add(tran);
             }
 
-            return list.OrderByDescending(x => x.Status).ToList();
+            return list.OrderBy(x => x.WeightRecorder).ThenByDescending(x => x.Status).ToList();
         }
 
         private async Task<List<TransactionDetailInformation>> GetListTransactionDetailModelAsync(Transaction tran)
