@@ -65,7 +65,7 @@ namespace TnR_SS.Domain.Supervisor
             var fishType = await _unitOfWork.FishTypes.FindAsync(purchaseDetail.FishTypeID);
             var basket = await _unitOfWork.Baskets.FindAsync(purchaseDetail.BasketId);
             //var listDrum = _unitOfWork.LK_PurchaseDeatil_Drums.GetAll(x => x.PurchaseDetailID == purchaseDetailId);
-            double totalFishWeight = purchaseDetail.Weight - basket.Weight;
+            double totalFishWeight = purchaseDetail.Weight - (basket != null ? basket.Weight : 0);
             return totalFishWeight > 0 ? fishType.Price * totalFishWeight : 0;
             //return 0;
         }
@@ -176,7 +176,7 @@ namespace TnR_SS.Domain.Supervisor
                 }
             }
 
-            if (purchase.isCompleted == PurchaseStatus.Pending || lackOfData)
+            if (purchase.isCompleted == PurchaseStatus.Pending || purchase.isCompleted == PurchaseStatus.Remain || lackOfData)
             {
                 var listPurchaseDetail = _unitOfWork.PurchaseDetails.GetAll(x => x.PurchaseId == purchaseId).OrderByDescending(x => x.ID);
                 List<PurchaseDetailResModel> list = new List<PurchaseDetailResModel>();
@@ -184,8 +184,13 @@ namespace TnR_SS.Domain.Supervisor
                 {
                     PurchaseDetailResModel data = _mapper.Map<PurchaseDetail, PurchaseDetailResModel>(item);
                     data.Basket = _mapper.Map<Basket, BasketApiModel>(await _unitOfWork.Baskets.FindAsync(item.BasketId));
+                    if(data.Basket == null)
+                    {
+                        data.Basket = new BasketApiModel();
+                    }
+
                     data.FishType = _mapper.Map<FishType, FishTypeApiModel>(await _unitOfWork.FishTypes.FindAsync(item.FishTypeID));
-                    data.Price = GetPurchaseDetailPrice(data.FishType.Price, data.Basket.Weight, data.Weight);
+                    data.Price = 0;/* GetPurchaseDetailPrice(data.FishType.Price, data.Basket != null ? data.Basket.Weight : 0, data.Weight);*/
                     data.ListDrum = GetListDrumByPurchaseDetail(item);
                     if (data.ListDrum.Count > 0)
                     {
