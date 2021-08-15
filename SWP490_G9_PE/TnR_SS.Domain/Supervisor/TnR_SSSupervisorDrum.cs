@@ -22,6 +22,18 @@ namespace TnR_SS.Domain.Supervisor
             return list;
         }
 
+        private List<DrumApiModel> GetListDrumByClosePurchaseDetail(ClosePurchaseDetail closePurchaseDetail)
+        {
+            var listDrum = _unitOfWork.Drums.GetDrumsByClosePurchaseDetail(closePurchaseDetail);
+            List<DrumApiModel> list = new List<DrumApiModel>();
+            foreach (var item in listDrum)
+            {
+                list.Add(_mapper.Map<Drum, DrumApiModel>(item));
+            }
+
+            return list;
+        }
+
         public List<DrumApiModel> GetAllDrumByTruckId(int truckId)
         {
             return _unitOfWork.Drums.GetAll(x => x.TruckID == truckId).Select(x => _mapper.Map<Drum, DrumApiModel>(x)).ToList();
@@ -70,7 +82,7 @@ namespace TnR_SS.Domain.Supervisor
             var drum = await _unitOfWork.Drums.FindAsync(drumId);
             var truck = _unitOfWork.Trucks.GetAll(x => x.TraderID == userId).Select(x => x.ID);
             var lk = _unitOfWork.LK_PurchaseDetail_Drums.GetAll(x => x.DrumID == drumId);
-            if(lk != null)
+            if (lk != null)
             {
                 throw new Exception("Thông tin lồ đang được sử dụng, không thể xóa !!!");
             }

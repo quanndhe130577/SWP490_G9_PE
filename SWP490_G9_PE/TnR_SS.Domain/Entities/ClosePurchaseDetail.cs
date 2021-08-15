@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TnR_SS.Domain.ApiModels.DrumModel;
 
 namespace TnR_SS.Domain.Entities
 {
@@ -28,7 +29,8 @@ namespace TnR_SS.Domain.Entities
         public double FishTypePrice { get; set; }
         public double FishTypeTransactionPrice { get; set; }
 
-        public int PurchaseDetailId { get; set; }
-        public PurchaseDetail PurchaseDetail { get; set; }
+        public int PurchaseId { get; set; }
+        public Purchase Purchase { get; set; }
+        public List<LK_PurchaseDeatil_Drum> LK_PurchaseDeatil_Drums { get; set; }
     }
 }

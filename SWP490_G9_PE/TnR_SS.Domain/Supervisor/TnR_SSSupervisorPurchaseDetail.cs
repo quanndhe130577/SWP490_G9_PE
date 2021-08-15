@@ -154,6 +154,9 @@ namespace TnR_SS.Domain.Supervisor
                 if (listClosePD.Count == 0)
                 {
                     lackOfData = true;
+                    purchase.isCompleted = PurchaseStatus.Pending;
+                    _unitOfWork.Purchases.Update(purchase);
+                    await _unitOfWork.SaveChangeAsync();
                 }
                 else
                 {
@@ -161,7 +164,7 @@ namespace TnR_SS.Domain.Supervisor
                     foreach (var item in listClosePD)
                     {
                         PurchaseDetailResModel data = _mapper.Map<ClosePurchaseDetail, PurchaseDetailResModel>(item);
-                        data.ListDrum = GetListDrumByPurchaseDetail(await _unitOfWork.PurchaseDetails.FindAsync(item.PurchaseDetailId));
+                        data.ListDrum = GetListDrumByClosePurchaseDetail(item);
                         if (data.ListDrum.Count > 0)
                         {
                             data.Truck = _mapper.Map<Truck, TruckApiModel>(await _unitOfWork.Trucks.FindAsync(data.ListDrum.FirstOrDefault().TruckId));
@@ -224,10 +227,10 @@ namespace TnR_SS.Domain.Supervisor
 
                         // delete current LK
                         _unitOfWork.LK_PurchaseDetail_Drums.DeleteMany(x => x.PurchaseDetailID == data.Id);
+                        await _unitOfWork.SaveChangeAsync();
 
                         // create new LK
                         await CreateLK(data.ListDrumId, data.Id);
-
                         await _unitOfWork.SaveChangeAsync();
 
                         await UpdatePayForPondOwnerAsync(purchaseDetail.PurchaseId);
@@ -264,8 +267,9 @@ namespace TnR_SS.Domain.Supervisor
                         try
                         {
                             _unitOfWork.LK_PurchaseDetail_Drums.RemoveLKByPurchaseDetailId(purchaseDetailId);
+                            await _unitOfWork.SaveChangeAsync();
                             // remove close purchase detail
-                            await _unitOfWork.ClosePurchaseDetails.DeleteByPurchaseDetailIdAsync(purchaseDetailId);
+                            //await _unitOfWork.ClosePurchaseDetails.DeleteByPurchaseIdAsync(purchaseDetailId);
                             _unitOfWork.PurchaseDetails.DeleteById(purchaseDetailId);
                             await _unitOfWork.SaveChangeAsync();
 

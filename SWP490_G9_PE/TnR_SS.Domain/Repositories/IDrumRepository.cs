@@ -13,5 +13,6 @@ namespace TnR_SS.Domain.Repositories
         List<Drum> GetAllByTraderId(int traderId);
         List<Drum> GetDrumsByPurchaseDetail(PurchaseDetail data);
         List<Drum> GetDrumsByPurchaseDetails(List<PurchaseDetail> purchaseDetails);
+        List<Drum> GetDrumsByClosePurchaseDetail(ClosePurchaseDetail data);
     }
 }

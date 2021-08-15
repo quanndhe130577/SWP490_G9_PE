@@ -13,9 +13,12 @@ namespace TnR_SS.Domain.Entities
         [Key]
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
-        [Required]
-        public int PurchaseDetailID { get; set; }
+        public int? PurchaseDetailID { get; set; }
         public PurchaseDetail PurchaseDetail { get; set; }
+
+        public int? ClosePurchaseDetailID { get; set; }
+        public ClosePurchaseDetail ClosePurchaseDetail { get; set; }
+
         [Required]
         public int DrumID { get; set; }
         public Drum Drum { get; set; }

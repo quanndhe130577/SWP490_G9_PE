@@ -22,6 +22,9 @@ namespace TnR_SS.DataEFCore.Configurations
             entity.Property(e => e.Weight)
                 .IsRequired();
 
+            entity.Property(e => e.PurchaseId)
+               .IsRequired();
+
             entity.Property(e => e.UpdatedAt)
                 .IsRequired()
                 .HasColumnType("datetime");
@@ -29,12 +32,11 @@ namespace TnR_SS.DataEFCore.Configurations
             entity.Property(e => e.CreatedAt)
                .HasColumnType("datetime");
 
-
-            entity.HasOne(p => p.PurchaseDetail)
-                .WithOne(b => b.ClosePurchaseDetail)
-                .HasForeignKey<ClosePurchaseDetail>(p => p.PurchaseDetailId)
+            entity.HasOne(p => p.Purchase)
+                .WithMany(b => b.ClosePurchaseDetails)
+                .HasForeignKey(p => p.PurchaseId)
                 .OnDelete(DeleteBehavior.ClientNoAction)
-                .HasConstraintName("FK_ClosePurchaseDetail_PurchaseDetail");
+                .HasConstraintName("FK_ClosePurchaseDetail_Purchase");
         }
     }
 }

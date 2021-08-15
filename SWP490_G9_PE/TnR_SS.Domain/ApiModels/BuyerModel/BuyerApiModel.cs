@@ -16,7 +16,7 @@ namespace TnR_SS.Domain.ApiModels.BuyerModel
 
         public string Address { get; set; }
 
-        [RegularExpression(@"(84|0[3|5|7|8|9])+([0-9]{8})\b", ErrorMessage = "Phone Number invalid")]
+        [RegularExpression(@"(84|0[3|5|7|8|9])+([0-9]{8})\b", ErrorMessage = "Số điện thoại không đúng")]
         [MaxLength(11)]
         [MinLength(10)]
         public string PhoneNumber { get; set; }

@@ -19,7 +19,8 @@ namespace TnR_SS.DataEFCore.Configurations
                .HasConstraintName("FK_PurchaseDetail_FishType");
 
             entity.Property(e => e.BasketId)
-                .IsRequired();
+                .IsRequired(false);
+
             entity.HasOne(p => p.Basket)
                 .WithMany(b => b.PurchaseDetails)
                 .HasForeignKey(p => p.BasketId)
@@ -28,6 +29,7 @@ namespace TnR_SS.DataEFCore.Configurations
 
             entity.Property(e => e.PurchaseId)
                 .IsRequired();
+
             entity.HasOne(p => p.Purchase)
                 .WithMany(b => b.PurchaseDetails)
                 .HasForeignKey(p => p.PurchaseId)

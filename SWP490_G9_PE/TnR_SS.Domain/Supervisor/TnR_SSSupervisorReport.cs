@@ -339,8 +339,8 @@ namespace TnR_SS.Domain.Supervisor
                     }
                     else
                     {
-                        var listTranDe = _unitOfWork.TransactionDetails.GetAllByListTransaction(listTran.Select(x => x.ID).ToList());
-                        totalIncome += listTranDe.Sum(x => x.Weight * x.SellPrice - listTran.Find(y => y.ID == x.TransId).CommissionUnit * x.Weight);
+                        var listTranDe = _unitOfWork.TransactionDetails.GetAll(x => x.TransId == tran.ID);
+                        totalIncome += listTranDe.Sum(x => x.Weight * x.SellPrice - x.Weight * tran.CommissionUnit);
                     }
                 }
             }

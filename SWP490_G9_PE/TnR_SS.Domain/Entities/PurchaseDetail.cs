@@ -23,15 +23,13 @@ namespace TnR_SS.Domain.Entities
         [Required]
         public double Weight { get; set; }
 
-
-        [Required]
-        public int BasketId { get; set; }
+        public int? BasketId { get; set; } = null;
         public Basket Basket { get; set; }
 
         [Required]
         public int PurchaseId { get; set; }
         public Purchase Purchase { get; set; }
         public List<LK_PurchaseDeatil_Drum> LK_PurchaseDeatil_Drums { get; set; }
-        public ClosePurchaseDetail ClosePurchaseDetail { get; set; }
+        //public ClosePurchaseDetail ClosePurchaseDetail { get; set; }
     }
 }
