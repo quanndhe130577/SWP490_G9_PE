@@ -59,7 +59,7 @@ namespace TnR_SS.Domain.Supervisor
         {
             PurchaseResModel newPurchase = _mapper.Map<Purchase, PurchaseResModel>(purchase);
             var pondOwner = await _unitOfWork.PondOwners.FindAsync(purchase.PondOwnerID);
-            newPurchase.PondOwnerName = pondOwner != null ? pondOwner.Name : "Cá tồn kho";
+            newPurchase.PondOwnerName = pondOwner != null ? pondOwner.Name : "Cá cũ";
             newPurchase.TotalWeight = GetTotalWeightPurchase(purchase);
             newPurchase.TotalAmount = await GetTotalAmountPurchaseAsync(purchase.ID);
             newPurchase.Status = purchase.isCompleted.ToString();

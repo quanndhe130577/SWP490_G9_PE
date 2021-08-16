@@ -77,27 +77,6 @@ namespace TnR_SS.Domain.Supervisor
 
         public List<GetAllFishTypeForTransactionResModel> GetAllFishTypeForTransaction(int? traderId, int userId, DateTime date)
         {
-            /*List<FishType> listType = new List<FishType>();
-            var userRole = await _unitOfWork.UserInfors.GetRolesAsync(userId);
-            if (userRole.Contains(RoleName.Trader))
-            {
-                // lay ra ngay co purchase gan nhat tối đa 1 ngày
-                var dateGanNhat = _unitOfWork.Purchases.GetAll(x => x.TraderID == userId && x.Date.Date <= date && x.Date.Date >= date.AddDays(-1)).OrderByDescending(x => x.Date).Select(x => x.Date).FirstOrDefault();
-                // lấy ra purchase có ngày = ngày gần nhất
-                var listPurchaseId = _unitOfWork.Purchases.GetAll(x => x.TraderID == userId && x.Date.Date == dateGanNhat.Date && x.Date.Date >= date.AddDays(-1)).Select(x => x.ID).ToList();
-                listType = _unitOfWork.FishTypes.GetAllFishTypeByPurchaseIds(listPurchaseId);
-                //listType = _unitOfWork.FishTypes.GetAll(X => X.TraderID == userId && X.Date.Date == date.Date && X.PurchaseID != null).Distinct().ToList();
-            }
-            else if (userRole.Contains(RoleName.WeightRecorder) && traderId != null)
-            {
-                // lay ra ngay co purchase gan nhat
-                var dateGanNhat = _unitOfWork.Purchases.GetAll(x => x.TraderID == traderId && x.Date.Date <= date && x.Date.Date >= date.AddDays(-1)).OrderByDescending(x => x.Date).Select(x => x.Date).FirstOrDefault();
-                // lấy ra purchase có ngày = ngày gần nhất
-                var listPurchaseId = _unitOfWork.Purchases.GetAll(x => x.TraderID == traderId && x.Date.Date == dateGanNhat.Date && x.Date.Date >= date.AddDays(-1)).Select(x => x.ID).ToList();
-                // lấy ra loại cá của các purchase đó
-                listType = _unitOfWork.FishTypes.GetAllFishTypeByPurchaseIds(listPurchaseId);
-                //listType = _unitOfWork.FishTypes.GetAll(X => X.TraderID == traderId.Value && X.Date.Date == date.Date && X.PurchaseID != null).Distinct().ToList();
-            }*/
             var phien = date.Date;
             if (date.Date == DateTime.Now.Date)
             {
@@ -110,6 +89,25 @@ namespace TnR_SS.Domain.Supervisor
             {
                 GetAllFishTypeForTransactionResModel newFish = _mapper.Map<FishType, GetAllFishTypeForTransactionResModel>(type);
                 newFish.RemainWeight = (float)(_unitOfWork.FishTypes.GetTotalWeightOfFishType(type.ID) - _unitOfWork.FishTypes.GetSellWeightOfFishType(type.ID));
+                var listRemainFish = _unitOfWork.FishTypes.GetListFishTypeRemainByDay(phien.AddDays(1), traderId.Value).Where(x => x.FishName == type.FishName).FirstOrDefault();
+                if (listRemainFish != null)
+                {
+                    var purchaseDetail = _unitOfWork.PurchaseDetails.GetAll(x => x.FishTypeID == listRemainFish.ID).FirstOrDefault();
+                    if (purchaseDetail != null)
+                    {
+                        newFish.Weight = (float)purchaseDetail.Weight;
+                    }
+                    else
+                    {
+                        newFish.Weight = newFish.RemainWeight;
+                    }
+                }
+                else
+                {
+                    newFish.Weight = newFish.RemainWeight;
+                }
+
+
                 //newFish.PondOwner = _mapper.Map<PondOwner, PondOwnerApiModel>(await _unitOfWork.PondOwners.FindAsync(newFish.PondOwnerID));
                 list.Add(newFish);
             }

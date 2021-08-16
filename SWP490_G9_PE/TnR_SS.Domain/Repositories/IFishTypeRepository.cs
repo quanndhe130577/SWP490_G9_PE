@@ -17,6 +17,8 @@ namespace TnR_SS.Domain.Repositories
         List<FishType> GetAllFishTypeByPurchaseIds(List<int> listPurchaseId);
         bool CheckFishTypeOfPurchaseInUse(int purchaseId);
         List<FishType> GetAllFishTypeForTransaction(int? traderId, int userId, DateTime date);
+
+        List<FishType> GetListFishTypeRemainByDay(DateTime date, int traderId);
         Task ClearDataAsync();
     }
 }

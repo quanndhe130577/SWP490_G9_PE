@@ -110,33 +110,6 @@ namespace TnR_SS.DataEFCore.Repositories
                     ru => ru.Id,
                     (ur, ru) => ru.NormalizedName);
 
-            /*DateTime startDate = DateTime.MinValue;
-            DateTime endDate = DateTime.MaxValue;
-
-            // nếu là ngày hiện tại và < 18 giờ thì là bán tiếp => lấy dữ liệu từ 18h hôm trc -> 18h hôm nay
-            if (date.Date == DateTime.Now.Date && DateTime.Now.Hour < 18)
-            {
-                var temp = date.AddDays(-1);
-                startDate = new DateTime(temp.Year, temp.Month, temp.Day, 0, 0, 0); // 18 h ngày hôm trước
-                endDate = new DateTime(date.Year, date.Month, date.Day, 0, 0, 0); // 18 h ngày hôm nay
-            }
-            else // lấy dữ liệu từ 18h hôm đó -> 18h hôm sau
-            {
-                var temp = date.AddDays(1);
-                startDate = new DateTime(date.Year, date.Month, date.Day, 0, 0, 0); // 18 h ngày hôm đó
-                endDate = new DateTime(temp.Year, temp.Month, temp.Day, 0, 0, 0); // 18 h ngày hôm sau
-            }
-
-            List<int> listPurchaseId = new();
-            if (userRole.Contains(RoleName.Trader))
-            {
-                listPurchaseId = _context.Purchases.Where(x => x.TraderID == userId && x.Date <= endDate && x.Date >= startDate).Select(x => x.ID).ToList();
-            }
-            else if (userRole.Contains(RoleName.WeightRecorder) && traderId != null)
-            {
-                listPurchaseId = _context.Purchases.Where(x => x.TraderID == traderId && x.Date <= endDate && x.Date >= startDate).Select(x => x.ID).ToList();
-            }*/
-
             List<int> listPurchaseId = new();
             if (userRole.Contains(RoleName.Trader))
             {
@@ -172,18 +145,19 @@ namespace TnR_SS.DataEFCore.Repositories
             var listFishIdInPur = _context.PurchaseDetails.Select(x => x.FishTypeID).Distinct();
             var listFishIdInTran = _context.TransactionDetails.Select(x => x.FishTypeId).Distinct();
             var listRemove = _context.FishTypes.Where(x => !listFishIdInPur.Contains(x.ID) && !listFishIdInTran.Contains(x.ID) && x.Date.Date != DateTime.Now.Date);
-
-            /*var listTranDe = _context.TransactionDetails.Join(
-                    listRemove,
-                    td => td.FishTypeId,
-                    ft => ft.ID,
-                    (td, ft) => td
-                );
-
-            _context.TransactionDetails.RemoveRange(listTranDe);*/
-
             _context.FishTypes.RemoveRange(listRemove);
             await _context.SaveChangesAsync();
+        }
+
+        public List<FishType> GetListFishTypeRemainByDay(DateTime date, int traderId)
+        {
+            return _context.Purchases.Where(x => x.TraderID == traderId && x.Date.Date == date.Date && x.isCompleted == PurchaseStatus.Remain)
+                .Join(
+                    _context.FishTypes,
+                    p => p.ID,
+                    ft => ft.PurchaseID,
+                    (p, ft) => ft
+                ).Distinct().ToList();
         }
     }
 }

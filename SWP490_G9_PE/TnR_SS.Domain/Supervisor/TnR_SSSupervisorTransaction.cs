@@ -342,12 +342,34 @@ namespace TnR_SS.Domain.Supervisor
 
                                 foreach (var item in chotSoApi.ListRemainFish)
                                 {
+                                    var oldFish = await _unitOfWork.FishTypes.FindAsync(item.ID);
+
+                                    if (oldFish == null)
+                                    {
+                                        throw new Exception("Lỗi thông tin cá !!!");
+                                    }
+
+                                    var newFish = new FishType()
+                                    {
+                                        ID = 0,
+                                        Date = curretPhien.AddDays(1),
+                                        Price = 0,
+                                        TraderID = userId,
+                                        PurchaseID = purchase.ID,
+                                        FishName = oldFish.FishName + "dư ngày " + curretPhien.ToString("dd/MM/yyyy"),
+                                        Description = oldFish.Description,
+                                        MaxWeight = oldFish.MaxWeight,
+                                        MinWeight = oldFish.MinWeight,
+                                    };
+
+                                    await _unitOfWork.FishTypes.CreateAsync(newFish);
+                                    await _unitOfWork.SaveChangeAsync();
+
                                     if (item.Weight > 0)
                                     {
                                         PurchaseDetail purchaseDetail = new PurchaseDetail();
-                                        purchaseDetail.FishTypeID = item.ID;
+                                        purchaseDetail.FishTypeID = newFish.ID;
                                         purchaseDetail.Weight = item.Weight;
-                                        purchaseDetail.PurchaseId = purchase.ID;
                                         purchaseDetail.PurchaseId = purchase.ID;
 
                                         await _unitOfWork.PurchaseDetails.CreateAsync(purchaseDetail);

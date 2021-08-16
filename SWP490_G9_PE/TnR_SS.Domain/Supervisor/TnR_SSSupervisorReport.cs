@@ -34,17 +34,17 @@ namespace TnR_SS.Domain.Supervisor
             // Purchase
             if (isTrader)
             {
-                var listPurchase = _unitOfWork.Purchases.GetAll(x => x.Date.Date == date.Date && x.TraderID == userId && x.isCompleted != PurchaseStatus.Remain);
+                var listPurchase = _unitOfWork.Purchases.GetAll(x => x.Date.Date == date.Date && x.TraderID == userId);
                 if (listPurchase == null || listPurchase.Count() == 0)
                 {
-                    closestDate = _unitOfWork.Purchases.GetAll(x => x.Date.Date <= date.Date && x.isCompleted != PurchaseStatus.Remain).Select(x => x.Date.Date).OrderByDescending(x => x.Date).FirstOrDefault();
-                    listPurchase = _unitOfWork.Purchases.GetAll(x => x.Date.Date == closestDate.Date && x.TraderID == userId && x.isCompleted != PurchaseStatus.Remain);
+                    closestDate = _unitOfWork.Purchases.GetAll(x => x.Date.Date <= date.Date).Select(x => x.Date.Date).OrderByDescending(x => x.Date).FirstOrDefault();
+                    listPurchase = _unitOfWork.Purchases.GetAll(x => x.Date.Date == closestDate.Date && x.TraderID == userId);
                 }
 
                 if (listPurchase == null || listPurchase.Count() == 0)
                 {
-                    closestDate = _unitOfWork.Purchases.GetAll(x => x.Date.Date >= date.Date && x.isCompleted != PurchaseStatus.Remain).Select(x => x.Date.Date).OrderBy(x => x.Date).FirstOrDefault();
-                    listPurchase = _unitOfWork.Purchases.GetAll(x => x.Date.Date == closestDate.Date && x.TraderID == userId && x.isCompleted != PurchaseStatus.Remain);
+                    closestDate = _unitOfWork.Purchases.GetAll(x => x.Date.Date >= date.Date).Select(x => x.Date.Date).OrderBy(x => x.Date).FirstOrDefault();
+                    listPurchase = _unitOfWork.Purchases.GetAll(x => x.Date.Date == closestDate.Date && x.TraderID == userId);
                 }
 
                 if (listPurchase == null || listPurchase.Count() == 0)
@@ -53,7 +53,7 @@ namespace TnR_SS.Domain.Supervisor
                 }
 
                 reportApiModel.PurchaseTotal = new ReportPurchaseModal();
-                foreach (var purchase in listPurchase)
+                foreach (var purchase in listPurchase.Where(x => x.isCompleted != PurchaseStatus.Remain))
                 {
                     SummaryPurchaseModal summary = new SummaryPurchaseModal();
                     summary.PondOwner = _mapper.Map<PondOwner, PondOwnerApiModel>(await _unitOfWork.PondOwners.FindAsync(purchase.PondOwnerID));
@@ -95,7 +95,7 @@ namespace TnR_SS.Domain.Supervisor
                             summary.PurchaseDetails.Add(pdM);
                         }
                     }
-                    else
+                    else if (purchase.isCompleted == PurchaseStatus.Pending)
                     {
                         var listPD = _unitOfWork.PurchaseDetails.GetAll(x => x.PurchaseId == purchase.ID);
                         var listFishTypeId = listPD.Select(x => x.FishTypeID).Distinct();
@@ -117,9 +117,43 @@ namespace TnR_SS.Domain.Supervisor
                     }
 
                     reportApiModel.PurchaseTotal.ListSummaryPurchaseDetail.Add(summary);
-                    reportApiModel.PurchaseTotal.SummaryWeight = reportApiModel.PurchaseTotal.ListSummaryPurchaseDetail.Sum(x => x.TotalWeight);
-                    reportApiModel.PurchaseTotal.SummaryMoney = reportApiModel.PurchaseTotal.ListSummaryPurchaseDetail.Sum(x => x.TotalMoney);
                 }
+
+                // cá cũ
+                foreach (var item in listPurchase.Where(x => x.isCompleted == PurchaseStatus.Remain))
+                {
+                    SummaryPurchaseModal summary = new SummaryPurchaseModal();
+                    summary.PondOwner = new PondOwnerApiModel()
+                    {
+                        Name = "Cá cũ",
+                        TraderID = item.TraderID,
+                        PhoneNumber = "",
+                        Address = ""
+                    };
+
+                    var listPD = _unitOfWork.PurchaseDetails.GetAll(x => x.PurchaseId == item.ID);
+                    var listFishTypeId = listPD.Select(x => x.FishTypeID).Distinct();
+                    int count = 0;
+                    foreach (var fishTypeId in listFishTypeId)
+                    {
+                        var fishType = await _unitOfWork.FishTypes.FindAsync(fishTypeId);
+                        SummaryFishTypePurchaseModel pdM = new SummaryFishTypePurchaseModel();
+                        pdM.Idx = count++;
+                        pdM.FishType = _mapper.Map<FishType, FishTypeApiModel>(fishType);
+                        pdM.Weight = _unitOfWork.FishTypes.GetTotalWeightOfFishType(fishTypeId);
+                        pdM.Price = 0 /*fishType.Price * pdM.Weight*/;
+
+                        summary.TotalWeight += pdM.Weight;
+                        summary.TotalMoney += pdM.Price;
+
+                        summary.PurchaseDetails.Add(pdM);
+                    }
+
+                    reportApiModel.PurchaseTotal.ListSummaryPurchaseDetail.Add(summary);
+                }
+
+                reportApiModel.PurchaseTotal.SummaryWeight = reportApiModel.PurchaseTotal.ListSummaryPurchaseDetail.Sum(x => x.TotalWeight);
+                reportApiModel.PurchaseTotal.SummaryMoney = reportApiModel.PurchaseTotal.ListSummaryPurchaseDetail.Sum(x => x.TotalMoney);
             }
 
             // Transaction
@@ -191,6 +225,46 @@ namespace TnR_SS.Domain.Supervisor
 
                         summary.TransactionDetails.Add(tdM);
                     }
+                }
+
+                reportApiModel.TransactionTotal.ListSummaryTransactionDetail.Add(summary);
+            }
+
+            // cá dư
+            var listRemain = _unitOfWork.Purchases.GetAll(x => x.Date.Date == date.Date.AddDays(1) && x.isCompleted == PurchaseStatus.Remain);
+            foreach (var item in listRemain)
+            {
+                SummaryTransactionModal summary = new SummaryTransactionModal();
+                summary.WeightRecorder = null;
+                summary.Trader = _mapper.Map<UserInfor, UserInformation>(await _unitOfWork.UserInfors.FindAsync(item.TraderID));
+
+                var listPD = _unitOfWork.PurchaseDetails.GetAll(x => x.PurchaseId == item.ID);
+                var listFishTypeId = listPD.Select(x => x.FishTypeID).Distinct();
+                int count = 0;
+                foreach (var fishTypeId in listFishTypeId)
+                {
+                    var fishType = await _unitOfWork.FishTypes.FindAsync(fishTypeId);
+                    SummaryFishTypeTransactionModel tdM = new SummaryFishTypeTransactionModel();
+                    var listFish = listPD.Where(x => x.FishTypeID == fishTypeId);
+                    tdM.FishType = new FishTypeApiModel()
+                    {
+                        ID = fishType.ID,
+                        FishName = fishType.FishName,
+                        Description = fishType.Description,
+                        MinWeight = fishType.MinWeight,
+                        MaxWeight = fishType.MaxWeight,
+                        Price = fishType.Price,
+                        TransactionPrice = 0
+                    };
+                    tdM.Idx = count++;
+                    tdM.Weight = listFish.Sum(x => x.Weight);
+                    tdM.SellPrice = 0;
+
+                    summary.TotalWeight += tdM.Weight;
+                    summary.TotalMoney += tdM.SellPrice;
+                    summary.TotalCommission += 0;
+
+                    summary.TransactionDetails.Add(tdM);
                 }
 
                 reportApiModel.TransactionTotal.ListSummaryTransactionDetail.Add(summary);
