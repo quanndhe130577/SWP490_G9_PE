@@ -268,8 +268,8 @@ namespace TnR_SS.Domain.Supervisor
                 reportApiModel.RemainTotal.SummaryRemainDetail = summary;
             }
 
-            reportApiModel.RemainTotal.SummaryWeight = reportApiModel.RemainTotal.ListSummaryRemainDetail.Sum(x => x.TotalWeight);
-            reportApiModel.RemainTotal.SummaryMoney = reportApiModel.RemainTotal.ListSummaryRemainDetail.Sum(x => x.TotalMoney);
+            reportApiModel.RemainTotal.SummaryWeight = reportApiModel.RemainTotal.SummaryRemainDetail.TotalWeight;
+            reportApiModel.RemainTotal.SummaryMoney = reportApiModel.RemainTotal.SummaryRemainDetail.TotalMoney;
 
             // Cost Incurred
             var listCI = _unitOfWork.CostIncurreds.GetAll(x => x.UserId == userId && x.TypeOfCost == "day" && x.Date.Date == closestDate.Date);
