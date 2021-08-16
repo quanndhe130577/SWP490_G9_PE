@@ -54,6 +54,17 @@ namespace TnR_SS.Domain.Supervisor
                             {
                                 FishTypeResModel newFish = _mapper.Map<FishType, FishTypeResModel>(type);
                                 newFish.PondOwner = _mapper.Map<PondOwner, PondOwnerApiModel>(await _unitOfWork.PondOwners.GetByFishTypeAsync(type));
+                                if (newFish.PondOwner == null)
+                                {
+                                    newFish.PondOwner = new PondOwnerApiModel()
+                                    {
+                                        Name = "Cá cũ",
+                                        TraderID = traderId,
+                                        PhoneNumber = "",
+                                        Address = ""
+                                    };
+                                }
+
                                 newFish.TotalWeight = _unitOfWork.FishTypes.GetTotalWeightOfFishType(type.ID);
                                 newFish.Date = purchase.Date.Date;
                                 list.Add(newFish);

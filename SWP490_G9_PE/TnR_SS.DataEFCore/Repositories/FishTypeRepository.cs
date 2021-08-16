@@ -13,9 +13,18 @@ namespace TnR_SS.DataEFCore.Repositories
         public FishTypeRepository(TnR_SSContext context) : base(context) { }
         public List<FishType> GetAllLastByTraderIdAndPondOwnerId(int traderId)
         {
-            var rs = _context.FishTypes.AsEnumerable().Where(x => x.TraderID == traderId)
-                .OrderByDescending(x => x.Date).ThenByDescending(x => x.ID).GroupBy(x => x.FishName)
+            var rs = _context.Purchases.Where(x => x.isCompleted == PurchaseStatus.Completed && x.TraderID == traderId)
+                .Join(
+                    _context.FishTypes,
+                    p => p.ID,
+                    ft => ft.PurchaseID,
+                    (p, ft) => ft
+                ).AsEnumerable().OrderByDescending(x => x.Date).ThenByDescending(x => x.ID).GroupBy(x => x.FishName)
                 .Select(x => x.First()).ToList();
+
+            /*var rs = _context.FishTypes.AsEnumerable().Where(x => x.TraderID == traderId)
+                .OrderByDescending(x => x.Date).ThenByDescending(x => x.ID).GroupBy(x => x.FishName)
+                .Select(x => x.First()).ToList();*/
             return rs;
         }
 
