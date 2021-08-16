@@ -25,7 +25,7 @@ namespace TnR_SS.Domain.ApiModels.ReportModel
 
     public class ReportRemainModal
     {
-        public List<SummaryRemainModal> ListSummaryRemainDetail { get; set; } = new List<SummaryRemainModal>();
+        public SummaryRemainModal SummaryRemainDetail { get; set; }
         public double SummaryWeight { get; set; }
         public double SummaryMoney { get; set; }
     }

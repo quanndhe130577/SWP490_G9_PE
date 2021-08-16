@@ -38,13 +38,19 @@ namespace TnR_SS.Domain.Supervisor
                 if (listPurchase == null || listPurchase.Count() == 0)
                 {
                     closestDate = _unitOfWork.Purchases.GetAll(x => x.Date.Date <= date.Date).Select(x => x.Date.Date).OrderByDescending(x => x.Date).FirstOrDefault();
-                    listPurchase = _unitOfWork.Purchases.GetAll(x => x.Date.Date == closestDate.Date && x.TraderID == userId);
+                    if (closestDate != DateTime.MinValue)
+                    {
+                        listPurchase = _unitOfWork.Purchases.GetAll(x => x.Date.Date == closestDate.Date && x.TraderID == userId);
+                    }
                 }
 
                 if (listPurchase == null || listPurchase.Count() == 0)
                 {
                     closestDate = _unitOfWork.Purchases.GetAll(x => x.Date.Date >= date.Date).Select(x => x.Date.Date).OrderBy(x => x.Date).FirstOrDefault();
-                    listPurchase = _unitOfWork.Purchases.GetAll(x => x.Date.Date == closestDate.Date && x.TraderID == userId);
+                    if (closestDate != DateTime.MinValue)
+                    {
+                        listPurchase = _unitOfWork.Purchases.GetAll(x => x.Date.Date == closestDate.Date && x.TraderID == userId);
+                    }
                 }
 
                 if (listPurchase == null || listPurchase.Count() == 0)
@@ -259,7 +265,7 @@ namespace TnR_SS.Domain.Supervisor
                     summary.RemainDetails.Add(pdM);
                 }
 
-                reportApiModel.RemainTotal.ListSummaryRemainDetail.Add(summary);
+                reportApiModel.RemainTotal.SummaryRemainDetail = summary;
             }
 
             reportApiModel.RemainTotal.SummaryWeight = reportApiModel.RemainTotal.ListSummaryRemainDetail.Sum(x => x.TotalWeight);
