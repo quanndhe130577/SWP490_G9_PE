@@ -210,6 +210,7 @@ namespace TnR_SS.Domain.Supervisor
                     WrId = traderOfWeightRecorder.WeightRecorderId,
                     Name = wr.FirstName + " " + wr.LastName,
                     PhoneNumber = wr.PhoneNumber,
+                    Address = wr.Address,
                     IsAccepted = traderOfWeightRecorder.IsAccepted,
                     CanDelete = count == 0,
                     IsDeleted = false

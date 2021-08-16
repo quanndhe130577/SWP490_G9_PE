@@ -19,6 +19,7 @@ namespace TnR_SS.Domain.ApiModels.AccountModel
 
         [Required]
         public string IdentifyCode { get; set; }
+        public string Address { get; set; }
 
     }
 }
