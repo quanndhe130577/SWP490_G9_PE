@@ -119,7 +119,7 @@ namespace TnR_SS.Domain.Supervisor
                     reportApiModel.PurchaseTotal.ListSummaryPurchaseDetail.Add(summary);
                 }
 
-                // cá cũ
+                // Cá cũ
                 foreach (var item in listPurchase.Where(x => x.isCompleted == PurchaseStatus.Remain))
                 {
                     SummaryPurchaseModal summary = new SummaryPurchaseModal();
@@ -230,13 +230,16 @@ namespace TnR_SS.Domain.Supervisor
                 reportApiModel.TransactionTotal.ListSummaryTransactionDetail.Add(summary);
             }
 
-            // cá dư
+            reportApiModel.TransactionTotal.SummaryWeight = reportApiModel.TransactionTotal.ListSummaryTransactionDetail.Sum(x => x.TotalWeight);
+            reportApiModel.TransactionTotal.SummaryMoney = reportApiModel.TransactionTotal.ListSummaryTransactionDetail.Sum(x => x.TotalMoney);
+            reportApiModel.TransactionTotal.SummaryCommission = reportApiModel.TransactionTotal.ListSummaryTransactionDetail.Sum(x => x.TotalCommission);
+
+            // Remain
+            reportApiModel.RemainTotal = new ReportRemainModal();
             var listRemain = _unitOfWork.Purchases.GetAll(x => x.Date.Date == date.Date.AddDays(1) && x.isCompleted == PurchaseStatus.Remain);
             foreach (var item in listRemain)
             {
-                SummaryTransactionModal summary = new SummaryTransactionModal();
-                summary.WeightRecorder = null;
-                summary.Trader = _mapper.Map<UserInfor, UserInformation>(await _unitOfWork.UserInfors.FindAsync(item.TraderID));
+                SummaryRemainModal summary = new SummaryRemainModal();
 
                 var listPD = _unitOfWork.PurchaseDetails.GetAll(x => x.PurchaseId == item.ID);
                 var listFishTypeId = listPD.Select(x => x.FishTypeID).Distinct();
@@ -244,35 +247,23 @@ namespace TnR_SS.Domain.Supervisor
                 foreach (var fishTypeId in listFishTypeId)
                 {
                     var fishType = await _unitOfWork.FishTypes.FindAsync(fishTypeId);
-                    SummaryFishTypeTransactionModel tdM = new SummaryFishTypeTransactionModel();
-                    var listFish = listPD.Where(x => x.FishTypeID == fishTypeId);
-                    tdM.FishType = new FishTypeApiModel()
-                    {
-                        ID = fishType.ID,
-                        FishName = fishType.FishName,
-                        Description = fishType.Description,
-                        MinWeight = fishType.MinWeight,
-                        MaxWeight = fishType.MaxWeight,
-                        Price = fishType.Price,
-                        TransactionPrice = 0
-                    };
-                    tdM.Idx = count++;
-                    tdM.Weight = listFish.Sum(x => x.Weight);
-                    tdM.SellPrice = 0;
+                    SummaryFishTypePurchaseModel pdM = new SummaryFishTypePurchaseModel();
+                    pdM.Idx = count++;
+                    pdM.FishType = _mapper.Map<FishType, FishTypeApiModel>(fishType);
+                    pdM.Weight = _unitOfWork.FishTypes.GetTotalWeightOfFishType(fishTypeId);
+                    pdM.Price = fishType.Price * pdM.Weight;
 
-                    summary.TotalWeight += tdM.Weight;
-                    summary.TotalMoney += tdM.SellPrice;
-                    summary.TotalCommission += 0;
+                    summary.TotalWeight += pdM.Weight;
+                    summary.TotalMoney += pdM.Price;
 
-                    summary.TransactionDetails.Add(tdM);
+                    summary.RemainDetails.Add(pdM);
                 }
 
-                reportApiModel.TransactionTotal.ListSummaryTransactionDetail.Add(summary);
+                reportApiModel.RemainTotal.ListSummaryRemainDetail.Add(summary);
             }
 
-            reportApiModel.TransactionTotal.SummaryWeight = reportApiModel.TransactionTotal.ListSummaryTransactionDetail.Sum(x => x.TotalWeight);
-            reportApiModel.TransactionTotal.SummaryMoney = reportApiModel.TransactionTotal.ListSummaryTransactionDetail.Sum(x => x.TotalMoney);
-            reportApiModel.TransactionTotal.SummaryCommission = reportApiModel.TransactionTotal.ListSummaryTransactionDetail.Sum(x => x.TotalCommission);
+            reportApiModel.RemainTotal.SummaryWeight = reportApiModel.RemainTotal.ListSummaryRemainDetail.Sum(x => x.TotalWeight);
+            reportApiModel.RemainTotal.SummaryMoney = reportApiModel.RemainTotal.ListSummaryRemainDetail.Sum(x => x.TotalMoney);
 
             // Cost Incurred
             var listCI = _unitOfWork.CostIncurreds.GetAll(x => x.UserId == userId && x.TypeOfCost == "day" && x.Date.Date == closestDate.Date);

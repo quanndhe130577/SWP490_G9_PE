@@ -360,6 +360,7 @@ namespace TnR_SS.Domain.Supervisor
                                         Description = oldFish.Description + " dư ngày " + curretPhien.ToString("dd/MM/yyyy"),
                                         MaxWeight = oldFish.MaxWeight,
                                         MinWeight = oldFish.MinWeight,
+                                        TransactionPrice = oldFish.TransactionPrice,
                                     };
 
                                     await _unitOfWork.FishTypes.CreateAsync(newFish);

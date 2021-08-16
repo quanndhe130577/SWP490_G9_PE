@@ -13,6 +13,7 @@ namespace TnR_SS.Domain.ApiModels.ReportModel
 {
     public class ReportDayApiModel
     {
+        public ReportRemainModal RemainTotal { get; set; }
         public ReportPurchaseModal PurchaseTotal { get; set; }
         public ReportTransactionModal TransactionTotal { get; set; }
         public List<CostIncurredApiModel> ListCostIncurred { get; set; } = new List<CostIncurredApiModel>();
@@ -20,6 +21,20 @@ namespace TnR_SS.Domain.ApiModels.ReportModel
         public double TongThu { get; set; }
         public double TongNo { get; set; }
         public DateTime Date { get; set; }
+    }
+
+    public class ReportRemainModal
+    {
+        public List<SummaryRemainModal> ListSummaryRemainDetail { get; set; } = new List<SummaryRemainModal>();
+        public double SummaryWeight { get; set; }
+        public double SummaryMoney { get; set; }
+    }
+
+    public class SummaryRemainModal
+    {
+        public double TotalWeight { get; set; }
+        public double TotalMoney { get; set; }
+        public List<SummaryFishTypePurchaseModel> RemainDetails { get; set; } = new List<SummaryFishTypePurchaseModel>();
     }
 
     public class ReportPurchaseModal
