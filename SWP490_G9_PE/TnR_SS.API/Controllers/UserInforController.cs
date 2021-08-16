@@ -48,7 +48,7 @@ namespace TnR_SS.API.Controllers
         public async Task<ResponseModel> GetTraders()
         {
             var weightRecorderId = TokenManagement.GetUserIdInToken(HttpContext);
-            var listTrader = await _tnrssSupervisor.FindTradersOfWeightRecorder(weightRecorderId);
+            var listTrader = await _tnrssSupervisor.FindTradersOfWeightRecorderForTransaction(weightRecorderId);
             return new ResponseBuilder<List<FindTraderByPhoneApiModel>>().Success("Lấy thông tin thương lái thành công").WithData(listTrader).ResponseModel;
         }
 

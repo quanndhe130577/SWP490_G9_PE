@@ -66,7 +66,7 @@ namespace TnR_SS.Domain.Supervisor
         Task<UserResModel> GetUserResModelByIdAsync(int id);
         Task<FindTraderByPhoneApiModel> FindTraderByPhoneAsync(string phoneNumber);
         Task<List<FindTraderByPhoneApiModel>> SuggestTradersByPhoneAsync(string phoneNumber, int wcId);
-        Task<List<FindTraderByPhoneApiModel>> FindTradersOfWeightRecorder(int weightRecorderId);
+        Task<List<FindTraderByPhoneApiModel>> FindTradersOfWeightRecorderForTransaction(int weightRecorderId);
         Task<List<FindTraderByPhoneApiModel>> FindTradersOfWeightRecorderForList(int weightRecorderId);
         Task WeightRecorderAddTrader(int traderId, int weightRecorderId);
         Task<List<WeightRecorderModal>> TraderGetWeightRecorder(int traderId);

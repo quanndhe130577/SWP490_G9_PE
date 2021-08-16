@@ -71,7 +71,7 @@ namespace TnR_SS.Domain.Supervisor
                         var phien = apiModel.Date;
                         if (apiModel.Date == DateTime.Now.Date)
                         {
-                            phien = DateTime.Now.Hour < 18 ? DateTime.Now.AddDays(-1).Date : DateTime.Now.Date;
+                            phien = DateTime.Now.Hour < EndHour ? DateTime.Now.AddDays(-1).Date : DateTime.Now.Date;
                         }
                         // create transaction if not existed
                         //var transaction = _unitOfWork.Transactions.GetAll(x => x.TraderId == traderId && x.Date.Date == apiModel.Date.Date && x.WeightRecorderId == null).FirstOrDefault();
@@ -260,7 +260,7 @@ namespace TnR_SS.Domain.Supervisor
             var phien = date.Date;
             if (date.Date == DateTime.Now.Date)
             {
-                phien = DateTime.Now.Hour < 18 ? DateTime.Now.AddDays(-1).Date : DateTime.Now.Date;
+                phien = DateTime.Now.Hour < EndHour ? DateTime.Now.AddDays(-1).Date : DateTime.Now.Date;
             }
 
             var listTran = _unitOfWork.Transactions.GetAllTransactionsByDate(userId, phien);
@@ -304,7 +304,7 @@ namespace TnR_SS.Domain.Supervisor
             var phien = apiModel.Date;
             if (apiModel.Date == DateTime.Now.Date)
             {
-                phien = DateTime.Now.Hour < 18 ? DateTime.Now.AddDays(-1).Date : DateTime.Now.Date;
+                phien = DateTime.Now.Hour < EndHour ? DateTime.Now.AddDays(-1).Date : DateTime.Now.Date;
             }
 
             var buyer = _unitOfWork.Buyers.GetAll(x => x.ID == apiModel.BuyerId && x.SellerId == userId);

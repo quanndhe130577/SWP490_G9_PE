@@ -22,5 +22,6 @@ namespace TnR_SS.Domain.Supervisor
             _unitOfWork = unitOfWork;
         }
 
+        public int EndHour = 1;
     }
 }

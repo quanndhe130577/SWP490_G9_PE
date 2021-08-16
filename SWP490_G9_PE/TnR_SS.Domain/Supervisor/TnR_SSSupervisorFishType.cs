@@ -91,7 +91,7 @@ namespace TnR_SS.Domain.Supervisor
             var phien = date.Date;
             if (date.Date == DateTime.Now.Date)
             {
-                phien = DateTime.Now.Hour < 18 ? DateTime.Now.AddDays(-1).Date : DateTime.Now.Date;
+                phien = DateTime.Now.Hour < EndHour ? DateTime.Now.AddDays(-1).Date : DateTime.Now.Date;
             }
 
             List<FishType> listType = _unitOfWork.FishTypes.GetAllFishTypeForTransaction(traderId, userId, phien);
@@ -137,7 +137,7 @@ namespace TnR_SS.Domain.Supervisor
             var phien = date.Date;
             if (date.Date == DateTime.Now.Date)
             {
-                phien = DateTime.Now.Hour < 18 ? DateTime.Now.AddDays(-1).Date : DateTime.Now.Date;
+                phien = DateTime.Now.Hour < EndHour ? DateTime.Now.AddDays(-1).Date : DateTime.Now.Date;
             }
 
             var purchaseList = _unitOfWork.Purchases.GetAll(x => x.TraderID == traderId && x.PondOwnerID == poId && x.Date.Date == phien.Date).ToList();

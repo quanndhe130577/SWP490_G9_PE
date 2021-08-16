@@ -42,7 +42,7 @@ namespace TnR_SS.Domain.Supervisor
             var roleName = await _unitOfWork.UserInfors.GetRolesAsync(userId);
             if (roleName.Contains(RoleName.Trader))
             {
-                var phien = DateTime.Now.Hour < 18 ? DateTime.Now.AddDays(-1).Date : DateTime.Now.Date;
+                var phien = DateTime.Now.Hour < EndHour ? DateTime.Now.AddDays(-1).Date : DateTime.Now.Date;
                 var tran = _unitOfWork.Transactions.GetAllTransactionsByDate(userId, phien).Where(x => x.WeightRecorderId == null).FirstOrDefault();
                 if (tran != null)
                 {
@@ -65,7 +65,7 @@ namespace TnR_SS.Domain.Supervisor
                     try
                     {
                         // get closest date tran
-                        var phien = DateTime.Now.Hour < 18 ? DateTime.Now.AddDays(-1).Date : DateTime.Now.Date;
+                        var phien = DateTime.Now.Hour < EndHour ? DateTime.Now.AddDays(-1).Date : DateTime.Now.Date;
                         var closestDate = _unitOfWork.Transactions.GetAll(x => x.WeightRecorderId == wcId && x.Date.Date < phien.Date).OrderByDescending(x => x.Date).Select(x => x.Date).FirstOrDefault();
                         var listCloestTran = _unitOfWork.Transactions.GetAllTransactionsByDate(wcId, closestDate);
                         // check close last phiên
@@ -110,7 +110,7 @@ namespace TnR_SS.Domain.Supervisor
             var phien = date.Date;
             if (date.Date == DateTime.Now.Date)
             {
-                phien = DateTime.Now.Hour < 18 ? DateTime.Now.AddDays(-1).Date : DateTime.Now.Date;
+                phien = DateTime.Now.Hour < EndHour ? DateTime.Now.AddDays(-1).Date : DateTime.Now.Date;
             }
 
             var listTran = _unitOfWork.Transactions.GetAllTransactionsByDate(userId, phien);
