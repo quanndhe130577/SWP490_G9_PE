@@ -335,18 +335,23 @@ namespace TnR_SS.Domain.Supervisor
                                 purchase.TraderID = userId;
                                 purchase.Date = nextPhien;
                                 purchase.isCompleted = PurchaseStatus.Remain;
+                                purchase.isPaid = true;
 
                                 await _unitOfWork.Purchases.CreateAsync(purchase);
                                 await _unitOfWork.SaveChangeAsync();
 
                                 foreach (var item in chotSoApi.ListRemainFish)
                                 {
-                                    PurchaseDetail purchaseDetail = new PurchaseDetail();
-                                    purchaseDetail.FishTypeID = item.ID;
-                                    purchaseDetail.Weight = item.Weight;
-                                    purchaseDetail.PurchaseId = purchase.ID;
+                                    if (item.Weight > 0)
+                                    {
+                                        PurchaseDetail purchaseDetail = new PurchaseDetail();
+                                        purchaseDetail.FishTypeID = item.ID;
+                                        purchaseDetail.Weight = item.Weight;
+                                        purchaseDetail.PurchaseId = purchase.ID;
+                                        purchaseDetail.PurchaseId = purchase.ID;
 
-                                    await _unitOfWork.PurchaseDetails.CreateAsync(purchaseDetail);
+                                        await _unitOfWork.PurchaseDetails.CreateAsync(purchaseDetail);
+                                    }
                                 }
 
                                 await _unitOfWork.SaveChangeAsync();

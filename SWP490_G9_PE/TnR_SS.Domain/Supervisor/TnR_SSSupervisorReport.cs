@@ -34,17 +34,17 @@ namespace TnR_SS.Domain.Supervisor
             // Purchase
             if (isTrader)
             {
-                var listPurchase = _unitOfWork.Purchases.GetAll(x => x.Date.Date == date.Date && x.TraderID == userId);
+                var listPurchase = _unitOfWork.Purchases.GetAll(x => x.Date.Date == date.Date && x.TraderID == userId && x.isCompleted != PurchaseStatus.Remain);
                 if (listPurchase == null || listPurchase.Count() == 0)
                 {
-                    closestDate = _unitOfWork.Purchases.GetAll(x => x.Date.Date <= date.Date).Select(x => x.Date.Date).OrderByDescending(x => x.Date).FirstOrDefault();
-                    listPurchase = _unitOfWork.Purchases.GetAll(x => x.Date.Date == closestDate.Date && x.TraderID == userId);
+                    closestDate = _unitOfWork.Purchases.GetAll(x => x.Date.Date <= date.Date && x.isCompleted != PurchaseStatus.Remain).Select(x => x.Date.Date).OrderByDescending(x => x.Date).FirstOrDefault();
+                    listPurchase = _unitOfWork.Purchases.GetAll(x => x.Date.Date == closestDate.Date && x.TraderID == userId && x.isCompleted != PurchaseStatus.Remain);
                 }
 
                 if (listPurchase == null || listPurchase.Count() == 0)
                 {
-                    closestDate = _unitOfWork.Purchases.GetAll(x => x.Date.Date >= date.Date).Select(x => x.Date.Date).OrderBy(x => x.Date).FirstOrDefault();
-                    listPurchase = _unitOfWork.Purchases.GetAll(x => x.Date.Date == closestDate.Date && x.TraderID == userId);
+                    closestDate = _unitOfWork.Purchases.GetAll(x => x.Date.Date >= date.Date && x.isCompleted != PurchaseStatus.Remain).Select(x => x.Date.Date).OrderBy(x => x.Date).FirstOrDefault();
+                    listPurchase = _unitOfWork.Purchases.GetAll(x => x.Date.Date == closestDate.Date && x.TraderID == userId && x.isCompleted != PurchaseStatus.Remain);
                 }
 
                 if (listPurchase == null || listPurchase.Count() == 0)
@@ -372,7 +372,7 @@ namespace TnR_SS.Domain.Supervisor
             double totalOutcome = 0;
             if (role.Contains(RoleName.Trader))
             {
-                var listPurchase = _unitOfWork.Purchases.GetAll(x => x.TraderID == userId && x.Date.Date == date);
+                var listPurchase = _unitOfWork.Purchases.GetAll(x => x.TraderID == userId && x.Date.Date == date && x.isCompleted != PurchaseStatus.Remain);
                 foreach (var purchase in listPurchase)
                 {
                     /* if (purchase.isCompleted == PurchaseStatus.Completed)

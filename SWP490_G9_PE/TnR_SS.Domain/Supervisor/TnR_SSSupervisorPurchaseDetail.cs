@@ -184,13 +184,16 @@ namespace TnR_SS.Domain.Supervisor
                 {
                     PurchaseDetailResModel data = _mapper.Map<PurchaseDetail, PurchaseDetailResModel>(item);
                     data.Basket = _mapper.Map<Basket, BasketApiModel>(await _unitOfWork.Baskets.FindAsync(item.BasketId));
-                    if(data.Basket == null)
+                    if (data.Basket == null)
                     {
-                        data.Basket = new BasketApiModel();
+                        data.Basket = new BasketApiModel()
+                        {
+                            Type = "Loại"
+                        };
                     }
 
                     data.FishType = _mapper.Map<FishType, FishTypeApiModel>(await _unitOfWork.FishTypes.FindAsync(item.FishTypeID));
-                    data.Price = 0;/* GetPurchaseDetailPrice(data.FishType.Price, data.Basket != null ? data.Basket.Weight : 0, data.Weight);*/
+                    data.Price = GetPurchaseDetailPrice(data.FishType.Price, data.Basket != null ? data.Basket.Weight : 0, data.Weight);
                     data.ListDrum = GetListDrumByPurchaseDetail(item);
                     if (data.ListDrum.Count > 0)
                     {
