@@ -65,7 +65,7 @@ namespace TnR_SS
                 options.AddDefaultPolicy(
                     builder =>
                     {
-                        builder.WithOrigins("http://localhost:3010", "http://localhost:3000", "https://tnrss.herokuapp.com", "https://2b35ec15ffaf.ngrok.io")
+                        builder.WithOrigins("http://localhost:3010", "http://localhost:3000", "https://tnrss.herokuapp.com")
                             .AllowCredentials()
                             .AllowAnyMethod()
                             .AllowAnyHeader();

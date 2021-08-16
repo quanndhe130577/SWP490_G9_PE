@@ -25,17 +25,20 @@ namespace TnR_SS.Domain.ApiModels.ReportModel
 
     public class ReportRemainModal
     {
-        public SummaryRemainModal SummaryRemainDetail { get; set; }
+        public double TotalWeight { get; set; }
+        public double TotalMoney { get; set; }
+        public List<SummaryFishTypePurchaseModel> RemainDetails { get; set; } = new List<SummaryFishTypePurchaseModel>();
+        /*public SummaryRemainModal SummaryRemainDetail { get; set; }
         public double SummaryWeight { get; set; }
-        public double SummaryMoney { get; set; }
+        public double SummaryMoney { get; set; }*/
     }
 
-    public class SummaryRemainModal
+    /*public class SummaryRemainModal
     {
         public double TotalWeight { get; set; }
         public double TotalMoney { get; set; }
         public List<SummaryFishTypePurchaseModel> RemainDetails { get; set; } = new List<SummaryFishTypePurchaseModel>();
-    }
+    }*/
 
     public class ReportPurchaseModal
     {

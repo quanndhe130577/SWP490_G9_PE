@@ -245,7 +245,7 @@ namespace TnR_SS.Domain.Supervisor
             var listRemain = _unitOfWork.Purchases.GetAll(x => x.Date.Date == date.Date.AddDays(1) && x.isCompleted == PurchaseStatus.Remain);
             foreach (var item in listRemain)
             {
-                SummaryRemainModal summary = new SummaryRemainModal();
+                //SummaryRemainModal summary = new SummaryRemainModal();
 
                 var listPD = _unitOfWork.PurchaseDetails.GetAll(x => x.PurchaseId == item.ID);
                 var listFishTypeId = listPD.Select(x => x.FishTypeID).Distinct();
@@ -259,17 +259,19 @@ namespace TnR_SS.Domain.Supervisor
                     pdM.Weight = _unitOfWork.FishTypes.GetTotalWeightOfFishType(fishTypeId);
                     pdM.Price = fishType.Price * pdM.Weight;
 
-                    summary.TotalWeight += pdM.Weight;
-                    summary.TotalMoney += pdM.Price;
+                    /*summary.TotalWeight += pdM.Weight;
+                    summary.TotalMoney += pdM.Price;*/
+                    reportApiModel.RemainTotal.TotalWeight += pdM.Weight;
+                    reportApiModel.RemainTotal.TotalMoney += pdM.Price;
 
-                    summary.RemainDetails.Add(pdM);
+                    reportApiModel.RemainTotal.RemainDetails.Add(pdM);
                 }
 
-                reportApiModel.RemainTotal.SummaryRemainDetail = summary;
+                //reportApiModel.RemainTotal.SummaryRemainDetail = summary;
             }
 
-            reportApiModel.RemainTotal.SummaryWeight = reportApiModel.RemainTotal.SummaryRemainDetail.TotalWeight;
-            reportApiModel.RemainTotal.SummaryMoney = reportApiModel.RemainTotal.SummaryRemainDetail.TotalMoney;
+            /*reportApiModel.RemainTotal.SummaryWeight = reportApiModel.RemainTotal.SummaryRemainDetail.TotalWeight;
+            reportApiModel.RemainTotal.SummaryMoney = reportApiModel.RemainTotal.SummaryRemainDetail.TotalMoney;*/
 
             // Cost Incurred
             var listCI = _unitOfWork.CostIncurreds.GetAll(x => x.UserId == userId && x.TypeOfCost == "day" && x.Date.Date == closestDate.Date);
