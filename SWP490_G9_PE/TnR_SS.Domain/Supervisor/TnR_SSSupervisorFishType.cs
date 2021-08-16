@@ -120,6 +120,10 @@ namespace TnR_SS.Domain.Supervisor
                     newFish.RealWeight = newFish.RemainWeight;
                 }
 
+                if (newFish.RealWeight < 0)
+                {
+                    newFish.RealWeight = 0;
+                }
 
                 //newFish.PondOwner = _mapper.Map<PondOwner, PondOwnerApiModel>(await _unitOfWork.PondOwners.FindAsync(newFish.PondOwnerID));
                 list.Add(newFish);
