@@ -42,6 +42,7 @@ namespace TnR_SS.API.Controllers
             var trader = await _tnrssSupervisor.FindTraderByPhoneAsync(phoneNumber);
             return new ResponseBuilder<FindTraderByPhoneApiModel>().Success("Tìm thương lái thành công").WithData(trader).ResponseModel;
         }
+
         [Authorize(Roles = RoleName.WeightRecorder)]
         [HttpGet("wc/get-all-trader")]
         public async Task<ResponseModel> GetTraders()
@@ -50,6 +51,16 @@ namespace TnR_SS.API.Controllers
             var listTrader = await _tnrssSupervisor.FindTradersOfWeightRecorder(weightRecorderId);
             return new ResponseBuilder<List<FindTraderByPhoneApiModel>>().Success("Lấy thông tin thương lái thành công").WithData(listTrader).ResponseModel;
         }
+
+        [Authorize(Roles = RoleName.WeightRecorder)]
+        [HttpGet("wc/get-all-trader-for-list")]
+        public async Task<ResponseModel> GetTradersForList()
+        {
+            var weightRecorderId = TokenManagement.GetUserIdInToken(HttpContext);
+            var listTrader = await _tnrssSupervisor.FindTradersOfWeightRecorderForList(weightRecorderId);
+            return new ResponseBuilder<List<FindTraderByPhoneApiModel>>().Success("Lấy thông tin thương lái thành công").WithData(listTrader).ResponseModel;
+        }
+
         [Authorize(Roles = RoleName.WeightRecorder)]
         [HttpPost("wc/add-trader")]
         public async Task<ResponseModel> AddTrader(UserIdModel TraderIdModel)

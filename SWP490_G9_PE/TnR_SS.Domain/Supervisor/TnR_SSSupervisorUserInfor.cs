@@ -178,6 +178,20 @@ namespace TnR_SS.Domain.Supervisor
             return list;
         }
 
+        public async Task<List<FindTraderByPhoneApiModel>> FindTradersOfWeightRecorderForList(int weightRecorderId)
+        {
+            List<FindTraderByPhoneApiModel> list = new List<FindTraderByPhoneApiModel>();
+            var listTraderOfWR = _unitOfWork.TraderOfWeightRecorders.GetAll(x => x.WeightRecorderId == weightRecorderId).ToList();
+            foreach (var item in listTraderOfWR)
+            {
+                FindTraderByPhoneApiModel data = _mapper.Map<UserInfor, FindTraderByPhoneApiModel>(await _unitOfWork.UserInfors.FindAsync(item.TraderId));
+                data.IsAccepted = item.IsAccepted;
+                list.Add(data);
+            }
+
+            return list;
+        }
+
         public async Task WeightRecorderAddTrader(int traderId, int weightRecorderId)
         {
             var traderList = await _unitOfWork.UserInfors.GetUserByRoleAsync(RoleName.Trader);
