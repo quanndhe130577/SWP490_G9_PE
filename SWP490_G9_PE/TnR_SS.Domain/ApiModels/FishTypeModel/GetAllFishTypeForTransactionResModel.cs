@@ -14,7 +14,7 @@ namespace TnR_SS.Domain.ApiModels.FishTypeModel
         public float MinWeight { get; set; }
         public float MaxWeight { get; set; }
         public float RemainWeight { get; set; }
-        public float Weight { get; set; } // real remain weight
+        public float RealWeight { get; set; } // real remain weight
         public DateTime Date { get; set; }
         public double Price { get; set; }
         public double TransactionPrice { get; set; }

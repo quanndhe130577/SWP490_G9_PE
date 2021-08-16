@@ -365,11 +365,11 @@ namespace TnR_SS.Domain.Supervisor
                                     await _unitOfWork.FishTypes.CreateAsync(newFish);
                                     await _unitOfWork.SaveChangeAsync();
 
-                                    if (item.Weight > 0)
+                                    if (item.RealWeight > 0)
                                     {
                                         PurchaseDetail purchaseDetail = new PurchaseDetail();
                                         purchaseDetail.FishTypeID = newFish.ID;
-                                        purchaseDetail.Weight = item.Weight;
+                                        purchaseDetail.Weight = item.RealWeight;
                                         purchaseDetail.PurchaseId = purchase.ID;
 
                                         await _unitOfWork.PurchaseDetails.CreateAsync(purchaseDetail);

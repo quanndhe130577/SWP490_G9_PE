@@ -88,6 +88,8 @@ namespace TnR_SS.Domain.Supervisor
             foreach (var type in listType)
             {
                 GetAllFishTypeForTransactionResModel newFish = _mapper.Map<FishType, GetAllFishTypeForTransactionResModel>(type);
+                var rs1 = _unitOfWork.FishTypes.GetTotalWeightOfFishType(type.ID);
+                var rs2 = _unitOfWork.FishTypes.GetSellWeightOfFishType(type.ID);
                 newFish.RemainWeight = (float)(_unitOfWork.FishTypes.GetTotalWeightOfFishType(type.ID) - _unitOfWork.FishTypes.GetSellWeightOfFishType(type.ID));
                 var listRemainFish = _unitOfWork.FishTypes.GetListFishTypeRemainByDay(phien.AddDays(1), traderId.Value).Where(x => x.FishName == type.FishName).FirstOrDefault();
                 if (listRemainFish != null)
@@ -95,16 +97,16 @@ namespace TnR_SS.Domain.Supervisor
                     var purchaseDetail = _unitOfWork.PurchaseDetails.GetAll(x => x.FishTypeID == listRemainFish.ID).FirstOrDefault();
                     if (purchaseDetail != null)
                     {
-                        newFish.Weight = (float)purchaseDetail.Weight;
+                        newFish.RealWeight = (float)purchaseDetail.Weight;
                     }
                     else
                     {
-                        newFish.Weight = newFish.RemainWeight;
+                        newFish.RealWeight = newFish.RemainWeight;
                     }
                 }
                 else
                 {
-                    newFish.Weight = newFish.RemainWeight;
+                    newFish.RealWeight = newFish.RemainWeight;
                 }
 
 

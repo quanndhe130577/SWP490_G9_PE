@@ -49,17 +49,25 @@ namespace TnR_SS.DataEFCore.Repositories
 
         public double GetTotalWeightOfFishType(int fishTypeId)
         {
-            return _context.PurchaseDetails.Where(x => x.FishTypeID == fishTypeId)
-                .Join(
-                    _context.Baskets,
-                    pd => pd.BasketId,
-                    bk => bk.ID,
-                    (pd, bk) => new
+            return (from p in _context.PurchaseDetails.Where(x => x.FishTypeID == fishTypeId)
+                    from bk in _context.Baskets.Where(x => x.ID == p.BasketId).DefaultIfEmpty()
+                    select new
                     {
-                        realWeight = pd.Weight - bk.Weight
-                    }
-                )
-                .Sum(x => x.realWeight);
+                        purchaseDetail = p,
+                        basket = bk
+                    }).Sum(x => x.basket != null ? x.purchaseDetail.Weight - x.basket.Weight : x.purchaseDetail.Weight);
+
+            /* return _context.PurchaseDetails.Where(x => x.FishTypeID == fishTypeId)
+                 .Join(
+                     _context.Baskets.DefaultIfEmpty(),
+                     pd => pd.BasketId,
+                     bk => bk.ID,
+                     (pd, bk) => new
+                     {
+                         realWeight = bk != null ? pd.Weight - bk.Weight : pd.Weight
+                     }
+                 )
+                 .Sum(x => x.realWeight);*/
         }
 
         public double GetSellWeightOfFishType(int fishTypeId)
@@ -113,11 +121,11 @@ namespace TnR_SS.DataEFCore.Repositories
             List<int> listPurchaseId = new();
             if (userRole.Contains(RoleName.Trader))
             {
-                listPurchaseId = _context.Purchases.Where(x => x.TraderID == userId && x.Date.Date == date.Date && x.isCompleted == PurchaseStatus.Completed).Select(x => x.ID).ToList();
+                listPurchaseId = _context.Purchases.Where(x => x.TraderID == userId && x.Date.Date == date.Date && x.isCompleted != PurchaseStatus.Pending).Select(x => x.ID).ToList();
             }
             else if (userRole.Contains(RoleName.WeightRecorder) && traderId != null)
             {
-                listPurchaseId = _context.Purchases.Where(x => x.TraderID == traderId && x.Date.Date == date.Date && x.isCompleted == PurchaseStatus.Completed).Select(x => x.ID).ToList();
+                listPurchaseId = _context.Purchases.Where(x => x.TraderID == traderId && x.Date.Date == date.Date && x.isCompleted != PurchaseStatus.Pending).Select(x => x.ID).ToList();
             }
 
             return GetAllInUseByPurchaseIds(listPurchaseId);

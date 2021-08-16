@@ -17,6 +17,6 @@ namespace TnR_SS.Domain.ApiModels.TransactionModel
     public class RemainFish
     {
         public int ID { get; set; }
-        public double Weight { get; set; }
+        public double RealWeight { get; set; }
     }
 }
