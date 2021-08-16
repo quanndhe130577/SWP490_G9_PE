@@ -167,7 +167,7 @@ namespace TnR_SS.Domain.Supervisor
         public async Task<List<FindTraderByPhoneApiModel>> FindTradersOfWeightRecorder(int weightRecorderId)
         {
             List<FindTraderByPhoneApiModel> list = new List<FindTraderByPhoneApiModel>();
-            var listTraderOfWR = _unitOfWork.TraderOfWeightRecorders.GetAll(x => x.WeightRecorderId == weightRecorderId && x.IsAccepted).ToList();
+            var listTraderOfWR = _unitOfWork.TraderOfWeightRecorders.GetAll(x => x.WeightRecorderId == weightRecorderId).ToList();
             foreach (var item in listTraderOfWR)
             {
                 FindTraderByPhoneApiModel data = _mapper.Map<UserInfor, FindTraderByPhoneApiModel>(await _unitOfWork.UserInfors.FindAsync(item.TraderId));
@@ -224,6 +224,7 @@ namespace TnR_SS.Domain.Supervisor
                     WrId = traderOfWeightRecorder.WeightRecorderId,
                     Name = wr.FirstName + " " + wr.LastName,
                     PhoneNumber = wr.PhoneNumber,
+                    Address = wr.Address,
                     IsAccepted = traderOfWeightRecorder.IsAccepted,
                     CanDelete = count == 0,
                     IsDeleted = false

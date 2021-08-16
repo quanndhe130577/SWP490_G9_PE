@@ -15,6 +15,7 @@ namespace TnR_SS.Domain.ApiModels.UserInforModel
         [MinLength(10)]
         public string PhoneNumber { get; set; }
         public string Avatar { get; set; }
+        public string Address { get; set; }
 
         [Required]
         public string FirstName { get; set; }

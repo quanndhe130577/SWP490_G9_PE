@@ -53,6 +53,7 @@ namespace TnR_SS.DataEFCore.Configurations
 
             entity.Property(e => e.UpdatedAt)
                 .IsRequired();
+            entity.Property(e => e.Address);
         }
     }
 }

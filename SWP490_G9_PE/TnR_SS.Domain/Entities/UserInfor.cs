@@ -22,6 +22,7 @@ namespace TnR_SS.Domain.Entities
         public DateTime Dob { get; set; }
         public string IdentifyCode { get; set; }
         public string Avatar { get; set; }
+        public string Address { get; set; }
 
         [Required]
         public DateTime CreatedAt { get; set; }
