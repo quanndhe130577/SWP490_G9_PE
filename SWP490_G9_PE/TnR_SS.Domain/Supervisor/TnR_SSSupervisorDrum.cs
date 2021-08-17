@@ -53,7 +53,6 @@ namespace TnR_SS.Domain.Supervisor
             {
                 throw new Exception("Thông tin lồ không chính xác");
             }
-
         }
 
         public List<DrumApiModel> GetAllDrumByTraderId(int traderId)
@@ -65,9 +64,15 @@ namespace TnR_SS.Domain.Supervisor
         {
             var drumEdit = await _unitOfWork.Drums.FindAsync(drum.ID);
             drumEdit = _mapper.Map<DrumApiModel, Drum>(drum, drumEdit);
-            var truck = _unitOfWork.Trucks.GetAll(x => x.TraderID == userId).Select(x => x.ID);
-            if (truck.Contains(drumEdit.TruckID))
+            var listTruckId = _unitOfWork.Trucks.GetAll(x => x.TraderID == userId).Select(x => x.ID);
+            if (listTruckId.Contains(drumEdit.TruckID))
             {
+                var drumCheck = _unitOfWork.Drums.GetAllByTraderId(userId).Where(x => x.Number == drum.Number).FirstOrDefault();
+                if (drumCheck != null && drumCheck.ID != drum.ID)
+                {
+                    throw new Exception("Xe tải được chọn đã có lồ với tên " + drum.Number);
+                }
+
                 _unitOfWork.Drums.Update(drumEdit);
                 await _unitOfWork.SaveChangeAsync();
             }
