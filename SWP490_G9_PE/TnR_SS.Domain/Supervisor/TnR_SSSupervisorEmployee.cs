@@ -61,9 +61,9 @@ namespace TnR_SS.Domain.Supervisor
         {
             Employee obj = _mapper.Map<EmployeeApiModel, Employee>(employee);
             obj.TraderId = traderId;
-            if (!CheckEmployeeExist(traderId, employee))
+            if (CheckEmployeeExist(traderId, employee))
             {
-                throw new Exception("Nhân viên đã tồn tại");
+                throw new Exception("Đã tồn tại nhân viên với số điện thoại này");
             }
             else if (obj.DOB > DateTime.Now)
             {
@@ -85,7 +85,7 @@ namespace TnR_SS.Domain.Supervisor
             {
                 if (CheckEmployeeExist(traderId, employee))
                 {
-                    throw new Exception("Nhân viên đã tồn tại");
+                    throw new Exception("Đã tồn tại nhân viên với số điện thoại này");
                 }
                 else if (empEdit.DOB > DateTime.Now)
                 {
@@ -137,8 +137,8 @@ namespace TnR_SS.Domain.Supervisor
         public bool CheckEmployeeExist(int traderId, EmployeeApiModel employee)
         {
             var listEmp = _unitOfWork.Employees.GetAllEmployeeByTraderId(traderId);
-            var flag = listEmp.Where(x => x.PhoneNumber == employee.PhoneNumber).Count() == 0;
-            if (flag)
+            var flag = listEmp.Where(x => x.PhoneNumber == employee.PhoneNumber).FirstOrDefault();
+            if (flag != null && (flag.ID != employee.ID || employee.ID == 0))
             {
                 return true;
             }
