@@ -26,10 +26,10 @@ namespace TnR_SS.API.Middleware.ErrorHandle
 
                     if (!TokenManagement.CheckUserIdFromToken(context, id))
                     {
-                        throw new Exception("Access denied");
+                        throw new Exception("Truy cập bị từ chối");
                     }
                 }
-                    
+
                 await _next(context);
             }
             catch (Exception error)
@@ -48,7 +48,8 @@ namespace TnR_SS.API.Middleware.ErrorHandle
                         response.StatusCode = (int)HttpStatusCode.InternalServerError;
                         break;
                 }*/
-                ResponseBuilder rpb = new ResponseBuilder().Error(error?.InnerException == null ? error?.Message : error?.InnerException.Message);
+                //ResponseBuilder rpb = new ResponseBuilder().Error(error?.InnerException == null ? error?.Message : error?.InnerException.Message);
+                ResponseBuilder rpb = new ResponseBuilder().Error(error?.InnerException == null ? error?.Message : "Lỗi hệ thống, vui lòng thử lại sau !!!");
                 //var result = JsonSerializer.Serialize(rpb.ResponseModel);
                 var result = JsonConvert.SerializeObject(rpb.ResponseModel);
                 await response.WriteAsync(result);

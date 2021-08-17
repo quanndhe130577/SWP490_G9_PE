@@ -45,7 +45,7 @@ namespace TnR_SS.Domain.Supervisor
             }
 
             var check = _unitOfWork.Buyers.GetAll(x => x.PhoneNumber == model.PhoneNumber).FirstOrDefault();
-            if (check.ID == buyer.ID)
+            if (check != null && check.ID != buyer.ID)
             {
                 throw new Exception("Người mua sử dụng số điện thoại này đã tồn tại !!!");
             }
