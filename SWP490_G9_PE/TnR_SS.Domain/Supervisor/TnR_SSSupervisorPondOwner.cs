@@ -35,6 +35,12 @@ namespace TnR_SS.Domain.Supervisor
 
         public async Task<int> EditPondOwner(PondOwnerApiModel pondOwnerModel)
         {
+            var pO = _unitOfWork.PondOwners.GetAllByTraderId(pondOwnerModel.TraderID).Where(x => x.PhoneNumber == pondOwnerModel.PhoneNumber).FirstOrDefault();
+            if (pO != null && pO.ID != pondOwnerModel.ID)
+            {
+                throw new Exception("Đã tồn tại chủ ao với số điện thoại này !!!");
+            }
+
             PondOwner pondOwner = await _unitOfWork.PondOwners.FindAsync(pondOwnerModel.ID);
             pondOwner.Name = pondOwnerModel.Name;
             pondOwner.Address = pondOwnerModel.Address;
