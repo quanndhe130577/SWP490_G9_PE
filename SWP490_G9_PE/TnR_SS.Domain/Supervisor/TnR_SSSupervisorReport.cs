@@ -55,7 +55,7 @@ namespace TnR_SS.Domain.Supervisor
 
                 if (listPurchase == null || listPurchase.Count() == 0)
                 {
-                    throw new Exception("Bạn chưa mua bất kỳ ngày nào !!");
+                    throw new Exception("Ngày được chọn không có dữ liệu !!");
                 }
 
                 reportApiModel.PurchaseTotal = new ReportPurchaseModal();
