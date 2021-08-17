@@ -51,7 +51,6 @@ namespace TnR_SS.Domain.Supervisor
 
                 await CreateTransactionAsync(userId, null, phien);
             }
-
         }
 
         public async Task CreateListTransactionAsync(CreateListTransactionReqModel apiModel, int wcId)
@@ -129,7 +128,9 @@ namespace TnR_SS.Domain.Supervisor
                 list.Add(tran);
             }
 
-            return list.OrderBy(x => x.WeightRecorder).ThenByDescending(x => x.Status).ToList();
+            var rs = list.OrderBy(x => x.WeightRecorder).ThenByDescending(x => x.Status).ToList();
+
+            return rs;
         }
 
         private async Task<List<TransactionDetailInformation>> GetListTransactionDetailModelAsync(Transaction tran)

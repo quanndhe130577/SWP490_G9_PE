@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TnR_SS.Domain.ApiModels.UserInforModel
 {
-    public class UserInformation
+    public class UserInformation : IComparable
     {
         public int ID { get; set; }
 
@@ -21,5 +21,12 @@ namespace TnR_SS.Domain.ApiModels.UserInforModel
 
         [Required]
         public string LastName { get; set; }
+
+        public int CompareTo(object obj)
+        {
+            var newObj = (UserInformation)obj;
+
+            return this.LastName.CompareTo(newObj.LastName);
+        }
     }
 }

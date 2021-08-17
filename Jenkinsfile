@@ -31,7 +31,7 @@ pipeline {
         // }
         stage('Publish') {
             steps {
-                bat 'dotnet publish SWP490_G9_PE/TnRSS.sln -p:PublishProfile=FolderProfile'
+                bat 'dotnet publish -c Release SWP490_G9_PE/TnRSS.sln -p:PublishProfile=FolderProfile'
             }
         }    
     }
