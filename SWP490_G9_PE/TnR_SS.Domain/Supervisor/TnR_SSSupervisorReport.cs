@@ -242,7 +242,7 @@ namespace TnR_SS.Domain.Supervisor
 
             // Remain
             reportApiModel.RemainTotal = new ReportRemainModal();
-            var listRemain = _unitOfWork.Purchases.GetAll(x => x.Date.Date == date.Date.AddDays(1) && x.isCompleted == PurchaseStatus.Remain);
+            var listRemain = _unitOfWork.Purchases.GetAll(x => x.Date.Date == date.Date.AddDays(1) && x.isCompleted == PurchaseStatus.Remain && x.TraderID == userId);
             foreach (var item in listRemain)
             {
                 //SummaryRemainModal summary = new SummaryRemainModal();
