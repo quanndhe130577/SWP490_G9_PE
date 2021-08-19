@@ -23,6 +23,8 @@ namespace TnR_SS.Domain.ApiModels.EmployeeModel
 
         public double? AdvanceSalary { get; set; }
 
+        public bool Leaved { get; set; }
+
     }
 
 }

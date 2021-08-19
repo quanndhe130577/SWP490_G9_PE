@@ -12,6 +12,8 @@ namespace TnR_SS.Domain.ApiModels.DebtModel
         public string Trader { get; set; }
 
         public string Partner { get; set; }
+        public string FishName { get; set; }
+        public double Weight { get; set; }
 
         public double Amount { get; set; }
 

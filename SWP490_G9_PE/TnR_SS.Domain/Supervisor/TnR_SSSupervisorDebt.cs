@@ -94,14 +94,14 @@ namespace TnR_SS.Domain.Supervisor
             List<TransactionDetail> transactionDetails = new List<TransactionDetail>();
             if (user.RoleName == "Trader")
             {
-                foreach (Transaction transaction in _unitOfWork.Transactions.GetAll(filter: t => t.TraderId == id))
+                foreach (Transaction transaction in _unitOfWork.Transactions.GetAll(filter: t => t.TraderId == id, orderBy: ps => ps.OrderByDescending(p => p.Date)))
                 {
                     transactionDetails.AddRange(_unitOfWork.TransactionDetails.GetAll(td => td.TransId == transaction.ID && td.IsPaid == false));
                 }
             }
             else
             {
-                foreach (Transaction transaction in _unitOfWork.Transactions.GetAll(filter: t => t.WeightRecorderId == id))
+                foreach (Transaction transaction in _unitOfWork.Transactions.GetAll(filter: t => t.WeightRecorderId == id, orderBy: ps => ps.OrderByDescending(p => p.Date)))
                 {
                     transactionDetails.AddRange(_unitOfWork.TransactionDetails.GetAll(td => td.TransId == transaction.ID && td.IsPaid == false));
                 }
@@ -110,11 +110,14 @@ namespace TnR_SS.Domain.Supervisor
             foreach (TransactionDetail transactionDetail in transactionDetails)
             {
                 Buyer buyer = await _unitOfWork.Buyers.FindAsync(transactionDetail.BuyerId);
+                FishType fishType = await _unitOfWork.FishTypes.FindAsync(transactionDetail.FishTypeId);
                 Transaction transaction = await _unitOfWork.Transactions.FindAsync(transactionDetail.TransId);
                 debtTraderApiModels.Add(new DebtTraderApiModel()
                 {
                     ID = transactionDetail.ID,
                     Partner = buyer == null ? null : buyer.Name,
+                    FishName = fishType == null ? null : fishType.FishName,
+                    Weight = transactionDetail.Weight,
                     Trader = user.FirstName + " " + user.LastName,
                     Amount = transactionDetail.SellPrice * transactionDetail.Weight,
                     Date = transaction.Date
@@ -155,7 +158,8 @@ namespace TnR_SS.Domain.Supervisor
         {
             UserResModel trader = await GetUserByIdAsync(id);
             List<DebtTraderApiModel> debtTraderApiModels = new List<DebtTraderApiModel>();
-            foreach (Purchase purchase in _unitOfWork.Purchases.GetAll(filter: p => p.TraderID == id && p.isPaid == false && p.isCompleted == PurchaseStatus.Completed))
+            foreach (Purchase purchase in _unitOfWork.Purchases.GetAll(filter: p => p.TraderID == id && p.isPaid == false && p.isCompleted == PurchaseStatus.Completed,
+              orderBy: ps => ps.OrderByDescending(p => p.Date)))
             {
                 PondOwner pondOwner = await _unitOfWork.PondOwners.FindAsync(purchase.PondOwnerID);
                 double amount = await CalculatePayForPondOwnerAsync(purchase.ID, purchase.Commission);

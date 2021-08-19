@@ -68,7 +68,8 @@ namespace TnR_SS.DataEFCore.Repositories
                         Punish = historySalaryEmps.Count > 0 ? historySalaryEmps[0].Punish : 0,
                         Salary = historySalaryEmps.Count > 0 ? historySalaryEmps[0].Salary : null,
                         Status = status,
-                        AdvanceSalary = GetEmployeeAdvanceSalary(employee.ID, date)
+                        AdvanceSalary = GetEmployeeAdvanceSalary(employee.ID, date),
+                        Leaved = DateTime.Now > employee.EndDate
                     });
                 }
                 else
@@ -80,7 +81,8 @@ namespace TnR_SS.DataEFCore.Repositories
                         BaseSalary = null,
                         Salary = historySalaryEmps.Count > 0 ? historySalaryEmps[0].Salary : null,
                         Status = status,
-                        AdvanceSalary = GetEmployeeAdvanceSalary(employee.ID, date)
+                        AdvanceSalary = GetEmployeeAdvanceSalary(employee.ID, date),
+                        Leaved = DateTime.Now > employee.EndDate
                     });
                 }
             }
