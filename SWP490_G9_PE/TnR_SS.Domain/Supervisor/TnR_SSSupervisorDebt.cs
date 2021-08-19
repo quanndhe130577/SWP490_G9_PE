@@ -44,7 +44,8 @@ namespace TnR_SS.Domain.Supervisor
         {
             List<DebtApiModel> list = new();
             var roleUser = await _unitOfWork.UserInfors.GetRolesAsync(userId);
-            List<TransactionDetail> listTranDe = new List<TransactionDetail>();
+            List<TransactionDetail> listTranDe = new List<TransactionDetail>();           
+
             if (roleUser.Contains(RoleName.WeightRecorder))
             {
                 listTranDe = _unitOfWork.TransactionDetails.GetAllByWcIDAndDate(userId, date).Where(x => x.IsPaid == false).ToList();
@@ -94,7 +95,7 @@ namespace TnR_SS.Domain.Supervisor
             List<TransactionDetail> transactionDetails = new List<TransactionDetail>();
             if (user.RoleName == "Trader")
             {
-                foreach (Transaction transaction in _unitOfWork.Transactions.GetAll(filter: t => t.TraderId == id, orderBy: ps => ps.OrderByDescending(p => p.Date)))
+                foreach (Transaction transaction in _unitOfWork.Transactions.GetAll(filter: t => t.TraderId == id && t.WeightRecorderId == null, orderBy: ps => ps.OrderByDescending(p => p.Date)))
                 {
                     transactionDetails.AddRange(_unitOfWork.TransactionDetails.GetAll(td => td.TransId == transaction.ID && td.IsPaid == false));
                 }
