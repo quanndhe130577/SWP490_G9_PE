@@ -87,7 +87,7 @@ namespace TnR_SS.Domain.Supervisor
             var drum = await _unitOfWork.Drums.FindAsync(drumId);
             var truck = _unitOfWork.Trucks.GetAll(x => x.TraderID == userId).Select(x => x.ID);
             var lk = _unitOfWork.LK_PurchaseDetail_Drums.GetAll(x => x.DrumID == drumId);
-            if (lk != null)
+            if (lk != null && lk.Count() != 0)
             {
                 throw new Exception("Thông tin lồ đang được sử dụng, không thể xóa !!!");
             }
