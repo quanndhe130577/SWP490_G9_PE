@@ -358,7 +358,7 @@ namespace TnR_SS.Domain.Supervisor
                                         TraderID = userId,
                                         PurchaseID = purchase.ID,
                                         FishName = oldFish.FishName /*+ "dư ngày " + curretPhien.ToString("dd/MM/yyyy")*/,
-                                        Description = oldFish.Description + " dư ngày " + curretPhien.ToString("dd/MM/yyyy"),
+                                        Description = oldFish.Description,
                                         MaxWeight = oldFish.MaxWeight,
                                         MinWeight = oldFish.MinWeight,
                                         TransactionPrice = oldFish.TransactionPrice,
