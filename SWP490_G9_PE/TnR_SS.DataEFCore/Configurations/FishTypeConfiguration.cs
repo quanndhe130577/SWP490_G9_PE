@@ -22,9 +22,6 @@ namespace TnR_SS.DataEFCore.Configurations
                 .IsRequired()
                 .HasMaxLength(50);
 
-            entity.Property(e => e.Description)
-                .HasMaxLength(50);
-
             entity.Property(e => e.MinWeight)
                 .HasMaxLength(12)
                 .IsRequired();
