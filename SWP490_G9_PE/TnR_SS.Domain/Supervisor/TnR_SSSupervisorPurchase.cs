@@ -63,7 +63,7 @@ namespace TnR_SS.Domain.Supervisor
             newPurchase.TotalWeight = GetTotalWeightPurchase(purchase);
             newPurchase.TotalAmount = await GetTotalAmountPurchaseAsync(purchase.ID);
             newPurchase.Status = purchase.isCompleted.ToString();
-            if (purchase.SentMoney >= purchase.PayForPondOwner)
+            if (purchase.isCompleted != PurchaseStatus.Pending && purchase.SentMoney >= purchase.PayForPondOwner)
             {
                 newPurchase.isPaid = true;
             }
