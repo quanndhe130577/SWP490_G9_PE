@@ -66,7 +66,7 @@ namespace TnR_SS.API.Controllers
 
         #region Update Purchase
         [HttpPost("update")]
-        public async Task<ResponseModel> Update(PurchaseApiModel data)
+        public async Task<ResponseModel> Update(UpdatePurchaseApiModel data)
         {
             var traderId = TokenManagement.GetUserIdInToken(HttpContext);
             await _tnrssSupervisor.UpdatePurchaseAsync(data, traderId);

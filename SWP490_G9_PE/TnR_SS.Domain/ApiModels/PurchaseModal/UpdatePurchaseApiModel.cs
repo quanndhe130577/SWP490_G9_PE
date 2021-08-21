@@ -8,7 +8,7 @@ using TnR_SS.Domain.Entities;
 
 namespace TnR_SS.Domain.ApiModels.PurchaseModal
 {
-    public class PurchaseApiModel
+    public class UpdatePurchaseApiModel
     {
         public int ID { get; set; }
 
@@ -19,6 +19,7 @@ namespace TnR_SS.Domain.ApiModels.PurchaseModal
 
         [Range(0.0, Double.MaxValue, ErrorMessage = "Thuộc tính {0} phải lớn hơn {1}.")]
         public double Commission { get; set; } // tiền trả cho môi giới
+        public double SentMoney { get; set; } // tiền trả cho môi giới
 
        /* [Required]
         public bool IsPaid { get; set; } = false;*/

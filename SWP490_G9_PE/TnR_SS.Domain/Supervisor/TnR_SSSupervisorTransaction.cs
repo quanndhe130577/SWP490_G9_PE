@@ -336,7 +336,7 @@ namespace TnR_SS.Domain.Supervisor
                                 purchase.TraderID = userId;
                                 purchase.Date = nextPhien;
                                 purchase.isCompleted = PurchaseStatus.Remain;
-                                purchase.isPaid = true;
+                                //purchase.isPaid = true;
 
                                 await _unitOfWork.Purchases.CreateAsync(purchase);
                                 await _unitOfWork.SaveChangeAsync();

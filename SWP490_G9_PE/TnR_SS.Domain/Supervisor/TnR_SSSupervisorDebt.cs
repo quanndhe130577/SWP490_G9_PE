@@ -22,7 +22,8 @@ namespace TnR_SS.Domain.Supervisor
             List<DebtApiModel> list = new();
 
             var listPurchase = _unitOfWork.Purchases.GetAll(x => x.TraderID == traderId)
-                .Where(x => x.isCompleted == Entities.PurchaseStatus.Completed && x.isPaid == false)
+                //.Where(x => x.isCompleted == Entities.PurchaseStatus.Completed && x.isPaid == false)
+                .Where(x => x.isCompleted == Entities.PurchaseStatus.Completed && x.SentMoney < x.PayForPondOwner)
                 .OrderByDescending(x => x.Date).ThenByDescending(x => x.ID);
             var user = await _unitOfWork.UserInfors.FindAsync(traderId);
             foreach (var purchase in listPurchase)
@@ -31,7 +32,8 @@ namespace TnR_SS.Domain.Supervisor
                 pondOwner = await _unitOfWork.PondOwners.FindAsync(purchase.PondOwnerID);
                 model.Creditors = pondOwner.Name;
                 model.Debtor = user.LastName + " " + user.FirstName;
-                model.DebtMoney = purchase.PayForPondOwner;
+                //model.DebtMoney = purchase.PayForPondOwner;
+                model.DebtMoney = purchase.PayForPondOwner - purchase.SentMoney;
                 model.Date = purchase.Date;
 
                 list.Add(model);
@@ -44,7 +46,7 @@ namespace TnR_SS.Domain.Supervisor
         {
             List<DebtApiModel> list = new();
             var roleUser = await _unitOfWork.UserInfors.GetRolesAsync(userId);
-            List<TransactionDetail> listTranDe = new List<TransactionDetail>();           
+            List<TransactionDetail> listTranDe = new List<TransactionDetail>();
 
             if (roleUser.Contains(RoleName.WeightRecorder))
             {
@@ -217,7 +219,7 @@ namespace TnR_SS.Domain.Supervisor
         {
             UserResModel trader = await GetUserByIdAsync(id);
             List<DebtTraderApiModel> debtTraderApiModels = new List<DebtTraderApiModel>();
-            foreach (Purchase purchase in _unitOfWork.Purchases.GetAll(filter: p => p.TraderID == id && p.isPaid == false && p.isCompleted == PurchaseStatus.Completed,
+            foreach (Purchase purchase in _unitOfWork.Purchases.GetAll(filter: p => p.TraderID == id && /*p.isPaid == false*/ p.SentMoney < p.PayForPondOwner && p.isCompleted == PurchaseStatus.Completed,
               orderBy: ps => ps.OrderByDescending(p => p.Date)))
             {
                 PondOwner pondOwner = await _unitOfWork.PondOwners.FindAsync(purchase.PondOwnerID);
@@ -240,7 +242,8 @@ namespace TnR_SS.Domain.Supervisor
             {
                 if (purchase.TraderID == userId)
                 {
-                    purchase.isPaid = true;
+                    //purchase.isPaid = true;
+                    purchase.SentMoney = purchase.PayForPondOwner;
                     _unitOfWork.Purchases.Update(purchase);
                     await _unitOfWork.SaveChangeAsync();
                 }

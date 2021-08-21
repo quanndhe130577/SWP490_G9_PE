@@ -100,7 +100,7 @@ namespace TnR_SS.Domain.Supervisor
         Task<PurchaseResModel> CreatePurchaseAsync(PurchaseCreateReqModel purchaseModel);
         Task<List<PurchaseResModel>> GetAllPurchaseAsync(int traderId);
         Task<PurchaseResModel> GetPurchaseByIdAsync(int purchaseId, int traderId);
-        Task UpdatePurchaseAsync(PurchaseApiModel models, int traderId);
+        Task UpdatePurchaseAsync(UpdatePurchaseApiModel models, int traderId);
         Task DeletePurchaseAsync(int purchaseId, int traderId);
         Task<PurchaseResModel> ChotSoAsync(ChotSoApiModel data, int traderId);
         Task UpdatePondOwnerInPurchaseAsync(PurchaseUpdatePondOwnerModel apiModel, int traderId);

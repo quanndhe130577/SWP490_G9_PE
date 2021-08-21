@@ -63,6 +63,10 @@ namespace TnR_SS.Domain.Supervisor
             newPurchase.TotalWeight = GetTotalWeightPurchase(purchase);
             newPurchase.TotalAmount = await GetTotalAmountPurchaseAsync(purchase.ID);
             newPurchase.Status = purchase.isCompleted.ToString();
+            if (purchase.SentMoney >= purchase.PayForPondOwner)
+            {
+                newPurchase.isPaid = true;
+            }
 
             return newPurchase;
         }
@@ -93,9 +97,9 @@ namespace TnR_SS.Domain.Supervisor
             {
                 if (purchase.isCompleted == PurchaseStatus.Completed)
                 {
-                    var countClosePurcase = _unitOfWork.ClosePurchaseDetails.GetAll(x => x.PurchaseId == purchase.ID).Count();
+                    var countClosePurchase = _unitOfWork.ClosePurchaseDetails.GetAll(x => x.PurchaseId == purchase.ID).Count();
                     var countPurchase = _unitOfWork.PurchaseDetails.GetAll(x => x.PurchaseId == purchase.ID).Count();
-                    if (countClosePurcase == 0 && countPurchase != 0)
+                    if (countClosePurchase == 0 && countPurchase != 0)
                     {
                         purchase.isCompleted = PurchaseStatus.Pending;
                         _unitOfWork.Purchases.Update(purchase);
@@ -158,7 +162,7 @@ namespace TnR_SS.Domain.Supervisor
             return newPurchase;
         }
 
-        public async Task UpdatePurchaseAsync(PurchaseApiModel model, int traderId)
+        public async Task UpdatePurchaseAsync(UpdatePurchaseApiModel model, int traderId)
         {
             var purchase = await _unitOfWork.Purchases.FindAsync(model.ID);
 
@@ -184,7 +188,7 @@ namespace TnR_SS.Domain.Supervisor
                 throw new Exception("Đơn mua với chủ ao trong ngày " + model.Date.ToString("dd/MM/yyyy") + " đã có!!!");
             }
 
-            purchase = _mapper.Map<PurchaseApiModel, Purchase>(model, purchase);
+            purchase = _mapper.Map<UpdatePurchaseApiModel, Purchase>(model, purchase);
             purchase.PayForPondOwner = await CalculatePayForPondOwnerAsync(purchase.ID, purchase.Commission);
             /*if (model.Status.Equals(PurchaseStatus.Completed.ToString(), StringComparison.InvariantCultureIgnoreCase))
             {
@@ -222,7 +226,16 @@ namespace TnR_SS.Domain.Supervisor
                         purchase.Commission = totalAmount * data.CommissionPercent / 100;
                         purchase.PayForPondOwner = totalAmount - purchase.Commission;
                         purchase.isCompleted = PurchaseStatus.Completed;
-                        purchase.isPaid = data.IsPaid;
+                        //purchase.isPaid = data.IsPaid;
+                        if (data.IsPaid)
+                        {
+                            purchase.SentMoney = purchase.PayForPondOwner;
+                        }
+                        else
+                        {
+                            purchase.SentMoney = data.SentMoney;
+                        }
+
 
                         _unitOfWork.Purchases.Update(purchase);
                         await _unitOfWork.SaveChangeAsync();

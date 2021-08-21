@@ -380,7 +380,8 @@ namespace TnR_SS.Domain.Supervisor
             // Debt
             if (isTrader)
             {
-                var listPurchase = _unitOfWork.Purchases.GetAll(x => x.TraderID == userId && !x.isPaid);
+                //var listPurchase = _unitOfWork.Purchases.GetAll(x => x.TraderID == userId && !x.isPaid);
+                var listPurchase = _unitOfWork.Purchases.GetAll(x => x.TraderID == userId && x.SentMoney < x.PayForPondOwner);
                 foreach (var purchase in listPurchase)
                 {
                     reportApiModel.SummaryDebt = await GetTotalAmountPurchaseAsync(purchase.ID);

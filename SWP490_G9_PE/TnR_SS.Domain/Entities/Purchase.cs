@@ -27,14 +27,14 @@ namespace TnR_SS.Domain.Entities
         public DateTime Date { get; set; }
         public double Commission { get; set; } // tiền trả cho môi giới
 
-        [Required]
-        public bool isPaid { get; set; } = false;
+        /*[Required]
+        public bool isPaid { get; set; } = false;*/
 
-        public double PondBackMoney { get; set; }
-
+        public double SentMoney { get; set; } // tiền đã trả trước cho chủ ao
         public PurchaseStatus isCompleted { get; set; } = PurchaseStatus.Pending; // đã chốt sổ hay chưa
 
         public int? PondOwnerID { get; set; }
+
         public PondOwner PondOwner { get; set; }
 
         [Required]

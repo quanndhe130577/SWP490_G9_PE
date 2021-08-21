@@ -148,7 +148,7 @@ namespace TnR_SS.Domain.ApiModels
             #region Purchase
             CreateMap<PurchaseCreateReqModel, Purchase>().ReverseMap();
             CreateMap<PurchaseResModel, Purchase>().ReverseMap();
-            CreateMap<PurchaseApiModel, Purchase>().ReverseMap();
+            CreateMap<UpdatePurchaseApiModel, Purchase>().ReverseMap();
             #endregion
 
             #region PondOwner

@@ -16,5 +16,6 @@ namespace TnR_SS.Domain.ApiModels.PurchaseModal
 
         [Required]
         public bool IsPaid { get; set; } = false;
+        public double SentMoney { get; set; }
     }
 }

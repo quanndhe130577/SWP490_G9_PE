@@ -25,7 +25,7 @@ namespace TnR_SS.Domain.ApiModels.PurchaseModal
 
         public double Commission { get; set; }
         public bool isPaid { get; set; } = false;
-        public double PondBackMoney { get; set; }
+        public double SentMoney { get; set; }
         /* public List<FishTypeApiModel> ListFishTypeWithPrice { get; set; }
 
          public PurchaseResModel()

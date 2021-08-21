@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TnR_SS.DataEFCore;
 
 namespace TnR_SS.DataEFCore.Migrations
 {
     [DbContext(typeof(TnR_SSContext))]
-    partial class TnR_SSContextModelSnapshot : ModelSnapshot
+    [Migration("20210821155331_addSentMoneyToPurchase")]
+    partial class addSentMoneyToPurchase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -731,6 +733,9 @@ namespace TnR_SS.DataEFCore.Migrations
                     b.Property<int>("isCompleted")
                         .HasColumnType("int");
 
+                    b.Property<bool>("isPaid")
+                        .HasColumnType("bit");
+
                     b.HasKey("ID");
 
                     b.HasIndex("PondOwnerID");
@@ -818,32 +823,32 @@ namespace TnR_SS.DataEFCore.Migrations
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "8dd75750-242a-46fd-8fbf-b6a5e695c4d0",
+                            ConcurrencyStamp = "8786af9d-e69a-4a95-bed7-26b331e7fd50",
                             CreatedAt = new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Chủ bến",
                             Name = "WeightRecorder",
                             NormalizedName = "WEIGHTRECORDER",
-                            UpdatedAt = new DateTime(2021, 8, 21, 23, 37, 21, 309, DateTimeKind.Local).AddTicks(2667)
+                            UpdatedAt = new DateTime(2021, 8, 21, 22, 53, 30, 634, DateTimeKind.Local).AddTicks(4696)
                         },
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "7f7b03f0-43b3-4bbf-9618-ae000a3042ee",
+                            ConcurrencyStamp = "c51a325a-f0e4-48e4-8bc5-f4d8a6253b24",
                             CreatedAt = new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Thương lái",
                             Name = "Trader",
                             NormalizedName = "TRADER",
-                            UpdatedAt = new DateTime(2021, 8, 21, 23, 37, 21, 311, DateTimeKind.Local).AddTicks(2210)
+                            UpdatedAt = new DateTime(2021, 8, 21, 22, 53, 30, 637, DateTimeKind.Local).AddTicks(3811)
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "a9c80ad7-0408-4717-ac29-f2368d5536c7",
+                            ConcurrencyStamp = "725d680d-d039-4b61-a1d5-a37d7ba0e9c8",
                             CreatedAt = new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DisplayName = "Admin",
                             Name = "Admin",
                             NormalizedName = "ADMIN",
-                            UpdatedAt = new DateTime(2021, 8, 21, 23, 37, 21, 311, DateTimeKind.Local).AddTicks(2255)
+                            UpdatedAt = new DateTime(2021, 8, 21, 22, 53, 30, 637, DateTimeKind.Local).AddTicks(3880)
                         });
                 });
 
