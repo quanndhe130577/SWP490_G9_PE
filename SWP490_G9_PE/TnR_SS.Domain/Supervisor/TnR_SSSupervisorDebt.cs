@@ -92,18 +92,33 @@ namespace TnR_SS.Domain.Supervisor
         {
             UserResModel user = await GetUserByIdAsync(id);
             List<TransactionDetail> transactionDetails = new List<TransactionDetail>();
+            List<CloseTransactionDetail> closeTransactionDetails = new List<CloseTransactionDetail>();
             if (user.RoleName == "Trader")
             {
                 foreach (Transaction transaction in _unitOfWork.Transactions.GetAll(filter: t => t.TraderId == id, orderBy: ps => ps.OrderByDescending(p => p.Date)))
                 {
-                    transactionDetails.AddRange(_unitOfWork.TransactionDetails.GetAll(td => td.TransId == transaction.ID && td.IsPaid == false));
+                    if (transaction.isCompleted == TransactionStatus.Completed)
+                    {
+                        closeTransactionDetails.AddRange(_unitOfWork.CloseTransactionDetails.GetAll(td => td.TransactionId == transaction.ID && td.IsPaid == false));
+                    }
+                    else
+                    {
+                        transactionDetails.AddRange(_unitOfWork.TransactionDetails.GetAll(td => td.TransId == transaction.ID && td.IsPaid == false));
+                    }
                 }
             }
             else
             {
                 foreach (Transaction transaction in _unitOfWork.Transactions.GetAll(filter: t => t.WeightRecorderId == id, orderBy: ps => ps.OrderByDescending(p => p.Date)))
                 {
-                    transactionDetails.AddRange(_unitOfWork.TransactionDetails.GetAll(td => td.TransId == transaction.ID && td.IsPaid == false));
+                    if (transaction.isCompleted == TransactionStatus.Completed)
+                    {
+                        closeTransactionDetails.AddRange(_unitOfWork.CloseTransactionDetails.GetAll(td => td.TransactionId == transaction.ID && td.IsPaid == false));
+                    }
+                    else
+                    {
+                        transactionDetails.AddRange(_unitOfWork.TransactionDetails.GetAll(td => td.TransId == transaction.ID && td.IsPaid == false));
+                    }
                 }
             }
             List<DebtTraderApiModel> debtTraderApiModels = new List<DebtTraderApiModel>();
@@ -120,16 +135,35 @@ namespace TnR_SS.Domain.Supervisor
                     Weight = transactionDetail.Weight,
                     Trader = user.FirstName + " " + user.LastName,
                     Amount = transactionDetail.SellPrice * transactionDetail.Weight,
-                    Date = transaction.Date
+                    Date = transaction.Date,
+                    Status = false
                 });
             }
-            return debtTraderApiModels;
+            foreach (CloseTransactionDetail transactionDetail in closeTransactionDetails)
+            {
+                Buyer buyer = await _unitOfWork.Buyers.FindAsync(transactionDetail.BuyerId);
+                FishType fishType = await _unitOfWork.FishTypes.FindAsync(transactionDetail.FishTypeId);
+                Transaction transaction = await _unitOfWork.Transactions.FindAsync(transactionDetail.TransactionId);
+                debtTraderApiModels.Add(new DebtTraderApiModel()
+                {
+                    ID = transactionDetail.ID,
+                    Partner = buyer == null ? null : buyer.Name,
+                    FishName = fishType == null ? null : fishType.FishName,
+                    Weight = transactionDetail.Weight,
+                    Trader = user.FirstName + " " + user.LastName,
+                    Amount = transactionDetail.SellPrice * transactionDetail.Weight,
+                    Date = transaction.Date,
+                    Status = true
+                });
+            }
+            return debtTraderApiModels.OrderBy(d => d.Date).ToList();
         }
 
         public async Task UpdateDebtTransationDetail(int userId, int id)
         {
             UserResModel user = await GetUserByIdAsync(userId);
             TransactionDetail transactionDetail = await _unitOfWork.TransactionDetails.FindAsync(id);
+            CloseTransactionDetail closeTransactionDetail = await _unitOfWork.CloseTransactionDetails.FindAsync(id);
             if (transactionDetail != null)
             {
                 if (user.RoleName == "Trader")
@@ -153,7 +187,31 @@ namespace TnR_SS.Domain.Supervisor
                     }
                 }
             }
+            if (closeTransactionDetail != null)
+            {
+                if (user.RoleName == "Trader")
+                {
+                    Transaction transaction = await _unitOfWork.Transactions.FindAsync(closeTransactionDetail.TransactionId);
+                    if (transaction.TraderId == userId)
+                    {
+                        closeTransactionDetail.IsPaid = true;
+                        _unitOfWork.CloseTransactionDetails.Update(closeTransactionDetail);
+                        await _unitOfWork.SaveChangeAsync();
+                    }
+                }
+                else
+                {
+                    Transaction transaction = await _unitOfWork.Transactions.FindAsync(closeTransactionDetail.TransactionId);
+                    if (transaction.WeightRecorderId == userId)
+                    {
+                        closeTransactionDetail.IsPaid = true;
+                        _unitOfWork.CloseTransactionDetails.Update(closeTransactionDetail);
+                        await _unitOfWork.SaveChangeAsync();
+                    }
+                }
+            }
         }
+
         public async Task<List<DebtTraderApiModel>> GetAllDebtPurchaseOfTrader(int id)
         {
             UserResModel trader = await GetUserByIdAsync(id);
