@@ -19,5 +19,7 @@ namespace TnR_SS.Domain.ApiModels.DebtModel
 
         public DateTime Date { get; set; }
 
+        public bool Status { get; set; }
+
     }
 }
