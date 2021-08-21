@@ -229,7 +229,7 @@ namespace TnR_SS.Domain.Supervisor
                     ID = purchase.ID,
                     Partner = pondOwner.Name,
                     Trader = trader.FirstName + " " + trader.LastName,
-                    Amount = amount,
+                    Amount = amount - purchase.SentMoney,
                     Date = purchase.Date
                 });
             }
