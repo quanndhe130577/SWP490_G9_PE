@@ -384,8 +384,12 @@ namespace TnR_SS.Domain.Supervisor
                 var listPurchase = _unitOfWork.Purchases.GetAll(x => x.TraderID == userId && x.SentMoney < x.PayForPondOwner);
                 foreach (var purchase in listPurchase)
                 {
-                    reportApiModel.SummaryDebt = await GetTotalAmountPurchaseAsync(purchase.ID);
+                    reportApiModel.SummaryPaidDebt += await GetTotalAmountPurchaseAsync(purchase.ID);
                 }
+
+                var listTranId = _unitOfWork.Transactions.GetAll(x => x.TraderId == userId && x.Date.Month == date.Month && x.Date.Year == year).Select(x => x.ID);
+                var listTranDe = _unitOfWork.TransactionDetails.GetAllByListTransaction(listTranId.ToList());
+                reportApiModel.SummaryDebt = listTranDe.Where(x => !x.IsPaid).Sum(x => x.SellPrice);
             }
             else
             {
