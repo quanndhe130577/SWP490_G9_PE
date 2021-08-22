@@ -11,8 +11,8 @@ namespace TnR_SS.Domain.ApiModels.ReportModel
         public double SummaryDailyCost { get; set; }
         public double SummaryIncome { get; set; }
         public double SummaryOutcome { get; set; }
-        public double SummaryDebt { get; set; }
-        public double SummaryPaidDebt { get; set; }
+        public double TienPhaiThu { get; set; }
+        public double TienPhaiTra { get; set; }
     }
 
     public class DailyData
