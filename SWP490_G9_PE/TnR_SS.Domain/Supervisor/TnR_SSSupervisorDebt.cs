@@ -235,7 +235,7 @@ namespace TnR_SS.Domain.Supervisor
             }
             return debtTraderApiModels;
         }
-        public async Task UpdateDebtPurchaseDetail(int userId, int id)
+        public async Task UpdateDebtPurchaseDetail(int userId, int id, int amount)
         {
             Purchase purchase = await _unitOfWork.Purchases.FindAsync(id);
             if (purchase != null)
@@ -243,7 +243,8 @@ namespace TnR_SS.Domain.Supervisor
                 if (purchase.TraderID == userId)
                 {
                     //purchase.isPaid = true;
-                    purchase.SentMoney = purchase.PayForPondOwner;
+                    //purchase.SentMoney = purchase.PayForPondOwner;
+                    purchase.SentMoney += amount;
                     _unitOfWork.Purchases.Update(purchase);
                     await _unitOfWork.SaveChangeAsync();
                 }
