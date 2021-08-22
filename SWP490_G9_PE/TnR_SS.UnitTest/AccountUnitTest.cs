@@ -22,9 +22,6 @@ namespace TnR_SS.UnitTest
 {
     public class AccountUnitTest
     {
-
-
-
         [Fact(DisplayName = "Repository: Create user with password async")]
         public async Task AddAccountAsync()
         {
