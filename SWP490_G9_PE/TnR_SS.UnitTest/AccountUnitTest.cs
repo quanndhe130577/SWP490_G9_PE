@@ -1,10 +1,13 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using TnR_SS.API.Common.Response;
 using TnR_SS.API.Common.Token;
@@ -96,64 +99,72 @@ namespace TnR_SS.UnitTest
             Assert.Equal(1, rs.Id);
         }*/
 
-        [Fact(DisplayName = "Account Controller: Test Login")]
-        public async Task Login()
-        {
-            List<UserInfor> _users = new List<UserInfor>
-                 {
-                      new UserInfor() {
-                          Id = 1,
-                          UserName = "0966848112",
-                          PhoneNumber = "0966848112",
-                          FirstName = "Q",
-                          LastName = "Q"
-                      }
-                 };
-            Mock dbContextMock = new Mock<TnR_SSContext>();
-            UserManager<UserInfor> _userManager = FakeUserManager.MockUserManager<UserInfor>(_users).Object;
-            SignInManager<UserInfor> signInManagerMock = new FakeSignInManager();
-            UserInforRepository userInforRepository = new UserInforRepository((TnR_SSContext)dbContextMock.Object, _userManager, signInManagerMock);
+        //[Fact(DisplayName = "Account Controller: Test Login")]
+        //public async Task Login()
+        //{
+        //    List<UserInfor> _users = new List<UserInfor>
+        //         {
+        //              new UserInfor() {
+        //                  Id = 1,
+        //                  UserName = "0966848112",
+        //                  PhoneNumber = "0966848112",
+        //                  FirstName = "Q",
+        //                  LastName = "Q",
+        //              }
+        //         };
+        //    Mock dbContextMock = new Mock<TnR_SSContext>();
+        //    UserManager<UserInfor> _userManager = FakeUserManager.MockUserManager<UserInfor>(_users).Object;
+        //    SignInManager<UserInfor> signInManagerMock = new FakeSignInManager();
+        //    UserInforRepository userInforRepository = new UserInforRepository((TnR_SSContext)dbContextMock.Object, _userManager, signInManagerMock);
 
-            LoginReqModel loginModel = new LoginReqModel()
-            {
-                PhoneNumber = "0985191100",
-                Password = "1234578"
-            };
+        //    LoginReqModel loginModel = new LoginReqModel()
+        //    {
+        //        PhoneNumber = "0985191100",
+        //        Password = "1234578"
+        //    };
 
-            UserInfor user = new UserInfor()
-            {
-                Id = 1,
-                Avatar = null,
-                Dob = DateTime.Parse("10/21/1999"),
-                FirstName = "Quan",
-                LastName = "Nguyen",
-                IdentifyCode = "123456789",
-                PhoneNumber = "0985191100",
-                UserName = "0985191100",
-            };
+        //    UserInfor user = new UserInfor()
+        //    {
+        //        Id = 1,
+        //        Avatar = null,
+        //        Dob = DateTime.Parse("10/21/1999"),
+        //        FirstName = "Quan",
+        //        LastName = "Nguyen",
+        //        IdentifyCode = "123456789",
+        //        PhoneNumber = "0985191100",
+        //        UserName = "0985191100",
+        //    };
 
-            UserResModel res = new UserResModel()
-            {
-                UserID = 1,
-                Avatar = null,
-                Dob = DateTime.Parse("10/21/1999"),
-                FirstName = "Quan",
-                LastName = "Nguyen",
-                IdentifyCode = "123456789",
-                PhoneNumber = "0985191100"
-            };
+        //    UserResModel res = new UserResModel()
+        //    {
+        //        UserID = 1,
+        //        Avatar = null,
+        //        Dob = DateTime.Parse("10/21/1999"),
+        //        FirstName = "Quan",
+        //        LastName = "Nguyen",
+        //        IdentifyCode = "123456789",
+        //        PhoneNumber = "0985191100"
+        //    };
 
-            //var rs_create = await _userManager.CreateAsync(user, "12345678");
+        //    Mock<ITnR_SSSupervisor> mock = new Mock<ITnR_SSSupervisor>();
+        //    mock.Setup(repo => repo.GetUserByPhoneNumber(loginModel.PhoneNumber)).Returns(user);
+        //    mock.Setup(repo => repo.SignInWithPasswordAsync(user, loginModel.Password)).ReturnsAsync(res);
 
-            Mock<ITnR_SSSupervisor> mock = new Mock<ITnR_SSSupervisor>();
-            mock.Setup(repo => repo.GetUserByPhoneNumber(loginModel.PhoneNumber)).Returns(user);
-            mock.Setup(repo => repo.SignInWithPasswordAsync(user, loginModel.Password)).ReturnsAsync(res);
-
-            AccountController accCon = new AccountController(mock.Object);
-            var rs = await accCon.Login(loginModel);
-            Assert.Equal("Login success", rs.Message);
-
-
-        }
+        //    AccountController accCon = new AccountController(mock.Object)
+        //    {
+        //        ControllerContext = new ControllerContext()
+        //        {
+        //            HttpContext = new DefaultHttpContext()
+        //            {
+        //                User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+        //                {
+        //                    new Claim("ID", "1"),
+        //                }, "mock"))
+        //            }
+        //        }
+        //    };
+        //    var rs = await accCon.Login(loginModel);
+        //    Assert.Equal("Login success", rs.Message);
+        //}
     }
 }
