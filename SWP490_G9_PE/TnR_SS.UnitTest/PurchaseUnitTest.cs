@@ -83,26 +83,26 @@ namespace TnR_SS.UnitTest
             Assert.Equal("Lấy thông tin tất cả đơn mua thành công", rs.Message);
         }
 
-        [Theory(DisplayName = "Purchase Controller: Demo Setup")]
-        [InlineData(1)]
-        [InlineData(2)]
-        public async Task DemoSetup(int id)
-        {
-            Mock<ITnR_SSSupervisor> mock = new Mock<ITnR_SSSupervisor>();
-            mock.Setup(m => m.GetAllPurchaseAsync(It.Is<int>(i => i == 1))).ReturnsAsync(new List<PurchaseResModel>());
-            mock.Setup(m => m.GetAllPurchaseAsync(It.Is<int>(i => i != 1))).Throws(new Exception("NotFound"));
+        // [Theory(DisplayName = "Purchase Controller: Demo Setup")]
+        // [InlineData(1)]
+        // [InlineData(2)]
+        // public async Task DemoSetup(int id)
+        // {
+        //     Mock<ITnR_SSSupervisor> mock = new Mock<ITnR_SSSupervisor>();
+        //     mock.Setup(m => m.GetAllPurchaseAsync(It.Is<int>(i => i == 1))).ReturnsAsync(new List<PurchaseResModel>());
+        //     mock.Setup(m => m.GetAllPurchaseAsync(It.Is<int>(i => i != 1))).Throws(new Exception("NotFound"));
 
-            if (id == 1)
-            {
-                var rs = await mock.Object.GetAllPurchaseAsync(id);
-                Assert.Empty(rs);
-            }
-            else
-            {
-                Action action = async () => await mock.Object.GetAllPurchaseAsync(id);
-                Exception ex = Assert.Throws<Exception>(action);
-                Assert.Equal("NoFound", ex.Message);
-            }
-        }
+        //     if (id == 1)
+        //     {
+        //         var rs = await mock.Object.GetAllPurchaseAsync(id);
+        //         Assert.Empty(rs);
+        //     }
+        //     else
+        //     {
+        //         Action action = async () => await mock.Object.GetAllPurchaseAsync(id);
+        //         Exception ex = Assert.Throws<Exception>(action);
+        //         Assert.Equal("NoFound", ex.Message);
+        //     }
+        // }
     }
 }
