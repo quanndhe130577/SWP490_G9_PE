@@ -291,6 +291,18 @@ namespace TnR_SS.Domain.Supervisor
                             throw new Exception("Không có đơn bán nào để chốt sổ !!");
                         }
 
+                        bool isTrader = false;
+                        var roleUser = await _unitOfWork.UserInfors.GetRolesAsync(userId);
+                        if (roleUser.Contains(RoleName.Trader))
+                        {
+                            isTrader = true;
+                        }
+
+                        if (!isTrader)
+                        {
+                            tran.SentMoney = chotSoApi.SentMoney;
+                        }
+
                         tran.isCompleted = TransactionStatus.Completed;
                         tran.CommissionUnit = chotSoApi.CommissionUnit;
                         _unitOfWork.Transactions.Update(tran);
@@ -325,8 +337,7 @@ namespace TnR_SS.Domain.Supervisor
                             await _unitOfWork.SaveChangeAsync();
                         }
 
-                        var roleUser = await _unitOfWork.UserInfors.GetRolesAsync(userId);
-                        if (roleUser.Contains(RoleName.Trader))
+                        if (isTrader)
                         {
                             if (chotSoApi.ListRemainFish.Count != 0)
                             {
