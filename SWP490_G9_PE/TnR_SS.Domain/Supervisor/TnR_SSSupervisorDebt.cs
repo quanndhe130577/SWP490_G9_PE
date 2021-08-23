@@ -269,7 +269,7 @@ namespace TnR_SS.Domain.Supervisor
                         var trader = await _unitOfWork.UserInfors.FindAsync(tran.TraderId);
                         GetDebtForWrWithTraderResModel model = new GetDebtForWrWithTraderResModel()
                         {
-                            TransID = tran.ID,
+                            Id = tran.ID,
                             Date = tran.Date,
                             SentMoney = sentMoney,
                             Amount = totalMoney - sentMoney,
@@ -291,7 +291,7 @@ namespace TnR_SS.Domain.Supervisor
 
         public async Task UpdateDebtTransactionOfWRWithTrader(UpdateDebtWrWithTraderReqModel apiModel, int wrId)
         {
-            var tran = await _unitOfWork.Transactions.FindAsync(apiModel.TransId);
+            var tran = await _unitOfWork.Transactions.FindAsync(apiModel.Id);
             if (tran != null && tran.WeightRecorderId == wrId)
             {
                 tran.SentMoney += apiModel.Amount;

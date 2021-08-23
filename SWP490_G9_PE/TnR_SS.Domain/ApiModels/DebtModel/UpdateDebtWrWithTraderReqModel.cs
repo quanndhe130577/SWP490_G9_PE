@@ -8,7 +8,7 @@ namespace TnR_SS.Domain.ApiModels.DebtModel
 {
     public class UpdateDebtWrWithTraderReqModel
     {
-        public int TransId { get; set; }
+        public int Id { get; set; }
         public double Amount { get; set; }
     }
 }

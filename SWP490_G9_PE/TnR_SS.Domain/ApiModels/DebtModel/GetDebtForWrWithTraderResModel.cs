@@ -9,7 +9,7 @@ namespace TnR_SS.Domain.ApiModels.DebtModel
 {
     public class GetDebtForWrWithTraderResModel
     {
-        public int TransID { get; set; }
+        public int Id { get; set; }
         public string Partner { get; set; }
         public DateTime Date { get; set; }
         public double SentMoney { get; set; }
