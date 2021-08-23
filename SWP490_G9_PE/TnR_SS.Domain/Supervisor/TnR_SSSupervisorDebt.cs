@@ -272,7 +272,7 @@ namespace TnR_SS.Domain.Supervisor
                             TransID = tran.ID,
                             Date = tran.Date,
                             SentMoney = sentMoney,
-                            Amount = totalMoney,
+                            Amount = totalMoney - sentMoney,
                             Partner = trader != null ? trader.LastName : ""
                         };
 
@@ -292,7 +292,7 @@ namespace TnR_SS.Domain.Supervisor
         public async Task UpdateDebtTransactionOfWRWithTrader(UpdateDebtWrWithTraderReqModel apiModel, int wrId)
         {
             var tran = await _unitOfWork.Transactions.FindAsync(apiModel.TransId);
-            if (tran.WeightRecorderId == wrId)
+            if (tran != null && tran.WeightRecorderId == wrId)
             {
                 tran.SentMoney += apiModel.Amount;
                 _unitOfWork.Transactions.Update(tran);
