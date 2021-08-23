@@ -22,17 +22,19 @@ namespace TnR_SS.UnitTest
 {
     public class AccountUnitTest
     {
-        [Fact(DisplayName = "Repository: Create user with password async")]
-        public async Task AddAccountAsync()
+        [Theory(DisplayName = "Repository: Create user with password async")]
+        [InlineData(1, "0966848112", "0966848112", "Q", "Q")]
+        [InlineData(2, "0912345678", "0912345678", "A", "A")]
+        public async Task AddAccountAsync(int userId, string userName, string phoneNumber, string firstName, string lastName)
         {
             List<UserInfor> _users = new List<UserInfor>
                  {
                       new UserInfor() {
-                          Id = 1,
-                          UserName = "0966848112",
-                          PhoneNumber = "0966848112",
-                          FirstName = "Q",
-                          LastName = "Q"
+                          Id = userId,
+                          UserName = userName,
+                          PhoneNumber = phoneNumber,
+                          FirstName = firstName,
+                          LastName = lastName
                       }
                  };
             Mock dbContextMock = new Mock<TnR_SSContext>();
@@ -109,6 +111,7 @@ namespace TnR_SS.UnitTest
                           LastName = "Q"
                       }
                  };
+
             Mock dbContextMock = new Mock<TnR_SSContext>();
             UserManager<UserInfor> _userManager = FakeUserManager.MockUserManager<UserInfor>(_users).Object;
             SignInManager<UserInfor> signInManagerMock = new FakeSignInManager();
@@ -144,7 +147,6 @@ namespace TnR_SS.UnitTest
             };
 
             //var rs_create = await _userManager.CreateAsync(user, "12345678");
-
             Mock<ITnR_SSSupervisor> mock = new Mock<ITnR_SSSupervisor>();
             mock.Setup(repo => repo.GetUserByPhoneNumber(loginModel.PhoneNumber)).Returns(user);
             mock.Setup(repo => repo.SignInWithPasswordAsync(user, loginModel.Password)).ReturnsAsync(res);
@@ -152,7 +154,6 @@ namespace TnR_SS.UnitTest
             AccountController accCon = new AccountController(mock.Object);
             var rs = await accCon.Login(loginModel);
             Assert.Equal("Login success", rs.Message);
-
 
         }
     }
