@@ -10,6 +10,7 @@ using TnR_SS.Domain.ApiModels.FishTypeModel;
 using TnR_SS.Domain.ApiModels.PurchaseModal;
 using TnR_SS.Domain.ApiModels.TransactionDetailModel;
 using TnR_SS.Domain.ApiModels.TransactionModel;
+using TnR_SS.Domain.ApiModels.UserInforModel;
 using TnR_SS.Domain.Entities;
 
 namespace TnR_SS.Domain.Supervisor
@@ -249,6 +250,42 @@ namespace TnR_SS.Domain.Supervisor
                     await _unitOfWork.SaveChangeAsync();
                 }
             }
+        }
+
+        public async Task<List<GetDebtForWrWithTraderResModel>> GetAllDebtTransactionOfWRWithTraderAsync(int userId)
+        {
+            var roleUser = await _unitOfWork.UserInfors.GetRolesAsync(userId);
+            if (roleUser.Contains(RoleName.WeightRecorder))
+            {
+                List<GetDebtForWrWithTraderResModel> list = new List<GetDebtForWrWithTraderResModel>();
+                var listTran = _unitOfWork.Transactions.GetAll(x => x.WeightRecorderId == userId);
+                foreach (var tran in listTran)
+                {
+                    var totalMoney = await _unitOfWork.Transactions.GetTotalMoneyAsync(tran.ID) - await _unitOfWork.Transactions.GetTotalWeightAsync(tran.ID) * tran.CommissionUnit;
+                    var sentMoney = tran.SentMoney;
+                    if (sentMoney < totalMoney)
+                    {
+                        var trader = await _unitOfWork.UserInfors.FindAsync(tran.TraderId);
+                        GetDebtForWrWithTraderResModel model = new GetDebtForWrWithTraderResModel()
+                        {
+                            TransID = tran.ID,
+                            Date = tran.Date,
+                            SentMoney = sentMoney,
+                            TotalMoney = totalMoney,
+                            Partner = trader != null ? trader.LastName : ""
+                        };
+
+                        list.Add(model);
+                    }
+                }
+
+                return list;
+            }
+            else
+            {
+                throw new Exception("Không có thông tin !!!");
+            }
+
         }
     }
 }

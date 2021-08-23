@@ -55,6 +55,15 @@ namespace TnR_SS.API.Controllers
             var list = await _tnrssSupervisor.GetAllDebtTransactionOfTrader(userId);
             return new ResponseBuilder<List<DebtTraderApiModel>>().Success("Lấy thông tin nợ thành công").WithData(list).ResponseModel;
         }
+
+        [HttpGet("wr/debtWithTrader")]
+        public async Task<ResponseModel> GetAllDebtTransactionOfWRWithTrader()
+        {
+            var userId = TokenManagement.GetUserIdInToken(HttpContext);
+            var list = await _tnrssSupervisor.GetAllDebtTransactionOfWRWithTraderAsync(userId);
+            return new ResponseBuilder<List<GetDebtForWrWithTraderResModel>>().Success("Lấy thông tin nợ thành công").WithData(list).ResponseModel;
+        }
+
         [HttpGet("td-UpdateDebtTransactionDetail/{id}")]
         public async Task<ResponseModel> GetTransactionOfTrader(int id)
         {

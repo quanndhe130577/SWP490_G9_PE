@@ -124,6 +124,7 @@ namespace TnR_SS.Domain.Supervisor
                 tran.WeightRecorder = item.WeightRecorderId != null ? _mapper.Map<UserInfor, UserInformation>(await _unitOfWork.UserInfors.FindAsync(item.WeightRecorderId)) : null;
                 tran.TransactionDetails = await GetListTransactionDetailModelAsync(item);
                 tran.Status = item.isCompleted.ToString();
+                tran.SentMoney = item.SentMoney;
 
                 list.Add(tran);
             }
