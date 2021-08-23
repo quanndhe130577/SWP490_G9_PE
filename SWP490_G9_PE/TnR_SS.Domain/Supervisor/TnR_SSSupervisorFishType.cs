@@ -213,6 +213,19 @@ namespace TnR_SS.Domain.Supervisor
         public async Task UpdateFishTypeAsync(FishTypeApiModel fishType, int traderId)
         {
             var fishTypeEdit = await _unitOfWork.FishTypes.FindAsync(fishType.ID);
+            /*if (fishTypeEdit != null)
+            {
+                var listFish = _unitOfWork.FishTypes.GetAll(x => x.PurchaseID == fishType.PurchaseID && x.ID != fishTypeEdit.ID && x.FishName == fishType.FishName).ToList();
+                if(listFish == null || listFish.Count != 0)
+                {
+                    throw new Exception("Tên cá bị trùng lặp");
+                }
+            }
+            else
+            {
+                throw new Exception("Không tìm thấy thông tin cá");
+            }*/
+
             fishTypeEdit = _mapper.Map<FishTypeApiModel, FishType>(fishType, fishTypeEdit);
             if (fishTypeEdit.TraderID == traderId)
             {
@@ -244,6 +257,12 @@ namespace TnR_SS.Domain.Supervisor
             {
                 using (var transaction = _unitOfWork.BeginTransaction())
                 {
+                    var rs = listFishType.ListFishType.Select(x => x.FishName).Distinct();
+                    if (rs.Count() != listFishType.ListFishType.Count())
+                    {
+                        throw new Exception("Tên cá bị trùng lặp !!!");
+                    }
+
                     try
                     {
                         foreach (var item in listFishType.ListFishType)
