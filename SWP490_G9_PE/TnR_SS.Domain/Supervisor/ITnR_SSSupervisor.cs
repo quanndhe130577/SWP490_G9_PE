@@ -214,6 +214,7 @@ namespace TnR_SS.Domain.Supervisor
         Task<List<DebtTraderApiModel>> GetAllDebtPurchaseOfTrader(int id);
         Task UpdateDebtPurchaseDetail(int userId, int id, int amount);
         Task<List<GetDebtForWrWithTraderResModel>> GetAllDebtTransactionOfWRWithTraderAsync(int userId);
+        Task UpdateDebtTransactionOfWRWithTrader(UpdateDebtWrWithTraderReqModel apiModel, int wrId);
         #endregion
 
         #region Advance Salary

@@ -271,7 +271,7 @@ namespace TnR_SS.Domain.Supervisor
                             TransID = tran.ID,
                             Date = tran.Date,
                             SentMoney = sentMoney,
-                            TotalMoney = totalMoney,
+                            Amount = totalMoney,
                             Partner = trader != null ? trader.LastName : ""
                         };
 
@@ -286,6 +286,21 @@ namespace TnR_SS.Domain.Supervisor
                 throw new Exception("Không có thông tin !!!");
             }
 
+        }
+
+        public async Task UpdateDebtTransactionOfWRWithTrader(UpdateDebtWrWithTraderReqModel apiModel, int wrId)
+        {
+            var tran = await _unitOfWork.Transactions.FindAsync(apiModel.TransId);
+            if (tran.WeightRecorderId == wrId)
+            {
+                tran.SentMoney += apiModel.Amount;
+                _unitOfWork.Transactions.Update(tran);
+                await _unitOfWork.SaveChangeAsync();
+            }
+            else
+            {
+                throw new Exception("Không có thông tin !!!");
+            }
         }
     }
 }

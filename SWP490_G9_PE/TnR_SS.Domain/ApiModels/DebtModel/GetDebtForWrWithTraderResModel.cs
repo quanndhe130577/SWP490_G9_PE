@@ -13,6 +13,6 @@ namespace TnR_SS.Domain.ApiModels.DebtModel
         public string Partner { get; set; }
         public DateTime Date { get; set; }
         public double SentMoney { get; set; }
-        public double TotalMoney { get; set; }
+        public double Amount { get; set; }
     }
 }

@@ -64,20 +64,30 @@ namespace TnR_SS.API.Controllers
             return new ResponseBuilder<List<GetDebtForWrWithTraderResModel>>().Success("Lấy thông tin nợ thành công").WithData(list).ResponseModel;
         }
 
-        [HttpGet("td-UpdateDebtTransactionDetail/{id}")]
+        [HttpPost("wr/update/debtWithTrader")]
+        public async Task<ResponseModel> GetTransactionOfTrader(UpdateDebtWrWithTraderReqModel apiModel)
+        {
+            var userId = TokenManagement.GetUserIdInToken(HttpContext);
+            await _tnrssSupervisor.UpdateDebtTransactionOfWRWithTrader(apiModel, userId);
+            return new ResponseBuilder().Success("Cập nhật thông tin thành công").ResponseModel;
+        }
+
+        /*[HttpGet("td-UpdateDebtTransactionDetail/{id}")]
         public async Task<ResponseModel> GetTransactionOfTrader(int id)
         {
             var userId = TokenManagement.GetUserIdInToken(HttpContext);
             await _tnrssSupervisor.UpdateDebtTransationDetail(userId, id);
             return new ResponseBuilder().Success("Cập nhật thông tin nợ của đơn bán thành công").ResponseModel;
-        }
+        }*/
+
         [HttpGet("td-getDebtPurchase")]
         public async Task<ResponseModel> GetAllDebtPurchaseOfTrader()
         {
             var userId = TokenManagement.GetUserIdInToken(HttpContext);
             var list = await _tnrssSupervisor.GetAllDebtPurchaseOfTrader(userId);
             return new ResponseBuilder<List<DebtTraderApiModel>>().Success("Lấy thông tin nợ thành công").WithData(list).ResponseModel;
-        }
+        }      
+
         [HttpGet("td-UpdateDebtPurchase/{purchaseId}/{amount}")]
         public async Task<ResponseModel> UpdateDebtPurchaseOfTrader(int purchaseId, int amount)
         {
