@@ -40,7 +40,7 @@ namespace TnR_SS.Domain.Supervisor
                 list.Add(model);
             }
 
-            return list;
+            return list.OrderByDescending(x => x.Date).ToList();
         }
 
         public async Task<List<DebtApiModel>> GetAllDebtWRAsync(int userId, DateTime? date)
@@ -75,7 +75,8 @@ namespace TnR_SS.Domain.Supervisor
 
                 list.Add(model);
             }
-            return list;
+
+            return list.OrderByDescending(x => x.Date).ToList();
         }
 
         public async Task<List<DebtApiModel>> GetDebtAsync(int userId, DateTime? date)
@@ -160,14 +161,14 @@ namespace TnR_SS.Domain.Supervisor
                     Status = true
                 });
             }
-            return debtTraderApiModels.OrderBy(d => d.Date).ToList();
+            return debtTraderApiModels.OrderByDescending(d => d.Date).ToList();
         }
 
-        public async Task UpdateDebtTransationDetail(int userId, int id)
+        public async Task UpdateDebtTransationDetail(int userId, int tranDeid)
         {
             UserResModel user = await GetUserByIdAsync(userId);
-            TransactionDetail transactionDetail = await _unitOfWork.TransactionDetails.FindAsync(id);
-            CloseTransactionDetail closeTransactionDetail = await _unitOfWork.CloseTransactionDetails.FindAsync(id);
+            TransactionDetail transactionDetail = await _unitOfWork.TransactionDetails.FindAsync(tranDeid);
+            CloseTransactionDetail closeTransactionDetail = await _unitOfWork.CloseTransactionDetails.FindAsync(tranDeid);
             if (transactionDetail != null)
             {
                 if (user.RoleName == "Trader")
@@ -234,7 +235,7 @@ namespace TnR_SS.Domain.Supervisor
                     Date = purchase.Date
                 });
             }
-            return debtTraderApiModels;
+            return debtTraderApiModels.OrderByDescending(x => x.Date).ToList();
         }
         public async Task UpdateDebtPurchaseDetail(int userId, int id, int amount)
         {
@@ -258,7 +259,7 @@ namespace TnR_SS.Domain.Supervisor
             if (roleUser.Contains(RoleName.WeightRecorder))
             {
                 List<GetDebtForWrWithTraderResModel> list = new List<GetDebtForWrWithTraderResModel>();
-                var listTran = _unitOfWork.Transactions.GetAll(x => x.WeightRecorderId == userId);
+                var listTran = _unitOfWork.Transactions.GetAll(x => x.WeightRecorderId == userId).OrderByDescending(x => x.Date);
                 foreach (var tran in listTran)
                 {
                     var totalMoney = await _unitOfWork.Transactions.GetTotalMoneyAsync(tran.ID) - await _unitOfWork.Transactions.GetTotalWeightAsync(tran.ID) * tran.CommissionUnit;
