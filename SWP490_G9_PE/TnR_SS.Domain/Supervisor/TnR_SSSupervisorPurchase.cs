@@ -117,6 +117,10 @@ namespace TnR_SS.Domain.Supervisor
         public async Task<PurchaseResModel> GetPurchaseByIdAsync(int purchaseId, int traderId)
         {
             var purchase = await _unitOfWork.Purchases.FindAsync(purchaseId);
+            if (purchase == null)
+            {
+                throw new Exception("Đơn mua không tồn tại");
+            }
             if (purchase.TraderID != traderId)
             {
                 throw new Exception("Đơn mua không tồn tại");
@@ -166,7 +170,10 @@ namespace TnR_SS.Domain.Supervisor
         public async Task UpdatePurchaseAsync(UpdatePurchaseApiModel model, int traderId)
         {
             var purchase = await _unitOfWork.Purchases.FindAsync(model.ID);
-
+            if (purchase == null)
+            {
+                throw new Exception("Đơn mua không tồn tại");
+            }
             if (purchase.TraderID != traderId)
             {
                 throw new Exception("Đơn mua không tồn tại");
@@ -212,7 +219,10 @@ namespace TnR_SS.Domain.Supervisor
                     try
                     {
                         var purchase = await _unitOfWork.Purchases.FindAsync(data.ID);
-
+                        if (purchase == null)
+                        {
+                            throw new Exception("Đơn mua không tồn tại");
+                        }
                         if (purchase.TraderID != traderId)
                         {
                             throw new Exception("Đơn mua không tồn tại !!!");
