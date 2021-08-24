@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using TnR_SS.Domain.ApiModels.TransactionModel;
+using TnR_SS.Domain.ApiModels.TransactionDetailModel;
 
 namespace TnR_SS.UnitTest
 {
@@ -105,6 +106,157 @@ namespace TnR_SS.UnitTest
                 Assert.True(true);
             }
         }
+        [Theory(DisplayName = "Transaction Supervisor: Test Get All Transaction Follow Date")]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(1000)]
+        public async Task TestGetAllTransactionFollowDateAsync(int id)
+        {
+            if (id == 1)
+            {
+                List<GetGeneralTransactionFollowDateResModel> res = await _supervisor.GetAllTransactionFollowDateAsync(id);
+                Assert.Single(res);
+            }
+            else if (id == 2)
+            {
+                List<GetGeneralTransactionFollowDateResModel> res = await _supervisor.GetAllTransactionFollowDateAsync(id);
+                Assert.Single(res);
+            }
+            else
+            {
+                Exception ex = await Assert.ThrowsAsync<Exception>(async () => await _supervisor.GetAllTransactionFollowDateAsync(id));
+                Assert.Equal("Tài khoản không hợp lệ", ex.Message);
+            }
+        }
+        [Theory(DisplayName = "Transaction Supervisor: Test Weight Recorder Create Transaction Detail")]
+        [InlineData(1, 2, 1, 1)]
+        [InlineData(1, 3, 1, 2)]
+        [InlineData(1, 1000, 1, 2)]
+        [InlineData(1000, 2, 1, 2)]
+        [InlineData(1, 2, 1000, 2)]
+        [InlineData(1, 2, 1, 1000)]
+        public async Task TestWeightRecorderCreateTransactionDetailAsync(int fishTypeId, int transId, int buyerId, int id)
+        {
+            CreateTransactionDetailReqModel model = new CreateTransactionDetailReqModel()
+            {
+                FishTypeId = fishTypeId,
+                TransId = transId,
+                BuyerId = buyerId,
+                SellPrice = 1000,
+                Weight = 10,
+                Date = date,
+            };
+            if (transId == 3)
+            {
+                Exception ex = await Assert.ThrowsAsync<Exception>(async () => await _supervisor.CreateTransactionDetailAsync(model, id));
+                Assert.Equal("Đã chốt sổ với thương lái này, không thể tạo thêm !!", ex.Message);
+            }
+            else if (transId == 1000)
+            {
+                Exception ex = await Assert.ThrowsAsync<Exception>(async () => await _supervisor.CreateTransactionDetailAsync(model, id));
+                Assert.Equal("Hãy tạo hóa đơn trước !!", ex.Message);
+            }
+            else if (buyerId == 1000)
+            {
+                Exception ex = await Assert.ThrowsAsync<Exception>(async () => await _supervisor.CreateTransactionDetailAsync(model, id));
+                Assert.Equal("Người mua không tồn tại !!", ex.Message);
+            }
+            else if (fishTypeId == 1000)
+            {
+                Exception ex = await Assert.ThrowsAsync<Exception>(async () => await _supervisor.CreateTransactionDetailAsync(model, id));
+                Assert.Equal("Loại cá không đúng !!", ex.Message);
+            }
+            else if (id == 1000)
+            {
+                Exception ex = await Assert.ThrowsAsync<Exception>(async () => await _supervisor.CreateTransactionDetailAsync(model, id));
+                Assert.Equal("Người mua không tồn tại !!", ex.Message);
+            }
+            else
+            {
+                ArgumentNullException ex = await Assert.ThrowsAsync<ArgumentNullException>(async () => await _supervisor.CreateTransactionDetailAsync(model, id));
+                Assert.IsType<ArgumentNullException>(ex);
+            }
+        }
+        [Theory(DisplayName = "Transaction Supervisor: Test Weight Recorder Update Transaction Detail")]
+        [InlineData(1, 1, 1, 1)]
+        [InlineData(1, 1000, 1, 1)]
+        [InlineData(1000, 1, 1, 1)]
+        [InlineData(1, 1, 1000, 1)]
+        [InlineData(1, 1, 1, 1000)]
+        public async Task TestWeightRecorderUpdateTransactionDetailAsync(int fishTypeId, int transId, int buyerId, int id)
+        {
+            UpdateTransactionDetailReqModel model = new UpdateTransactionDetailReqModel()
+            {
+                ID = transId,
+                FishTypeId = fishTypeId,
+                BuyerId = buyerId,
+                SellPrice = 1000,
+                Weight = 10,
+                IsPaid = true
+            };
+            if (transId == 1000)
+            {
+                Exception ex = await Assert.ThrowsAsync<Exception>(async () => await _supervisor.UpdateTransactionDetailAsync(model, id));
+                Assert.Equal("Không tìm thấy đơn mua !!", ex.Message);
+            }
+            else if (buyerId == 1000)
+            {
+                Exception ex = await Assert.ThrowsAsync<Exception>(async () => await _supervisor.UpdateTransactionDetailAsync(model, id));
+                Assert.Equal("Không tìm thấy người mua !!", ex.Message);
+            }
+            else if (fishTypeId == 1000)
+            {
+                Exception ex = await Assert.ThrowsAsync<Exception>(async () => await _supervisor.UpdateTransactionDetailAsync(model, id));
+                Assert.Equal("Loại cá không đúng !!", ex.Message);
+            }
+            else if (id == 1000)
+            {
+                Exception ex = await Assert.ThrowsAsync<Exception>(async () => await _supervisor.UpdateTransactionDetailAsync(model, id));
+                Assert.Equal("Không tìm thấy người mua !!", ex.Message);
+            }
+            else
+            {
+                await _supervisor.UpdateTransactionDetailAsync(model, id);
+            }
+        }
+        [Theory(DisplayName = "Transaction Supervisor: Test Get Payment For Buyers Async")]
+        [InlineData(1)]
+        [InlineData(1000)]
+        public async Task TestGetPaymentForBuyersAsync(int id)
+        {
+            if (id == 1)
+            {
+                List<PaymentForBuyer> res = await _supervisor.GetPaymentForBuyersAsync(id, date);
+                Assert.Single(res);
+            }
+            else
+            {
+                List<PaymentForBuyer> res = await _supervisor.GetPaymentForBuyersAsync(id, date);
+                Assert.Empty(res);
+            }
+        }
+        [Theory(DisplayName = "Transaction Supervisor: Test Get Payment For Buyers Async")]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(1000)]
+        public async Task TestPaymentForBuyersAsync(int buyer)
+        {
+            FinishPaymentBuyerReqModel model = new FinishPaymentBuyerReqModel() { BuyerId = buyer, Date = date };
+            if (buyer == 1)
+            {
+                await _supervisor.PaymentForBuyersAsync(model, 1);
+            }
+            else if (buyer == 2)
+            {
+                Exception ex = await Assert.ThrowsAsync<Exception>(async () => await _supervisor.PaymentForBuyersAsync(model, 1));
+                Assert.Equal("Người này chưa mua gì cả !!!", ex.Message);
+            }
+            else
+            {
+                Exception ex = await Assert.ThrowsAsync<Exception>(async () => await _supervisor.PaymentForBuyersAsync(model, 1));
+                Assert.Equal("Không có thông tin người mua này !!!", ex.Message);
+            }
+        }
         void MockSetup()
         {
             _umock = new Mock<IUnitOfWork>();
@@ -125,6 +277,33 @@ namespace TnR_SS.UnitTest
                 string includeProperties,
                 int? skip, int? take
                 ) => purchaseDetails.Where(filter.Compile()).ToList());
+            _umock.Setup(u => u.Transactions.GetAll(It.IsAny<Expression<Func<Transaction, bool>>>(),
+                It.IsAny<Func<IQueryable<Transaction>, IOrderedQueryable<Transaction>>>(),
+                It.IsAny<string>(), It.IsAny<int?>(), It.IsAny<int?>()))
+                .Returns((
+                Expression<Func<Transaction, bool>> filter,
+                Func<IQueryable<Transaction>, IOrderedQueryable<Transaction>> orderBy,
+                string includeProperties,
+                int? skip, int? take
+                ) => transactions.Where(filter.Compile()).ToList());
+            _umock.Setup(u => u.TransactionDetails.GetAll(It.IsAny<Expression<Func<TransactionDetail, bool>>>(),
+                It.IsAny<Func<IQueryable<TransactionDetail>, IOrderedQueryable<TransactionDetail>>>(),
+                It.IsAny<string>(), It.IsAny<int?>(), It.IsAny<int?>()))
+                .Returns((
+                Expression<Func<TransactionDetail, bool>> filter,
+                Func<IQueryable<TransactionDetail>, IOrderedQueryable<TransactionDetail>> orderBy,
+                string includeProperties,
+                int? skip, int? take
+                ) => transactionDetails.Where(filter.Compile()).ToList());
+            _umock.Setup(u => u.Buyers.GetAll(It.IsAny<Expression<Func<Buyer, bool>>>(),
+                It.IsAny<Func<IQueryable<Buyer>, IOrderedQueryable<Buyer>>>(),
+                It.IsAny<string>(), It.IsAny<int?>(), It.IsAny<int?>()))
+                .Returns((
+                Expression<Func<Buyer, bool>> filter,
+                Func<IQueryable<Buyer>, IOrderedQueryable<Buyer>> orderBy,
+                string includeProperties,
+                int? skip, int? take
+                ) => buyers.Where(filter.Compile()).ToList());
 
             _umock.Setup(u => u.ClosePurchaseDetails.GetAllByPurchase(It.IsAny<Purchase>()))
                 .Returns((Purchase purchase) => closePurchaseDetails.Where(pd => pd.PurchaseId == purchase.ID).ToList());
@@ -132,6 +311,7 @@ namespace TnR_SS.UnitTest
             _umock.Setup(u => u.Drums.GetDrumsByClosePurchaseDetail(It.IsAny<ClosePurchaseDetail>())).Returns(drums);
             _umock.Setup(u => u.Transactions.GetAllTransactionsByDate(It.IsAny<int>(), It.IsAny<DateTime?>()))
                 .Returns((int id, DateTime? date) => transactions.Where(t => (t.TraderId == id || t.WeightRecorderId == id) && t.Date == date).ToList());
+            _umock.Setup(u => u.TransactionDetails.GetAllByListTransaction(It.IsAny<List<int>>())).Returns((List<int> list) => list.Count > 0 ? transactionDetails : new List<TransactionDetail>());
 
             foreach (Purchase purchase in purchases)
             {
@@ -169,6 +349,8 @@ namespace TnR_SS.UnitTest
             _umock.Setup(m => m.UserInfors.FindAsync(It.Is<int>(id => id == 2))).ReturnsAsync(new UserInfor() { Id = 2 });
             _umock.Setup(m => m.UserInfors.GetRolesAsync(It.Is<int>(id => id == 1))).ReturnsAsync(new List<string>() { "Trader" });
             _umock.Setup(m => m.UserInfors.GetRolesAsync(It.Is<int>(id => id == 2))).ReturnsAsync(new List<string>() { "WeightRecorder" });
+            _umock.Setup(m => m.UserInfors.GetRolesAsync(It.Is<UserInfor>(id => id.Id == 1))).ReturnsAsync(new List<string>() { "Trader" });
+            _umock.Setup(m => m.UserInfors.GetRolesAsync(It.Is<UserInfor>(id => id.Id == 2))).ReturnsAsync(new List<string>() { "WeightRecorder" });
             _umock.Setup(m => m.UserInfors.GetRolesAsync(It.Is<int>(id => !(id == 2 || id == 1)))).ReturnsAsync(new List<string>() { });
             _supervisor = new TnR_SSSupervisor(_mapper, _umock.Object);
         }
@@ -313,6 +495,14 @@ namespace TnR_SS.UnitTest
                     Name="Tam",
                     SellerId=1,
                     PhoneNumber="0912345678"
+                },
+                new Buyer()
+                {
+                    ID=2,
+                    Address="HD",
+                    Name="Tien",
+                    SellerId=1,
+                    PhoneNumber="0912345671"
                 }
             };
             transactions = new List<Transaction>()
@@ -331,6 +521,15 @@ namespace TnR_SS.UnitTest
                     ID=2,
                     TraderId=1,
                     Date= new DateTime(date.Year,date.Month,date.Day),
+                    isCompleted=TransactionStatus.Pending,
+                    WeightRecorderId=2,
+                    CommissionUnit=2
+                },
+                new Transaction()
+                {
+                    ID=3,
+                    TraderId=1,
+                    Date= new DateTime(date.Year,date.Month,date.Day),
                     isCompleted=TransactionStatus.Completed,
                     WeightRecorderId=2,
                     CommissionUnit=2
@@ -344,7 +543,7 @@ namespace TnR_SS.UnitTest
                     FishTypeId=1,
                     TransId=1,
                     BuyerId=1,
-                    IsPaid=true,
+                    IsPaid=false,
                     SellPrice=1000,
                     Weight=10
                 }
