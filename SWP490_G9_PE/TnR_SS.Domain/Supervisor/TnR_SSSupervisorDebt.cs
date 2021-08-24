@@ -34,7 +34,7 @@ namespace TnR_SS.Domain.Supervisor
                 model.Creditors = pondOwner.Name;
                 model.Debtor = user.LastName + " " + user.FirstName;
                 //model.DebtMoney = purchase.PayForPondOwner;
-                model.DebtMoney = purchase.PayForPondOwner - purchase.SentMoney;
+                model.DebtMoney = Math.Round(purchase.PayForPondOwner - purchase.SentMoney);
                 model.Date = purchase.Date;
 
                 list.Add(model);
@@ -70,7 +70,7 @@ namespace TnR_SS.Domain.Supervisor
                 model.Creditors = user.LastName + " " + user.FirstName;
                 var buyer = await _unitOfWork.Buyers.FindAsync(td.BuyerId);
                 model.Debtor = buyer != null ? _mapper.Map<Buyer, BuyerApiModel>(buyer).Name : null;
-                model.DebtMoney = td.SellPrice;
+                model.DebtMoney = Math.Round(td.SellPrice);
                 model.Date = _mapper.Map<Transaction, TransactionResModel>(await _unitOfWork.Transactions.FindAsync(td.TransId)).Date;
 
                 list.Add(model);
@@ -137,7 +137,7 @@ namespace TnR_SS.Domain.Supervisor
                     ID = transactionDetail.ID,
                     Partner = buyer == null ? null : buyer.Name,
                     FishName = fishType == null ? null : fishType.FishName,
-                    Weight = transactionDetail.Weight,
+                    Weight = Math.Round(transactionDetail.Weight, 2),
                     Trader = user.FirstName + " " + user.LastName,
                     Amount = transactionDetail.SellPrice * transactionDetail.Weight,
                     Date = transaction.Date,
@@ -154,7 +154,7 @@ namespace TnR_SS.Domain.Supervisor
                     ID = transactionDetail.ID,
                     Partner = buyer == null ? null : buyer.Name,
                     FishName = fishType == null ? null : fishType.FishName,
-                    Weight = transactionDetail.Weight,
+                    Weight = Math.Round(transactionDetail.Weight, 2),
                     Trader = user.FirstName + " " + user.LastName,
                     Amount = transactionDetail.SellPrice * transactionDetail.Weight,
                     Date = transaction.Date,
@@ -231,7 +231,7 @@ namespace TnR_SS.Domain.Supervisor
                     ID = purchase.ID,
                     Partner = pondOwner.Name,
                     Trader = trader.FirstName + " " + trader.LastName,
-                    Amount = amount - purchase.SentMoney,
+                    Amount = Math.Round(amount - purchase.SentMoney),
                     Date = purchase.Date
                 });
             }
@@ -271,7 +271,7 @@ namespace TnR_SS.Domain.Supervisor
                         {
                             Id = tran.ID,
                             Date = tran.Date,
-                            SentMoney = sentMoney,
+                            SentMoney = Math.Round(sentMoney),
                             Amount = totalMoney - sentMoney,
                             Partner = trader != null ? trader.LastName : ""
                         };

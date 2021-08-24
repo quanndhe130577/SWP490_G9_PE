@@ -124,7 +124,7 @@ namespace TnR_SS.Domain.Supervisor
                 tran.WeightRecorder = item.WeightRecorderId != null ? _mapper.Map<UserInfor, UserInformation>(await _unitOfWork.UserInfors.FindAsync(item.WeightRecorderId)) : null;
                 tran.TransactionDetails = await GetListTransactionDetailModelAsync(item);
                 tran.Status = item.isCompleted.ToString();
-                tran.SentMoney = item.SentMoney;
+                tran.SentMoney = Math.Round(item.SentMoney);
 
                 list.Add(tran);
             }
@@ -216,9 +216,9 @@ namespace TnR_SS.Domain.Supervisor
                     newGeneral.ListWeightRecorder = await TraderGetAllWeightRecorderInTransactions(userId, listTran);
                 }
 
-                newGeneral.TotalWeight = await GetTotalWeightForGeneral(userId, listTran);
-                newGeneral.TotalMoney = await GetTotalMoneyForGeneral(userId, listTran);
-                newGeneral.TotalDebt = await GetTotalDebtForGeneral(userId, listTran);
+                newGeneral.TotalWeight = Math.Round(await GetTotalWeightForGeneral(userId, listTran), 2);
+                newGeneral.TotalMoney = Math.Round(await GetTotalMoneyForGeneral(userId, listTran));
+                newGeneral.TotalDebt = Math.Round(await GetTotalDebtForGeneral(userId, listTran));
 
                 listGeTran.Add(newGeneral);
             }

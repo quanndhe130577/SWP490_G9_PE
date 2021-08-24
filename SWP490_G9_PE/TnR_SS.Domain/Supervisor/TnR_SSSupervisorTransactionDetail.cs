@@ -279,10 +279,10 @@ namespace TnR_SS.Domain.Supervisor
                 PaymentForBuyer payments = new PaymentForBuyer();
                 payments.Date = phien;
                 payments.Buyer = _mapper.Map<Buyer, BuyerApiModel>(await _unitOfWork.Buyers.FindAsync(item));
-                payments.TotalWeight = listTranBuyer.Sum(x => x.Weight);
-                payments.MoneyPaid = listTranBuyer.Where(x => x.IsPaid).Sum(x => x.SellPrice * x.Weight);
-                payments.MoneyNotPaid = listTranBuyer.Where(x => !x.IsPaid).Sum(x => x.SellPrice * x.Weight);
-                payments.TotalMoney = payments.MoneyPaid + payments.MoneyNotPaid;
+                payments.TotalWeight = Math.Round(listTranBuyer.Sum(x => x.Weight), 2);
+                payments.MoneyPaid = Math.Round(listTranBuyer.Where(x => x.IsPaid).Sum(x => x.SellPrice * x.Weight));
+                payments.MoneyNotPaid = Math.Round(listTranBuyer.Where(x => !x.IsPaid).Sum(x => x.SellPrice * x.Weight));
+                payments.TotalMoney = Math.Round(payments.MoneyPaid + payments.MoneyNotPaid);
                 foreach (var tran in listTranBuyer)
                 {
                     TransactionDetailPayment tdp = _mapper.Map<TransactionDetail, TransactionDetailPayment>(tran);
