@@ -1,21 +1,25 @@
+﻿using System;
 using Moq;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using TnR_SS.Domain.ApiModels.PurchaseModal;
 using TnR_SS.Domain.Entities;
 using TnR_SS.Domain.Supervisor;
-using Xunit;
 using AutoMapper;
 using TnR_SS.Domain.UnitOfWork;
 using System.Linq.Expressions;
-using TnR_SS.Domain.ApiModels.PurchaseDetailModel;
 using TnR_SS.Domain.ApiModels;
+using Xunit;
+using System.Threading.Tasks;
+using TnR_SS.Domain.ApiModels.PurchaseModal;
+using TnR_SS.API.Controllers;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
+using TnR_SS.Domain.ApiModels.TransactionModel;
 
 namespace TnR_SS.UnitTest
 {
-    public class TnR_SSSupervisorPurchaseUnitTest
+    public class TransactionUnitTest
     {
         TnR_SSSupervisor _supervisor;
         IMapper _mapper;
@@ -29,145 +33,76 @@ namespace TnR_SS.UnitTest
         List<PondOwner> pondOwners;
         List<Drum> drums;
         List<Truck> trucks;
-        public TnR_SSSupervisorPurchaseUnitTest()
+        List<Buyer> buyers;
+        List<Transaction> transactions;
+        List<TransactionDetail> transactionDetails;
+        public TransactionUnitTest()
         {
             Setup();
             MockSetup();
         }
-
-        [Theory(DisplayName = "Purchase Supervisor: Test Get Total Weight Purchase")]
-        [InlineData(1)]
-        [InlineData(30000)]
-        public async Task TestGetAllPurchaseAsync(int traderid)
+        [Theory(DisplayName = "Transaction Controller: Test Get All")]
+        [InlineData("")]
+        [InlineData("1000000")]
+        [InlineData("20/20/2021")]
+        [InlineData("02022021")]
+        public async Task TestGetAll(string date)
         {
-            List<PurchaseResModel> rs = await _supervisor.GetAllPurchaseAsync(traderid);
-            if (traderid == 1)
+            Mock<ITnR_SSSupervisor> mock = new Mock<ITnR_SSSupervisor>();
+            mock.Setup(m => m.CreatePurchaseAsync(It.IsAny<PurchaseCreateReqModel>()));
+            TransactionController purchase = new TransactionController(mock.Object)
             {
-                Assert.NotEmpty(rs);
-            }
-            else
-            {
-                Assert.Empty(rs);
-            }
-        }
-
-        [Theory(DisplayName = "Purchase Supervisor: Test Get Total Weight Purchase")]
-        [InlineData(1, 1)]
-        [InlineData(1, 2)]
-        [InlineData(30000, 1)]
-        public async Task TestGetPurchaseByIdAsync(int pid, int uid)
-        {
-            if (pid == 1)
-            {
-                if (uid == 1)
+                ControllerContext = new ControllerContext()
                 {
-                    PurchaseResModel purchase = await _supervisor.GetPurchaseByIdAsync(pid, uid);
-                    Assert.NotNull(purchase);
+                    HttpContext = new DefaultHttpContext()
+                    {
+                        User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                        {
+                            new Claim("ID", "1"),
+                        }, "mock"))
+                    }
                 }
-                else
-                {
-                    Exception ex = await Assert.ThrowsAsync<Exception>(async () => await _supervisor.GetPurchaseByIdAsync(pid, uid));
-                    Assert.Equal("Đơn mua không tồn tại", ex.Message);
-                }
-            }
-            else
-            {
-                Exception ex = await Assert.ThrowsAsync<Exception>(async () => await _supervisor.GetPurchaseByIdAsync(pid, uid));
-                Assert.Equal("Đơn mua không tồn tại", ex.Message);
-            }
-        }
-
-        [Theory(DisplayName = "Purchase Supervisor: Test Create Purchase")]
-        [InlineData(1, 1)]
-        [InlineData(2, 1)]
-        [InlineData(2, 2)]
-        [InlineData(1000, 1)]
-        [InlineData(2, 1000)]
-        public async Task TestCreatePurchaseAsync(int poid, int traderid)
-        {
-            PurchaseCreateReqModel purchase = new PurchaseCreateReqModel() { Date = date, PondOwnerID = poid, TraderID = traderid };
-            if (poid == 1)
-            {
-                Exception ex = await Assert.ThrowsAsync<Exception>(async () => await _supervisor.CreatePurchaseAsync(purchase));
-                Assert.Equal("Đơn mua với chủ ao trong ngày " + date.ToString("dd/MM/yyyy") + " đã có!!!", ex.Message);
-            }
-            else if (traderid == 2)
-            {
-                Exception ex = await Assert.ThrowsAsync<Exception>(async () => await _supervisor.CreatePurchaseAsync(purchase));
-                Assert.Equal("Không tìm thấy thương lái !!!", ex.Message);
-            }
-            else if (poid == 1000)
-            {
-                Exception ex = await Assert.ThrowsAsync<Exception>(async () => await _supervisor.CreatePurchaseAsync(purchase));
-                Assert.Equal("Không tìm thấy chủ ao !!!", ex.Message);
-            }
-            else if (traderid == 1000)
-            {
-                Exception ex = await Assert.ThrowsAsync<Exception>(async () => await _supervisor.CreatePurchaseAsync(purchase));
-                Assert.Equal("Không tìm thấy thương lái !!!", ex.Message);
-            }
-            else
-            {
-                var rs = await _supervisor.CreatePurchaseAsync(purchase);
-                Assert.IsType<PurchaseResModel>(rs);
-            }
-        }
-        [Theory(DisplayName = "Purchase Supervisor: Test Update Purchase")]
-        [InlineData(1, 4, 200, 2, 1)]
-        [InlineData(1000, 4, 200, 2, 1)]
-        [InlineData(1, -4, 200, 2, 1)]
-        [InlineData(1, 4, -200, 2, 1)]
-        [InlineData(1, 4, 200, 1000, 1)]
-        [InlineData(1, 4, 200, 2, 2)]
-        public async Task TestUpdatePurchaseAsync(int id, double commission, double sentMoney, int poid, int traderid)
-        {
-            UpdatePurchaseApiModel update = new UpdatePurchaseApiModel()
-            {
-                ID = id,
-                Commission = commission,
-                SentMoney = sentMoney,
-                PondOwnerID = poid,
-                Date = date
             };
-            if (id == 1000)
+            var rs = await purchase.GetAll(date);
+            if (date == "02022021")
             {
-                Exception ex = await Assert.ThrowsAsync<Exception>(async () => await _supervisor.UpdatePurchaseAsync(update, traderid));
-                Assert.Equal("Đơn mua không tồn tại", ex.Message);
+                Assert.Equal("Lấy thông tin hóa đơn thành công !!", rs.Message);
             }
-            else if (poid == 1000)
+            else
             {
-                Exception ex = await Assert.ThrowsAsync<Exception>(async () => await _supervisor.UpdatePurchaseAsync(update, traderid));
-                Assert.Equal("Chủ ao không hợp lệ", ex.Message);
+                Assert.Equal("Lỗi format date !!!", rs.Message);
             }
-            else if (traderid == 2)
+        }
+        [Theory(DisplayName = "Transaction Supervisor: Test Create Transaction")]
+        [InlineData(1)]
+        [InlineData(2)]
+        public async Task TestCreateTransactionAsync(int userId)
+        {
+            TraderCreateTransactionReqModel model = new TraderCreateTransactionReqModel();
+            if (userId == 1)
             {
-                Exception ex = await Assert.ThrowsAsync<Exception>(async () => await _supervisor.UpdatePurchaseAsync(update, traderid));
-                Assert.Equal("Đơn mua không tồn tại", ex.Message);
+                Exception ex = await Assert.ThrowsAsync<Exception>(async () => await _supervisor.TraderCreateTransactionAsync(model, userId));
+                Assert.Equal("Đơn bán ngày đã có sẵn, tiếp tục mua thôi <3", ex.Message);
             }
             else
             {
                 Assert.True(true);
             }
         }
-        [Theory(DisplayName = "Purchase Detail Supervisor: Test Get All Purchase Detail")]
+        [Theory(DisplayName = "Transaction Supervisor: Test Create Transaction")]
         [InlineData(1)]
         [InlineData(2)]
-        [InlineData(1000)]
-        public async Task TestGetAllPurchaseDetailAsync(int id)
+        public async Task TestGetAllTransactionAsync(int userId)
         {
-            if (id == 1)
+            TraderCreateTransactionReqModel model = new TraderCreateTransactionReqModel();
+            if (userId == 1)
             {
-                List<PurchaseDetailResModel> purchases = await _supervisor.GetAllPurchaseDetailAsync(id);
-                Assert.Equal(2, purchases.Count);
-            }
-            else if (id == 2)
-            {
-                List<PurchaseDetailResModel> purchases = await _supervisor.GetAllPurchaseDetailAsync(id);
-                Assert.Single(purchases);
+                Exception ex = await Assert.ThrowsAsync<Exception>(async () => await _supervisor.TraderCreateTransactionAsync(model, userId));
+                Assert.Equal("Đơn bán ngày đã có sẵn, tiếp tục mua thôi <3", ex.Message);
             }
             else
             {
-                await Assert.ThrowsAnyAsync<NullReferenceException>(async () => await _supervisor.GetAllPurchaseDetailAsync(id));
+                Assert.True(true);
             }
         }
         void MockSetup()
@@ -195,6 +130,8 @@ namespace TnR_SS.UnitTest
                 .Returns((Purchase purchase) => closePurchaseDetails.Where(pd => pd.PurchaseId == purchase.ID).ToList());
             _umock.Setup(u => u.Drums.GetDrumsByPurchaseDetail(It.IsAny<PurchaseDetail>())).Returns(drums);
             _umock.Setup(u => u.Drums.GetDrumsByClosePurchaseDetail(It.IsAny<ClosePurchaseDetail>())).Returns(drums);
+            _umock.Setup(u => u.Transactions.GetAllTransactionsByDate(It.IsAny<int>(), It.IsAny<DateTime?>()))
+                .Returns((int id, DateTime? date) => transactions.Where(t => (t.TraderId == id || t.WeightRecorderId == id) && t.Date == date).ToList());
 
             foreach (Purchase purchase in purchases)
             {
@@ -216,10 +153,23 @@ namespace TnR_SS.UnitTest
             {
                 _umock.Setup(m => m.Trucks.FindAsync(It.Is<int>(id => id == truck.ID))).ReturnsAsync(truck);
             }
+            foreach (Buyer buyer in buyers)
+            {
+                _umock.Setup(m => m.Buyers.FindAsync(It.Is<int>(id => id == buyer.ID))).ReturnsAsync(buyer);
+            }
+            foreach (Transaction transaction in transactions)
+            {
+                _umock.Setup(m => m.Transactions.FindAsync(It.Is<int>(id => id == transaction.ID))).ReturnsAsync(transaction);
+            }
+            foreach (TransactionDetail transactionDetail in transactionDetails)
+            {
+                _umock.Setup(m => m.TransactionDetails.FindAsync(It.Is<int>(id => id == transactionDetail.ID))).ReturnsAsync(transactionDetail);
+            }
             _umock.Setup(m => m.UserInfors.FindAsync(It.Is<int>(id => id == 1))).ReturnsAsync(new UserInfor() { Id = 1 });
             _umock.Setup(m => m.UserInfors.FindAsync(It.Is<int>(id => id == 2))).ReturnsAsync(new UserInfor() { Id = 2 });
             _umock.Setup(m => m.UserInfors.GetRolesAsync(It.Is<int>(id => id == 1))).ReturnsAsync(new List<string>() { "Trader" });
             _umock.Setup(m => m.UserInfors.GetRolesAsync(It.Is<int>(id => id == 2))).ReturnsAsync(new List<string>() { "WeightRecorder" });
+            _umock.Setup(m => m.UserInfors.GetRolesAsync(It.Is<int>(id => !(id == 2 || id == 1)))).ReturnsAsync(new List<string>() { });
             _supervisor = new TnR_SSSupervisor(_mapper, _umock.Object);
         }
         void Setup()
@@ -352,6 +302,51 @@ namespace TnR_SS.UnitTest
                     TraderID = 1,
                     Date = date,
                     PurchaseID = 1
+                }
+            };
+            buyers = new List<Buyer>()
+            {
+                new Buyer()
+                {
+                    ID=1,
+                    Address="HD",
+                    Name="Tam",
+                    SellerId=1,
+                    PhoneNumber="0912345678"
+                }
+            };
+            transactions = new List<Transaction>()
+            {
+                new Transaction()
+                {
+                    ID=1,
+                    TraderId=1,
+                    Date= new DateTime(date.Year,date.Month,date.Day),
+                    isCompleted=TransactionStatus.Pending,
+                    WeightRecorderId=null,
+                    CommissionUnit=2
+                },
+                new Transaction()
+                {
+                    ID=2,
+                    TraderId=1,
+                    Date= new DateTime(date.Year,date.Month,date.Day),
+                    isCompleted=TransactionStatus.Completed,
+                    WeightRecorderId=2,
+                    CommissionUnit=2
+                }
+            };
+            transactionDetails = new List<TransactionDetail>()
+            {
+                new TransactionDetail()
+                {
+                    ID=1,
+                    FishTypeId=1,
+                    TransId=1,
+                    BuyerId=1,
+                    IsPaid=true,
+                    SellPrice=1000,
+                    Weight=10
                 }
             };
             _mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile(new MapperProfile())));
