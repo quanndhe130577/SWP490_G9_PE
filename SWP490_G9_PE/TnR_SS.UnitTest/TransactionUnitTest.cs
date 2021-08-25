@@ -46,7 +46,11 @@ namespace TnR_SS.UnitTest
         [InlineData("")]
         [InlineData("1000000")]
         [InlineData("20/20/2021")]
+        [InlineData("20-20-2021")]
         [InlineData("02022021")]
+        [InlineData("29022021")]
+        [InlineData("31022021")]
+        [InlineData("922021")]
         public async Task TestGetAll(string date)
         {
             Mock<ITnR_SSSupervisor> mock = new Mock<ITnR_SSSupervisor>();
@@ -87,7 +91,7 @@ namespace TnR_SS.UnitTest
             }
             else
             {
-                Assert.True(true);
+                await _supervisor.TraderCreateTransactionAsync(model, userId);
             }
         }
         [Theory(DisplayName = "Transaction Supervisor: Test Create Transaction")]
@@ -103,7 +107,7 @@ namespace TnR_SS.UnitTest
             }
             else
             {
-                Assert.True(true);
+                await _supervisor.TraderCreateTransactionAsync(model, userId);
             }
         }
         [Theory(DisplayName = "Transaction Supervisor: Test Get All Transaction Follow Date")]
@@ -179,6 +183,7 @@ namespace TnR_SS.UnitTest
         }
         [Theory(DisplayName = "Transaction Supervisor: Test Weight Recorder Update Transaction Detail")]
         [InlineData(1, 1, 1, 1)]
+        [InlineData(1, 1, 1, 2)]
         [InlineData(1, 1000, 1, 1)]
         [InlineData(1000, 1, 1, 1)]
         [InlineData(1, 1, 1000, 1)]
@@ -210,6 +215,11 @@ namespace TnR_SS.UnitTest
                 Assert.Equal("Loại cá không đúng !!", ex.Message);
             }
             else if (id == 1000)
+            {
+                Exception ex = await Assert.ThrowsAsync<Exception>(async () => await _supervisor.UpdateTransactionDetailAsync(model, id));
+                Assert.Equal("Không tìm thấy người mua !!", ex.Message);
+            }
+            else if (id == 2)
             {
                 Exception ex = await Assert.ThrowsAsync<Exception>(async () => await _supervisor.UpdateTransactionDetailAsync(model, id));
                 Assert.Equal("Không tìm thấy người mua !!", ex.Message);
