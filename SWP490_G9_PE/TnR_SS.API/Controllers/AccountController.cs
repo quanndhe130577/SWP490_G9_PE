@@ -205,7 +205,6 @@ namespace TnR_SS.API.Controller
         #endregion
 
         #region change PhoneNumber 
-
         [HttpPost("user/change-phone-number/{id}")]
         public async Task<ResponseModel> ChangePhoneNumberOTP(int id, ChangePhoneNumberOTPReqModel modelData)
         {

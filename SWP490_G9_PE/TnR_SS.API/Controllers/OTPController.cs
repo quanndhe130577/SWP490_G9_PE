@@ -40,7 +40,7 @@ namespace TnR_SS.API.Controller
             var checkOTPExsits = _tnrssSupervisor.CheckPhoneOTPExists(phoneNumber);
             if (checkOTPExsits)
             {
-                return new ResponseBuilder().Error("Mã OTP không đúng").ResponseModel;
+                return new ResponseBuilder().Error("Hãy gửi lại OTP sau 1 phút").ResponseModel;
             }
 
             //var otpId = await _tnrssSupervisor.SendOTPByStringee(token, phoneNumber);
