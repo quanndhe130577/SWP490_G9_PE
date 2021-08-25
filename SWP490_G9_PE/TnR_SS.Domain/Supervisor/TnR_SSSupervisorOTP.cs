@@ -56,7 +56,7 @@ namespace TnR_SS.Domain.Supervisor
             {
                 Code = code,
                 PhoneNumber = phoneNumber,
-                ExpiredDate = DateTime.Now.AddSeconds(30),
+                ExpiredDate = DateTime.Now.AddSeconds(60),
                 Status = OTPStatus.Waiting.ToString()
             };
 

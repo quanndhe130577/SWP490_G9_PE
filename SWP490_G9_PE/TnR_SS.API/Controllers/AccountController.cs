@@ -42,20 +42,20 @@ namespace TnR_SS.API.Controller
             if (ModelState.IsValid)
             {
                 //check OTP for phoneNumber
-                //if (!await _tnrssSupervisor.CheckOTPDoneAsync(userData.OTPID, userData.PhoneNumber))
-                //{
-                //    return new ResponseBuilder().Error("Access denied").ResponseModel;
-                //}
+                if (!await _tnrssSupervisor.CheckOTPDoneAsync(userData.OTPID, userData.PhoneNumber))
+                {
+                    return new ResponseBuilder().Error("Truy cập bị từ chối").ResponseModel;
+                }
 
                 if (_tnrssSupervisor.CheckUserPhoneExists(userData.PhoneNumber))
                 {
-                    return new ResponseBuilder().Error("Phone Number existed").ResponseModel;
+                    return new ResponseBuilder().Error("Số điện thoại không tồn tại").ResponseModel;
                 }
 
                 bool checkRoleExists = await _tnrssSupervisor.RoleExistsAsync(userData.RoleNormalizedName);
                 if (!checkRoleExists)
                 {
-                    return new ResponseBuilder().Error("Role user does not existed").ResponseModel;
+                    return new ResponseBuilder().Error("Vai trò không tồn tại").ResponseModel;
                 }
 
                 string avatarLink = await ImgurAPI.UploadImgurAsync(userData.AvatarBase64);
@@ -63,14 +63,14 @@ namespace TnR_SS.API.Controller
                 var result = await _tnrssSupervisor.CreateUserAsync(userData, avatarLink);
                 if (result.Succeeded)
                 {
-                    return new ResponseBuilder().Success("Register Success").ResponseModel;
+                    return new ResponseBuilder().Success("Đăng ký thành công").ResponseModel;
                 }
 
                 var errors = result.Errors.Select(x => x.Description).ToList();
                 return new ResponseBuilder().Errors(errors).ResponseModel;
             }
 
-            return new ResponseBuilder().Error("Invalid information").ResponseModel;
+            return new ResponseBuilder().Error("Thông tin không chính xác").ResponseModel;
         }
         #endregion
 
@@ -183,18 +183,18 @@ namespace TnR_SS.API.Controller
 
             if (userInfor is null)
             {
-                return new ResponseBuilder().WithCode(HttpStatusCode.NotFound).WithMessage("Invalid Information").ResponseModel;
+                return new ResponseBuilder().WithCode(HttpStatusCode.NotFound).WithMessage("Số điện thoại không chính xác").ResponseModel;
             }
 
             if (!await _tnrssSupervisor.CheckOTPRightAsync(resetData.OTPID, resetData.Code, resetData.PhoneNumber))
             {
-                return new ResponseBuilder().Error("Invalid OTP").ResponseModel;
+                return new ResponseBuilder().Error("Sai mã OTP").ResponseModel;
             }
 
             var result = await _tnrssSupervisor.ResetUserPasswordAsync(userInfor, resetData.ResetToken, resetData.NewPassword);
             if (result.Succeeded)
             {
-                return new ResponseBuilder().Success("Reset Password Success").ResponseModel;
+                return new ResponseBuilder().Success("Tạo mới mật khẩu thành công").ResponseModel;
             }
             else
             {
@@ -211,12 +211,12 @@ namespace TnR_SS.API.Controller
         {
             if (!TokenManagement.CheckUserIdFromToken(HttpContext, id))
             {
-                return new ResponseBuilder().Error("Access denied").ResponseModel;
+                return new ResponseBuilder().Error("Truy cập bị từ chối").ResponseModel;
             }
 
             if (_tnrssSupervisor.CheckUserPhoneExists(modelData.NewPhoneNumber))
             {
-                return new ResponseBuilder().Error("Phone Number existed").ResponseModel;
+                return new ResponseBuilder().Error("Số điện thoại đã tồn tại").ResponseModel;
             }
 
             // if (await _tnrssSupervisor.CheckOTPRightAsync(modelData.OTPID, modelData.Code, modelData.NewPhoneNumber))
@@ -225,7 +225,7 @@ namespace TnR_SS.API.Controller
                 var rs = await _tnrssSupervisor.UpdatePhoneNumberAsync(id, modelData.NewPhoneNumber);
                 if (rs.Succeeded)
                 {
-                    return new ResponseBuilder().Success("Success").ResponseModel;
+                    return new ResponseBuilder().Success("Thành công").ResponseModel;
                 }
 
                 var errors = rs.Errors.Select(x => x.Description).ToList();
@@ -241,7 +241,7 @@ namespace TnR_SS.API.Controller
         public async Task<ResponseModel> Logout()
         {
             await _tnrssSupervisor.SignOutAsync();
-            return new ResponseBuilder().Success("Logout Success").ResponseModel;
+            return new ResponseBuilder().Success("Đăng suất thành công").ResponseModel;
         }
         #endregion
 

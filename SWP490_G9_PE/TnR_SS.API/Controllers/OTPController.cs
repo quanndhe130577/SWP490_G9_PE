@@ -44,15 +44,16 @@ namespace TnR_SS.API.Controller
             }
 
             //var otpId = await _tnrssSupervisor.SendOTPByStringee(token, phoneNumber);
-            /*var otpCode = TwilioAPI.SendOtpRequest(phoneNumber);
+            var otpCode = TwilioAPI.SendOtpRequest(phoneNumber);
             if (otpCode is null)
             {
-                return new ResponseBuilder().Error("Nếu không nhận được OTP, hãy nhận lại sau 60s").ResponseModel;
-            }*/
-            var otpCode = "123456";
+                return new ResponseBuilder().Error("Nếu không nhận được OTP, hãy thử lại sau 60s").ResponseModel;
+            }
+
+            //var otpCode = "123456";
             var otpId = await _tnrssSupervisor.AddOTPAsync(otpCode, phoneNumber);
 
-            return new ResponseBuilder<Object>().Success("Success").WithData(new { OTPID = otpId }).ResponseModel;
+            return new ResponseBuilder<Object>().Success("Thành công").WithData(new { OTPID = otpId }).ResponseModel;
         }
 
         [HttpPost("check-register")]
@@ -64,8 +65,7 @@ namespace TnR_SS.API.Controller
                 return new ResponseBuilder().Success("OTP thành công").ResponseModel;
             }
 
-            //return new ResponseBuilder().Success("OTP Thành công").ResponseModel;
-            return new ResponseBuilder().Error("Invalid OTP").ResponseModel;
+            return new ResponseBuilder().Error("Sai mã OTP").ResponseModel;
         }
         #endregion
 
@@ -77,30 +77,30 @@ namespace TnR_SS.API.Controller
             var userInfor = _tnrssSupervisor.GetUserByPhoneNumber(phoneNumber);
             if (userInfor is null)
             {
-                return new ResponseBuilder().WithCode(HttpStatusCode.NotFound).WithMessage("Phone Number haven't registered yet").ResponseModel;
+                return new ResponseBuilder().WithCode(HttpStatusCode.NotFound).WithMessage("Số điện thoại chưa được đăng ký").ResponseModel;
             }
 
             var checkOTPExsits = _tnrssSupervisor.CheckPhoneOTPExists(phoneNumber);
             if (checkOTPExsits)
             {
-                return new ResponseBuilder().Error("Wait a minute then resend OTP").ResponseModel;
+                return new ResponseBuilder().Error("Hãy gửi lại OTP sau 1 phút").ResponseModel;
             }
 
             //var otpCode = await StringeeAPI.SendOtpRequestAsync(phoneNumber);
-            /*var otpCode = TwilioAPI.SendOtpRequest(phoneNumber);
+            var otpCode = TwilioAPI.SendOtpRequest(phoneNumber);
             if (otpCode is null)
             {
-                return new ResponseBuilder().Error("Wait a minute then resend OTP").ResponseModel;
-            }*/
+                return new ResponseBuilder().Error("Hãy gửi lại OTP sau 1 phút").ResponseModel;
+            }
 
-            var otpCode = "123456";
+            //var otpCode = "123456";
 
             var optId = await _tnrssSupervisor.AddOTPAsync(otpCode, phoneNumber);
 
             //generate reset token
             var token_reset = await _tnrssSupervisor.GetPasswordResetTokenAsync(userInfor);
 
-            return new ResponseBuilder<Object>().Success("Success").WithData(new { resetToken = token_reset, otpid = optId }).ResponseModel;
+            return new ResponseBuilder<Object>().Success("Thành công").WithData(new { resetToken = token_reset, otpid = optId }).ResponseModel;
         }
         #endregion
 
@@ -131,13 +131,13 @@ namespace TnR_SS.API.Controller
             }
 
             //var otpCode = await StringeeAPI.SendOtpRequestAsync(dataModel.NewPhoneNumber);
-            /*var otpCode = TwilioAPI.SendOtpRequest(dataModel.NewPhoneNumber);
+            var otpCode = TwilioAPI.SendOtpRequest(dataModel.NewPhoneNumber);
             if (otpCode is null)
             {
                 return new ResponseBuilder().Error("Nếu không nhận được OTP, hãy gửi lại sau 60s").ResponseModel;
-            }*/
+            }
 
-            var otpCode = "123456";
+            //var otpCode = "123456";
 
             var otpId = await _tnrssSupervisor.AddOTPAsync(otpCode, dataModel.NewPhoneNumber);
 
