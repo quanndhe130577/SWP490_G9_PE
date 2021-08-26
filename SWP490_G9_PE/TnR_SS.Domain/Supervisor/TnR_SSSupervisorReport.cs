@@ -112,7 +112,7 @@ namespace TnR_SS.Domain.Supervisor
                             SummaryFishTypePurchaseModel pdM = new SummaryFishTypePurchaseModel();
                             pdM.Idx = count++;
                             pdM.FishType = _mapper.Map<FishType, FishTypeApiModel>(fishType);
-                            pdM.Weight = _unitOfWork.FishTypes.GetTotalWeightOfFishType(fishTypeId);
+                            pdM.Weight = Math.Round(_unitOfWork.FishTypes.GetTotalWeightOfFishType(fishTypeId), 2);
                             pdM.Price = fishType.Price * pdM.Weight;
 
                             summary.TotalWeight += pdM.Weight;
@@ -146,7 +146,7 @@ namespace TnR_SS.Domain.Supervisor
                         SummaryFishTypePurchaseModel pdM = new SummaryFishTypePurchaseModel();
                         pdM.Idx = count++;
                         pdM.FishType = _mapper.Map<FishType, FishTypeApiModel>(fishType);
-                        pdM.Weight = _unitOfWork.FishTypes.GetTotalWeightOfFishType(fishTypeId);
+                        pdM.Weight = Math.Round(_unitOfWork.FishTypes.GetTotalWeightOfFishType(fishTypeId), 2);
                         pdM.Price = 0 /*fishType.Price * pdM.Weight*/;
 
                         summary.TotalWeight += pdM.Weight;
@@ -158,8 +158,8 @@ namespace TnR_SS.Domain.Supervisor
                     reportApiModel.PurchaseTotal.ListSummaryPurchaseDetail.Add(summary);
                 }
 
-                reportApiModel.PurchaseTotal.SummaryWeight = reportApiModel.PurchaseTotal.ListSummaryPurchaseDetail.Sum(x => x.TotalWeight);
-                reportApiModel.PurchaseTotal.SummaryMoney = reportApiModel.PurchaseTotal.ListSummaryPurchaseDetail.Sum(x => x.TotalMoney);
+                reportApiModel.PurchaseTotal.SummaryWeight = Math.Round(reportApiModel.PurchaseTotal.ListSummaryPurchaseDetail.Sum(x => x.TotalWeight), 2);
+                reportApiModel.PurchaseTotal.SummaryMoney = Math.Round(reportApiModel.PurchaseTotal.ListSummaryPurchaseDetail.Sum(x => x.TotalMoney));
             }
 
             // Transaction
@@ -200,8 +200,8 @@ namespace TnR_SS.Domain.Supervisor
                             TransactionPrice = listFish.Sum(x => x.SellPrice) / listFish.Count()
                         };
                         tdM.Idx = count++;
-                        tdM.Weight = listFish.Sum(x => x.Weight);
-                        tdM.SellPrice = listFish.Sum(x => x.Weight * x.SellPrice);
+                        tdM.Weight = Math.Round(listFish.Sum(x => x.Weight), 2);
+                        tdM.SellPrice = Math.Round(listFish.Sum(x => x.Weight * x.SellPrice));
 
                         summary.TotalWeight += tdM.Weight;
                         summary.TotalMoney += tdM.SellPrice;
@@ -222,8 +222,8 @@ namespace TnR_SS.Domain.Supervisor
                         SummaryFishTypeTransactionModel tdM = new SummaryFishTypeTransactionModel();
                         tdM.Idx = count++;
                         tdM.FishType = _mapper.Map<FishType, FishTypeApiModel>(await _unitOfWork.FishTypes.FindAsync(fishTypeId));
-                        tdM.Weight = listTD.Where(x => x.FishTypeId == fishTypeId).Sum(x => x.Weight);
-                        tdM.SellPrice = listTD.Where(x => x.FishTypeId == fishTypeId).Sum(x => x.SellPrice * x.Weight);
+                        tdM.Weight = Math.Round(listTD.Where(x => x.FishTypeId == fishTypeId).Sum(x => x.Weight), 2);
+                        tdM.SellPrice = Math.Round(listTD.Where(x => x.FishTypeId == fishTypeId).Sum(x => x.SellPrice * x.Weight));
 
                         summary.TotalWeight += tdM.Weight;
                         summary.TotalMoney += tdM.SellPrice;
@@ -236,9 +236,9 @@ namespace TnR_SS.Domain.Supervisor
                 reportApiModel.TransactionTotal.ListSummaryTransactionDetail.Add(summary);
             }
 
-            reportApiModel.TransactionTotal.SummaryWeight = reportApiModel.TransactionTotal.ListSummaryTransactionDetail.Sum(x => x.TotalWeight);
-            reportApiModel.TransactionTotal.SummaryMoney = reportApiModel.TransactionTotal.ListSummaryTransactionDetail.Sum(x => x.TotalMoney);
-            reportApiModel.TransactionTotal.SummaryCommission = reportApiModel.TransactionTotal.ListSummaryTransactionDetail.Sum(x => x.TotalCommission);
+            reportApiModel.TransactionTotal.SummaryWeight = Math.Round(reportApiModel.TransactionTotal.ListSummaryTransactionDetail.Sum(x => x.TotalWeight), 2);
+            reportApiModel.TransactionTotal.SummaryMoney = Math.Round(reportApiModel.TransactionTotal.ListSummaryTransactionDetail.Sum(x => x.TotalMoney));
+            reportApiModel.TransactionTotal.SummaryCommission = Math.Round(reportApiModel.TransactionTotal.ListSummaryTransactionDetail.Sum(x => x.TotalCommission));
 
             // Remain
             reportApiModel.RemainTotal = new ReportRemainModal();
@@ -256,8 +256,8 @@ namespace TnR_SS.Domain.Supervisor
                     SummaryFishTypePurchaseModel pdM = new SummaryFishTypePurchaseModel();
                     pdM.Idx = count++;
                     pdM.FishType = _mapper.Map<FishType, FishTypeApiModel>(fishType);
-                    pdM.Weight = _unitOfWork.FishTypes.GetTotalWeightOfFishType(fishTypeId);
-                    pdM.Price = fishType.Price * pdM.Weight;
+                    pdM.Weight = Math.Round(_unitOfWork.FishTypes.GetTotalWeightOfFishType(fishTypeId), 2);
+                    pdM.Price = Math.Round(fishType.Price * pdM.Weight);
 
                     /*summary.TotalWeight += pdM.Weight;
                     summary.TotalMoney += pdM.Price;*/
@@ -285,14 +285,14 @@ namespace TnR_SS.Domain.Supervisor
             // tính lỗ lãi
             if (isTrader)
             {
-                reportApiModel.TongChi = (reportApiModel.PurchaseTotal != null ? reportApiModel.PurchaseTotal.SummaryMoney : 0) + reportApiModel.ListCostIncurred.Sum(x => x.Cost);
-                reportApiModel.TongThu = (reportApiModel.TransactionTotal != null ? reportApiModel.TransactionTotal.SummaryMoney : 0) - reportApiModel.TransactionTotal.SummaryCommission;
+                reportApiModel.TongChi = Math.Round((reportApiModel.PurchaseTotal != null ? reportApiModel.PurchaseTotal.SummaryMoney : 0) + reportApiModel.ListCostIncurred.Sum(x => x.Cost));
+                reportApiModel.TongThu = Math.Round((reportApiModel.TransactionTotal != null ? reportApiModel.TransactionTotal.SummaryMoney : 0) - reportApiModel.TransactionTotal.SummaryCommission);
                 reportApiModel.TongNo = 0;
             }
             else
             {
-                reportApiModel.TongChi = reportApiModel.ListCostIncurred.Sum(x => x.Cost);
-                reportApiModel.TongThu = reportApiModel.TransactionTotal != null ? reportApiModel.TransactionTotal.SummaryCommission : 0;
+                reportApiModel.TongChi = Math.Round(reportApiModel.ListCostIncurred.Sum(x => x.Cost));
+                reportApiModel.TongThu = Math.Round(reportApiModel.TransactionTotal != null ? reportApiModel.TransactionTotal.SummaryCommission : 0);
             }
 
             return reportApiModel;
@@ -368,15 +368,15 @@ namespace TnR_SS.Domain.Supervisor
                 reportApiModel.ListCostIncurred.Add(_mapper.Map<CostIncurred, CostIncurredApiModel>(item));
             }
             // Total Cost
-            reportApiModel.SummaryDailyCost = _unitOfWork.CostIncurreds.GetAll(x => x.Date.Month == month && x.Date.Year == year && x.TypeOfCost == "day" && x.UserId == userId).Sum(x => x.Cost);
+            reportApiModel.SummaryDailyCost = Math.Round(_unitOfWork.CostIncurreds.GetAll(x => x.Date.Month == month && x.Date.Year == year && x.TypeOfCost == "day" && x.UserId == userId).Sum(x => x.Cost));
             /*// Chi
             reportApiModel.SummaryOutcome = (isTrader ? reportApiModel.DailyData.ListTraderData.Sum(x => x.TotalOutcome) : 0) + reportApiModel.SummaryDailyCost + reportApiModel.ListCostIncurred.Sum(x => x.Cost);
             // Thu
             reportApiModel.SummaryIncome = isTrader ? reportApiModel.DailyData.ListTraderData.Sum(x => x.TotalIncome) : reportApiModel.DailyData.ListWRData.Sum(x => x.TotalIncome);*/
             // Chi
-            reportApiModel.SummaryOutcome = (isTrader ? reportApiModel.DailyData.ListTraderData.Where(x => x.Name == DailyDataName.TotalOutcome).Sum(x => x.Value) : 0) + reportApiModel.SummaryDailyCost + reportApiModel.ListCostIncurred.Sum(x => x.Cost);
+            reportApiModel.SummaryOutcome = Math.Round((isTrader ? reportApiModel.DailyData.ListTraderData.Where(x => x.Name == DailyDataName.TotalOutcome).Sum(x => x.Value) : 0) + reportApiModel.SummaryDailyCost + reportApiModel.ListCostIncurred.Sum(x => x.Cost));
             // Thu
-            reportApiModel.SummaryIncome = isTrader ? reportApiModel.DailyData.ListTraderData.Where(x => x.Name == DailyDataName.TotalIncome).Sum(x => x.Value) : reportApiModel.DailyData.ListWRData.Where(x => x.Name == DailyDataName.TotalIncome).Sum(x => x.Value);
+            reportApiModel.SummaryIncome = Math.Round(isTrader ? reportApiModel.DailyData.ListTraderData.Where(x => x.Name == DailyDataName.TotalIncome).Sum(x => x.Value) : reportApiModel.DailyData.ListWRData.Where(x => x.Name == DailyDataName.TotalIncome).Sum(x => x.Value));
             // Debt
             if (isTrader)
             {
@@ -441,7 +441,7 @@ namespace TnR_SS.Domain.Supervisor
                 }
             }
 
-            return totalIncome;
+            return Math.Round(totalIncome);
         }
 
         private async Task<double> ReportGetTotalOutcomeDayAsync(DateTime date, int userId)
@@ -471,7 +471,7 @@ namespace TnR_SS.Domain.Supervisor
             }
 
             totalOutcome += _unitOfWork.CostIncurreds.GetAll(x => x.Date.Date == date.Date && x.UserId == userId && x.TypeOfCost == "day").Sum(x => x.Cost);
-            return totalOutcome;
+            return Math.Round(totalOutcome);
         }
 
         private async Task<double> ReportGetTotalDebtDayAsync(DateTime date, int userId)
@@ -518,7 +518,7 @@ namespace TnR_SS.Domain.Supervisor
                         //totalIncome += listTranDe.Sum(x => x.SellPrice * x.Weight);
                     }
                 }
-                return totalDebt;
+                return Math.Round(totalDebt);
             }
         }
     }

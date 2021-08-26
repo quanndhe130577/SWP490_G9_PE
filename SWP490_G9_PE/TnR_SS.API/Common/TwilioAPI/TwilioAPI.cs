@@ -22,7 +22,7 @@ namespace TnR_SS.API.Common.TwilioAPI
             string otpCode = rd.Next(1, 999999).ToString("D6");
 
             var message = MessageResource.Create(
-                body: "Hi, I'm QuanND from SWP490_G9. Your OTP is " + otpCode,
+                body: "Hi, This's from SWP490_G9. Your OTP is " + otpCode,
                 from: new Twilio.Types.PhoneNumber(fromPhone),
                 to: new Twilio.Types.PhoneNumber(ModifyPhoneNumber(phoneNumber))
             );

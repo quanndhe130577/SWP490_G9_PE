@@ -275,6 +275,22 @@ namespace TnR_SS.Domain.Supervisor
                 {
                     try
                     {
+                        bool isTrader = false;
+                        var roleUser = await _unitOfWork.UserInfors.GetRolesAsync(userId);
+                        if (roleUser.Contains(RoleName.Trader))
+                        {
+                            isTrader = true;
+                        }
+
+                        if (isTrader)
+                        {
+                            var listTran = _unitOfWork.Transactions.GetAllTransactionsByDate(userId, chotSoApi.Date.Date).Where(x => x.WeightRecorderId != null && x.isCompleted == TransactionStatus.Pending);
+                            if (listTran != null && listTran.Count() != 0)
+                            {
+                                throw new Exception("Có thương lái chưa chốt sổ !!!");
+                            }
+                        }
+
                         var tran = await _unitOfWork.Transactions.FindAsync(chotSoApi.TranId);
                         if (tran == null || (tran.WeightRecorderId != null && tran.WeightRecorderId != userId) || (tran.WeightRecorderId == null && tran.TraderId != userId))
                         {
@@ -292,12 +308,7 @@ namespace TnR_SS.Domain.Supervisor
                             throw new Exception("Không có đơn bán nào để chốt sổ !!");
                         }
 
-                        bool isTrader = false;
-                        var roleUser = await _unitOfWork.UserInfors.GetRolesAsync(userId);
-                        if (roleUser.Contains(RoleName.Trader))
-                        {
-                            isTrader = true;
-                        }
+
 
                         if (!isTrader)
                         {

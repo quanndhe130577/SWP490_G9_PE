@@ -139,7 +139,7 @@ namespace TnR_SS.Domain.Supervisor
                     FishName = fishType == null ? null : fishType.FishName,
                     Weight = Math.Round(transactionDetail.Weight, 2),
                     Trader = user.FirstName + " " + user.LastName,
-                    Amount = transactionDetail.SellPrice * transactionDetail.Weight,
+                    Amount = Math.Round(transactionDetail.SellPrice * transactionDetail.Weight),
                     Date = transaction.Date,
                     Status = false
                 });
@@ -156,7 +156,7 @@ namespace TnR_SS.Domain.Supervisor
                     FishName = fishType == null ? null : fishType.FishName,
                     Weight = Math.Round(transactionDetail.Weight, 2),
                     Trader = user.FirstName + " " + user.LastName,
-                    Amount = transactionDetail.SellPrice * transactionDetail.Weight,
+                    Amount = Math.Round(transactionDetail.SellPrice * transactionDetail.Weight),
                     Date = transaction.Date,
                     Status = true
                 });
