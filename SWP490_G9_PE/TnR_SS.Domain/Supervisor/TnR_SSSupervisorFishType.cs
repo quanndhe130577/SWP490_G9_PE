@@ -102,7 +102,7 @@ namespace TnR_SS.Domain.Supervisor
                 /*var rs1 = _unitOfWork.FishTypes.GetTotalWeightOfFishType(type.ID);
                 var rs2 = _unitOfWork.FishTypes.GetSellWeightOfFishType(type.ID);*/
                 newFish.RemainWeight = (float)(_unitOfWork.FishTypes.GetTotalWeightOfFishType(type.ID) - _unitOfWork.FishTypes.GetSellWeightOfFishType(type.ID));
-                var listRemainFish = _unitOfWork.FishTypes.GetListFishTypeRemainByDay(phien.AddDays(1), traderId.Value).Where(x => x.ID == type.ID).FirstOrDefault();
+                var listRemainFish = _unitOfWork.FishTypes.GetListFishTypeRemainByDay(phien.AddDays(1), traderId.Value).Where(x => x.FishName == type.FishName).FirstOrDefault();
                 if (listRemainFish != null)
                 {
                     var purchaseDetail = _unitOfWork.PurchaseDetails.GetAll(x => x.FishTypeID == listRemainFish.ID).FirstOrDefault();
@@ -117,7 +117,8 @@ namespace TnR_SS.Domain.Supervisor
                 }
                 else
                 {
-                    newFish.RealWeight = newFish.RemainWeight;
+                    //newFish.RealWeight = newFish.RemainWeight;
+                    newFish.RealWeight = 0;
                 }
 
                 if (newFish.RealWeight < 0)
