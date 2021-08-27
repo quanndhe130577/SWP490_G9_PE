@@ -320,16 +320,16 @@ namespace TnR_SS.Domain.Supervisor
                 isTrader = true;
             }
 
-            var listTran = _unitOfWork.Transactions.GetAllTransactionsByDate(userId, phien.Date).Where(x => (isTrader ? x.WeightRecorderId == null : x.WeightRecorderId != null));
+            var listTran = _unitOfWork.Transactions.GetAllTransactionsByDate(userId, phien.Date).Where(x => (isTrader ? (x.WeightRecorderId == null) : (x.WeightRecorderId != null)));
             foreach (var item in listTran)
             {
                 if (item.isCompleted == TransactionStatus.Completed)
                 {
                     var listCloseTran = _unitOfWork.CloseTransactionDetails.GetAll(x => x.TransactionId == item.ID).Where(x => x.BuyerId == apiModel.BuyerId);
-                    if (listCloseTran == null || listCloseTran.Count() == 0)
+                    /*if (listCloseTran == null || listCloseTran.Count() == 0)
                     {
                         throw new Exception("Người này chưa mua gì cả !!!");
-                    }
+                    }*/
 
                     foreach (var subitem in listCloseTran)
                     {
@@ -342,10 +342,10 @@ namespace TnR_SS.Domain.Supervisor
                 }
 
                 var listTranDe = _unitOfWork.TransactionDetails.GetAll(x => x.TransId == item.ID)/*(listTran.Select(x => x.ID).ToList())*/.Where(x => x.BuyerId == apiModel.BuyerId);
-                if (listTranDe == null || listTranDe.Count() == 0)
+                /*if (listTranDe == null || listTranDe.Count() == 0)
                 {
                     throw new Exception("Người này chưa mua gì cả !!!");
-                }
+                }*/
 
                 foreach (var subitem in listTranDe)
                 {
