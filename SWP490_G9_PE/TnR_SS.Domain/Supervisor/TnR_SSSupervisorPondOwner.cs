@@ -28,6 +28,12 @@ namespace TnR_SS.Domain.Supervisor
 
         public async Task<int> AddPondOwnerAsync(PondOwnerApiModel pondOwnerModel)
         {
+            var pO = _unitOfWork.PondOwners.GetAllByTraderId(pondOwnerModel.TraderID).Where(x => x.PhoneNumber == pondOwnerModel.PhoneNumber && x.ID != pondOwnerModel.ID)/*.FirstOrDefault()*/;
+            if (pO.Count() != 0)
+            {
+                throw new Exception("Đã tồn tại chủ ao với số điện thoại này !!!");
+            }
+
             PondOwner pondOwner = _mapper.Map<PondOwnerApiModel, PondOwner>(pondOwnerModel);
             await _unitOfWork.PondOwners.CreateAsync(pondOwner);
             return await _unitOfWork.SaveChangeAsync();
@@ -35,8 +41,8 @@ namespace TnR_SS.Domain.Supervisor
 
         public async Task<int> EditPondOwner(PondOwnerApiModel pondOwnerModel)
         {
-            var pO = _unitOfWork.PondOwners.GetAllByTraderId(pondOwnerModel.TraderID).Where(x => x.PhoneNumber == pondOwnerModel.PhoneNumber).FirstOrDefault();
-            if (pO != null && pO.ID != pondOwnerModel.ID)
+            var pO = _unitOfWork.PondOwners.GetAllByTraderId(pondOwnerModel.TraderID).Where(x => x.PhoneNumber == pondOwnerModel.PhoneNumber && x.ID != pondOwnerModel.ID)/*.FirstOrDefault()*/;
+            if (pO.Count() != 0)
             {
                 throw new Exception("Đã tồn tại chủ ao với số điện thoại này !!!");
             }
