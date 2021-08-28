@@ -25,7 +25,7 @@ namespace TnR_SS.Domain.Supervisor
         public async Task CreateBuyerAsync(BuyerApiModel model, int wcId)
         {
             var buyer = _mapper.Map<BuyerApiModel, Buyer>(model);
-            var check = _unitOfWork.Buyers.GetAll(x => x.PhoneNumber == model.PhoneNumber).FirstOrDefault();
+            var check = _unitOfWork.Buyers.GetAll(x => x.PhoneNumber == model.PhoneNumber && x.SellerId == wcId).FirstOrDefault();
             if (check != null)
             {
                 throw new Exception("Người mua sử dụng số điện thoại này đã tồn tại !!!");
@@ -44,7 +44,7 @@ namespace TnR_SS.Domain.Supervisor
                 throw new Exception("Thông tin người mua không tồn tại !!!");
             }
 
-            var check = _unitOfWork.Buyers.GetAll(x => x.PhoneNumber == model.PhoneNumber).FirstOrDefault();
+            var check = _unitOfWork.Buyers.GetAll(x => x.PhoneNumber == model.PhoneNumber && x.SellerId == wcId).FirstOrDefault();
             if (check != null && check.ID != buyer.ID)
             {
                 throw new Exception("Người mua sử dụng số điện thoại này đã tồn tại !!!");

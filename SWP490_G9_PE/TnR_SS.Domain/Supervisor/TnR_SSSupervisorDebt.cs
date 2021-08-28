@@ -10,6 +10,7 @@ using TnR_SS.Domain.ApiModels.FishTypeModel;
 using TnR_SS.Domain.ApiModels.PurchaseModal;
 using TnR_SS.Domain.ApiModels.TransactionDetailModel;
 using TnR_SS.Domain.ApiModels.TransactionModel;
+using TnR_SS.Domain.ApiModels.UserInforModel;
 using TnR_SS.Domain.Entities;
 
 namespace TnR_SS.Domain.Supervisor
@@ -33,13 +34,13 @@ namespace TnR_SS.Domain.Supervisor
                 model.Creditors = pondOwner.Name;
                 model.Debtor = user.LastName + " " + user.FirstName;
                 //model.DebtMoney = purchase.PayForPondOwner;
-                model.DebtMoney = purchase.PayForPondOwner - purchase.SentMoney;
+                model.DebtMoney = Math.Round(purchase.PayForPondOwner - purchase.SentMoney);
                 model.Date = purchase.Date;
 
                 list.Add(model);
             }
 
-            return list;
+            return list.OrderByDescending(x => x.Date).ToList();
         }
 
         public async Task<List<DebtApiModel>> GetAllDebtWRAsync(int userId, DateTime? date)
@@ -69,12 +70,13 @@ namespace TnR_SS.Domain.Supervisor
                 model.Creditors = user.LastName + " " + user.FirstName;
                 var buyer = await _unitOfWork.Buyers.FindAsync(td.BuyerId);
                 model.Debtor = buyer != null ? _mapper.Map<Buyer, BuyerApiModel>(buyer).Name : null;
-                model.DebtMoney = td.SellPrice;
+                model.DebtMoney = Math.Round(td.SellPrice);
                 model.Date = _mapper.Map<Transaction, TransactionResModel>(await _unitOfWork.Transactions.FindAsync(td.TransId)).Date;
 
                 list.Add(model);
             }
-            return list;
+
+            return list.OrderByDescending(x => x.Date).ToList();
         }
 
         public async Task<List<DebtApiModel>> GetDebtAsync(int userId, DateTime? date)
@@ -135,9 +137,9 @@ namespace TnR_SS.Domain.Supervisor
                     ID = transactionDetail.ID,
                     Partner = buyer == null ? null : buyer.Name,
                     FishName = fishType == null ? null : fishType.FishName,
-                    Weight = transactionDetail.Weight,
+                    Weight = Math.Round(transactionDetail.Weight, 2),
                     Trader = user.FirstName + " " + user.LastName,
-                    Amount = transactionDetail.SellPrice * transactionDetail.Weight,
+                    Amount = Math.Round(transactionDetail.SellPrice * transactionDetail.Weight),
                     Date = transaction.Date,
                     Status = false
                 });
@@ -152,21 +154,21 @@ namespace TnR_SS.Domain.Supervisor
                     ID = transactionDetail.ID,
                     Partner = buyer == null ? null : buyer.Name,
                     FishName = fishType == null ? null : fishType.FishName,
-                    Weight = transactionDetail.Weight,
+                    Weight = Math.Round(transactionDetail.Weight, 2),
                     Trader = user.FirstName + " " + user.LastName,
-                    Amount = transactionDetail.SellPrice * transactionDetail.Weight,
+                    Amount = Math.Round(transactionDetail.SellPrice * transactionDetail.Weight),
                     Date = transaction.Date,
                     Status = true
                 });
             }
-            return debtTraderApiModels.OrderBy(d => d.Date).ToList();
+            return debtTraderApiModels.OrderByDescending(d => d.Date).ToList();
         }
 
-        public async Task UpdateDebtTransationDetail(int userId, int id)
+        public async Task UpdateDebtTransationDetail(int userId, int tranDeid)
         {
             UserResModel user = await GetUserByIdAsync(userId);
-            TransactionDetail transactionDetail = await _unitOfWork.TransactionDetails.FindAsync(id);
-            CloseTransactionDetail closeTransactionDetail = await _unitOfWork.CloseTransactionDetails.FindAsync(id);
+            TransactionDetail transactionDetail = await _unitOfWork.TransactionDetails.FindAsync(tranDeid);
+            CloseTransactionDetail closeTransactionDetail = await _unitOfWork.CloseTransactionDetails.FindAsync(tranDeid);
             if (transactionDetail != null)
             {
                 if (user.RoleName == "Trader")
@@ -229,11 +231,11 @@ namespace TnR_SS.Domain.Supervisor
                     ID = purchase.ID,
                     Partner = pondOwner.Name,
                     Trader = trader.FirstName + " " + trader.LastName,
-                    Amount = amount - purchase.SentMoney,
+                    Amount = Math.Round(amount - purchase.SentMoney),
                     Date = purchase.Date
                 });
             }
-            return debtTraderApiModels;
+            return debtTraderApiModels.OrderByDescending(x => x.Date).ToList();
         }
         public async Task UpdateDebtPurchaseDetail(int userId, int id, int amount)
         {
@@ -248,6 +250,57 @@ namespace TnR_SS.Domain.Supervisor
                     _unitOfWork.Purchases.Update(purchase);
                     await _unitOfWork.SaveChangeAsync();
                 }
+            }
+        }
+
+        public async Task<List<GetDebtForWrWithTraderResModel>> GetAllDebtTransactionOfWRWithTraderAsync(int userId)
+        {
+            var roleUser = await _unitOfWork.UserInfors.GetRolesAsync(userId);
+            if (roleUser.Contains(RoleName.WeightRecorder))
+            {
+                List<GetDebtForWrWithTraderResModel> list = new List<GetDebtForWrWithTraderResModel>();
+                var listTran = _unitOfWork.Transactions.GetAll(x => x.WeightRecorderId == userId).OrderByDescending(x => x.Date);
+                foreach (var tran in listTran)
+                {
+                    var totalMoney = await _unitOfWork.Transactions.GetTotalMoneyAsync(tran.ID) - await _unitOfWork.Transactions.GetTotalWeightAsync(tran.ID) * tran.CommissionUnit;
+                    var sentMoney = tran.SentMoney;
+                    if (sentMoney < totalMoney)
+                    {
+                        var trader = await _unitOfWork.UserInfors.FindAsync(tran.TraderId);
+                        GetDebtForWrWithTraderResModel model = new GetDebtForWrWithTraderResModel()
+                        {
+                            Id = tran.ID,
+                            Date = tran.Date,
+                            SentMoney = Math.Round(sentMoney),
+                            Amount = totalMoney - sentMoney,
+                            Partner = trader != null ? trader.LastName : ""
+                        };
+
+                        list.Add(model);
+                    }
+                }
+
+                return list;
+            }
+            else
+            {
+                throw new Exception("Không có thông tin !!!");
+            }
+
+        }
+
+        public async Task UpdateDebtTransactionOfWRWithTrader(UpdateDebtWrWithTraderReqModel apiModel, int wrId)
+        {
+            var tran = await _unitOfWork.Transactions.FindAsync(apiModel.Id);
+            if (tran != null && tran.WeightRecorderId == wrId)
+            {
+                tran.SentMoney += apiModel.Amount;
+                _unitOfWork.Transactions.Update(tran);
+                await _unitOfWork.SaveChangeAsync();
+            }
+            else
+            {
+                throw new Exception("Không có thông tin !!!");
             }
         }
     }

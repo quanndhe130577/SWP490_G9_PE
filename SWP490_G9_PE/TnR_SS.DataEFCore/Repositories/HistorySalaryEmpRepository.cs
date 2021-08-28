@@ -12,5 +12,18 @@ namespace TnR_SS.DataEFCore.Repositories
     {
         public HistorySalaryEmpRepository(TnR_SSContext context) : base(context) { }
 
+        public double GetTotalSalaryOfEmpByMonth(int month, int year, int traderId)
+        {
+            return _context.Employees.Where(x => x.TraderId == traderId).Join(
+                        _context.HistorySalaryEmp,
+                        emp => emp.ID,
+                        hse => hse.EmpId,
+                        (emp, hse) => new
+                        {
+                            HistoryEmpSalary = hse
+                        }
+                    ).Where(x => x.HistoryEmpSalary.DateStart.Month == month && x.HistoryEmpSalary.DateStart.Year == year)
+                    .Sum(x => x.HistoryEmpSalary.Salary);
+        }
     }
 }

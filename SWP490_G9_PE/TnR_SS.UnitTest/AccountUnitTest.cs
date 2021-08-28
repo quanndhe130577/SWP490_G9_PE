@@ -34,8 +34,8 @@ namespace TnR_SS.UnitTest
                           Id = 1,
                           UserName = "0966848112",
                           PhoneNumber = "0966848112",
-                          FirstName = "Q",
-                          LastName = "Q"
+                          FirstName = "Quan",
+                          LastName = "Nguyen"
                       }
                  };
             Mock dbContextMock = new Mock<TnR_SSContext>();
@@ -59,45 +59,6 @@ namespace TnR_SS.UnitTest
             Assert.True(rs.Succeeded && _users.Count == 2);
         }
 
-        //[Fact(DisplayName = "Repository: GetUserByPhoneNumber")]
-        //public void GetUserByPhoneNumber()
-        //{
-        //    List<UserInfor> _users = new List<UserInfor>
-        //         {
-        //              new UserInfor() {
-        //                  Id = 1,
-        //                  UserName = "0966848112",
-        //                  PhoneNumber = "0966848112",
-        //                  FirstName = "Q",
-        //                  LastName = "Q"
-        //              }
-        //         };
-
-        //    UserInfor user = new UserInfor()
-        //    {
-        //        Id = 1,
-        //        Avatar = null,
-        //        Dob = DateTime.Parse("10/21/1999"),
-        //        FirstName = "Quan",
-        //        LastName = "Nguyen",
-        //        IdentifyCode = "123456789",
-        //        PhoneNumber = "0915152665",
-        //        UserName = "0915152665",
-        //    };
-
-        //    Mock dbContextMock = new Mock<TnR_SSContext>();
-        //    var userManageMock = FakeUserManager.MockUserManager<UserInfor>(_users);
-        //    userManageMock.Setup(x => x.Users.SingleOrDefault(It.IsAny<Func<UserInfor, bool>>())).Returns(user);
-        //    userManageMock.Setup(x => x.Users.SingleOrDefault(It.IsAny<Func<UserInfor, bool>>())).Returns((string phoneNumber) => userManageMock.Object.Users.SingleOrDefault(u => u.PhoneNumber == phoneNumber));
-
-        //    UserManager<UserInfor> _userManager = userManageMock.Object;
-        //    SignInManager<UserInfor> signInManagerMock = new FakeSignInManager();
-        //    UserInforRepository userInforRepository = new UserInforRepository((TnR_SSContext)dbContextMock.Object, _userManager, signInManagerMock);
-
-        //    var rs = userInforRepository.GetUserByPhoneNumber("0966848112");
-
-        //    Assert.Equal(1, rs.Id);
-        //}
 
         [Fact(DisplayName = "Account Controller: Test Login")]
         public async Task Login()

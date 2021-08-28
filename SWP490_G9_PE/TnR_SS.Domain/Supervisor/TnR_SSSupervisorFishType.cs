@@ -96,14 +96,97 @@ namespace TnR_SS.Domain.Supervisor
 
             List<FishType> listType = _unitOfWork.FishTypes.GetAllFishTypeForTransaction(traderId, userId, phien);
             List<GetAllFishTypeForTransactionResModel> list = new List<GetAllFishTypeForTransactionResModel>();
+            var listCheck = new List<string>();
+
             foreach (var type in listType)
             {
                 GetAllFishTypeForTransactionResModel newFish = _mapper.Map<FishType, GetAllFishTypeForTransactionResModel>(type);
-                /*var rs1 = _unitOfWork.FishTypes.GetTotalWeightOfFishType(type.ID);
-                var rs2 = _unitOfWork.FishTypes.GetSellWeightOfFishType(type.ID);*/
-                newFish.RemainWeight = (float)(_unitOfWork.FishTypes.GetTotalWeightOfFishType(type.ID) - _unitOfWork.FishTypes.GetSellWeightOfFishType(type.ID));
-                var listRemainFish = _unitOfWork.FishTypes.GetListFishTypeRemainByDay(phien.AddDays(1), traderId.Value).Where(x => x.ID == type.ID).FirstOrDefault();
-                if (listRemainFish != null)
+                var checkStr = type.FishName + "_" + type.MinWeight + "_" + type.MaxWeight;
+
+                var isDone = false;
+                var checkClose = _unitOfWork.Transactions.GetAll(x => x.TraderId == traderId.Value && x.WeightRecorderId == null && x.Date == phien);
+                if (checkClose.Count() != 0)
+                {
+                    if (checkClose.FirstOrDefault().isCompleted == TransactionStatus.Completed)
+                    {
+                        isDone = true;
+                    }
+                }
+                else
+                {
+                    var checkClose2 = _unitOfWork.Transactions.GetAll(x => x.TraderId == traderId.Value && x.WeightRecorderId != null && x.Date == phien && x.isCompleted == TransactionStatus.Pending);
+                    if (checkClose2.Count() == 0)
+                    {
+                        isDone = true;
+                    }
+                }
+
+                if (!isDone)
+                {
+                    newFish.RemainWeight = (float)(_unitOfWork.FishTypes.GetTotalWeightOfFishType(type.ID) - _unitOfWork.FishTypes.GetSellWeightOfFishType(type.ID));
+                    newFish.RealWeight = newFish.RemainWeight;
+                }
+                else
+                {
+                    var listRealFish = _unitOfWork.FishTypes.GetListFishTypeRemainByDay(phien.AddDays(1), traderId.Value);
+                    if (listRealFish.Count != 0)
+                    {
+                        var remainFish = listRealFish.Where(x => x.FishName == type.FishName).FirstOrDefault();
+                        if (remainFish != null)
+                        {
+                            var purchaseDetail = _unitOfWork.PurchaseDetails.GetAll(x => x.FishTypeID == remainFish.ID).FirstOrDefault();
+                            if (purchaseDetail != null && !listCheck.Contains(checkStr))
+                            {
+                                newFish.RealWeight = (float)purchaseDetail.Weight;
+                                listCheck.Add(checkStr);
+                            }
+                            else
+                            {
+                                //newFish.RealWeight = newFish.RemainWeight;
+                                newFish.RealWeight = 0;
+                            }
+                        }
+                        else
+                        {
+                            newFish.RealWeight = 0;
+                        }
+                    }
+                    else
+                    {
+                        newFish.RealWeight = 0;
+                    }
+
+                    newFish.RemainWeight = newFish.RealWeight;
+                }
+
+
+                /*var listRealFish = _unitOfWork.FishTypes.GetListFishTypeRemainByDay(phien.AddDays(1), traderId.Value);*//* ; *//*
+                if (listRealFish.Count != 0)
+                {
+                    var remainFish = listRealFish.Where(x => x.FishName == type.FishName).FirstOrDefault();
+                    if (remainFish != null)
+                    {
+                        var purchaseDetail = _unitOfWork.PurchaseDetails.GetAll(x => x.FishTypeID == remainFish.ID).FirstOrDefault();
+                        if (purchaseDetail != null)
+                        {
+                            newFish.RealWeight = (float)purchaseDetail.Weight;
+                        }
+                        else
+                        {
+                            newFish.RealWeight = newFish.RemainWeight;
+                        }
+                    }
+                    else
+                    {
+                        newFish.RealWeight = 0;
+                    }
+                }
+                else
+                {
+                    newFish.RealWeight = newFish.RemainWeight;
+                }*/
+
+                /*if (listRemainFish != null)
                 {
                     var purchaseDetail = _unitOfWork.PurchaseDetails.GetAll(x => x.FishTypeID == listRemainFish.ID).FirstOrDefault();
                     if (purchaseDetail != null)
@@ -117,8 +200,9 @@ namespace TnR_SS.Domain.Supervisor
                 }
                 else
                 {
-                    newFish.RealWeight = newFish.RemainWeight;
-                }
+                    //newFish.RealWeight = newFish.RemainWeight;
+                    newFish.RealWeight = 0;
+                }*/
 
                 if (newFish.RealWeight < 0)
                 {

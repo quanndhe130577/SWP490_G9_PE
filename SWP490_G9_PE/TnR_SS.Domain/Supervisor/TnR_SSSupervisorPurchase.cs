@@ -60,8 +60,8 @@ namespace TnR_SS.Domain.Supervisor
             PurchaseResModel newPurchase = _mapper.Map<Purchase, PurchaseResModel>(purchase);
             var pondOwner = await _unitOfWork.PondOwners.FindAsync(purchase.PondOwnerID);
             newPurchase.PondOwnerName = pondOwner != null ? pondOwner.Name : "Cá cũ";
-            newPurchase.TotalWeight = GetTotalWeightPurchase(purchase);
-            newPurchase.TotalAmount = await GetTotalAmountPurchaseAsync(purchase.ID);
+            newPurchase.TotalWeight = Math.Round(GetTotalWeightPurchase(purchase), 2);
+            newPurchase.TotalAmount = Math.Round(await GetTotalAmountPurchaseAsync(purchase.ID));
             newPurchase.Status = purchase.isCompleted.ToString();
             if (purchase.isCompleted != PurchaseStatus.Pending && purchase.SentMoney >= purchase.PayForPondOwner)
             {
@@ -90,7 +90,7 @@ namespace TnR_SS.Domain.Supervisor
 
         public async Task<List<PurchaseResModel>> GetAllPurchaseAsync(int traderId)
         {
-            await _unitOfWork.Purchases.ClearPurchaseAsync();
+            //await _unitOfWork.Purchases.ClearPurchaseAsync();
             var listPurchase = _unitOfWork.Purchases.GetAll(x => x.TraderID == traderId)
                 .OrderByDescending(x => x.Date).ThenByDescending(x => x.ID);
             List<PurchaseResModel> list = new List<PurchaseResModel>();

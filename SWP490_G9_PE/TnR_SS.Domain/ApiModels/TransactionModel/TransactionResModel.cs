@@ -15,6 +15,7 @@ namespace TnR_SS.Domain.ApiModels.TransactionModel
         public DateTime Date { get; set; }
         public string Status { get; set; } // đã chốt sổ hay chưa Completed/Pending
         public double CommissionUnit { get; set; }
+        public double SentMoney { get; set; }
         public List<TransactionDetailInformation> TransactionDetails { get; set; }
     }
 

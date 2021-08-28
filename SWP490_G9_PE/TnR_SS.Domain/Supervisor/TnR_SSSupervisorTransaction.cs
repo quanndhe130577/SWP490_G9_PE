@@ -124,6 +124,7 @@ namespace TnR_SS.Domain.Supervisor
                 tran.WeightRecorder = item.WeightRecorderId != null ? _mapper.Map<UserInfor, UserInformation>(await _unitOfWork.UserInfors.FindAsync(item.WeightRecorderId)) : null;
                 tran.TransactionDetails = await GetListTransactionDetailModelAsync(item);
                 tran.Status = item.isCompleted.ToString();
+                tran.SentMoney = Math.Round(item.SentMoney);
 
                 list.Add(tran);
             }
@@ -215,9 +216,9 @@ namespace TnR_SS.Domain.Supervisor
                     newGeneral.ListWeightRecorder = await TraderGetAllWeightRecorderInTransactions(userId, listTran);
                 }
 
-                newGeneral.TotalWeight = await GetTotalWeightForGeneral(userId, listTran);
-                newGeneral.TotalMoney = await GetTotalMoneyForGeneral(userId, listTran);
-                newGeneral.TotalDebt = await GetTotalDebtForGeneral(userId, listTran);
+                newGeneral.TotalWeight = Math.Round(await GetTotalWeightForGeneral(userId, listTran), 2);
+                newGeneral.TotalMoney = Math.Round(await GetTotalMoneyForGeneral(userId, listTran));
+                newGeneral.TotalDebt = Math.Round(await GetTotalDebtForGeneral(userId, listTran));
 
                 listGeTran.Add(newGeneral);
             }
@@ -274,6 +275,22 @@ namespace TnR_SS.Domain.Supervisor
                 {
                     try
                     {
+                        bool isTrader = false;
+                        var roleUser = await _unitOfWork.UserInfors.GetRolesAsync(userId);
+                        if (roleUser.Contains(RoleName.Trader))
+                        {
+                            isTrader = true;
+                        }
+
+                        if (isTrader)
+                        {
+                            var listTran = _unitOfWork.Transactions.GetAllTransactionsByDate(userId, chotSoApi.Date.Date).Where(x => x.WeightRecorderId != null && x.isCompleted == TransactionStatus.Pending);
+                            if (listTran != null && listTran.Count() != 0)
+                            {
+                                throw new Exception("Có thương lái chưa chốt sổ !!!");
+                            }
+                        }
+
                         var tran = await _unitOfWork.Transactions.FindAsync(chotSoApi.TranId);
                         if (tran == null || (tran.WeightRecorderId != null && tran.WeightRecorderId != userId) || (tran.WeightRecorderId == null && tran.TraderId != userId))
                         {
@@ -289,6 +306,13 @@ namespace TnR_SS.Domain.Supervisor
                         if (listTranDe.Count() == 0)
                         {
                             throw new Exception("Không có đơn bán nào để chốt sổ !!");
+                        }
+
+
+
+                        if (!isTrader)
+                        {
+                            tran.SentMoney = chotSoApi.SentMoney;
                         }
 
                         tran.isCompleted = TransactionStatus.Completed;
@@ -325,8 +349,7 @@ namespace TnR_SS.Domain.Supervisor
                             await _unitOfWork.SaveChangeAsync();
                         }
 
-                        var roleUser = await _unitOfWork.UserInfors.GetRolesAsync(userId);
-                        if (roleUser.Contains(RoleName.Trader))
+                        if (isTrader)
                         {
                             if (chotSoApi.ListRemainFish.Count != 0)
                             {
@@ -336,12 +359,65 @@ namespace TnR_SS.Domain.Supervisor
                                 purchase.TraderID = userId;
                                 purchase.Date = nextPhien;
                                 purchase.isCompleted = PurchaseStatus.Remain;
-                                //purchase.isPaid = true;
 
                                 await _unitOfWork.Purchases.CreateAsync(purchase);
                                 await _unitOfWork.SaveChangeAsync();
 
-                                foreach (var item in chotSoApi.ListRemainFish)
+                                // lấy ra list fish có trong reamin api
+                                var listFish = _unitOfWork.FishTypes.GetAll(x => chotSoApi.ListRemainFish.Select(y => y.ID).Contains(x.ID));
+                                // list mới bao gồm RealWeight
+                                var newListFish = listFish.Join(
+                                    chotSoApi.ListRemainFish,
+                                    lf => lf.ID,
+                                    cs => cs.ID,
+                                    (lf, cs) => new
+                                    {
+                                        FishType = lf,
+                                        RealWeight = cs.RealWeight
+                                    }
+                                );
+
+                                // group fish với tên, max, min
+                                var newGroup = newListFish.Select(x => new
+                                {
+                                    FishName = x.FishType.FishName,
+                                    MaxWeight = x.FishType.MaxWeight,
+                                    MinWeight = x.FishType.MinWeight,
+                                }).Distinct();
+
+                                foreach (var item in newGroup)
+                                {
+                                    var realWeight = newListFish.Where(x => x.FishType.FishName == item.FishName && x.FishType.MaxWeight == item.MaxWeight && x.FishType.MinWeight == item.MinWeight).Sum(x => x.RealWeight);
+
+                                    if (realWeight > 0)
+                                    {
+                                        var newFish = new FishType()
+                                        {
+                                            ID = 0,
+                                            Date = nextPhien,
+                                            Price = 0,
+                                            TraderID = userId,
+                                            PurchaseID = purchase.ID,
+                                            FishName = item.FishName,
+                                            Description = "cá dư ngày " + curretPhien.ToString("dd/MM/yyyy"),
+                                            MaxWeight = item.MaxWeight,
+                                            MinWeight = item.MinWeight,
+                                            TransactionPrice = newListFish.Where(x => x.FishType.FishName == item.FishName && x.FishType.MaxWeight == item.MaxWeight && x.FishType.MinWeight == item.MinWeight).Average(x => x.FishType.TransactionPrice),
+                                        };
+
+                                        await _unitOfWork.FishTypes.CreateAsync(newFish);
+                                        await _unitOfWork.SaveChangeAsync();
+
+                                        PurchaseDetail purchaseDetail = new PurchaseDetail();
+                                        purchaseDetail.FishTypeID = newFish.ID;
+                                        purchaseDetail.Weight = realWeight;
+                                        purchaseDetail.PurchaseId = purchase.ID;
+
+                                        await _unitOfWork.PurchaseDetails.CreateAsync(purchaseDetail);
+                                    }
+                                }
+
+                                /*foreach (var item in chotSoApi.ListRemainFish)
                                 {
                                     var oldFish = await _unitOfWork.FishTypes.FindAsync(item.ID);
 
@@ -355,12 +431,12 @@ namespace TnR_SS.Domain.Supervisor
                                         var newFish = new FishType()
                                         {
                                             ID = 0,
-                                            Date = curretPhien.AddDays(1),
+                                            Date = nextPhien,
                                             Price = 0,
                                             TraderID = userId,
                                             PurchaseID = purchase.ID,
-                                            FishName = oldFish.FishName /*+ "dư ngày " + curretPhien.ToString("dd/MM/yyyy")*/,
-                                            Description = oldFish.Description,
+                                            FishName = oldFish.FishName,
+                                            Description = *//*oldFish.Description*//*"cá dư ngày " + curretPhien.ToString("dd/MM/yyyy"),
                                             MaxWeight = oldFish.MaxWeight,
                                             MinWeight = oldFish.MinWeight,
                                             TransactionPrice = oldFish.TransactionPrice,
@@ -376,7 +452,7 @@ namespace TnR_SS.Domain.Supervisor
 
                                         await _unitOfWork.PurchaseDetails.CreateAsync(purchaseDetail);
                                     }
-                                }
+                                }*/
 
                                 await _unitOfWork.SaveChangeAsync();
                             }
