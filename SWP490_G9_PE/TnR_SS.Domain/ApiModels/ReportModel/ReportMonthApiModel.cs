@@ -13,6 +13,7 @@ namespace TnR_SS.Domain.ApiModels.ReportModel
         public double SummaryOutcome { get; set; }
         public double TienPhaiThu { get; set; }
         public double TienPhaiTra { get; set; }
+        public double SummaryEmpSalary { get; set; }
     }
 
     public class DailyData
@@ -48,7 +49,7 @@ namespace TnR_SS.Domain.ApiModels.ReportModel
         public static string TotalIncome = "Tổng thu";
         public static string TotalOutcome = "Tổng chi";
         public static string TotalDebt = "Tổng nợ";
-        
+
     }
 }
 
