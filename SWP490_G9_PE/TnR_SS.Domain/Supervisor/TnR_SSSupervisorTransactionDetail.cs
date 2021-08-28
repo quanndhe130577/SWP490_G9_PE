@@ -313,20 +313,49 @@ namespace TnR_SS.Domain.Supervisor
                 throw new Exception("Không có thông tin người mua này !!!");
             }
 
-            var listTran = _unitOfWork.Transactions.GetAllTransactionsByDate(userId, phien.Date);
-            var listTranDe = _unitOfWork.TransactionDetails.GetAllByListTransaction(listTran.Select(x => x.ID).ToList()).Where(x => x.BuyerId == apiModel.BuyerId);
-            if (listTranDe == null || listTranDe.Count() == 0)
+            bool isTrader = false;
+            var roleUser = await _unitOfWork.UserInfors.GetRolesAsync(userId);
+            if (roleUser.Contains(RoleName.Trader))
             {
-                throw new Exception("Người này chưa mua gì cả !!!");
+                isTrader = true;
             }
 
-            foreach (var item in listTranDe)
+            var listTran = _unitOfWork.Transactions.GetAllTransactionsByDate(userId, phien.Date).Where(x => (isTrader ? x.WeightRecorderId == null : x.WeightRecorderId != null));
+            foreach (var item in listTran)
             {
-                item.IsPaid = true;
-                _unitOfWork.TransactionDetails.Update(item);
+                if (item.isCompleted == TransactionStatus.Completed)
+                {
+                    var listCloseTran = _unitOfWork.CloseTransactionDetails.GetAll(x => x.TransactionId == item.ID).Where(x => x.BuyerId == apiModel.BuyerId);
+                    if (listCloseTran == null || listCloseTran.Count() == 0)
+                    {
+                        throw new Exception("Người này chưa mua gì cả !!!");
+                    }
+
+                    foreach (var subitem in listCloseTran)
+                    {
+                        subitem.IsPaid = true;
+                        _unitOfWork.CloseTransactionDetails.Update(subitem);
+                    }
+
+                    await _unitOfWork.SaveChangeAsync();
+
+                }
+
+                var listTranDe = _unitOfWork.TransactionDetails.GetAll(x => x.TransId == item.ID)/*(listTran.Select(x => x.ID).ToList())*/.Where(x => x.BuyerId == apiModel.BuyerId);
+                if (listTranDe == null || listTranDe.Count() == 0)
+                {
+                    throw new Exception("Người này chưa mua gì cả !!!");
+                }
+
+                foreach (var subitem in listTranDe)
+                {
+                    subitem.IsPaid = true;
+                    _unitOfWork.TransactionDetails.Update(subitem);
+                }
+
+                await _unitOfWork.SaveChangeAsync();
             }
 
-            await _unitOfWork.SaveChangeAsync();
         }
     }
 }

@@ -350,25 +350,25 @@ namespace TnR_SS.Domain.Supervisor
                                         throw new Exception("Lỗi thông tin cá !!!");
                                     }
 
-                                    var newFish = new FishType()
-                                    {
-                                        ID = 0,
-                                        Date = curretPhien.AddDays(1),
-                                        Price = 0,
-                                        TraderID = userId,
-                                        PurchaseID = purchase.ID,
-                                        FishName = oldFish.FishName /*+ "dư ngày " + curretPhien.ToString("dd/MM/yyyy")*/,
-                                        Description = oldFish.Description,
-                                        MaxWeight = oldFish.MaxWeight,
-                                        MinWeight = oldFish.MinWeight,
-                                        TransactionPrice = oldFish.TransactionPrice,
-                                    };
-
-                                    await _unitOfWork.FishTypes.CreateAsync(newFish);
-                                    await _unitOfWork.SaveChangeAsync();
-
                                     if (item.RealWeight > 0)
                                     {
+                                        var newFish = new FishType()
+                                        {
+                                            ID = 0,
+                                            Date = curretPhien.AddDays(1),
+                                            Price = 0,
+                                            TraderID = userId,
+                                            PurchaseID = purchase.ID,
+                                            FishName = oldFish.FishName /*+ "dư ngày " + curretPhien.ToString("dd/MM/yyyy")*/,
+                                            Description = oldFish.Description,
+                                            MaxWeight = oldFish.MaxWeight,
+                                            MinWeight = oldFish.MinWeight,
+                                            TransactionPrice = oldFish.TransactionPrice,
+                                        };
+
+                                        await _unitOfWork.FishTypes.CreateAsync(newFish);
+                                        await _unitOfWork.SaveChangeAsync();
+
                                         PurchaseDetail purchaseDetail = new PurchaseDetail();
                                         purchaseDetail.FishTypeID = newFish.ID;
                                         purchaseDetail.Weight = item.RealWeight;
@@ -441,6 +441,12 @@ namespace TnR_SS.Domain.Supervisor
         }
         private async Task<double> GetTotalDebtForGeneral(int userId, List<Transaction> listTran)
         {
+            var roleUser = await _unitOfWork.UserInfors.GetRolesAsync(userId);
+            if (roleUser.Contains(RoleName.Trader))
+            {
+                listTran = listTran.Where(x => x.WeightRecorderId == null).ToList();
+            }
+
             double totalWeight = 0.0;
             foreach (var tran in listTran)
             {

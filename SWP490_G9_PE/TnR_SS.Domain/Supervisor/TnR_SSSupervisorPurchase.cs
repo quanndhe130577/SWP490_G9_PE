@@ -90,6 +90,7 @@ namespace TnR_SS.Domain.Supervisor
 
         public async Task<List<PurchaseResModel>> GetAllPurchaseAsync(int traderId)
         {
+            await _unitOfWork.Purchases.ClearPurchaseAsync();
             var listPurchase = _unitOfWork.Purchases.GetAll(x => x.TraderID == traderId)
                 .OrderByDescending(x => x.Date).ThenByDescending(x => x.ID);
             List<PurchaseResModel> list = new List<PurchaseResModel>();

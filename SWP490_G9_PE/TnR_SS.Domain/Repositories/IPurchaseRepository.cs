@@ -9,5 +9,6 @@ namespace TnR_SS.Domain.Repositories
 {
     public interface IPurchaseRepository : IRepositoryBase<Purchase>
     {
+        Task ClearPurchaseAsync();
     }
 }
