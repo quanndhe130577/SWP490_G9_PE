@@ -37,7 +37,7 @@ namespace TnR_SS.Domain.Supervisor
                 var listPurchase = _unitOfWork.Purchases.GetAll(x => x.Date.Date == date.Date && x.TraderID == userId);
                 if (listPurchase == null || listPurchase.Count() == 0)
                 {
-                    closestDate = _unitOfWork.Purchases.GetAll(x => x.Date.Date <= date.Date).Select(x => x.Date.Date).OrderByDescending(x => x.Date).FirstOrDefault();
+                    closestDate = _unitOfWork.Purchases.GetAll(x => x.Date.Date <= date.Date && x.TraderID == userId).Select(x => x.Date.Date).OrderByDescending(x => x.Date).FirstOrDefault();
                     if (closestDate != DateTime.MinValue)
                     {
                         listPurchase = _unitOfWork.Purchases.GetAll(x => x.Date.Date == closestDate.Date && x.TraderID == userId);
@@ -46,7 +46,7 @@ namespace TnR_SS.Domain.Supervisor
 
                 if (listPurchase == null || listPurchase.Count() == 0)
                 {
-                    closestDate = _unitOfWork.Purchases.GetAll(x => x.Date.Date >= date.Date).Select(x => x.Date.Date).OrderBy(x => x.Date).FirstOrDefault();
+                    closestDate = _unitOfWork.Purchases.GetAll(x => x.Date.Date >= date.Date && x.TraderID == userId).Select(x => x.Date.Date).OrderBy(x => x.Date).FirstOrDefault();
                     if (closestDate != DateTime.MinValue)
                     {
                         listPurchase = _unitOfWork.Purchases.GetAll(x => x.Date.Date == closestDate.Date && x.TraderID == userId);
@@ -93,7 +93,7 @@ namespace TnR_SS.Domain.Supervisor
                             };
 
                             pdM.Price = listCPD.Where(x => x.FishName == fishtype.FishName).Sum(x => x.FishTypePrice * (x.Weight - x.BasketWeight));
-                            pdM.Weight = listCPD.Where(x => x.FishName == fishtype.FishName).Sum(x => x.Weight - x.BasketWeight);
+                            pdM.Weight = Math.Round(listCPD.Where(x => x.FishName == fishtype.FishName).Sum(x => x.Weight - x.BasketWeight), 2);
 
                             summary.TotalWeight += pdM.Weight;
                             summary.TotalMoney += pdM.Price;
@@ -113,7 +113,7 @@ namespace TnR_SS.Domain.Supervisor
                             pdM.Idx = count++;
                             pdM.FishType = _mapper.Map<FishType, FishTypeApiModel>(fishType);
                             pdM.Weight = Math.Round(_unitOfWork.FishTypes.GetTotalWeightOfFishType(fishTypeId), 2);
-                            pdM.Price = fishType.Price * pdM.Weight;
+                            pdM.Price = Math.Round(fishType.Price * pdM.Weight);
 
                             summary.TotalWeight += pdM.Weight;
                             summary.TotalMoney += pdM.Price;
