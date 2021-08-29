@@ -465,30 +465,30 @@ namespace TnR_SS.Domain.Supervisor
             double totalOutcome = 0;
             if (role.Contains(RoleName.Trader))
             {
+                // tiền mua cá
                 var listPurchase = _unitOfWork.Purchases.GetAll(x => x.TraderID == userId && x.Date.Date == date && x.isCompleted == PurchaseStatus.Completed);
                 foreach (var purchase in listPurchase)
                 {
-                    // tiền trả cho wr
-                    var transaction = _unitOfWork.Transactions.GetAllTransactionsByDate(userId, date.Date).Where(x => x.WeightRecorderId != null).ToList();
-                    var tranDe = _unitOfWork.TransactionDetails.GetAllByListTransaction(transaction.Select(x => x.ID).ToList());
 
-                    foreach (var item in transaction)
-                    {
-                        if (item.isCompleted == TransactionStatus.Completed)
-                        {
-                            var listCTD = _unitOfWork.CloseTransactionDetails.GetAll(x => x.TransactionId == item.ID);
-                            totalOutcome += listCTD.Sum(x => x.Weight * item.CommissionUnit);
-                        }
-                        else
-                        {
-                            var listTranDe = _unitOfWork.TransactionDetails.GetAll(x => x.TransId == item.ID);
-                            totalOutcome += listTranDe.Sum(x => transaction.Find(y => y.ID == x.TransId).CommissionUnit * x.Weight);
-                            //totalIncome += listTranDe.Sum(x => x.SellPrice * x.Weight);
-                        }
-                    }
-
-                    // tiền mua cá
                     totalOutcome += await GetTotalAmountPurchaseAsync(purchase.ID);
+                }
+
+                // tiền trả cho wr
+                var transaction = _unitOfWork.Transactions.GetAllTransactionsByDate(userId, date.Date).Where(x => x.WeightRecorderId != null).ToList();
+
+                foreach (var item in transaction)
+                {
+                    if (item.isCompleted == TransactionStatus.Completed)
+                    {
+                        var listCTD = _unitOfWork.CloseTransactionDetails.GetAll(x => x.TransactionId == item.ID);
+                        totalOutcome += listCTD.Sum(x => x.Weight * item.CommissionUnit);
+                    }
+                    else
+                    {
+                        var listTranDe = _unitOfWork.TransactionDetails.GetAll(x => x.TransId == item.ID);
+                        totalOutcome += listTranDe.Sum(x => transaction.Find(y => y.ID == x.TransId).CommissionUnit * x.Weight);
+                        //totalIncome += listTranDe.Sum(x => x.SellPrice * x.Weight);
+                    }
                 }
             }
             else
