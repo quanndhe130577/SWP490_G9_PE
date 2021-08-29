@@ -369,9 +369,9 @@ namespace TnR_SS.Domain.Supervisor
             }
             // Total Cost
             reportApiModel.SummaryDailyCost = Math.Round(_unitOfWork.CostIncurreds.GetAll(x => x.Date.Month == month && x.Date.Year == year && x.TypeOfCost == "day" && x.UserId == userId).Sum(x => x.Cost) + reportApiModel.ListCostIncurred.Sum(x => x.Cost));
-            // Chi
+            // Chi = Tổng tiền mua cá + tiền trả cho WR
             reportApiModel.SummaryOutcome = Math.Round((isTrader ? reportApiModel.DailyData.ListTraderData.Where(x => x.Name == DailyDataName.TotalOutcome).Sum(x => x.Value) : reportApiModel.DailyData.ListWRData.Where(x => x.Name == DailyDataName.TotalOutcome).Sum(x => x.Value)));
-            // Thu
+            // Thu = Tổng tiền bán cá
             reportApiModel.SummaryIncome = Math.Round(isTrader ? reportApiModel.DailyData.ListTraderData.Where(x => x.Name == DailyDataName.TotalIncome).Sum(x => x.Value) : reportApiModel.DailyData.ListWRData.Where(x => x.Name == DailyDataName.TotalIncome).Sum(x => x.Value));
             // TienPhaiTra + TienPhaiThu
             if (isTrader)

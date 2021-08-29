@@ -308,8 +308,6 @@ namespace TnR_SS.Domain.Supervisor
                             throw new Exception("Không có đơn bán nào để chốt sổ !!");
                         }
 
-
-
                         if (!isTrader)
                         {
                             tran.SentMoney = chotSoApi.SentMoney;
@@ -351,7 +349,7 @@ namespace TnR_SS.Domain.Supervisor
 
                         if (isTrader)
                         {
-                            if (chotSoApi.ListRemainFish.Count != 0)
+                            if (chotSoApi.ListRemainFish.Sum(x => x.RealWeight) != 0)
                             {
                                 var curretPhien = chotSoApi.Date.Date;
                                 var nextPhien = curretPhien.AddDays(1);

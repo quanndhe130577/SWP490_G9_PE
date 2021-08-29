@@ -126,6 +126,9 @@ namespace TnR_SS.Domain.Supervisor
                     }
                 }
             }
+
+            var roleUser = await _unitOfWork.UserInfors.GetRolesAsync(id);
+
             List<DebtTraderApiModel> debtTraderApiModels = new List<DebtTraderApiModel>();
             foreach (TransactionDetail transactionDetail in transactionDetails)
             {
@@ -135,7 +138,7 @@ namespace TnR_SS.Domain.Supervisor
                 debtTraderApiModels.Add(new DebtTraderApiModel()
                 {
                     ID = transactionDetail.ID,
-                    Partner = buyer == null ? null : buyer.Name,
+                    Partner = buyer == null ? "" : (roleUser.Contains(RoleName.Trader) ? "Người mua: " + buyer.Name : buyer.Name),
                     FishName = fishType == null ? null : fishType.FishName,
                     Weight = Math.Round(transactionDetail.Weight, 2),
                     Trader = user.FirstName + " " + user.LastName,
@@ -144,16 +147,19 @@ namespace TnR_SS.Domain.Supervisor
                     Status = false
                 });
             }
+
             foreach (CloseTransactionDetail transactionDetail in closeTransactionDetails)
             {
-                Buyer buyer = await _unitOfWork.Buyers.FindAsync(transactionDetail.BuyerId);
-                FishType fishType = await _unitOfWork.FishTypes.FindAsync(transactionDetail.FishTypeId);
+                //Buyer buyer = await _unitOfWork.Buyers.FindAsync(transactionDetail.BuyerId);
+                //FishType fishType = await _unitOfWork.FishTypes.FindAsync(transactionDetail.FishTypeId);
                 Transaction transaction = await _unitOfWork.Transactions.FindAsync(transactionDetail.TransactionId);
                 debtTraderApiModels.Add(new DebtTraderApiModel()
                 {
                     ID = transactionDetail.ID,
-                    Partner = buyer == null ? null : buyer.Name,
-                    FishName = fishType == null ? null : fishType.FishName,
+                    //Partner = buyer == null ? "" : (roleUser.Contains(RoleName.Trader) ? "Người mua: " + buyer.Name : buyer.Name),
+                    Partner = (roleUser.Contains(RoleName.Trader) ? "Người mua: " + transactionDetail.BuyerName : transactionDetail.BuyerName),
+                    //FishName = fishType == null ? null : fishType.FishName,
+                    FishName = transactionDetail.FishName,
                     Weight = Math.Round(transactionDetail.Weight, 2),
                     Trader = user.FirstName + " " + user.LastName,
                     Amount = Math.Round(transactionDetail.SellPrice * transactionDetail.Weight),
@@ -161,6 +167,36 @@ namespace TnR_SS.Domain.Supervisor
                     Status = true
                 });
             }
+
+
+            if (roleUser.Contains(RoleName.Trader))
+            {
+                var listTran = _unitOfWork.Transactions.GetAll(x => x.TraderId == id && x.WeightRecorderId != null).OrderByDescending(x => x.Date);
+                int count = -1;
+                foreach (var tran in listTran)
+                {
+                    var totalWeight = await _unitOfWork.Transactions.GetTotalWeightAsync(tran.ID);
+                    var totalMoney = await _unitOfWork.Transactions.GetTotalMoneyAsync(tran.ID) - totalWeight * tran.CommissionUnit;
+                    var sentMoney = tran.SentMoney;
+
+                    if (sentMoney < totalMoney)
+                    {
+                        var wr = await _unitOfWork.UserInfors.FindAsync(tran.WeightRecorderId);
+                        debtTraderApiModels.Add(new DebtTraderApiModel()
+                        {
+                            ID = count--,
+                            Partner = "Chủ bến: " + wr.LastName,
+                            FishName = "Tiền bán cá",
+                            Weight = Math.Round(totalWeight, 2),
+                            Trader = "",
+                            Amount = Math.Round(totalMoney - sentMoney),
+                            Date = tran.Date,
+                            Status = true
+                        });
+                    }
+                }
+            }
+
             return debtTraderApiModels.OrderByDescending(d => d.Date).ToList();
         }
 
